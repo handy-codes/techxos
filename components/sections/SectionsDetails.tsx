@@ -62,7 +62,7 @@ const SectionsDetails = ({
       };
   }
   const config: Config =  {
-    public_key: 'FLWPUBK_TEST-7e6875e5be98e38f9ad5d3fc801b3838-X',
+    public_key: 'FLWPUBK-a431cbb1ab60377246c9e41bb2a9002b-X',
     tx_ref: Date.now(),
     amount: Math.round(course.price!),
     currency: 'NGN',
