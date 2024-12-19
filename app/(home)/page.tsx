@@ -24,7 +24,7 @@ export default async function Home() {
   return (
     <>
     <Slider/>
-    <div className="mb-0">
+    <div className="mb-0 bg-[#1C1F2E] text-white">
       <Intro/>
       <div className="md:mt-5 mb-0 md:px-10 xl:px-16 pb-16">
         <Categories categories={categories} selectedCategory={null} />

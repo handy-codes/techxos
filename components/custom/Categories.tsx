@@ -17,7 +17,7 @@ const Categories = ({ categories, selectedCategory }: CategoriesProps) => {
   };
 
   return (
-    <div className="flex flex-wrap px-4 gap-7 justify-center my-10">
+    <div className="flex flex-wrap px-4 gap-7 justify-center my-10 text-black font-bold">
       <Button
         variant={selectedCategory === null ? "default" : "outline"}
         onClick={() => onClick(null)}
