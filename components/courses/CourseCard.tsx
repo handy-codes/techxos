@@ -1,12 +1,12 @@
 import { db } from "@/lib/db";
-// import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs/server";
 import { Course } from "@prisma/client";
 import { Gem } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const CourseCard = async ({ course }: { course: Course }) => {
-  // const instructor = await clerkClient.users.getUser(course.instructorId);
+  const instructor = await clerkClient.users.getUser(course.instructorId);
 
   let level;
 
@@ -33,7 +33,7 @@ const CourseCard = async ({ course }: { course: Course }) => {
       <div className="px-4 py-3 flex flex-col gap-2">
         <h2 className="text-lg font-bold hover:[#FDAB04]">{course.title}</h2>
         <div className="flex justify-between text-sm font-medium">
-          {/* {instructor && (
+          {instructor && (
             <div className="flex gap-2 items-center">
               <Image
                 src={
@@ -50,7 +50,7 @@ const CourseCard = async ({ course }: { course: Course }) => {
               />
               <p>{instructor.fullName}</p>
             </div>
-          )} */}
+          )}
           {level && (
             <div className="flex gap-2">
               <Gem size={20} />
