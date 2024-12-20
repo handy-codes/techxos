@@ -38,7 +38,7 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
   }
 
   return (
-    <div className="px-6 py-4 flex flex-col gap-5 text-sm bg-[#a3c6dc]">
+    <div className="px-6 py-4 flex flex-col gap-5 text-sm bg-[#ECEFF1]">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">{course.title}</h1>
         <SectionMenu course={course} />
