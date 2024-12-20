@@ -88,22 +88,28 @@ const SectionsDetails = ({
     try {
       setIsLoading(true);
       handleFlutterPayment({
-        callback: (response) => {
+        callback: async (response) => {
           if(response.status === "successful") {
-            console.log("payment successful"); 
-            // closePaymentModal();
-            // return redirect(`/`);
-            // return redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/courses/${course.id}/overview?canceled=true`);
+            console.log('Payment successful', response);
+            try {
+              const res = await axios.post(`/api/courses/${course.id}/checkout`);
+              window.location.assign(res.data.url);
+            } catch (err) {
+              console.log("Failed to checkout course", err);
+              toast.error("Payment failed!");
+            }
+            closePaymentModal() // this will close the modal programmatically           
+            // Redirect or perform other actions here
+          } else {
+            console.log('Payment failed', response);
+            // Handle failed payment
           }
-          console.log(response);          
-          closePaymentModal() // this will close the modal programmatically           
         },
         onClose: () => {
+          console.log('Payment modal closed');
+          // Handle actions when the payment modal is closed
         },
       });     
-      const res = await axios.post(`/api/courses/${course.id}/checkout`);
-      window.location.assign(res.data.url);
-
     } catch (err) {
       console.log("Failed to chechout course", err);
       toast.error("Something went wrong!");
@@ -178,84 +184,57 @@ export default SectionsDetails;
 
 
 
+// FROM COPILOT 20-12-2024
+// import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
-// "use client";
-
-// import {
-//   Course,
-//   MuxData,
-//   Progress,
-//   Purchase,
-//   Resource,
-//   Section,
-// } from "@prisma/client";
-// import toast from "react-hot-toast";
-// import { useState } from "react";
-// import axios from "axios";
-// import { File, Loader2, Lock } from "lucide-react";
-
-// import { Button } from "@/components/ui/button";
-// import ReadText from "@/components/custom/ReadText";
-// import MuxPlayer from "@mux/mux-player-react";
-// import Link from "next/link";
-// import ProgressButton from "./ProgressButton";
-// import SectionMenu from "../layout/SectionMenu";
-// // import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
-// import { usePaystackPayment } from 'react-paystack';
-// import { redirect } from "next/navigation";
-
-
-// interface SectionsDetailsProps {
-//   course: Course & { sections: Section[] };
-//   section: Section;
-//   purchase: Purchase | null;
-//   muxData: MuxData | null;
-//   resources: Resource[] | [];
-//   progress: Progress | null;
-// }
-
-// const SectionsDetails = ({
-//   course,
-//   section,
-//   purchase,
-//   muxData,
-//   resources,
-//   progress,
-// }: SectionsDetailsProps) => {
+// const SectionsDetails = ({ course, section, purchase, muxData, resources, progress }: SectionsDetailsProps) => {
 //   const [isLoading, setIsLoading] = useState(false);
 //   const isLocked = !purchase && !section.isFree;
 
 //   const config = {
-//     reference: (new Date()).getTime().toString(),
-//     email: "user@example.com",
-//     amount: Math.round(course.price! * 100),
-//     publicKey: 'pk_test_17a0c2285a889761fc4de298fad5e405e6916d04',
-// };
+//     public_key: 'YOUR_FLUTTERWAVE_PUBLIC_KEY',
+//     tx_ref: Date.now().toString(),
+//     amount: Math.round(course.price!),
+//     currency: 'NGN',
+//     payment_options: 'card,mobilemoney,ussd',
+//     customer: {
+//       email: 'customer@example.com',
+//       phone_number: '09012345678',
+//       name: 'Customer Name',
+//     },
+//     customizations: {
+//       title: 'Techxos Tutors',
+//       description: 'Payment for Courses in cart',
+//       logo: 'https://example.com/logo.png',
+//     },
+//   };
 
-
-// const onSuccess = (reference: any) => {
-//   // Implementation for whatever you want to do with reference and after success call.
-//   console.log(reference);
-// };
-
-// const onClose = () => {};
-
-//   const initializePayment = usePaystackPayment(config);
+//   const handleFlutterPayment = useFlutterwave(config);
 
 //   const buyCourse = async () => {
 //     try {
 //       setIsLoading(true);
-      
-//       const response = await axios.post(`/api/courses/${course.id}/checkout`);
-//       //@ts-ignore
-//       initializePayment(onSuccess, onClose); 
-//       window.location.assign(response.data.url);
-//       window.location.reload();
-//       return redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/courses/${course.id}/overview?success=true`);
-    
+//       handleFlutterPayment({
+//         callback: (response) => {
+//           if (response.status === 'successful') {
+//             console.log('Payment successful', response);
+//             // Perform actions after a successful payment
+//             // For example, you can redirect the user or update the state
+//             closePaymentModal(); // Close the payment modal
+//             // Redirect or perform other actions here
+//           } else {
+//             console.log('Payment failed', response);
+//             // Handle failed payment
+//           }
+//         },
+//         onClose: () => {
+//           console.log('Payment modal closed');
+//           // Handle actions when the payment modal is closed
+//         },
+//       });
 //     } catch (err) {
-//       console.log("Failed to chechout course", err);
-//       toast.error("Something went wrong!");
+//       console.log('Failed to checkout course', err);
+//       toast.error('Something went wrong!');
 //     } finally {
 //       setIsLoading(false);
 //     }
@@ -265,7 +244,6 @@ export default SectionsDetails;
 //     <div className="px-6 py-4 flex flex-col gap-5">
 //       <div className="flex flex-col md:flex-row md:justify-between md:items-center">
 //         <h1 className="text-2xl font-bold max-md:mb-4">{section.title}</h1>
-
 //         <div className="flex gap-4">
 //           <SectionMenu course={course} />
 //           {!purchase ? (
@@ -281,27 +259,21 @@ export default SectionsDetails;
 //               courseId={course.id}
 //               sectionId={section.id}
 //               isCompleted={!!progress?.isCompleted}
-//             /> // !! converts falsy values to boolean false
+//             />
 //           )}
 //         </div>
 //       </div>
-
 //       <ReadText value={section.description!} />
-
 //       {isLocked ? (
 //         <div className="px-10 flex flex-col gap-5 items-center bg-[#FFF8EB]">
 //           <Lock className="h-8 w-8" />
 //           <p className="text-sm font-bold">
-//             Video for this section is locked!. Please buy the course to access
+//             Video for this section is locked! Please buy the course to access.
 //           </p>
 //         </div>
 //       ) : (
-//         <MuxPlayer
-//           playbackId={muxData?.playbackId || ""}
-//           className="md:max-w-[600px]"
-//         />
+//         <MuxPlayer playbackId={muxData?.playbackId || ''} className="md:max-w-[600px]" />
 //       )}
-
 //       <div>
 //         <h2 className="text-xl font-bold mb-5">Resources</h2>
 //         {resources.map((resource) => (
@@ -321,5 +293,3 @@ export default SectionsDetails;
 // };
 
 // export default SectionsDetails;
-
-
