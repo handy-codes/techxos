@@ -1,19 +1,31 @@
-'use client';
-
-import { useSession } from 'next-auth/react';
 import React from 'react'
+// import { clerkClient } from "@clerk/nextjs/server";
+
 
 const Welcome = () => {
-    const { data: session } = useSession();
-    console.log(session);
-    return (
-        session && (
-            <div className="">
-                <p>Welcome back {session?.user?.name}</p>
-            </div>
-        )
-    );
-  }
+  return (
+    <div>Welcome</div>
+  )
+}
 
 export default Welcome
 
+
+
+
+
+// async function getUserName(userId: string) {
+//   try {
+//     const user = await clerkClient.users.getUser(userId);
+//     if (user) {
+//       console.log(user); // Assuming the user's name is stored in the 'name' property
+//     } else {
+//       console.log("User not found");
+//     }
+//   } catch (error) {
+//     console.error("Error fetching user:", error);
+//   }
+// }
+
+// // Usage
+// getUserName("user_id_here");
