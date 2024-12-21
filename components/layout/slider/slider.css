@@ -34,11 +34,11 @@
 
 @media(max-width: 639px){
     .slider{
-        height: 75vh;
+        height: 70vh;
     }
     
     .content{
-        height: 75vh;
+        height: 70vh;
     }    
 }
 
