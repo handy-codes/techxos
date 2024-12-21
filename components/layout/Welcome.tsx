@@ -1,31 +1,16 @@
-import React from 'react'
-// import { clerkClient } from "@clerk/nextjs/server";
+'use client';
 
+import { useUser } from '@clerk/nextjs';
+import React from 'react'
 
 const Welcome = () => {
+  const {user} = useUser();
+
   return (
-    <div>Welcome</div>
+    user && (
+    <div className='px-8 pt-4 flex flex-wrap gap-3'><h1 className='text-[#ECEFF1] text-3xl'>Welcome</h1> <span className='text-[#03FF01] text-4xl'>{user?.firstName}</span></div>
+   )
   )
 }
 
 export default Welcome
-
-
-
-
-
-// async function getUserName(userId: string) {
-//   try {
-//     const user = await clerkClient.users.getUser(userId);
-//     if (user) {
-//       console.log(user); // Assuming the user's name is stored in the 'name' property
-//     } else {
-//       console.log("User not found");
-//     }
-//   } catch (error) {
-//     console.error("Error fetching user:", error);
-//   }
-// }
-
-// // Usage
-// getUserName("user_id_here");
