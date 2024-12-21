@@ -58,9 +58,9 @@ const FooterPage = () => {
             <div data-aos="zoom-in" className="grid md:grid-cols-3 pb-44 pt-5">
               <div className="px-4">
                 <div className="flex gap-5">
-                  <Image className="rounded-full w-8 h-8 " src={'/footertechx.png'} width={24} height={24} alt="ghg"/>
+                  {/* <Image className="rounded-full w-8 h-8 " src={'/footertechx.png'} width={24} height={24} alt="ghg"/> */}
                   <h1 className="sm:text-2xl text-xl font-bold sm:text-left mb-3 flex items-center gap-3">
-                     Techxus
+                     Techxos
                   </h1>
                 </div>
                 <p className="">
