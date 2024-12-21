@@ -266,7 +266,7 @@ const EditCourseForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Price <span className="text-red-500">*</span> (USD)
+                  Price <span className="text-red-500">*</span> (NGN)
                 </FormLabel>
                 <FormControl>
                   <Input

@@ -27,7 +27,7 @@ const Chart = ({ data }: { data: { name: string; total: number }[] }) => {
             fontSize={12}
             axisLine={false}
             tickLine={false}
-            tickFormatter={(value) => `$${value}`}
+            tickFormatter={(value) => `NGN${value}`}
           />
           <Tooltip />
           <Bar dataKey="total" fill="#8884d8" radius={[4, 4, 0, 0]} />

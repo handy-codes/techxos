@@ -81,8 +81,8 @@ const Topbar = () => {
             <Link
               href={route.path}
               key={route.path}
-              className={`text-sm sm:text-[14px] rounded-[3px] transition-all active hover:bg-[#1b9bff] py-[13px] px-[13px]
-                ${pathName.startsWith(route.path) && "bg-[#1b9bff]"}
+              className={`text-sm sm:text-[14px] rounded-[3px] transition-all active hover:border-b-[#E79D09] py-[13px] px-[13px]
+                ${pathName.startsWith(route.path) && "border-2 border-[#E79D09]"}
                `}      
             >
               {route.label}
