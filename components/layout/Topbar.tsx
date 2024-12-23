@@ -75,15 +75,13 @@ const Topbar = () => {
         </button>
       </div>
 
-      <div className="flex gap-6 sm:gap-2 items-center">
+      <div className="flex gap-6 sm:gap-3 items-center">
         <div className="max-sm:hidden flex gap-6 max-md:gap-4">
           {topRoutes.map((route) => (
             <Link
               href={route.path}
               key={route.path}
-              className={`text-sm sm:text-[14px] rounded-[3px] transition-all active hover:border-b-[#E79D09] py-[13px] px-[13px]
-                ${pathName.startsWith(route.path) && "border-2 border-[#E79D09]"}
-               `}      
+              className="text-sm sm:text-[14px] rounded-[3px] transition-all active hover:bg-[#1b9bff] py-[13px] px-[13px]"
             >
               {route.label}
             </Link>
