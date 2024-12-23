@@ -25,6 +25,7 @@ export default async function Home() {
   return (
     <>
     <Slider/>
+    {/* <div className="mb-0 bg-[#1F1F1F] text-white"> */}
     <div className="mb-0 bg-[#1C1F2E] text-white">
       <Welcome/>
       <Intro/>
