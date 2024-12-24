@@ -38,7 +38,7 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
   }
 
   return (
-    <div className="px-6 py-4 flex flex-col gap-5 text-lg font-bold bg-[#ECEFF1]">
+    <div className="px-6 py-4 flex flex-col gap-5 text-lg font-semibold bg-[#ECEFF1]">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">{course.title}</h1>
         <SectionMenu course={course} />
@@ -63,7 +63,7 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
       </div> */}
 
       <div className="flex gap-2">
-        <p className="font-bold">Price:</p>
+        <p className="">Price:</p>
         <p>NGN{course.price}</p>
       </div>
 
@@ -73,7 +73,7 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <p className="font-semibold">Description:</p>
+        <p className="">Description:</p>
         <ReadText value={course.description!} />
       </div>
     </div>
