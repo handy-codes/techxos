@@ -15,7 +15,7 @@ export default function Intro() {
           {/* To upload and earn from your own quality course, please contact <span className='text-[#E79D09]'>sales@techxos.com.</span> */}
         </p>
 
-        <p className='text-white text-justify text-[14px] sm:text-[17px] sm:hidden'>
+        <p className='text-white text-justify text-[15px] sm:text-[17px] sm:hidden'>
           Check out our well-curated 
           courses just for you - from Coding to Accounting, Tourism & Aviation,
           as well as preparatory courses for ICAN, UTME, SSCE exams etc.<br/><br/>

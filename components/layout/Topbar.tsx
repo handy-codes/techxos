@@ -67,7 +67,7 @@ const Topbar = () => {
           onChange={(e) => setSearchInput(e.target.value)}
         />
         <button
-          className="bg-[#FDAB04] rounded-r-full border-none outline-none cursor-pointer px-4 py-3 hover:bg-[#FDAB04]/80"
+          className="bg-[#E79D09] rounded-r-full border-none outline-none cursor-pointer px-4 py-3 hover:bg-[#FDAB04]/80"
           disabled={searchInput.trim() === ""}
           onClick={handleSearch}
         >
@@ -99,7 +99,7 @@ const Topbar = () => {
                   <Link
                     href={route.path}
                     key={route.path}
-                    className="text-[22px] font-medium hover:text-[#FDAB04]"
+                    className="text-[22px] font-medium hover:text-[#E79D09]"
                   >
                     {route.label}
                   </Link>
