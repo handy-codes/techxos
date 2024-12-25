@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Intro() {
   return (
-    <div className="p-3 sm:p-8">
+    <div className="px-3 py-4 sm:p-8">
       <div className="bg-[#1C1F2E] border border-[#E79D09] borders text-[#E79D09] h-[40vh] p-4 sm:p-8 gap-2 sm:gap-2 radius flex flex-col items-center">
       {/* <div className="bg-[#010101] border border-[#ECEFF1] borders text-[#E79D09] h-[40vh] p-4 sm:p-8 gap-2 sm:gap-2 radius flex flex-col items-center"> */}
         <h1 className='font-extrabold text-[28px] sm:text-[34px] md:text-5xl'>Explore Our Courses</h1>

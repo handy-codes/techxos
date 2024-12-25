@@ -6,7 +6,7 @@ const Slider = () => {
     <div className="slider">
       <div className="load"></div>
       <div className="content">
-        <div className="principal -mt-[35%]">
+        <div className="principal -mt-[25%]">
           <h1 className="text-[25px] sm:text-[28px]">Skill Up</h1>
           <p className="text-[16px] sm:text-[18px]">with every ease!</p>
         </div>

@@ -13,10 +13,6 @@ body{
   background-color: #ECEFF1;
 }
 
-.borders{
-  border-width: 2px;
-}
-
 
 .scroll-cover{
     display: flex;
