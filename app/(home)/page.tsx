@@ -37,7 +37,7 @@ export default async function Home() {
           ))}
         </div>   
       </div>
-        <FooterPage/>   
+      <FooterPage/>   
     </div>
     </>
   );

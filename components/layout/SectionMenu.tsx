@@ -22,7 +22,9 @@ const SectionMenu = ({ course }: SectionMenuProps) => {
           >
             Overview
           </Link>
-          {course.sections.map((section) => (
+          {course.sections
+            .sort((a, b) => a.position - b.position) // Sort by position
+            .map((section) => (
             <Link
               key={section.id}
               href={`/courses/${course.id}/sections/${section.id}`}
