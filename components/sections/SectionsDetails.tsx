@@ -45,7 +45,7 @@ const SectionsDetails = ({
   const isLocked = !purchase && !section.isFree;
 
   type Config = {
-      public_key: string;
+      public_key: string | undefined;
       tx_ref?: number;
       amount: number;
       currency: string;
@@ -62,7 +62,7 @@ const SectionsDetails = ({
       };
   }
   const config: Config =  {
-    public_key: 'FLWPUBK-a431cbb1ab60377246c9e41bb2a9002b-X',
+    public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY,
     tx_ref: Date.now(),
     amount: Math.round(course.price!),
     currency: 'NGN',
