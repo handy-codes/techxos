@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const CourseCard = async ({ course }: { course: Course }) => {
+  try {
   const instructor = await clerkClient.users.getUser(course.instructorId);
 
   let level;
@@ -62,7 +63,9 @@ const CourseCard = async ({ course }: { course: Course }) => {
         <p className="text-sm font-bold">NGN {course.price}</p>
       </div>
     </Link>
-  );
+  );}catch (error) {
+    console.error('Error fetching instructor:', error);
+  }
 };
 
 export default CourseCard;
