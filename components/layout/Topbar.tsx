@@ -81,8 +81,9 @@ const Topbar = () => {
             <Link
               href={route.path}
               key={route.path}
-              className="text-sm sm:text-[14px] rounded-[3px] transition-all active hover:bg-[#1b9bff] py-[13px] px-[13px]"
-            >
+              className={`text-sm sm:text-[14px] rounded-[3px] transition-all py-[13px] px-[13px] ${
+                pathName === route.path ? 'bg-[#1b9bff]' : 'hover:bg-[#1b9bff]'
+              }`}            >
               {route.label}
             </Link>
           ))}
