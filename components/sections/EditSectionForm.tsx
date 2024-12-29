@@ -83,7 +83,7 @@ const EditSectionForm = ({
     <>
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7">
         <Link href={`/instructor/courses/${courseId}/sections`}>
-          <Button variant="outline" className="text-sm font-medium">
+          <Button variant="outline" className="text-sm bg-[#FBB11C] font-medium">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Chapters
           </Button>

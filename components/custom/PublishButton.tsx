@@ -56,7 +56,7 @@ const PublishButton = ({
       disabled={disabled || isLoading}
       onClick={onClick}
     >
-      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : isPublished ? "Unpublish" : "Publish"}
+      {isLoading ? <Loader2 className="h-4 w-4 bg-[#FBB11C] animate-spin" /> : isPublished ? "Unpublish" : "Publish"}
     </Button>
   );
 };

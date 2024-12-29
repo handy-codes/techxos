@@ -137,6 +137,7 @@ const CreateSectionForm = ({
           </div>
         </form>
       </Form>
+      router.refresh();
     </div>
   );
 };
