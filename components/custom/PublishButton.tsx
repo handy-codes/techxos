@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import confetti from "canvas-confetti";
 
 interface PublishButtonProps {
   disabled: boolean;
@@ -47,6 +48,10 @@ const PublishButton = ({
       );
     } finally {
       setIsLoading(false);
+      // if (!isPublished && page === "Section") {
+      //   // Assuming `pageType` is a variable that determines if the page is a course or chapter
+      //   confetti();
+      // }
     }
   };
 
