@@ -150,7 +150,7 @@ const SectionsDetails = ({
         <div className="px-10 flex flex-col gap-5 items-center bg-[#FFF8EB]">
           <Lock className="h-8 w-8" />
           <p className="text-sm font-bold">
-            Video for this section is locked!. Please buy the course to access
+            Video for this section is locked. You can buy the course to access it
           </p>
         </div>
       ) : (
