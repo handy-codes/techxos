@@ -32,7 +32,7 @@ const page = () => {
           <h1 className='text-white text-[21px] font-medium sm:text-3xl'>Leaverage Tech | eLearn now!</h1>
           <p className='text-[#ABBECC] sm:text-justify pt-3 pb-3 text-[18px]'> 
             When traditional 9-5pm work schedule leaves you with little time and energy to develop yourself
-            further or to read and pass your college or professional exams, Techxos has got you covered!
+            further or to read and pass your college or professional exams, Techxos has got you covered. Your instructors never sleep!
           </p>
       </div> 
       <div className="max-sm:rounded-lg sm:inline-block w-[90vw] sm:w-[45vw] h-[75vh] ">
