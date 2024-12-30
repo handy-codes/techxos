@@ -8,8 +8,8 @@ const page = () => {
   <>
   <div className=''>
     <div className="flex-row-reverse my-12  flex flex-wrap max-sm:gap-4 justify-center max-w-7xl mx-auto">
-      <div className="radius content-center bg-[#003B65] p-6 w-[90vw] sm:w-[45vw] h-[75vh] flex sm:content-center flex-col sm:items-center sm:justify-center">
-        <h1 className='text-white text-[21px] font-medium sm:text-3xl'>Redefining Learning</h1>
+    <div className="radius content-center bg-[#003B65] p-6 w-[90vw] sm:w-[45vw] md:h-[75vh] h-fit flex sm:content-center flex-col sm:items-center sm:justify-center">
+    <h1 className='text-white text-[21px] font-medium sm:text-3xl'>Redefining Learning</h1>
         <p className='text-[#ABBECC] sm:text-justify pt-3 pb-3 text-[18px]'> 
           Techxos is a dedicated online learning App. Made of local content, you can access well-curated courses ranging from Coding to Accounting, Tourism & Aviation,
           as well as in preparatory courses for ICAN, UTME, SSCE exams and so much more. Learn at your own pace.
@@ -28,11 +28,11 @@ const page = () => {
 
     {/* CTO SECTION */}
     <div className=" my-12 flex flex-wrap max-sm:gap-4 justify-center max-w-7xl mx-auto">
-      <div className="radius content-center bg-[#003B65] p-6 w-[90vw] sm:w-[45vw] h-[75vh] flex sm:content-center flex-col sm:items-center sm:justify-center">
-          <h1 className='text-white text-[21px] font-medium sm:text-3xl'>Redefining Learning</h1>
+      <div className="radius content-center bg-[#003B65] p-6 w-[90vw] sm:w-[45vw] md:h-[75vh] h-fit flex sm:content-center flex-col sm:items-center sm:justify-center">
+          <h1 className='text-white text-[21px] font-medium sm:text-3xl'>Leaverage Tech | eLearn now!</h1>
           <p className='text-[#ABBECC] sm:text-justify pt-3 pb-3 text-[18px]'> 
             When traditional 9-5pm work schedule leaves you with little time and energy to develop yourself
-            further or to read and pass professional exams, Techxos has got you covered!
+            further or to read and pass your college or professional exams, Techxos has got you covered!
           </p>
       </div> 
       <div className="max-sm:rounded-lg sm:inline-block w-[90vw] sm:w-[45vw] h-[75vh] ">
