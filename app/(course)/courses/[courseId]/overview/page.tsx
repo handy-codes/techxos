@@ -43,7 +43,7 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
         <h1 className="text-2xl font-bold">{course.title}</h1>
         <SectionMenu course={course} />
       </div>
-      <p><span className="text-green-600 text-[20px] max-sm:font-extrabold">You may proceed to Chapters </span  > or see overview below</p>
+      <p><span className="text-green-600 text-[20px] font-extrabold">You may proceed to Chapters </span  > or see overview below</p>
       <p className="font-bold">{course.subtitle}</p>
 
       {/* <div className="flex gap-2 items-center">
