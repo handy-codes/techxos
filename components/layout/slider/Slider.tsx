@@ -7,8 +7,8 @@ const Slider = () => {
       <div className="load"></div>
       <div className="content">
         <div className="principal -mt-[25%]">
-          <h1 className="text-[25px] sm:text-[28px]">Skill Up</h1>
-          <p className="text-[16px] sm:text-[18px]">with every ease!</p>
+          <h1 className="text-[25px] sm:text-[28px] font-bold">Skill Up</h1>
+          <p className="text-[16px] sm:text-[18px] font-bold text-[#FF7700]">with every ease!</p>
         </div>
       </div>
     </div>
