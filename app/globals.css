@@ -47,7 +47,7 @@ body{
 }
 
 .link.active{
-  background-color: red;
+  background-color: #c8d2de;
 }
 
 @media(max-width: 639px){

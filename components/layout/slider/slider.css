@@ -16,7 +16,7 @@
 
 .principal{
     left: 50%;
-    top: 50%;
+    top: 100%;
     transform: translate(-50%, -50%);
     position: absolute;
     letter-spacing: 5px;
@@ -24,12 +24,12 @@
 }
 
 .pricipal h1{
-    font-size: 30px;
+    font-size: 32px;
     margin-bottom: 20px;
 }
 
 .pricipal p{
-    font-size: 18px;
+    font-size: 20px;
 }
 
 @media(max-width: 639px){
@@ -39,7 +39,25 @@
     
     .content{
         height: 45vh;
-    }    
+    }   
+
+    .principal{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    letter-spacing: 5px;
+    text-align: center;
+    } 
+
+    .pricipal h1{
+    font-size: 30px;
+    margin-bottom: 20px;
+    }
+
+    .pricipal p{
+        font-size: 18px;
+    }
 }
 
 
