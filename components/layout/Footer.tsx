@@ -52,6 +52,7 @@ const FooterPage = () => {
     AOS.refresh();
   }, []);
 
+  const currentYear = new Date().getFullYear();
     return (
         <div style={BannerImg} className="text-white mb-0">
           <div className="container">
@@ -66,7 +67,7 @@ const FooterPage = () => {
                 <p className="">
                   Skill up - with every Ease!
                 </p>
-                <p className="text-[11px] mt-6">&copy;2024 All Rights Reserved</p>
+                <p className="text-[11px] mt-6">&copy;{currentYear} All Rights Reserved</p>
                   {/* <Image className="w-20 h-8 " src={'/ulearnlogo3.png'} width={48} height={48} alt="ghg"/>                 */}
               </div>    
               {/* Footer Links */}
