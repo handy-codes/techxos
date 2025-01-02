@@ -21,7 +21,6 @@ const page = () => {
         <div className=" w-[100%] p-6 h-[15%] flex flex-col justify-center items-center bg-lime-950 py-4 text-white">
          <p className='text-xl'>Jonadab Omonigho</p>
          <p className='text-[14px] sm:text-sm'>Founder, CEO Techxos</p>
-         {/* <p>HighKlass Intl Schools </p> */}
         </div>
       </div>
     </div>
@@ -43,7 +42,7 @@ const page = () => {
          <div className="flex items-center pb-1 gap-2 max-sm:gap-0justify-between ">
           <p className='text-[14px] sm:text-sm'>CTO & Co-founder, at Techxos</p>
           <a href="https://www.linkedin.com/in/emeka-owo-204aaa2a5" target='_blank'>          
-              <Image className='rounded-full' src={'/linkedin3.png'} width={23} height={23} alt=''/>
+              <Image className='rounded-full' src={'/linkedin4.png'} width={23} height={23} alt=''/>
           </a>
          </div>
         </div>
