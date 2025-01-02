@@ -58,7 +58,7 @@ const Topbar = () => {
         {/* <Image src="/logo71t.png" height={40} width={150} className="rounded-md max-md:w-[130px]" alt="logo" /> */}
       </Link>
 
-      <div className="max-md:hidden w-[400px] md:w-[300px] rounded-full flex">
+      <div className="max-lg:hidden max-lg::w-[100px] rounded-full flex">
         <input
           className="flex-grow rounded-l-full text-black border-none outline-none text-sm pl-4 py-3"
           // className="flex-grow bg-[#FFF8EB] rounded-l-full text-black border-none outline-none text-sm pl-4 py-3"
@@ -75,13 +75,13 @@ const Topbar = () => {
         </button>
       </div>
 
-      <div className="flex gap-6 sm:gap-3 items-center">
+      <div className="flex gap-6 sm:gap-1 items-center">
         <div className="max-sm:hidden flex gap-6 md:gap-2">
           {topRoutes.map((route) => (
             <Link
               href={route.path}
               key={route.path}
-              className={`text-sm sm:text-[14px] rounded-[3px] transition-all py-[13px] px-[13px] md: ${
+              className={`sm:text-[12px] md:text-[16px] rounded-[3px] transition-all py-[13px] px-[13px] md: ${
                 pathName === route.path ? 'bg-[#1b9bff]' : 'hover:bg-[#1b9bff]'
               }`}            >
               {route.label}
