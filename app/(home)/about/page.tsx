@@ -7,8 +7,8 @@ const page = () => {
   return (
   <>
   <div className=''>
-      <h1 className="ml-[5%] sm:ml-14 my-auto gap-2 mx-auto mt-12 text-3xl sm:text-4xl font-bold">Collaborating to <span className='text-[#003E8F] text-4xl sm:text-4xl font-extrabold'>Redefine</span> <br /> Learning</h1>
-    <div className="flex-row-reverse my-12  flex flex-wrap max-sm:gap-4 justify-center max-w-7xl mx-auto">
+      <h1 className="ml-[5%] sm:ml-14 my-auto gap-2 mx-auto mt-8 text-3xl sm:text-4xl font-bold">Collaborating to <span className='text-[#003E8F] text-4xl sm:text-4xl font-extrabold'>Redefine</span> <br /> Learning</h1>
+    <div className="flex-row-reverse mt-8  flex flex-wrap max-sm:gap-4 justify-center max-w-7xl mx-auto">
     <div className="radius content-center bg-[#003B65] p-6 w-[90vw] sm:w-[45vw] sm:h-[75vh] h-fit flex sm:content-center flex-col sm:items-center sm:justify-center">
         <h1 className='text-white text-[21px] font-medium sm:text-3xl'>Scale with Us</h1>
         <p className='text-[#ABBECC] sm:text-justify pt-3 pb-3 text-[18px]'> 
