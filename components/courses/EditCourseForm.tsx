@@ -280,7 +280,6 @@ const EditCourseForm = ({
               </FormItem>
             )}
           />
-
           <div className="flex gap-5">
             <Link href="/instructor/courses">
               <Button variant="outline" type="button">
@@ -301,4 +300,4 @@ const EditCourseForm = ({
   );
 };
 
-export default EditCourseForm;
+export default EditCourseForm; 
