@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -20,9 +19,8 @@ import MuxPlayer from "@mux/mux-player-react";
 import Link from "next/link";
 import ProgressButton from "./ProgressButton";
 import SectionMenu from "../layout/SectionMenu";
-import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { redirect, useRouter } from "next/navigation";
-
 
 interface SectionsDetailsProps {
   course: Course & { sections: Section[] };
@@ -45,37 +43,37 @@ const SectionsDetails = ({
   const isLocked = !purchase && !section.isFree;
 
   type Config = {
-      public_key: string | undefined;
-      tx_ref?: number;
-      amount: number;
-      currency: string;
-      payment_options: string;
-      customer: {
-          email: string;
-          phone_number: string;
-          name: string;
-      };
-      customizations: {
-          title: string;
-          description: string;
-          logo: string;
-      };
-  }
-  const config: Config =  {
+    public_key: string | undefined;
+    tx_ref?: number;
+    amount: number;
+    currency: string;
+    payment_options: string;
+    customer: {
+      email: string;
+      phone_number: string;
+      name: string;
+    };
+    customizations: {
+      title: string;
+      description: string;
+      logo: string;
+    };
+  };
+  const config: Config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY,
     tx_ref: Date.now(),
     amount: Math.round(course.price!),
-    currency: 'NGN',
-    payment_options: 'card,mobilemoney,ussd',
+    currency: "NGN",
+    payment_options: "card,mobilemoney,ussd",
     customer: {
-      email: 'paxymekventures@gmail.com',
-       phone_number: '09038984567',
-      name: 'Prince Emy',
+      email: "paxymekventures@gmail.com",
+      phone_number: "09038984567",
+      name: "Prince Emy",
     },
     customizations: {
-      title: 'Techxos Tutors',
-      description: 'Payment for Courses in cart',
-      logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
+      title: "Techxos Tutors",
+      description: "Payment for Courses in cart",
+      logo: "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
     },
   };
 
@@ -89,27 +87,29 @@ const SectionsDetails = ({
       setIsLoading(true);
       handleFlutterPayment({
         callback: async (response) => {
-          if(response.status === "successful") {
-            console.log('Payment successful', response);
+          if (response.status === "successful") {
+            console.log("Payment successful", response);
             try {
-              const res = await axios.post(`/api/courses/${course.id}/checkout`);
+              const res = await axios.post(
+                `/api/courses/${course.id}/checkout`
+              );
               window.location.assign(res.data.url);
             } catch (err) {
               console.log("Failed to checkout course", err);
               toast.error("Payment failed!");
             }
-            closePaymentModal() // this will close the modal programmatically           
+            closePaymentModal(); // this will close the modal programmatically
             // Redirect or perform other actions here
           } else {
-            console.log('Payment failed', response);
+            console.log("Payment failed", response);
             // Handle failed payment
           }
         },
         onClose: () => {
-          console.log('Payment modal closed');
+          console.log("Payment modal closed");
           // Handle actions when the payment modal is closed
         },
-      });     
+      });
     } catch (err) {
       console.log("Failed to chechout course", err);
       toast.error("Something went wrong!");
@@ -150,7 +150,8 @@ const SectionsDetails = ({
         <div className="px-10 flex flex-col gap-5 items-center bg-[#FFF8EB]">
           <Lock className="h-8 w-8" />
           <p className="text-sm font-bold">
-            This chapter is locked. You can buy the course to access all the chapters.
+            This chapter is locked. You can buy the course to access all the
+            chapters.
           </p>
         </div>
       ) : (
@@ -160,29 +161,27 @@ const SectionsDetails = ({
         />
       )}
 
-      <div>
-        <h2 className="text-xl font-bold mb-5">Resources</h2>
-        {resources.map((resource) => (
-          <Link
-            key={resource.id}
-            href={resource.fileUrl}
-            target="_blank"
-            className="flex items-center bg-[#FFF8EB] rounded-lg text-sm font-medium p-3"
-          >
-            <File className="h-4 w-4 mr-4" />
-            {resource.name}
-          </Link>
-        ))}
-      </div>
+      {resources.length > 0 && (
+        <div>
+          <h2 className="text-xl font-bold mb-5">Resources</h2>
+          {resources.map((resource) => (
+            <Link
+              key={resource.id}
+              href={resource.fileUrl}
+              target="_blank"
+              className="flex items-center bg-[#FFF8EB] rounded-lg text-sm font-medium p-3"
+            >
+              <File className="h-4 w-4 mr-4" />
+              {resource.name}
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
 export default SectionsDetails;
-
-
-
-
 
 // FROM COPILOT 20-12-2024
 // import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';

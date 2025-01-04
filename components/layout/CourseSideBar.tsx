@@ -54,11 +54,11 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
       )}
       <Link
         href={`/courses/${course.id}/overview`}
-        className={`p-3 rounded-lg hover:bg-[#FFF8EB] mt-4`}
+        className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3`}
       >
         Overview
       </Link>
-      <div className="overflow-y-auto max-h-screen flex flex-col font-semibold text-lg">
+      <div className="overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold">
         {publishedSections.map((section) => (
           <Link
             key={section.id}

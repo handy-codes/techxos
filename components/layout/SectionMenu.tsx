@@ -18,13 +18,13 @@ const SectionMenu = ({ course }: SectionMenuProps) => {
         <SheetContent className="flex flex-col">
           <Link
             href={`/courses/${course.id}/overview`}
-            className={`p-3 rounded-lg hover:bg-[#FFF8EB] mt-3`}
+            className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3`}
           >
             Overview
           </Link>
-          <div className="overflow-y-auto max-h-screen flex flex-col gap-1 font-semibold text-lg">
+          <div className="overflow-y-auto max-h-screen flex flex-col gap-1 font-semibold text-[16px]">
             {course.sections
-              .sort((a, b) => a.position - b.position) // Sort by position
+              .sort((a, b) => a.position - b.position) 
               .map((section) => (
                 <Link
                   key={section.id}
