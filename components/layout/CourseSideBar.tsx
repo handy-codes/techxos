@@ -58,7 +58,7 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
       >
         Overview
       </Link>
-      <div className="overflow-y-auto max-h-screen">
+      <div className="overflow-y-auto max-h-screen flex flex-col text-lg">
         {publishedSections.map((section) => (
           <Link
             key={section.id}

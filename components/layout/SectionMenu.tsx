@@ -22,7 +22,7 @@ const SectionMenu = ({ course }: SectionMenuProps) => {
           >
             Overview
           </Link>
-          <div className="overflow-y-auto max-h-screen">
+          <div className="overflow-y-auto max-h-screen flex flex-col text-lg">
             {course.sections
               .sort((a, b) => a.position - b.position) // Sort by position
               .map((section) => (
