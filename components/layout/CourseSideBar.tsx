@@ -31,16 +31,17 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
   });
 
   const completedSections = await db.progress.count({
-    where:{
+    where: {
       studentId,
       sectionId: {
         in: publishedSectionIds,
       },
       isCompleted: true,
-    }
+    },
   });
 
-  const progressPercentage = (completedSections / publishedSectionIds.length) * 100;
+  const progressPercentage =
+    (completedSections / publishedSectionIds.length) * 100;
 
   return (
     <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium">
@@ -57,15 +58,17 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
       >
         Overview
       </Link>
-      {publishedSections.map((section) => (
-        <Link
-          key={section.id}
-          href={`/courses/${course.id}/sections/${section.id}`}
-          className="p-3 rounded-lg hover:bg-[#FFF8EB] mt-4"
-        >
-          {section.title}
-        </Link>
-      ))}
+      <div className="overflow-y-auto max-h-screen">
+        {publishedSections.map((section) => (
+          <Link
+            key={section.id}
+            href={`/courses/${course.id}/sections/${section.id}`}
+            className="p-3 rounded-lg hover:bg-[#FFF8EB] mt-4"
+          >
+            {section.title}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };
