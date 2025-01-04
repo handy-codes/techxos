@@ -78,6 +78,7 @@ model Section {
   position    Int
   isPublished Boolean @default(false)
   isFree      Boolean @default(false)
+  locked    Boolean  @default(false)
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
