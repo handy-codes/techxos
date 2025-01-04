@@ -97,26 +97,31 @@ const Topbar = () => {
                 <SheetTrigger>
                   <Menu color="#FDB31D" className="w-8 h-8 sm:w-9 sm:h-9" />
                 </SheetTrigger>
-                <SheetContent className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-4">
+                <SheetContent className="flex flex-col gap-8 bg-[#2c3e50] text-[white] border-l-transparent">
+                  <div className="flex flex-col justify-center items-center mt-8 gap-4">
                     {topRoutes.map((route) => (
                       <Link
                         href={route.path}
                         key={route.path}
-                        className="text-[22px] font-medium hover:text-[#E79D09]"
+                        className={`${
+                          pathName === route.path
+                          ? "bg-[#1B9BFF] hover:bg-red-500 w-full"
+                          : "w-full hover:bg-[#1B9BFF]"} flex items-center justify-center p-3 rounded-lg`}
                       >
                         {route.label}
                       </Link>
                     ))}
                   </div>
-
                   {pathName.startsWith("/instructor") && (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 justify-center items-center">
                       {sidebarRoutes.map((route) => (
                         <Link
                           href={route.path}
                           key={route.path}
-                          className="text-lg font-medium hover:text-[#FDAB04]"
+                          className={`${
+                            pathName === route.path
+                            ? "bg-[#FBB11C] text-[black] w-full"
+                            : "w-full"} text-lg font-medium flex items-center justify-center p-3 rounded-lg`}
                         >
                           {route.label}
                         </Link>
