@@ -157,8 +157,7 @@ const SectionsDetails = ({
       ) : (
         <MuxPlayer
           playbackId={muxData?.playbackId || ""}
-          className="md:max-w-[600px]"
-        />
+          className="w-full h-auto max-w-full md:max-w-[600px] aspect-video"        />
       )}
 
       {resources.length > 0 && (
