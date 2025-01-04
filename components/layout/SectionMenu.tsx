@@ -22,17 +22,19 @@ const SectionMenu = ({ course }: SectionMenuProps) => {
           >
             Overview
           </Link>
-          {course.sections
-            .sort((a, b) => a.position - b.position) // Sort by position
-            .map((section) => (
-            <Link
-              key={section.id}
-              href={`/courses/${course.id}/sections/${section.id}`}
-              className="p-3 rounded-lg hover:bg-[#FFF8EB] mt-2"
-            >
-              {section.title}
-            </Link>
-          ))}
+          <div className="overflow-y-auto max-h-screen">
+            {course.sections
+              .sort((a, b) => a.position - b.position) // Sort by position
+              .map((section) => (
+                <Link
+                  key={section.id}
+                  href={`/courses/${course.id}/sections/${section.id}`}
+                  className="p-3 rounded-lg hover:bg-[#FFF8EB] mt-2"
+                >
+                  {section.title}
+                </Link>
+              ))}
+          </div>
         </SheetContent>
       </Sheet>
     </div>
