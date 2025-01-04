@@ -4,10 +4,10 @@ import React from 'react'
 export default function Intro() {
   return (
     <div className="px-3 py-4 sm:p-8">
-      <div className="bg-[#031536] text-[black] h-fit border border-[#CF9F6C] borders p-4 sm:p-8 gap-2 sm:gap-2 radius flex flex-col items-center">
+      <div className="bg-[#ECEFF1] text-[black] h-fit border border-[#003E8F] borders p-4 sm:p-8 gap-2 sm:gap-2 radius flex flex-col items-center">
       {/* <div className="bg-[#010101] border border-[#ECEFF1] borders text-[#E79D09] h-[40vh] p-4 sm:p-8 gap-2 sm:gap-2 radius flex flex-col items-center"> */}
-        <h1 className='font-bold text-[28px] text-[#CF9F6C] sm:text-[34px] md:text-5xl'>Explore Our Courses</h1>
-        <p className='text-[white] font-semibold text-justify text-[14px] max-sm:hidden md:px-44 md:text-[17px]'>
+        <h1 className='font-bold text-[28px] text-[#003E8F] sm:text-[34px] md:text-5xl'>Explore Our Courses</h1>
+        <p className='text-[black] font-semibold text-justify text-[14px] max-sm:hidden md:px-44 md:text-[17px]'>
           Techxos is a dedicated online learning App. Made of local content, you can choose from our below well-curated 
           courses ranging from Coding to Accounting, Tourism & Aviation,
           as well as preparatory courses for ICAN, UTME, SSCE exams and so much more.<br/><br/>
@@ -15,7 +15,7 @@ export default function Intro() {
           {/* To upload and earn from your own quality course, please contact <span className='text-[#E79D09]'>sales@techxos.com.</span> */}
         </p>
 
-        <p className='text-white font-semibold text-justify text-[15px] sm:text-[17px] sm:hidden'>
+        <p className='text-[black] font-semibold text-justify text-[15px] sm:text-[17px] sm:hidden'>
           Check out our well-curated 
           courses just for you - from Coding to Accounting, Tourism & Aviation,
           as well as preparatory courses for ICAN, UTME, SSCE exams etc.<br/><br/>
