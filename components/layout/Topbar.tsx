@@ -49,12 +49,12 @@ const Topbar = () => {
   return (
     <div className="sticky top-0 z-50 shadow-md">
       <header className="sticky z-50 top-0 fixer">
-        <div className="flex w-full mx-auto content-center justify-between  bg-[#003E8F] h-[80px] text-white font-bold text-2xl items-center p-4">
+        <div className="flex w-full mx-auto content-center justify-between  bg-[#003E8F] h-[80px] text-white text-2xl font-semibold items-center p-4">
           {/* <div className="flex w-full mx-auto content-center justify-between  bg-blue-700 h-[80px] text-white font-bold text-2xl items-center p-4"> */}
           <Link className="flex items-center content-center gap-3" href="/">
             <Home color="#FDAB04" className="w-6 h- sm:w-8 sm:h-8" />
             {/* <Image src="/wandylogo.jpg" height={20} width={80} alt="logo" /> */}
-            <h1 className="md:text-[32px]">Techxos</h1>
+            <h1 className="md:text-[32px] font-bold">Techxos</h1>
             {/* <Image src="/logo71t.png" height={40} width={150} className="rounded-md max-md:w-[130px]" alt="logo" /> */}
           </Link>
 
