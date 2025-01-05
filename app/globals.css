@@ -13,9 +13,11 @@ body{
   background-color: #ECEFF1;
 }
 
+/*
 .welcome-shadow{
   text-shadow: 2px 2px 0px black;
 }
+*/
 
 .scroll-cover{
     display: flex;
