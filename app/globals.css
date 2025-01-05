@@ -13,6 +13,9 @@ body{
   background-color: #ECEFF1;
 }
 
+.welcome-shadow{
+  text-shadow: 4px 4px 0px black;
+}
 
 .scroll-cover{
     display: flex;

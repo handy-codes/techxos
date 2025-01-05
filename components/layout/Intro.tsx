@@ -6,7 +6,7 @@ export default function Intro() {
     <div className="px-3 py-4 sm:p-8">
       <div className="bg-[#ECEFF1] text-[black] h-fit border border-[#003E8F] borders p-4 sm:p-8 gap-2 sm:gap-2 radius flex flex-col items-center">
       {/* <div className="bg-[#010101] border border-[#ECEFF1] borders text-[#E79D09] h-[40vh] p-4 sm:p-8 gap-2 sm:gap-2 radius flex flex-col items-center"> */}
-        <h1 className='font-extrabold text-[28px] text-[#003E8F] sm:text-[34px] md:text-5xl'>Explore Our Courses</h1>
+        <h1 className='font-extrabold text-[28px] text-[#003E8F] sm:text-[34px] md:text-5xl welcome-shadow'>Explore Our Courses</h1>
         <p className='text-[black] font-semibold text-justify text-[14px] max-sm:hidden md:px-44 md:text-[17px]'>
           Techxos is a dedicated online learning App. Made of local content, you can choose from our below well-curated 
           courses ranging from Coding to Accounting, Tourism & Aviation,

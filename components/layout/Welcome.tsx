@@ -28,7 +28,7 @@ const Welcome = () => {
 
   return (
     user && (
-      <div className='pl-2 sm:pl-7 pt-4 flex items-center flex-wrap gap-2 mb-3'>
+      <div className='pl-2 sm:pl-7 pt-4 flex items-center flex-wrap gap-2 mb-3 welcome-shadow'>
         <h1 className='text-[#ECEFF1] text-xl sm:text-3xl'>{getGreeting()},</h1>
         <span className='text-[#03FF01] text-2xl sm:text-4xl'>
           {getDisplayName()}
