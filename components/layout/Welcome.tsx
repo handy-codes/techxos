@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react'
-import { useUser } from '@clerk/nextjs';
+import React, { useState, useEffect } from "react";
+import Typical from "react-typical";
+import { useUser } from "@clerk/nextjs";
 
 const Welcome = () => {
-  const {user} = useUser();
+  const { user } = useUser();
 
   const getDisplayName = () => {
     if (user?.firstName) {
@@ -12,29 +13,54 @@ const Welcome = () => {
     } else if (user?.username) {
       return user.username.charAt(0).toUpperCase() + user.username.slice(1);
     }
-    return '';
+    return "";
   };
 
   const getGreeting = () => {
     const currentHour = new Date().getHours();
     if (currentHour < 12) {
-      return 'Good morning';
+      return "Good morning";
     } else if (currentHour < 18) {
-      return 'Good afternoon';
+      return "Good afternoon";
     } else {
-      return 'Good evening';
+      return "Good evening";
     }
   };
 
+  const [showTypical, setShowTypical] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowTypical(true);
+    }, 2000); // 2000 milliseconds (2 seconds) delay
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     user && (
-      <div className='pl-2 sm:pl-7 pt-4 flex items-center flex-wrap gap-2 mb-3 welcome-shadow'>
-        <h1 className='text-[#ECEFF1] text-xl sm:text-3xl'>{getGreeting()},</h1>
-        <span className='text-[#03FF01] text-2xl sm:text-4xl'>
-          {getDisplayName()}
-        </span>
+      <div className="flex flex-wrap sm:gap-10 items-center justify-start">
+        <div className="px-2 sm:pl-7 pt-4 flex items-center justify-start flex-wrap gap-2 mb-3 welcome-shadow">
+          <h1 className="text-[#ECEFF1] text-3xl sm:text-4xl">
+            {getGreeting()},
+          </h1>
+          <span className="text-[#03FF01] text-3xl sm:text-4xl">
+            {getDisplayName()}
+          </span>
+        </div>
+        <div className="px-2 sm:pl-7 pt-2 sm:pt-4 flex items-center flex-wrap gap-2 mb-3 welcome-shadow">
+          {showTypical && (
+            <Typical
+              steps={["Welcome back to the platform!", 10000]}
+              loop={1}
+              wrapper="div"
+              className="text-[#ECEFF1] text-[22px] sm:text-4xl"
+            />
+          )}
+        </div>
       </div>
     )
-  )}
+  );
+};
 
-export default Welcome
+export default Welcome;
