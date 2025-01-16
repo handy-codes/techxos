@@ -51,7 +51,7 @@ const Welcome = () => {
         <div className="px-2 sm:pl-7 pt-2 sm:pt-4 flex items-center flex-wrap gap-2 mb-3 welcome-shadow">
           {showTypical && (
             <Typical
-              steps={["Welcome back to the platform!", 10000]}
+              steps={["Welcome back to the platform!", 1000]}
               loop={1}
               wrapper="div"
               className="text-[#ECEFF1] text-[22px] sm:text-3xl"
