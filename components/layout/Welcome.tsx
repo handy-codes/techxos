@@ -46,10 +46,10 @@ const Welcome = () => {
               <span className="text-[#D9DD03]">
               <Typewriter
                 words={[
-                  "Take a Course.",
-                  "Publish a Course.",
-                  "Join our Team.",
-                  "Contact Sales."
+                  "Take a Course",
+                  "Publish a Course",
+                  "Join our Team",
+                  "Contact Sales"
                 ]}
                 loop={Infinity}
                 cursor
