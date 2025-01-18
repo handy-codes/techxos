@@ -6,6 +6,7 @@ import Intro from "@/components/layout/Intro";
 import FooterPage from "@/components/layout/Footer";
 import Slider from "../../components/layout/slider/Slider";
 import Welcome from "@/components/layout/Welcome";
+// import OnsiteClass from "@/components/layout/OnsiteClass";
 // import TestimonialSection from "@/components/layout/TestimonialSection";
 
 export default async function Home() {
@@ -39,6 +40,7 @@ export default async function Home() {
         </div>   
       </div>
       {/* <TestimonialSection/> */}
+      {/* <OnsiteClass/> */}
       <FooterPage/>   
     </div>
     </>

@@ -42,7 +42,7 @@ const Welcome = () => {
         <div className="px-2 sm:pl-7 pt-2 sm:pt-4 flex items-center flex-wrap gap-2 mb-3 welcome-shadow">
           {showTypical && (
             <div className="text-[white] font-bold text-[26px] sm:text-3xl">
-              Welcome back. You can{" "}
+              Nice you{" "}
               {/* <span className="text-[#D9DD03]"> */}
               <span className="text-[#ebeb4c]">
               <Typewriter
