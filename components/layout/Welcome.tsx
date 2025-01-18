@@ -43,7 +43,8 @@ const Welcome = () => {
           {showTypical && (
             <div className="text-[white] font-bold text-[26px] sm:text-3xl">
               Welcome back. You can{" "}
-              <span className="text-[#D9DD03]">
+              {/* <span className="text-[#D9DD03]"> */}
+              <span className="text-[#ebeb4c]">
               <Typewriter
                 words={[
                   "Take a Course",

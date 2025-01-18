@@ -20,7 +20,7 @@ export default function Home() {
     {
       name: "Chris Johnson",
       image: "/owo.jpg",
-      feedback: "The best LMS experience we’ve had in years. Easy and scalable.",
+      feedback: "The best LMS experience we have had in years. Easy and scalable.",
     },
   ];
 
