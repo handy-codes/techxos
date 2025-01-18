@@ -6,6 +6,7 @@ import Intro from "@/components/layout/Intro";
 import FooterPage from "@/components/layout/Footer";
 import Slider from "../../components/layout/slider/Slider";
 import Welcome from "@/components/layout/Welcome";
+// import TestimonialSection from "@/components/layout/TestimonialSection";
 
 export default async function Home() {
   const categories = await db.category.findMany({
@@ -37,6 +38,7 @@ export default async function Home() {
           ))}
         </div>   
       </div>
+      {/* <TestimonialSection/> */}
       <FooterPage/>   
     </div>
     </>
