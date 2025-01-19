@@ -2,11 +2,28 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      { hostname: 'utfs.io'},
-      { hostname: 'img.clerk.com'},
-      { hostname: 'i.ibb.co' } // Add this line
-    ]
-  }
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ibb.co',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -1,24 +1,63 @@
 import Image from "next/image";
 import React from "react";
+import { FaRegClock } from "react-icons/fa6";
+import { AiFillSchedule } from "react-icons/ai";
+import { HiLocationMarker } from "react-icons/hi";
+import { IoMdOptions } from "react-icons/io";
 
 const OnsiteClass = () => {
-  return (
-    <div className="flex flex-wrap justify-between gap-6 mb-4 p-6">
-      <div className="h-[80vh] w-[90vw] md:w-[50vw]">
-          <h1 className="text-3xl md:text-4xl font-bold">
-            Onsite Classes
-          </h1>
-          <p className="">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus delectus dolorem labore omnis? Mollitia reprehenderit neque debitis a voluptatibus quis voluptatem ab nesciunt facere sunt accusamus magni dolores dignissimos amet quaerat, exercitationem corporis ex dolorem incidunt doloremque velit eum. Reprehenderit, numquam a doloribus placeat ducimus sapiente laboriosam ipsam adipisci aliquam ipsa ipsum dolorem cupiditate ut culpa corporis commodi pariatur quae, maxime esse. Doloremque error voluptates corporis iusto? Et cupiditate consequatur itaque dolore, totam atque ipsa iure fugiat dolor, doloremque quis temporibus minima magni. Asperiores veniam at blanditiis adipisci quia voluptates quaerat aspernatur modi, et voluptatibus laboriosam quam pariatur, unde odit.
-          </p>
-      </div>
-      <div className="h-[80vh] w-[90vw] md:w-[50vw]">
-        <Image
-          src="/gomycode1.png"
-          alt="Onsite Class"
-            width={500}
-            height={500}
-        />
+  return (   
+    <div className="p-4  md:p-10 ">
+      <div className="bg-white md:p-4 lg:p-10 rounded-lg shadow-lg">
+        <div className="flex flex-col gap-4 md:flex-row h-[80vh]  mx-auto">
+          <div className="w-[90vw] py-24 md:py-20 md:w-[55vw] h-[80vh] text-[black] max-md:p-3 p-2 md:p-6">
+            <h1 className="text-2xl lg:text-4xl font-bold mb-4 md:mb-2 lg:mb-6">
+              FRONTEND DEVELOPMENT COURSE
+            </h1>
+            <h1 className="text-3xl text-[green] lg:text-4xl font-extrabold md:mb-2 lg:mb-6">
+              150,000 NGN
+            </h1>
+            <p className="text-justify font-semibold">
+              In 12 weeks, be absorbed in our extensive Frontend Web Development course.
+              Master the art of using ReactJs, TailwindCSS and the Color Theory, to create Websites people will love. 
+            </p>
+            <div className="font-semibold">
+              <div className="flex items-center gap-2 mt-2 md:mt-4">
+                <FaRegClock className="text-[black] font-bold text-[20px]"/>
+                <span>
+                  Duration: 12 weeks
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-2 md:mt-4">
+                <AiFillSchedule className="text-[black] font-bold text-[20px]"/>
+                <span>
+                  Schedule: 9 hours/week
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-2 md:mt-4">
+                <HiLocationMarker className="text-[black] font-bold text-[20px]"/>
+                <span>
+                  Location: In-person or online
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-2 md:mt-4">
+                <IoMdOptions className="text-[black] font-bold text-[20px]"/>
+                <span>
+                  Options: Evening Class, Executive (one-to-one) class
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="w-[90vw] hidden md:flex md:w-[35vw] h-[80vh] relative">
+            <Image
+              src="https://images.pexels.com/photos/6000134/pexels-photo-6000134.jpeg?auto=compress&cs=tinysrgb&w=600"
+              // src="/gomycode1.png"
+              className="rounded-lg object-cover"
+              alt="Onsite Class"
+              layout="fill"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
