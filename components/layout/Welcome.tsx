@@ -44,7 +44,7 @@ const Welcome = () => {
             <div className="text-[white] font-bold text-[20px] sm:text-3xl">
               Nice you{" "}
               {/* <span className="text-[#D9DD03]"> */}
-              <span className="text-[#ebeb4c]">
+              <span className="text-[yellow]">
               <Typewriter
                 words={[
                   "Take a course or",
