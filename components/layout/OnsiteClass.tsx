@@ -10,7 +10,7 @@ const OnsiteClass = () => {
     <div className="p-4  md:p-10 ">
       <div className="bg-white md:p-4 lg:p-10 rounded-lg shadow-lg">
         <div className="flex flex-col gap-4 md:flex-row h-[80vh]  mx-auto">
-          <div className="w-[90vw] py-24 md:py-20 md:w-[55vw] h-[80vh] text-[black] max-md:p-3 p-2 md:p-6">
+          <div className="w-[90vw] py-24 md:py-0 md:w-[55vw] h-[80vh] text-[black] max-md:p-3 p-2 md:p-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-4 md:mb-2 lg:mb-6">
               FRONTEND DEVELOPMENT COURSE
             </h1>
