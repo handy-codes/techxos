@@ -32,10 +32,10 @@ const Welcome = () => {
     user && (
       <div className="flex flex-wrap px-3 sm:gap-2 items-center justify-start">
         <div className="px-2 sm:pl-7 pt-4 flex items-center justify-start flex-wrap gap-2 mb-3 welcome-shadow">
-          <h1 className="text-[white] font-bold text-[22px] sm:text-3xl">
+          <h1 className="text-[white] font-bold text-3xl sm:text-3xl">
             {getGreeting()},
           </h1>
-          <span className="text-[#03FF01] font-bold text-[22px] sm:text-3xl">
+          <span className="text-[#03FF01] font-bold text-[24px] sm:text-3xl">
             {getDisplayName()}
           </span>
         </div>
