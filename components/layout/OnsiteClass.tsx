@@ -17,7 +17,7 @@ const OnsiteClass = () => {
               </h1>
               <div className="h-[10px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
             </div>
-            <h1 className="text-3xl text-[green] lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
+            <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
               150,000 NGN
             </h1>
             <p className="text-justify font-semibold">
@@ -26,20 +26,20 @@ const OnsiteClass = () => {
               Theory, to create Websites people will love.
             </p>
             <div className="font-semibold">
-              <div className="flex items-center gap-2 mt-4 md:mt-4">
-                <FaRegClock className="text-[black] font-bold text-[20px]" />
+              <div className="flex items-center gap-3 mt-4 md:mt-4">
+                <FaRegClock className="text-[black] font-bold text-[22px]" />
                 <span>Duration: 12 weeks</span>
               </div>
-              <div className="flex items-center gap-2 mt-4 md:mt-4">
-                <AiFillSchedule className="text-[black] font-bold text-[20px]" />
+              <div className="flex items-center gap-3 mt-4 md:mt-4">
+                <AiFillSchedule className="text-[black] font-bold text-[24px]" />
                 <span>Schedule: 9 hours/week</span>
               </div>
-              <div className="flex items-center gap-2 mt-4 md:mt-4">
-                <HiLocationMarker className="text-[black] font-bold text-[20px]" />
+              <div className="flex items-center gap-3 mt-4 md:mt-4">
+                <HiLocationMarker className="text-[black] font-bold text-[27px]" />
                 <span>Location: In-person or online</span>
               </div>
-              <div className="flex items-center gap-2 mt-4 md:mt-4">
-                <IoMdOptions className="text-[black] font-bold text-[20px]" />
+              <div className="flex items-center gap-3 mt-4 md:mt-4">
+                <IoMdOptions className="text-[black] font-bold text-[24px]" />
                 <span>
                   Options: Evening Class, Executive (one-to-one) class
                 </span>
