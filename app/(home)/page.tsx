@@ -7,6 +7,8 @@ import FooterPage from "@/components/layout/Footer";
 import Slider from "../../components/layout/slider/Slider";
 import Welcome from "@/components/layout/Welcome";
 import OnsiteClass from "@/components/layout/OnsiteClass";
+import WhatsAppLink from "@/components/layout/WhatsAppLink";
+
 // import TestimonialSection from "@/components/layout/TestimonialSection";
 
 export default async function Home() {
@@ -41,6 +43,7 @@ export default async function Home() {
       </div>
       {/* <TestimonialSection/> */}
       <OnsiteClass/>
+      <WhatsAppLink/>
       <FooterPage/>   
     </div>
     </>
