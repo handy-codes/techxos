@@ -15,7 +15,7 @@ const OnsiteClass = () => {
               <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
                 FRONTEND DEVELOPMENT COURSE
               </h1>
-              <div className="h-[10px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
+              <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
             </div>
             <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
               150,000 NGN
