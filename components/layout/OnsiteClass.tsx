@@ -25,6 +25,9 @@ const OnsiteClass = () => {
               course. Master the art of using ReactJs, TailwindCSS and the Color
               Theory, to create Websites people will love.
             </p>
+            <div className="p-4 mt-3 mb-2 hover:bg-green-700 hover:text-white transition border rounded-md border-green-700 inline-block bg-white font-bold">
+              <a href="https://wa.me/2349038984567" target="_blank" rel="noopener noreferrer">Contact an Advisor</a>
+            </div>
             <div className="font-semibold">
               <div className="flex items-center gap-3 mt-4 md:mt-4">
                 <FaRegClock className="text-[black] font-bold text-[22px]" />
