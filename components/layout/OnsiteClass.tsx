@@ -20,12 +20,12 @@ const OnsiteClass = () => {
             <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
               150,000 NGN
             </h1>
-            <p className="text-justify font-semibold">
+            <p className="text-justify font-semibold max-sm:mb-1">
               In 12 weeks, be absorbed in our extensive Frontend Web Development
               course. Master the art of using ReactJs, TailwindCSS and the Color
               Theory, to create Websites people will love.
             </p>
-            <div className="p-2 md:p-4 my-0 md:mt-3 md:mb-2 hover:bg-green-700 hover:text-white transition border rounded-md border-green-700 inline-block bg-white font-bold">
+            <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border rounded-md border-green-700 inline-block bg-white font-bold">
               <a href="https://wa.me/2349038984567" target="_blank" rel="noopener noreferrer">Contact an Advisor</a>
             </div>
             <div className="font-semibold">
