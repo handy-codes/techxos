@@ -11,7 +11,7 @@ export default function Intro() {
           Techxos is a dedicated online learning App. Made of local content, you can choose from our below well-curated 
           courses ranging from Coding to Accounting, Tourism & Aviation,
           as well as preparatory courses for ICAN, UTME, SSCE exams and so much more.<br/><br/>
-          To upload and earn from your own quality courses, visit the About page and DM the CTO, Co-founder on Linkedin to get started.
+          To upload and earn from your own quality courses, <a href="https://wa.me/2349038984567" className='text-blue-900' font-bold target="_blank" rel="noopener noreferrer">Contact Sales</a>.
           {/* To upload and earn from your own quality course, please contact <span className='text-[#E79D09]'>sales@techxos.com.</span> */}
         </p>
 
@@ -19,7 +19,8 @@ export default function Intro() {
           Check out our well-curated 
           courses just for you - from Coding to Accounting, Tourism & Aviation,
           as well as preparatory courses for ICAN, UTME, SSCE exams etc.<br/><br/>
-          To upload and earn from your own quality courses, visit the About page and DM the CTO, Co-founder on Linkedin to get started.          {/* To upload and earn from your own quality course, please contact <span className='text-[#E79D09]'>sales@techxos.com.</span> */}
+          To upload and earn from your own quality courses, <a href="https://wa.me/2349038984567" className='text-blue-900' font-bold target="_blank" rel="noopener noreferrer">Contact Sales</a>.          
+          {/* To upload and earn from your own quality course, please contact <span className='text-[#E79D09]'>sales@techxos.com.</span> */}
         </p>
       </div>
     </div>

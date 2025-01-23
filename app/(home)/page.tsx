@@ -8,6 +8,7 @@ import Slider from "../../components/layout/slider/Slider";
 import Welcome from "@/components/layout/Welcome";
 import OnsiteClass from "@/components/layout/OnsiteClass";
 import WhatsAppLink from "@/components/layout/WhatsAppLink";
+import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 
 // import TestimonialSection from "@/components/layout/TestimonialSection";
 
@@ -45,7 +46,9 @@ export default async function Home() {
       <OnsiteClass/>
       <WhatsAppLink/>
       <FooterPage/>   
+      <ScrollToTopButton />
     </div>
     </>
   );
 }
+
