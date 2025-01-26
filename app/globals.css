@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 html,
 body,
@@ -13,6 +13,7 @@ body{
   background-color: #ECEFF1;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 /*
 .welcome-shadow{
   text-shadow: 2px 2px 0px black;
@@ -130,8 +131,18 @@ body{
   } 
 }
 
+@keyframes oscillate {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
 
-
+.animate-oscillate {
+  animation: oscillate 1s infinite;
+}
 
 @layer base {
   :root {
@@ -199,10 +210,11 @@ body{
 
 @layer base {
   * {
-    @apply border-border;
+    border: var(--border);
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 

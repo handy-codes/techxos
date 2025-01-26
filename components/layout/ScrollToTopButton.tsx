@@ -32,8 +32,8 @@ const ScrollToTopButton: React.FC = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-20 right-4 bg-red-500 text-white p-2 md:p-4 w-12 h-12 md:w-16 md:h-16 rounded-full shadow-lg transition-opacity duration-300 flex items-center justify-center ${
-        isVisible ? "opacity-100" : "opacity-0"
+      className={`fixed bottom-20 right-4 bg-[red] text-white p-2 md:p-4 w-12 h-12 md:w-16 md:h-16 rounded-full shadow-lg transition-opacity duration-300 flex items-center justify-center ${
+        isVisible ? "opacity-100 animate-oscillate" : "opacity-0"
       }`}
     >
       <span className="text-2xl md:text-4xl">↑</span>

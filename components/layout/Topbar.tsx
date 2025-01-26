@@ -55,6 +55,7 @@ const Topbar = () => {
             <Home color="#FDAB04" className="w-6 h- sm:w-8 sm:h-8" />
             {/* <Image src="/wandylogo.jpg" height={20} width={80} alt="logo" /> */}
             <h1 className="md:text-[32px] font-bold">Techxos</h1>
+            {/* <h1 className="md:text-[32px] font-bold" style={{ fontFamily: "'Orbitron', sans-serif" }}>Techxos</h1> */}
             {/* <Image src="/logo71t.png" height={40} width={150} className="rounded-md max-md:w-[130px]" alt="logo" /> */}
           </Link>
 
