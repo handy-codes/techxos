@@ -112,7 +112,8 @@ const FooterPage = () => {
                     <a href="/">
                       <FaInstagram className="text-3xl" />
                     </a>
-                    <a href="/">
+                    <a href="https://web.facebook.com/profile.php?id=61572481057148" target="_blank"
+                      rel="noopener noreferrer">
                       <FaFacebook className="text-3xl" />
                     </a>
                     <a href="/">
