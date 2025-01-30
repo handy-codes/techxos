@@ -109,18 +109,20 @@ const FooterPage = () => {
                 {/* social links */}    
                 <div className="max-sm:pl-3">
                   <div className="flex items-center gap-3 mt-6">
-                    <a href="/">
+                    <a href="https://www.instagram.com/techxosoffical" target="_blank"
+                      rel="noopener noreferrer">
                       <FaInstagram className="text-3xl" />
                     </a>
                     <a href="https://web.facebook.com/profile.php?id=61572481057148" target="_blank"
                       rel="noopener noreferrer">
                       <FaFacebook className="text-3xl" />
                     </a>
-                    <a href="/">
+                    <a href="https://www.linkedin.com/company/techxos-digital-products" target="_blank"
+                      rel="noopener noreferrer">
                       <FaLinkedin className="text-3xl" />
                     </a>
                   </div>
-                  <div className="mt-6">
+                  <div className="mt-6 sm:hidden">
                     {/* <div className="flex items-center gap-3">
                       <FaLocationArrow />
                       <p>101 Lagos-Ikorodu Road</p>
