@@ -24,15 +24,15 @@ const BannerImg = {
 
 const FooterLinks = [
   {
-    title: "Home",
+    title: "HOME",
     link: "/",
   },
   {
-    title: "About",
+    title: "ABOUT",
     link: "/about",
   },
   {
-    title: "My Learning",
+    title: "MY LEARNING",
     link: "/learning",
   },
   // {
@@ -54,10 +54,16 @@ const FooterPage = () => {
 
   const currentYear = new Date().getFullYear();
   return (
-    <div style={BannerImg} className="text-white text-[14px] p-2 mb-0">
+    <div
+      style={BannerImg}
+      className="text-white text-[17px] md:text-[15px] p-2 mb-0"
+    >
       <div className="container">
         {/* <div data-aos="zoom-in" className="grid md:grid-cols-3 pb-44 pt-5"> */}
-        <div data-aos="zoom-in" className="flex justify-between max-sm:flex-col flex-wrap pb-40 pt-5">
+        <div
+          data-aos="zoom-in"
+          className="flex justify-between max-sm:flex-col flex-wrap pb-40 pt-5"
+        >
           <div className="py-4">
             <div className="flex gap-5">
               {/* <Image className="rounded-full w-8 h-8 " src={'/footertechx.png'} width={24} height={24} alt="ghg"/> */}
@@ -65,11 +71,13 @@ const FooterPage = () => {
                 Techxos
               </h1>
             </div>
-            <p className="text-[15px]">Skill up - with every Ease!</p>
+            <p className="text-[17px] md:text-[15px] text-semibold text-[#E5A111]">
+              Skill up - with every Ease!
+            </p>
             <div className="mt-6">
               <div className="flex items-center gap-3">
-                <MdRoom className="text-[18px]"/>
-                <p>101 Lagos-Ikorodu Road, WandyTechX Suites Ikorodu Lagos</p>
+                <MdRoom className="text-[24px] md:text-[19px]" />
+                <p>101 Lagos-Ikorodu Road, (WandyTechX Suites) Ikorodu Lagos</p>
               </div>
               <div className="flex items-center gap-3 mt-3">
                 <FaMobileAlt />
@@ -86,7 +94,10 @@ const FooterPage = () => {
               <div className="py-4">
                 <ul>
                   {FooterLinks.map((item, index) => (
-                    <li key={index} className="cursor-pointer mt-3 hover:text-[#E5A111] hover:translate-x-1 duration-300 text-gray-200">
+                    <li
+                      key={index}
+                      className="cursor-pointer mt-3 hover:text-[#E5A111] hover:translate-x-1 duration-300 text-[white]"
+                    >
                       <Link href={item.link} legacyBehavior>
                         <a>{item.title}</a>
                       </Link>
@@ -96,7 +107,10 @@ const FooterPage = () => {
               </div>
             </div>
             <div className="flex justify-start items-center gap-3 mt-2">
-            <p className="flex items-center">Follow us <span className="inline-block h-8 ml-2 w-px bg-current"></span></p>
+              <p className="flex items-center text-[17px] md:text-[15px]">
+                Follow us{" "}
+                <span className="inline-block h-8 ml-3 w-px bg-current"></span>
+              </p>
               <a
                 href="https://www.instagram.com/techxosoffical"
                 target="_blank"
@@ -125,7 +139,7 @@ const FooterPage = () => {
             <div className="bg-[white] w-full h-[2px]"></div>
           </div>
           <div className="">
-            <p className="text-[14px] mt-6">
+            <p className="text-[16px] mt-6 text-white">
               &copy;{currentYear} Techxos Digital Products
             </p>
           </div>
