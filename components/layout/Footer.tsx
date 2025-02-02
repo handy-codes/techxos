@@ -1,17 +1,17 @@
-'use client'
+"use client";
 import { MdOutlineMailOutline } from "react-icons/md";
 
 import React from "react";
-import AOS from "aos"
+import AOS from "aos";
 import "aos/dist/aos.css";
-import Image from "next/image";
+import Link from "next/link";
 import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
-  FaLocationArrow,
   FaMobileAlt,
 } from "react-icons/fa";
+import { MdRoom } from "react-icons/md";
 
 const BannerImg = {
   backgroundImage: `url('/footer-pattern.jpg')`,
@@ -25,20 +25,20 @@ const BannerImg = {
 const FooterLinks = [
   {
     title: "Home",
-    link: "/#",
+    link: "/",
   },
   {
     title: "About",
-    link: "/#about",
+    link: "/about",
   },
   {
-    title: "Services",
-    link: "/#contact",
+    title: "My Learning",
+    link: "/learning",
   },
-  {
-    title: "Careers",
-    link: "/#blog",
-  },
+  // {
+  //   title: "Careers",
+  //   link: "/#blog",
+  // },
 ];
 
 const FooterPage = () => {
@@ -53,94 +53,86 @@ const FooterPage = () => {
   }, []);
 
   const currentYear = new Date().getFullYear();
-    return (
-        <div style={BannerImg} className="text-white mb-0">
-          <div className="container">
-            <div data-aos="zoom-in" className="grid md:grid-cols-3 pb-44 pt-5">
-              <div className="px-4">
-                <div className="flex gap-5">
-                  {/* <Image className="rounded-full w-8 h-8 " src={'/footertechx.png'} width={24} height={24} alt="ghg"/> */}
-                  <h1 className="sm:text-2xl text-xl font-bold sm:text-left mb-3 flex items-center gap-3">
-                     Techxos
-                  </h1>
-                </div>
-                <p className="">
-                  Skill up - with every Ease!
-                </p>
-                <p className="text-[11px] mt-6">&copy;{currentYear} All Rights Reserved</p>
-                  {/* <Image className="w-20 h-8 " src={'/ulearnlogo3.png'} width={48} height={48} alt="ghg"/>                 */}
-              </div>    
-              {/* Footer Links */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 col-span-2 md:pl-10">
-                <div>
-                  <div className="py-8 px-4">
-                    <h1 className="sm:text-xl text-xl font-bold sm:text-left text-justify mb-3">
-                      Links
-                    </h1>
-                    <ul className="flex flex-col gap-3">
-                      {FooterLinks.map((link) => (
-                        <li
-                          className="cursor-pointer hover:text-primary hover:translate-x-1 duration-300 text-gray-200"
-                          key={link.title}
-                        >
-                          <span>{link.title}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-                <div>
-                  <div className="py-8 px-4">
-                    <h1 className="sm:text-xl text-xl font-bold sm:text-left text-justify mb-3">
-                      Links
-                    </h1>
-                    <ul className="flex flex-col gap-3">
-                      {FooterLinks.map((link) => (
-                        <li
-                          className="cursor-pointer hover:text-primary hover:translate-x-1 duration-300 text-gray-200"
-                          key={link.title}
-                        >
-                          <span>{link.title}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>    
-                {/* social links */}    
-                <div className="max-sm:pl-3">
-                  <div className="flex items-center gap-3 mt-6">
-                    <a href="https://www.instagram.com/techxosoffical" target="_blank"
-                      rel="noopener noreferrer">
-                      <FaInstagram className="text-3xl" />
-                    </a>
-                    <a href="https://web.facebook.com/profile.php?id=61572481057148" target="_blank"
-                      rel="noopener noreferrer">
-                      <FaFacebook className="text-3xl" />
-                    </a>
-                    <a href="https://www.linkedin.com/company/techxos-digital-products" target="_blank"
-                      rel="noopener noreferrer">
-                      <FaLinkedin className="text-3xl" />
-                    </a>
-                  </div>
-                  <div className="mt-6 sm:hidden">
-                    {/* <div className="flex items-center gap-3">
-                      <FaLocationArrow />
-                      <p>101 Lagos-Ikorodu Road</p>
-                    </div>
-                    <div className="flex items-center gap-3 mt-3">
-                      <FaMobileAlt />
-                      <p>+2349038984567</p>
-                    </div> */}
-                    <div className="flex flex-col items-center gap-3 mt-3">
-                      {/* <MdOutlineMailOutline /> */}
-                    </div>
-                  </div>
-                </div>
+  return (
+    <div style={BannerImg} className="text-white text-[14px] p-2 mb-0">
+      <div className="container">
+        {/* <div data-aos="zoom-in" className="grid md:grid-cols-3 pb-44 pt-5"> */}
+        <div data-aos="zoom-in" className="flex justify-between max-sm:flex-col flex-wrap pb-40 pt-5">
+          <div className="py-4">
+            <div className="flex gap-5">
+              {/* <Image className="rounded-full w-8 h-8 " src={'/footertechx.png'} width={24} height={24} alt="ghg"/> */}
+              <h1 className="sm:text-4xl text-3xl font-bold sm:text-left mb-3 flex items-center gap-3">
+                Techxos
+              </h1>
+            </div>
+            <p className="text-[15px]">Skill up - with every Ease!</p>
+            <div className="mt-6">
+              <div className="flex items-center gap-3">
+                <MdRoom className="text-[18px]"/>
+                <p>101 Lagos-Ikorodu Road, WandyTechX Suites Ikorodu Lagos</p>
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <FaMobileAlt />
+                <p>+2349123444391</p>
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <MdOutlineMailOutline />
+                <p>hello@techxos.com</p>
               </div>
             </div>
           </div>
+          <div className="flex flex-col gap-3">
+            <div>
+              <div className="py-4">
+                <ul>
+                  {FooterLinks.map((item, index) => (
+                    <li key={index} className="cursor-pointer mt-3 hover:text-[#E5A111] hover:translate-x-1 duration-300 text-gray-200">
+                      <Link href={item.link} legacyBehavior>
+                        <a>{item.title}</a>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>{" "}
+              </div>
+            </div>
+            <div className="flex justify-start items-center gap-3 mt-2">
+            <p className="flex items-center">Follow us <span className="inline-block h-8 ml-2 w-px bg-current"></span></p>
+              <a
+                href="https://www.instagram.com/techxosoffical"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition duration-300 ease-in-out transform hover:bg-red-500 hover:text-white p-1 rounded-full"
+              >
+                <FaInstagram className="text-[23px]" />
+              </a>
+              <a
+                href="https://web.facebook.com/profile.php?id=61572481057148"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition duration-300 ease-in-out transform hover:bg-red-500 hover:text-white p-1 rounded-full"
+              >
+                <FaFacebook className="text-[23px]" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/techxos-digital-products"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition duration-300 ease-in-out transform hover:bg-red-500 hover:text-white p-1 rounded-full"
+              >
+                <FaLinkedin className="text-[23px]" />
+              </a>
+            </div>
+            <div className="bg-[white] w-full h-[2px]"></div>
+          </div>
+          <div className="">
+            <p className="text-[14px] mt-6">
+              &copy;{currentYear} Techxos Digital Products
+            </p>
+          </div>
         </div>
-      );
-    }
- 
+      </div>
+    </div>
+  );
+};
+
 export default FooterPage;

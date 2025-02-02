@@ -8,7 +8,7 @@ const page = () => {
       <div className="">
         <h1 className="ml-[5%] sm:ml-14 my-auto gap-2 mx-auto mt-8 text-3xl sm:text-4xl font-bold">
           Collaborating to{" "}
-          <span className="text-[#003E8F] text-4xl sm:text-4xl font-extrabold">
+          <span className="text-[#003E8F] text-4xl sm:text-4xl font-semibold">
             Redefine
           </span>{" "}
           <br /> Learning
