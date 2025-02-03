@@ -71,7 +71,7 @@ const FooterPage = () => {
                 Techxos
               </h1>
             </div>
-            <p className="text-[17px] md:text-[15px] text-semibold text-[#E5A111]">
+            <p className="text-[17px] md:text-[15px] text-bold text-[#E5A111]">
               Skill up - with every Ease!
             </p>
             <div className="mt-6">
@@ -103,12 +103,12 @@ const FooterPage = () => {
                       </Link>
                     </li>
                   ))}
-                </ul>{" "}
+                </ul>
               </div>
             </div>
             <div className="flex justify-start items-center gap-3 mt-2">
               <p className="flex items-center text-[17px] md:text-[15px]">
-                Follow us{" "}
+                Follow us
                 <span className="inline-block h-8 ml-3 w-px bg-current"></span>
               </p>
               <a
@@ -139,8 +139,8 @@ const FooterPage = () => {
             <div className="bg-[white] w-full h-[2px]"></div>
           </div>
           <div className="">
-            <p className="text-[16px] mt-6 text-white">
-              &copy;{currentYear} Techxos Digital Products
+            <p className="text-[14px] mt-6 text-white">
+              &copy; {currentYear} Techxos All Rights Reserved
             </p>
           </div>
         </div>
