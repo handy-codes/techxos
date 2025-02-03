@@ -140,7 +140,7 @@ const FooterPage = () => {
           </div>
           <div className="">
             <p className="text-[13px] mt-6 text-white">
-              &copy; {currentYear} Techxos All Rights Reserved
+              &copy; {currentYear} Techxos | All Rights Reserved
             </p>
           </div>
         </div>

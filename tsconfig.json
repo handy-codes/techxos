@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/courses/[courseId]/checkout copy/route.js", "components/sections/SectionsDetails.tsx", "components/sections/SectionsDetails.jsx", "components/layout/Testimonials.jsx", "components/layout/TestimonialCarousel.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/courses/[courseId]/checkout copy/route.js", "components/sections/SectionsDetails.tsx", "components/sections/SectionsDetails.jsx", "components/layout/Testimonials.jsx", "components/layout/TestimonialCarousel.jsx", "next-sitemap.config.js"],
   "exclude": ["node_modules"]
 }
