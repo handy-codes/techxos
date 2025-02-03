@@ -71,7 +71,7 @@ const FooterPage = () => {
                 Techxos
               </h1>
             </div>
-            <p className="text-[17px] md:text-[15px] text-bold text-[#E5A111]">
+            <p className="text-[18px] md:text-[15px] text-bold text-[#E5A111]">
               Skill up - with every Ease!
             </p>
             <div className="mt-6">
@@ -139,7 +139,7 @@ const FooterPage = () => {
             <div className="bg-[white] w-full h-[2px]"></div>
           </div>
           <div className="">
-            <p className="text-[14px] mt-6 text-white">
+            <p className="text-[13px] mt-6 text-white">
               &copy; {currentYear} Techxos All Rights Reserved
             </p>
           </div>
