@@ -99,7 +99,7 @@ const FooterPage = () => {
                       className="cursor-pointer mt-3 hover:text-[#E5A111] hover:translate-x-1 duration-300 text-[white]"
                     >
                       <Link href={item.link} legacyBehavior>
-                        <a>{item.title}</a>
+                        <a className="text-[14px]">{item.title}</a>
                       </Link>
                     </li>
                   ))}
