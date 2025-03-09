@@ -200,7 +200,7 @@ export default function Testimonials() {
                         </p>
                         {testimonials[currentIndex].linkedin && (
                           <Link
-                            href={testimonials[currentIndex].linkedin}
+                          href={testimonials[currentIndex].linkedin || "#"}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-400 text-sm flex items-center"
