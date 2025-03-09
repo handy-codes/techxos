@@ -8,7 +8,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -68,11 +68,53 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "slide-in-left": {
+          from: {
+            transform: "translateX(-100%)",
+            opacity: "0",
+          },
+          to: {
+            transform: "translateX(0)",
+            opacity: "1",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "slide-in-left": "slide-in-left 1s ease-out",
       },
+      container: {
+        center: true,
+        padding: "2rem",
+      },
+      screens: {
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
+      },
+      maxWidth: {
+        "container-md": "100%",
+        "container-lg": "100%",
+      },
+      boxShadow: {
+        'custom-light': '0 4px 6px rgba(0, 0, 0, 0.1)',
+        'custom-medium': '0 6px 12px rgba(0, 0, 0, 0.15)',
+        'custom-dark': '0 8px 16px rgba(0, 0, 0, 0.2)',
+      },
+      height: {
+        '40vh': '40vh',
+      },
+      translate: {
+        '1': '0.25rem',
+      },
+    },
+  },
+  variants: {
+    extend: {
+      translate: ['hover'],
     },
   },
   plugins: [require("tailwindcss-animate")],

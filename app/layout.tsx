@@ -4,8 +4,14 @@ import { ClerkProvider } from "@clerk/nextjs";
 import SessionWrapper from '@/components/layout/SessionWrapper';
 import "./globals.css";
 import ToasterProvider from "@/components/providers/ToasterProvider";
+import FooterPage from "@/components/layout/Footer";
+import Topbar from "@/components/layout/Topbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap', // Prevents layout shifts
+});
 
 export const metadata: Metadata = {
   title: "Techxos",
@@ -18,15 +24,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionWrapper>
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <ToasterProvider />
-          {children}
-        </body>
-      </html>
+      <SessionWrapper>
+        <html lang="en" className={`${inter.variable}`}>
+          <body className={inter.className}>
+            <ToasterProvider />
+            <Topbar />
+            {children}
+            <FooterPage />
+            {/* <FooterPage className="custom-footer" /> */}
+          </body>
+        </html>
+      </SessionWrapper>
     </ClerkProvider>
-    </SessionWrapper>
   );
 }

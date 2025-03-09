@@ -1,128 +1,273 @@
 "use client";
 
 import { UserButton, useAuth } from "@clerk/nextjs";
-import { Menu, Home, Search } from "lucide-react";
-import Image from "next/image";
+import { Menu, Search } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-
+import { FaMapMarkerAlt, FaPhone, FaPaperPlane, FaChevronDown } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Image from "next/image";
 
 const Topbar = () => {
   const { isSignedIn } = useAuth();
   const router = useRouter();
   const pathName = usePathname();
+  const [searchInput, setSearchInput] = useState("");
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileCoursesOpen, setIsMobileCoursesOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const courses = [
+    { title: "Frontend Development", link: "/courses/web-dev" },
+    { title: "Fullstack Development", link: "/courses/web-dev" },
+    { title: "Data Science & Analytics", link: "/courses/data-science" },
+    { title: "Artificial Intelligence", link: "/courses/cloud" },
+    { title: "Software Development", link: "/courses/cybersecurity" },
+    { title: "Digital Marketing", link: "/courses/cybersecurity" },
+    { title: "UI/UX Design", link: "/courses/ui-ux" },
+    { title: "Cybersecurity", link: "/courses/cybersecurity" },
+  ];
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsDropdownOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsDropdownOpen(false);
+    }, 200);
+  };
 
   const topRoutes = [
     { label: "HOME", path: "/" },
     { label: "ABOUT", path: "/about" },
-    // { label: "INSTRUCTOR", path: "/instructor/courses" },
+    { label: "OUR COURSES", path: "" },
+    { label: "INSTRUCTOR", path: "/instructor/courses" },
     { label: "MY LEARNING", path: "/learning" },
   ];
 
   const sidebarRoutes = [
     { label: "Courses", path: "/instructor/courses" },
-    {
-      label: "Performance",
-      path: "/instructor/performance",
-    },
+    { label: "Performance", path: "/instructor/performance" },
   ];
 
-  const [searchInput, setSearchInput] = useState("");
-
   const handleSearch = () => {
-    if (searchInput.trim() !== "") {
-      router.push(`/search?query=${searchInput}`);
+    const query = searchInput.trim();
+    if (query) {
+      router.push(`/search?query=${encodeURIComponent(query)}`);
+      setSearchInput("");
     }
-    setSearchInput("");
   };
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   return (
-    <div className="sticky top-0 z-50 shadow-md">
-      <header className="sticky z-50 top-0 fixer">
-        <div className="flex w-full mx-auto content-center justify-between  bg-[#003E8F] h-[80px] text-white text-2xl font-semibold items-center p-4">
-          {/* <div className="flex w-full mx-auto content-center justify-between  bg-blue-700 h-[80px] text-white font-bold text-2xl items-center p-4"> */}
-          <Link className="flex items-center content-center gap-3" href="/">
-            <Home color="#FDAB04" className="w-6 h- sm:w-8 sm:h-8" />
-            {/* <Image src="/wandylogo.jpg" height={20} width={80} alt="logo" /> */}
-            <h1 className="md:text-[32px] font-bold">Techxos</h1>
-            {/* <h1 className="md:text-[32px] font-bold" style={{ fontFamily: "'Orbitron', sans-serif" }}>Techxos</h1> */}
-            {/* <Image src="/logo71t.png" height={40} width={150} className="rounded-md max-md:w-[130px]" alt="logo" /> */}
+    <div className="fixed top-0 z-50 w-full shadow-lg">
+      <header className="z-50 w-full top-0">
+        {/* Upper Contact Bar */}
+        <div className="h-[40px] bg-gray-900 text-white items-center justify-between py-7 px-6 hidden xl:flex">
+          <div className="flex items-center space-x-2 max-w-[40%] truncate">
+            <FaMapMarkerAlt className="text-[orange] shrink-0" />
+            <span className="truncate">
+              Office Address: 101, Lagos Ikorodu Road (WandyTech Place), by
+              Aruna B/Stop, Ikorodu Lagos
+            </span>
+          </div>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <FaPhone className="text-[orange]" />
+              <span>+2349123444391</span>
+            </div>
+            <Link
+              href="mailto:hello@techxos.com"
+              className="flex items-center py-[6px] px-3 bg-[#638995] rounded-md space-x-2 hover:bg-[#638995]/80 transition-colors"
+            >
+              <FaPaperPlane className="text-[#C5CFD2]" />
+              <span className="text-sm">Contact Us</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Main Navigation Bar */}
+        <nav className="flex w-full mx-auto justify-between bg-white h-[80px] my-auto items-center p-4 border-b-2 border-[#E79D09] relative">
+          {/* Logo */}
+          <Link className="flex items-center gap-3" href="/">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-[#003E8F]">
+              Techxos
+            </h1>
           </Link>
 
-          <div className="max-lg:hidden max-lg::w-[100px] rounded-full flex">
+          {/* Search Bar */}
+          <div className="hidden xl:flex border-2 border-[#E79D09] rounded-full overflow-hidden">
             <input
-              className="flex-grow rounded-l-full text-black border-none outline-none text-sm pl-4 py-3"
-              // className="flex-grow bg-[#FFF8EB] rounded-l-full text-black border-none outline-none text-sm pl-4 py-3"
+              className="bg-gray-100 text-gray-800 outline-none text-sm pl-4 py-3 w-[300px]"
               placeholder="Search for courses"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+              aria-label="Search courses"
             />
             <button
-              className="bg-[#E79D09] rounded-r-full border-none outline-none cursor-pointer px-4 py-3 hover:bg-[#FDAB04]/80"
-              disabled={searchInput.trim() === ""}
+              className="bg-[#E79D09] px-6 hover:bg-[#FDAB04]/80 transition-colors"
               onClick={handleSearch}
+              aria-label="Search"
+              disabled={!searchInput.trim()}
             >
-              <Search className="h-4 w-4" />
+              <Search className="h-4 w-4 text-white" />
             </button>
           </div>
 
-          <div className="flex gap-6 sm:gap-1 items-center">
-            <div className="max-sm:hidden flex gap-6 md:gap-2">
-              {topRoutes.map((route) => (
-                <Link
-                  href={route.path}
-                  key={route.path}
-                  className={`sm:text-[12px] md:text-[16px] rounded-[3px] transition-all py-[8px] px-[13px] md: ${
-                    pathName === route.path
-                      ? "bg-[#1b9bff]"
-                      : "hover:bg-[#1b9bff]"
-                  }`}
-                >
-                  {route.label}
-                </Link>
-              ))}
+          {/* Navigation Links and Auth */}
+          <div className="flex items-center font-semibold gap-4">
+            {/* Desktop Links */}
+            <div className="hidden lg:flex gap-2">
+              {topRoutes.map((route) =>
+                route.label === "OUR COURSES" ? (
+                  <div
+                    key={route.path}
+                    className="relative flex items-center space-x-1 cursor-pointer group"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    ref={dropdownRef}
+                  >
+                    <span
+                      className={`text-sm md:text-base rounded-[3px] transition-all py-2 px-3 ${
+                        pathName === route.path
+                          ? "bg-[#003E8F] text-white"
+                          : "hover:bg-[#003E8F] hover:text-white"
+                      }`}
+                    >
+                      {route.label}
+                    </span>
+                    <FaChevronDown className="text-[#dba231] text-sm transition-transform group-hover:rotate-180" />
+
+                    {/* Dropdown Content */}
+                    <div
+                      className={`absolute top-full -left-[25vw] w-[70vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
+                        isDropdownOpen
+                          ? "opacity-100 translate-y-0 visible"
+                          : "opacity-0 -translate-y-2 invisible"
+                      }`}
+                      style={{ height: "calc(100vh - 80px)" }}
+                      onMouseEnter={() => clearTimeout(timeoutRef.current!)}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <div className="w-[35vw] h-full relative">
+                        <Image
+                          src="https://images.pexels.com/photos/7971355/pexels-photo-7971355.jpeg"
+                          layout="fill"
+                          className="object-cover pt-1"
+                          alt="Course Preview"
+                          priority
+                        />
+                      </div>
+                      <div className="w-[38vw] bg-[#52737F] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 pr-12 overflow-y-auto">
+                        {courses.map((course, index) => (
+                          <Link
+                            key={index}
+                            href={course.link}
+                            className="hover:text-[#C5CFD2] text-sm md:text-base transition-colors"
+                            onClick={() => setIsDropdownOpen(false)}
+                          >
+                            {course.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    href={route.path}
+                    key={route.path}
+                    className={`text-sm md:text-base rounded-[3px] transition-all py-2 px-3 ${
+                      pathName === route.path
+                        ? "bg-[#003E8F] text-white"
+                        : "hover:bg-[#003E8F] hover:text-white"
+                    }`}
+                  >
+                    {route.label}
+                  </Link>
+                )
+              )}
             </div>
 
-            <div className="z-20 sm:hidden">
-              <Sheet>
-                <SheetTrigger>
-                  <Menu color="#FDB31D" className="w-8 h-8 sm:w-9 sm:h-9" />
+            {/* Mobile Menu */}
+            <div className="lg:hidden z-[100]">
+              <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                <SheetTrigger aria-label="Open navigation menu">
+                  <Menu className="w-8 h-8 mt-2 text-[#E79D09]" />
                 </SheetTrigger>
-                <SheetContent className="flex flex-col gap-8 bg-[#2c3e50] text-[white] border-l-transparent">
-                  <div className="flex flex-col justify-center items-center mt-8 gap-4">
-                    {topRoutes.map((route) => (
-                      <Link
-                        href={route.path}
-                        key={route.path}
-                        className={`${
-                          pathName === route.path
-                          ? "bg-[#1B9BFF] hover:bg-red-500 w-full"
-                          : "w-full hover:bg-[#1B9BFF]"} flex items-center justify-center p-3 rounded-lg`}
-                      >
-                        {route.label}
-                      </Link>
-                    ))}
+                <SheetContent className="flex flex-col gap-4 bg-gray-800 text-white border-l-0 z-[1000] pt-16">
+                  <div className="flex flex-col gap-2">
+                    {topRoutes.map((route) =>
+                      route.label === "OUR COURSES" ? (
+                        <div key={route.path} className="flex flex-col gap-1">
+                          <button
+                            onClick={() => setIsMobileCoursesOpen(!isMobileCoursesOpen)}
+                            className="flex items-center justify-between p-3 rounded-lg font-bold hover:bg-[#1B9BFF]/80"
+                          >
+                            <span>{route.label}</span>
+                            <FaChevronDown
+                              className={`transition-transform ${
+                                isMobileCoursesOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+                          {isMobileCoursesOpen && (
+                            <div className="pl-4 flex flex-col gap-2">
+                              {courses.map((course, index) => (
+                                <Link
+                                  key={index}
+                                  href={course.link}
+                                  onClick={() => {
+                                    setIsSheetOpen(false);
+                                    setIsMobileCoursesOpen(false);
+                                  }}
+                                  className="p-2 rounded-lg hover:bg-[#1B9BFF]/80"
+                                >
+                                  {course.title}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <Link
+                          href={route.path}
+                          key={route.path}
+                          onClick={() => setIsSheetOpen(false)}
+                          className={`p-3 rounded-lg font-bold ${
+                            pathName === route.path
+                              ? "bg-[#1B9BFF] text-white"
+                              : "hover:bg-[#1B9BFF]/80"
+                          }`}
+                        >
+                          {route.label}
+                        </Link>
+                      )
+                    )}
                   </div>
                   {pathName.startsWith("/instructor") && (
-                    <div className="flex flex-col gap-4 justify-center items-center">
+                    <div className="flex flex-col gap-4">
                       {sidebarRoutes.map((route) => (
                         <Link
                           href={route.path}
                           key={route.path}
-                          className={`${
+                          onClick={() => setIsSheetOpen(false)}
+                          className={`p-3 rounded-lg font-bold ${
                             pathName === route.path
-                            ? "bg-[#FBB11C] text-[black] w-full"
-                            : "w-full"} text-lg font-medium flex items-center justify-center p-3 rounded-lg`}
+                              ? "bg-[#FBB11C] text-black"
+                              : "hover:bg-[#FBB11C]/80"
+                          }`}
                         >
                           {route.label}
                         </Link>
@@ -132,16 +277,19 @@ const Topbar = () => {
                 </SheetContent>
               </Sheet>
             </div>
+
+            {/* User Authentication */}
             {isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
             ) : (
-              // <UserButton afterSignOutUrl="/sign-in" />
               <Link href="/sign-in">
-                <Button className="text-black">Sign In</Button>
+                <Button variant="outline" className="text-[#003E8F]">
+                  Sign In
+                </Button>
               </Link>
             )}
           </div>
-        </div>
+        </nav>
       </header>
     </div>
   );

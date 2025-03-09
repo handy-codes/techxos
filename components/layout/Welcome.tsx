@@ -30,30 +30,28 @@ const Welcome = () => {
 
   return (
     user && (
-      <div className="flex flex-wrap px-3 sm:gap-2 items-center justify-start">
+<div className="mt-[120px] flex max-sm:flex-col bg-[white] flex-wrap px-3 sm:gap-2 items-center justify-start border-t-2 border-[#E79D09]">      {/* <div className="flex bg-[#F7D15C] flex-wrap px-3 sm:gap-2 items-center justify-start"> */}
+      {/* <div className="flex bg-[#111827] flex-wrap px-3 sm:gap-2 items-center justify-start"> */}
         <div className="px-2 sm:pl-7 pt-4 flex items-center content-center justify-start flex-wrap gap-2 mb-3 welcome-shadow">
-          <h1 className="text-[white] font-bold text-3xl sm:text-3xl">
+          <h1 className="text-[black] font-bold text-3xl sm:text-2xl">
             {getGreeting()}
           </h1>
-          <span className="text-[#03FF01] font-bold text-3xl sm:text-3xl">
+          <span className="text-[#BF5800] font-extrabold text-3xl sm:text-2xl">
             {getDisplayName()}
           </span>
         </div>
         <div className="px-2 sm:pl-7 pt-2 sm:pt-4 flex items-center flex-wrap gap-2 mb-3 welcome-shadow">
           {showTypical && (
-            <div className="text-[white] font-bold text-[20px] sm:text-3xl">
-              Nice you{" "}
+            <div className="text-[black] font-bold text-[20px] sm:text-2xl">
+              You can{" "}
               {/* <span className="text-[#D9DD03]"> */}
-              <span className="text-[yellow]">
+              <span className="text-[#BF5800]">
               <Typewriter
                 words={[
-                  "Take a course OR",
-                  "Create one",
-                  "Upload it here",
-                  "Earn from it",
-                  "Give us refferals",
-                  "Join our team",
-                  "Grow with us"
+                  "Train Onsite",
+                  "Buy a Course OR",
+                  "Train Online",
+                  "Be an Instructor"
                 ]}
                 loop={Infinity}
                 cursor
