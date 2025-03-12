@@ -5,7 +5,7 @@ export const dummyData = [
       title:"FRONTEND WEB DEVELOPMENT (FRD)",
       comment: "Prepare for your career in the food industry with IT opening during term period",
       reading: "LEARN MORE",
-      link: "/pages/cateringsch",
+      link: "/pages/frontend",
     },
     {
       id: 2,
@@ -13,7 +13,7 @@ export const dummyData = [
       title: "FULLSTACK WEB DEVELOPMENT (FSD)",
       comment: "Get skilled in the art of managing a hotel and winning guests and referrals.",
       reading: "LEARN MORE",
-      link: "/pages/hotelmgt",
+      link: "/pages/fullstack",
     },
     {
       id: 3,
@@ -21,7 +21,7 @@ export const dummyData = [
       title: "DATA SCIENCE & ANALYTICS (DSC)",
       comment: "Learn from industry experts and become a sought-after flight attendant.",
       reading: "LEARN MORE",
-      link: "/pages/flightattendant",
+      link: "/pages/data-science",
     },
     {
       id: 4,
@@ -29,7 +29,7 @@ export const dummyData = [
       title: "ARTIFICIAL INTELLIGENCE & MACHINE LEARNING (AIML)",
       comment: "You will be equipped with the best industry standard in laundry services.",
       reading: "LEARN MORE",
-      link: "/pages/laundry",
+      link: "/pages/ai-ml",
     },
     {
       id: 5,
@@ -37,7 +37,7 @@ export const dummyData = [
       title: "SOFTWARE DEVELOPEMNT (SOD)",
       comment: "House keeping traning is well worth it.",
       reading: "LEARN MORE",
-      link: "/pages/housekeeping",
+      link: "/pages/softwar-devt",
     },
     {
       id: 6,
@@ -45,7 +45,7 @@ export const dummyData = [
       title: "DIGITAL MARKETING (DGM)",
       comment: "Get trained by industry experts and become a sought-after travel agent",
       reading: "LEARN MORE",
-      link: "/pages/travelagent",
+      link: "/pages/digital-marketing",
     },
     {
       id: 7,
@@ -53,7 +53,7 @@ export const dummyData = [
       title: "UI/UX DESIGN (EVP)",
       comment: "Learn the intricate details of running a booming event management startup.",
       reading: "LEARN MORE",
-      link: "/pages/eventplanner",
+      link: "/pages/ui-ux",
     },
     {
       id: 8,
@@ -61,6 +61,6 @@ export const dummyData = [
       title: "CYPERSECURITY (CYB)",
       comment: "Learn the intricate details of running a booming event management startup.",
       reading: "LEARN MORE",
-      link: "/pages/eventplanner",
+      link: "/pages/cybersecurity",
     },
 ]

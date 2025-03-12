@@ -18,14 +18,14 @@ const images = [
 ];
 
 const texts = [
-  { h2: 'Welcome to Wandytex', h1: 'FRONTEND DEVELOPMENT', h2Sub: 'Emerge a Chef that can go places' },
-  { h2: 'Manage my Wardrope', h1: 'FULLSTACK DEVELOPMENT', h2Sub: 'Learn the best industry standard' },
-  { h2: 'Celebrity Bar man!!', h1: 'DATA SCIENCE', h2Sub: 'Engage your Guests with care' },
-  { h2: 'Manage my Home', h1: 'ARTIFICIL INTELLIGENCE', h2Sub: 'house keeping is an Art. Master it' },
-  { h2: 'Offer Travel Solutions', h1: 'SOFTWARE DEVELOPMENT', h2Sub: 'Become a sought-after Travel Agent' },
-  { h2: 'Be my Event Planner', h1: 'DIGITAL MARKETING', h2Sub: 'Be trained on the intricate details of running a booming event management startup' },
-  { h2: 'Sow my Style', h1: 'UI/UX DESIGN', h2Sub: 'Learn modern fashion designing and sell at your e-commerce shop' },
-  { h2: 'Thats my Beautician', h1: 'CYBERSECURITY', h2Sub: 'Looking good is good business' },
+  { h2: 'Discover Coding', h1: 'FRONTEND DEVELOPMENT', h2Sub: 'Develop a website that people will love' },
+  { h2: 'Reinforce your Frontend Skills', h1: 'FULLSTACK DEVELOPMENT', h2Sub: 'Master Servers, API calls, Databases' },
+  { h2: 'Data is life', h1: 'DATA SCIENCE', h2Sub: 'Analyse data like a Pro' },
+  { h2: 'Technology of the Future', h1: 'ARTIFICIAL INTELLIGENCE', h2Sub: 'Train your AI Model with Dataset and Machine Learning'},
+  { h2: 'Power of Creativity', h1: 'SOFTWARE DEVELOPMENT', h2Sub: 'Develop and monetize disruptive software solutions'},
+  { h2: 'Take your client to a global audience', h1: 'DIGITAL MARKETING', h2Sub: '...From SEO to Social Media Marketing ' },
+  { h2: 'For love of Beauty', h1: 'UI/UX DESIGN', h2Sub: 'Create engaging and user-friendly interfaces' },
+  { h2: 'The world is on red alert', h1: 'CYBERSECURITY', h2Sub: 'Lead the war against cyber attacks' },
   { h2: 'Become an all-rounded Graduate', h1: 'DIGITAL SKILLS', h2Sub: 'Complement your Degree with a Digital Skill' },
 ];
 

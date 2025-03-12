@@ -2,14 +2,14 @@ import { db } from "@/lib/db";
 import getCoursesByCategory from "../actions/getCourses";
 import Categories from "@/components/custom/Categories";
 import CourseCard from "@/components/courses/CourseCard";
-import Intro from "@/components/layout/Intro";
+// import Intro from "@/components/layout/Intro";
 // import Slider from "../../components/layout/slider/Slider";
 import Welcome from "@/components/layout/Welcome";
 import OnsiteClass from "@/components/layout/OnsiteClass";
-import WhatsAppLink from "@/components/layout/WhatsAppLink";
+// import WhatsAppLink from "@/components/layout/WhatsAppLink";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import HeroSection from "@/components/layout/HeroSection";
-import FooterPage from "@/components/layout/Footer";
+// import FooterPage from "@/components/layout/Footer";
 import Courses from "@/components/layout/Courses";
 import WelcomeBanner from "@/components/UpdateUi/WelcomeBanner";
 import CoursesBanner from "@/components/UpdateUi/CoursesBanner";
@@ -55,7 +55,7 @@ export default async function Home() {
         <OnsiteClass />
         <HeroSection />
         <Testimonials />
-        <WhatsAppLink />
+        {/* <WhatsAppLink /> */}
         {/* <FooterPage/> */}
         <ScrollToTopButton />
       </div>

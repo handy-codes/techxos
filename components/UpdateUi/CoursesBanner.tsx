@@ -3,7 +3,8 @@ import React from 'react'
 
 const WelcomeBanner = () => {
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-teal-500 to-teal-700">
+    // <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-teal-500 to-teal-700">
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-[#5835F9]">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Image div moved to first position */}
@@ -21,12 +22,11 @@ const WelcomeBanner = () => {
           {/* Text content div */}
           <div className="text-white">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              Empowering Future Professionals
+              On-campus Module
             </h1>
             <p className="text-xl mb-8">
-              At Wandytex Skill Acquisition Center, we bridge the gap between education and
-              real-world experience through our comprehensive skill
-              development programs. Checkout our array of courses. swwwwlw
+              In our cozy training environment, we guide you hands-on, every step of the way, to ensure you get the best out of your learning experience. 
+              Check out the following courses you can enroll for in-person.
             </p>
           </div>
         </div>

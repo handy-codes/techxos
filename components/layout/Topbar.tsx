@@ -22,14 +22,14 @@ const Topbar = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const courses = [
-    { title: "Frontend Development", link: "/courses/web-dev" },
-    { title: "Fullstack Development", link: "/courses/web-dev" },
-    { title: "Data Science & Analytics", link: "/courses/data-science" },
-    { title: "Artificial Intelligence", link: "/courses/cloud" },
-    { title: "Software Development", link: "/courses/cybersecurity" },
-    { title: "Digital Marketing", link: "/courses/cybersecurity" },
-    { title: "UI/UX Design", link: "/courses/ui-ux" },
-    { title: "Cybersecurity", link: "/courses/cybersecurity" },
+    { title: "Frontend Development", link: "/pages/frontend" },
+    { title: "Fullstack Development", link: "/pages/fullstack" },
+    { title: "Data Science & Analytics", link: "/pages/data-science" },
+    { title: "Artificial Intelligence", link: "/pages/ai-ml" },
+    { title: "Software Development", link: "/pages/software-devt" },
+    { title: "Digital Marketing", link: "/pages/digital-marketing" },
+    { title: "UI/UX Design", link: "/pages/ui-ux" },
+    { title: "Cybersecurity", link: "/pages/cybersecurity" },
   ];
 
   const handleMouseEnter = () => {
@@ -74,28 +74,35 @@ const Topbar = () => {
     <div className="fixed top-0 z-50 w-full shadow-lg">
       <header className="z-50 w-full top-0">
         {/* Upper Contact Bar */}
-        <div className="h-[40px] bg-gray-900 text-white items-center justify-between py-7 px-6 hidden xl:flex">
-          <div className="flex items-center space-x-2 max-w-[40%] truncate">
-            <FaMapMarkerAlt className="text-[orange] shrink-0" />
-            <span className="truncate">
-              Office Address: 101, Lagos Ikorodu Road (WandyTech Place), by
-              Aruna B/Stop, Ikorodu Lagos
-            </span>
-          </div>
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2">
-              <FaPhone className="text-[orange]" />
-              <span>+2349123444391</span>
-            </div>
-            <Link
-              href="mailto:hello@techxos.com"
-              className="flex items-center py-[6px] px-3 bg-[#638995] rounded-md space-x-2 hover:bg-[#638995]/80 transition-colors"
-            >
-              <FaPaperPlane className="text-[#C5CFD2]" />
-              <span className="text-sm">Contact Us</span>
-            </Link>
-          </div>
+        <div className="h-[40px] bg-[black] text-white items-center justify-between py-7 px-6 hidden xl:flex">
+        <div className="flex items-center space-x-2">
+          <FaMapMarkerAlt className="text-[orange]" />
+          <span>
+            101, Lagos Ikorodu Road, (Wandytech Suites) by Jumofak Aruna Bus Stop,
+            Ikorodu Lagos
+          </span>
         </div>
+        <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-2">
+            <FaPhone className="text-[orange]" />
+            <span>+2349123444391</span>
+          </div>
+          <Link
+            href="mailto:hello@techxos.com"
+            className="flex items-center py-[6px] px-3 bg-[#638995] rounded-md space-x-2"
+          >
+            <FaPaperPlane className="text-[#C5CFD2]" />
+            <p className="text-dark-blue py-1 rounded">Contact Us</p>
+          </Link>
+          <Link
+            href="mailto:hello@wandytex.com"
+            className="flex items-center space-x-2"
+          >
+            <FaPaperPlane className="text-[orange]" />
+            <p className="text-dark-blue py-1 rounded">hello@techxos.com</p>
+          </Link>
+        </div>
+      </div>
 
         {/* Main Navigation Bar */}
         <nav className="flex w-full mx-auto justify-between bg-white h-[80px] my-auto items-center p-4 border-b-2 border-[#E79D09] relative">
@@ -113,7 +120,7 @@ const Topbar = () => {
               placeholder="Search for courses"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               aria-label="Search courses"
             />
             <button
@@ -129,18 +136,18 @@ const Topbar = () => {
           {/* Navigation Links and Auth */}
           <div className="flex items-center font-semibold gap-4">
             {/* Desktop Links */}
-            <div className="hidden lg:flex gap-2">
+            <div className="hidden lg:flex md:text-[13px] gap-2">
               {topRoutes.map((route) =>
                 route.label === "OUR COURSES" ? (
                   <div
                     key={route.path}
-                    className="relative flex items-center space-x-1 cursor-pointer group"
+                    className="relative flex md:text-[13px] items-center space-x-1 cursor-pointer group"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                     ref={dropdownRef}
                   >
                     <span
-                      className={`text-sm md:text-base rounded-[3px] transition-all py-2 px-3 ${
+                      className={`text-sm md:text-[13px] rounded-[3px] transition-all py-2 px-3 ${
                         pathName === route.path
                           ? "bg-[#003E8F] text-white"
                           : "hover:bg-[#003E8F] hover:text-white"
@@ -152,7 +159,7 @@ const Topbar = () => {
 
                     {/* Dropdown Content */}
                     <div
-                      className={`absolute top-full -left-[25vw] w-[70vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
+                      className={`absolute top-full -left-[30vw] w-[70vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
                         isDropdownOpen
                           ? "opacity-100 translate-y-0 visible"
                           : "opacity-0 -translate-y-2 invisible"
@@ -161,7 +168,7 @@ const Topbar = () => {
                       onMouseEnter={() => clearTimeout(timeoutRef.current!)}
                       onMouseLeave={handleMouseLeave}
                     >
-                      <div className="w-[35vw] h-full relative">
+                      <div className="w-[32vw] h-full relative">
                         <Image
                           src="https://images.pexels.com/photos/7971355/pexels-photo-7971355.jpeg"
                           layout="fill"
@@ -170,12 +177,12 @@ const Topbar = () => {
                           priority
                         />
                       </div>
-                      <div className="w-[38vw] bg-[#52737F] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 pr-12 overflow-y-auto">
+                      <div className="w-[33vw] bg-[#0F172A] text-[#47D1FD] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto">
                         {courses.map((course, index) => (
                           <Link
                             key={index}
                             href={course.link}
-                            className="hover:text-[#C5CFD2] text-sm md:text-base transition-colors"
+                            className="hover:text-[#4ac8f1] text-sm md:text-[15px] transition-colors"
                             onClick={() => setIsDropdownOpen(false)}
                           >
                             {course.title}
@@ -188,7 +195,7 @@ const Topbar = () => {
                   <Link
                     href={route.path}
                     key={route.path}
-                    className={`text-sm md:text-base rounded-[3px] transition-all py-2 px-3 ${
+                    className={`text-sm md:text-[13px] rounded-[3px] transition-all py-2 px-3 ${
                       pathName === route.path
                         ? "bg-[#003E8F] text-white"
                         : "hover:bg-[#003E8F] hover:text-white"
@@ -283,7 +290,7 @@ const Topbar = () => {
               <UserButton afterSignOutUrl="/" />
             ) : (
               <Link href="/sign-in">
-                <Button variant="outline" className="text-[#003E8F]">
+                <Button variant="outline" className="text-[#003E8F] p-4 bg-orange-500">
                   Sign In
                 </Button>
               </Link>

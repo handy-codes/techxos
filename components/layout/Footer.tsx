@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import Image from "next/image";
 import { FaX } from "react-icons/fa6";
+import ChatWidget from "./ChatWidget";
 
 const Footer = () => {
   return (
@@ -27,7 +28,7 @@ const Footer = () => {
               />
             </div>
             <h1 className=" max-sm:text-[18px] mt-4 sm:text-[27px] mb-4 font-semibold">
-              WandyTex Skills Development Services
+              Techxos Digital Products
             </h1>
           </div>
         </Link>
@@ -118,11 +119,12 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+          <ChatWidget /> 
         </div>
         <hr className="my-6 border-[#F89928]" />
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-[#CED1E4] mb-2 md:mb-0">
-            &copy; {new Date().getFullYear()} WandyTex Skills | All rights
+            &copy; {new Date().getFullYear()} Techxos Developers | All rights
             reserved.
           </p>
           <div className="flex space-x-4">
