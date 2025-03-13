@@ -2,12 +2,7 @@
 import { NextResponse } from 'next/server';
 import { createTransport } from 'nodemailer';
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable default body parsing
-  },
-  runtime: 'nodejs', // Use Node.js runtime (required for file handling)
-};
+export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
   try {
