@@ -211,7 +211,7 @@ const Topbar = () => {
             <div className="lg:hidden z-[100]">
               <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetTrigger aria-label="Open navigation menu">
-                  <Menu className="w-8 h-8 mt-2 text-[#E79D09]" />
+                  <Menu className="w-8 h-8 mt-2 text-[#003E8F]" />
                 </SheetTrigger>
                 <SheetContent className="flex flex-col gap-4 bg-gray-800 text-white border-l-0 z-[1000] pt-16">
                   <div className="flex flex-col gap-2">

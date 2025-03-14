@@ -80,7 +80,7 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Frontend DEvelopment Course"
+          content="Welcome to the Frontend Development Course"
         />
       </Head>
 

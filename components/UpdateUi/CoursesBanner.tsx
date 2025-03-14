@@ -26,7 +26,7 @@ const WelcomeBanner = () => {
             </h1>
             <p className="text-xl mb-8">
               In our cozy training environment, we guide you hands-on, every step of the way, to ensure you get the best out of your learning experience. 
-              Check out the following courses you can enroll for in-person.
+              Check out the following courses that you can enroll for, in-person.
             </p>
           </div>
         </div>

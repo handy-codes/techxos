@@ -11,7 +11,7 @@ const testimonials = [
     name: "Jonadab Arueya",
     role: "CEO Wahalanodey  Travels",
     roleLink: "https://www.wahalanodey.com",
-    text: "I kept ideating on a one-stop shop for skill acquision. WandyTex is the place!",
+    text: "Flexible learning at Techxos is next to none. Every busy professional like me has got a space.",
     image: "/wandyboss2.jpg",
     // linkedin: "https://www.linkedin.com/in/jonadab-arueya-74b81a2a",
   },
@@ -19,14 +19,14 @@ const testimonials = [
     name: "Emeka Owo",
     role: "CTO at Techxos",
     roleLink: "https://www.techxos.com",
-    text: "We have recruited Industrial Trainees from WandyTex, at no cost. That saved us 30% of our salary bill in 2024",
+    text: "We envioned a one-stop shop for trending Tech skills. It is happening at Techxos.",
     image: "/owo-blow.jpg",
     linkedin: "https://www.linkedin.com/in/emeka-owo",
   },
   {
-    name: "Chioma Ukaegbu",
+    name: "Chika Daniels",
     role: "Intern at NextGen",
-    text: "Learning new skills at Wandytex is a brease. They've got very supportive instructors. I am currently on an industrial training as an event planner",
+    text: "Learning new skills at Techxos is a brease. I am currently on an Industrial Training as a Fullstack Developer.",
     image:
       "https://images.pexels.com/photos/1757281/pexels-photo-1757281.jpeg?auto=compress&cs=tinysrgb&w=600",
     // linkedin: "https://www.linkedin.com/in/chioma-ukaegbu-54290a20b",
@@ -101,7 +101,7 @@ export default function Testimonials() {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#47D1FD]">
             {/* <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[orange]"> */}
-              From Our Clients and Students
+              From Us, Clients and Students
             </h2>
           </motion.div>
 
