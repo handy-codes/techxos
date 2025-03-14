@@ -19,7 +19,7 @@ const Footer = () => {
           <div className="flex items-center mb-4 gap-6">
             <div className="flex items-center">
               <Image
-                src="/logo2svg.svg"
+                src="/favicon.png"
                 alt="Your Company Logo"
                 width={60}
                 height={60}

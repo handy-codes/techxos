@@ -177,7 +177,7 @@ const Topbar = () => {
                           priority
                         />
                       </div>
-                      <div className="w-[33vw] bg-[#0F172A] text-[#47D1FD] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto">
+                      <div className="w-[33vw] bg-[#5025D1] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto">
                         {courses.map((course, index) => (
                           <Link
                             key={index}

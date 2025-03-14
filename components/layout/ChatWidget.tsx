@@ -81,9 +81,12 @@ export default function ChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: newMessage }),
       });
-
-      if (!response.ok) throw new Error("API request failed");
-
+    
+      if (!response.ok) {
+        console.error(`API request failed with status: ${response.status}`);
+        throw new Error("API request failed");
+      }
+    
       const data = await response.json();
       setMessages(prev => [...prev, { bot: data.reply }]);
     } catch (error) {
@@ -266,6 +269,7 @@ export default function ChatWidget() {
           gap: 8px;
           padding: 16px;
           border-top: 1px solid #e5e7eb;
+          overflow: hidden; 
         }
 
         input {
@@ -275,6 +279,8 @@ export default function ChatWidget() {
           border-radius: 8px;
           outline: none;
           font-size: 16px;
+          width: 100%; 
+          min-width: 0;
         }
 
         input:focus {
