@@ -18,17 +18,16 @@ const images = [
 ];
 
 const texts = [
-  { h2: 'Discover Coding', h1: 'FRONTEND DEVELOPMENT', h2Sub: 'Develop a website that people will love' },
-  { h2: 'Reinforce your Frontend Skills', h1: 'FULLSTACK DEVELOPMENT', h2Sub: 'Master Servers, API calls, Databases' },
-  { h2: 'Data is life', h1: 'DATA SCIENCE', h2Sub: 'Analyse data like a Pro' },
-  { h2: 'Technology of the Future', h1: 'ARTIFICIAL INTELLIGENCE', h2Sub: 'Train your AI Model with Dataset and Machine Learning'},
-  { h2: 'Power of Creativity', h1: 'SOFTWARE DEVELOPMENT', h2Sub: 'Develop and monetize disruptive software solutions'},
-  { h2: 'Take your client to a global audience', h1: 'DIGITAL MARKETING', h2Sub: '...From SEO to Social Media Marketing ' },
-  { h2: 'For love of Beauty', h1: 'UI/UX DESIGN', h2Sub: 'Create engaging and user-friendly interfaces' },
-  { h2: 'The world is on red alert', h1: 'CYBERSECURITY', h2Sub: 'Lead the war against cyber attacks' },
-  { h2: 'Become an all-rounded Graduate', h1: 'DIGITAL SKILLS', h2Sub: 'Complement your Degree with a Digital Skill' },
+  { h2: 'Discover Coding', h1: 'FRONTEND DEVELOPMENT', h2Sub: 'Develop a website that people will love', href: '/pages/frontend' },
+  { h2: 'Reinforce your Frontend Skills', h1: 'FULLSTACK DEVELOPMENT', h2Sub: 'Master Servers, API calls, Databases', href: '/pages/fullstack'},
+  { h2: 'Data is life', h1: 'DATA SCIENCE', h2Sub: 'Analyse data like a Pro', href: '/pages/data-science' },
+  { h2: 'Technology of the Future', h1: 'ARTIFICIAL INTELLIGENCE', h2Sub: 'Train your AI Model with Dataset and Machine Learning', href: '/ai-ml' },
+  { h2: 'Power of Creativity', h1: 'SOFTWARE DEVELOPMENT', h2Sub: 'Develop and monetize disruptive software solutions', href: '/pages/software-devt' },
+  { h2: 'Take your client to a global audience', h1: 'DIGITAL MARKETING', h2Sub: '...From SEO to Social Media Marketing ', href: '/pages/digital-marketing' },
+  { h2: 'For love of Beauty', h1: 'UI/UX DESIGN', h2Sub: 'Create engaging and user-friendly interfaces', href: '/pages/ui-ux' },
+  { h2: 'The world is on red alert', h1: 'CYBERSECURITY', h2Sub: 'Lead the war against cyber attacks', href: '/pages/cybersecurity' },
+  { h2: 'Become an all-rounded Graduate', h1: 'DIGITAL SKILLS', h2Sub: 'Complement your Degree with a Digital Skill', href: '/about' },
 ];
-
 export default function Slider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { user } = useUser();  
@@ -66,7 +65,7 @@ export default function Slider() {
                 <h1 className="text-[40px] md:text-[80px] text-[orange] font-extrabold">{texts[currentSlide].h1}</h1>
                 <h2 className="text-2xl px-5">{texts[currentSlide].h2Sub}</h2>
                 <Link
-                  href="/"
+                  href={texts[currentSlide].href}
                   className="inline-block mt-8 px-9 rounded-md py-3 font-bold bg-[#BF5800] text-[white] text-xl hover:bg-gray-500 hover:text-white transition-colors duration-300"
                 >
                   Explore

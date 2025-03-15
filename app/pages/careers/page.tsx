@@ -100,7 +100,7 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Dear Instructor,
+                Tech Instructor
               </h1>
               <p className="text-xl mb-8">
                 Join Techxos Learning Management System and reach thousands of
@@ -148,7 +148,7 @@ export default function Page() {
             href="https://wa.me/2348167715107"
             className="text-white font-bold mt-6 bg-[green] p-4 rounded hover:text-[green] hover:bg-white hover:border hover:border-green-700 transition duration-500"
           >
-            Contact the Course Advisor
+            Contact a Course Advisor
           </Link>
         </div>
 
@@ -179,7 +179,7 @@ export default function Page() {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded outline-none"
               />
             </div>
             <div className="mb-4">
@@ -190,7 +190,7 @@ export default function Page() {
                 required
                 value={formData.surname}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded outline-none"
               />
             </div>
             <div className="mb-4">
@@ -201,7 +201,7 @@ export default function Page() {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded outline-none"
               />
             </div>
             <div className="mb-4">
@@ -212,10 +212,8 @@ export default function Page() {
                 name="subject"
                 required
                 value={formData.subject}
-                onChange={handleChange}
-                className="max-sm:w-[55%] xl:w-full p-2 border rounded"
+                className="max-sm:w-[55%] xl:w-full p-2 border rounded outline-none"
               >
-                <div className="w-[]">
                   <option value="">Select a course</option>
                   <option value="Frontend Development">
                     <p className="w-inline-block bg-red-500">Frontend Development</p>
@@ -233,7 +231,6 @@ export default function Page() {
                     Software Development
                   </option>
                   <option value="Data Science">Data Science</option>
-                </div>
               </select>
             </div>
             <div className="mb-4">

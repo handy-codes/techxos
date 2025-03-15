@@ -10,7 +10,7 @@ const WelcomeBanner = () => {
           {/* Image div moved to first position */}
           <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl order-first lg:order-none">
             <Image
-              src="https://media.istockphoto.com/id/1437931505/photo/businessman-digital-tablet-or-strategy-planning-in-hotel-conference-lobby-or-airport-travel.jpg?b=1&s=612x612&w=0&k=20&c=6w-GCbKnm5eKoWql1jxUN2DuJAKpZpI4d98F_nU8M5g="
+              src="https://images.pexels.com/photos/5198239/pexels-photo-5198239.jpeg?auto=compress&cs=tinysrgb&w=600"
               alt="Team Collaboration"
               fill
               className="object-cover"

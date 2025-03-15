@@ -19,7 +19,7 @@ const testimonials = [
     name: "Emeka Owo",
     role: "CTO at Techxos",
     roleLink: "https://www.techxos.com",
-    text: "We envioned a one-stop shop for trending Tech skills. It is happening at Techxos.",
+    text: "We envioned a one-stop shop for learning in-demand Tech skills. Techxos just broke the jinx.",
     image: "/owo-blow.jpg",
     linkedin: "https://www.linkedin.com/in/emeka-owo",
   },

@@ -159,7 +159,7 @@ const Topbar = () => {
 
                     {/* Dropdown Content */}
                     <div
-                      className={`absolute top-full -left-[30vw] w-[70vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
+                      className={`absolute top-full -left-[33vw] w-[75vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
                         isDropdownOpen
                           ? "opacity-100 translate-y-0 visible"
                           : "opacity-0 -translate-y-2 invisible"
@@ -168,7 +168,7 @@ const Topbar = () => {
                       onMouseEnter={() => clearTimeout(timeoutRef.current!)}
                       onMouseLeave={handleMouseLeave}
                     >
-                      <div className="w-[32vw] h-full relative">
+                      <div className="w-[42vw] h-full relative">
                         <Image
                           src="https://images.pexels.com/photos/7971355/pexels-photo-7971355.jpeg"
                           layout="fill"
@@ -177,7 +177,10 @@ const Topbar = () => {
                           priority
                         />
                       </div>
-                      <div className="w-[33vw] bg-[#5025D1] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto">
+                      {/* <div className="w-[33vw] bg-[#343B43] text-[#46D5FB] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
+                      {/* <div className="w-[40vw] bg-gray-100 text-[#4F25CF] mt-1 grid grid-cols-2 font-semibold gap-3 p-6 overflow-y-auto"> */}
+                      <div className="w-[40vw] bg-[#ECEFF1] text-[#003E8F] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto">
+                      {/* <div className="w-[33vw] bg-[#5025D1] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
                         {courses.map((course, index) => (
                           <Link
                             key={index}

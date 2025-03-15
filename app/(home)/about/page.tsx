@@ -5,6 +5,7 @@ import {
   UserGroupIcon,
   BriefcaseIcon,
 } from "@heroicons/react/24/outline";
+import { FaLinkedin } from "react-icons/fa"; // Importing LinkedIn icon from react-icons
 
 const AboutPage = () => {
   return (
@@ -18,14 +19,19 @@ const AboutPage = () => {
                 Empowering Future Professionals
               </h1>
               <p className="text-xl mb-8">
-                At Wandytex Academy, we bridge the gap between education and
-                real-world experience through our comprehensive skill
-                development programs.
+                TechXos is a dynamic and user-friendly learning management
+                system designed to empower individuals and businesses with
+                seamless access to high-quality online education.
+              </p>
+              <p className="text-xl mb-8">
+                We believe in making learning accessible, efficient, and
+                impactful, helping users skill up with every ease!
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://images.pexels.com/photos/1181370/pexels-photo-1181370.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src="https://images.pexels.com/photos/3727464/pexels-photo-3727464.jpeg?auto=compress&cs=tinysrgb&w=600"
+                // src="https://images.pexels.com/photos/3727457/pexels-photo-3727457.jpeg?auto=compress&cs=tinysrgb&w=600"
                 alt="Team Collaboration"
                 fill
                 className="object-cover"
@@ -43,12 +49,12 @@ const AboutPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <div className="p-6 bg-blue-50 rounded-xl transition hover:bg-blue-100">
               <UserGroupIcon className="h-12 w-12 mx-auto text-blue-600" />
-              <h3 className="mt-4 text-3xl font-bold">5,000+</h3>
+              <h3 className="mt-4 text-3xl font-bold">500+</h3>
               <p className="mt-2 text-gray-600">Students Trained</p>
             </div>
             <div className="p-6 bg-purple-50 rounded-xl transition hover:bg-purple-100">
               <BriefcaseIcon className="h-12 w-12 mx-auto text-purple-600" />
-              <h3 className="mt-4 text-3xl font-bold">1,200+</h3>
+              <h3 className="mt-4 text-3xl font-bold">100+</h3>
               <p className="mt-2 text-gray-600">Internship Placements</p>
             </div>
             <div className="p-6 bg-green-50 rounded-xl transition hover:bg-green-100">
@@ -58,7 +64,7 @@ const AboutPage = () => {
             </div>
             <div className="p-6 bg-orange-50 rounded-xl transition hover:bg-orange-100">
               <LightBulbIcon className="h-12 w-12 mx-auto text-orange-600" />
-              <h3 className="mt-4 text-3xl font-bold">50+</h3>
+              <h3 className="mt-4 text-3xl font-bold">10+</h3>
               <p className="mt-2 text-gray-600">Industry Partners</p>
             </div>
           </div>
@@ -72,7 +78,6 @@ const AboutPage = () => {
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src="https://images.pexels.com/photos/7689877/pexels-photo-7689877.jpeg?auto=compress&cs=tinysrgb&w=600"
-                // src="/images/internship.jpg"
                 alt="Internship Program"
                 fill
                 className="object-cover"
@@ -110,11 +115,26 @@ const AboutPage = () => {
           </h2>
           <div className="flex flex-col md:flex-row justify-between gap-8">
             {[
-              "Skill Assessment",
-              "Custom Training",
-              "Mentorship",
-              "Placement",
-            ].map((step, index) => (
+              {
+                step: "Skill Assessment",
+                description:
+                  "Evaluate your current skills and identify areas for improvement.",
+              },
+              {
+                step: "Project-based Learning",
+                description:
+                  "Engage in hands-on projects to apply your knowledge.",
+              },
+              {
+                step: "Mentorship",
+                description:
+                  "Receive guidance and support from industry experts.",
+              },
+              {
+                step: "Placement",
+                description: "Secure a position in a reputable company.",
+              },
+            ].map(({ step, description }, index) => (
               <div key={step} className="relative flex-1 text-center">
                 <div className="mb-4">
                   <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto">
@@ -125,9 +145,7 @@ const AboutPage = () => {
                   )}
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{step}</h3>
-                <p className="text-gray-600">
-                  Comprehensive {step.toLowerCase()} program
-                </p>
+                <p className="text-gray-600">{description}</p>
               </div>
             ))}
           </div>
@@ -142,14 +160,27 @@ const AboutPage = () => {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { role: "CEO", name: "Jonadab Areuya", image: "/wandyboss2.jpg" },
-              { role: "CTO", name: "Phil Abioye", image: "https://images.pexels.com/photos/6584748/pexels-photo-6584748.jpeg?auto=compress&cs=tinysrgb&w=600" },
+              {
+                role: "CEO",
+                name: "Jonadab Areuya",
+                image: "/wandyboss2.jpg",
+                // linkedin: "https://linkedin.com/in/jonadabareuya"
+              },
+              {
+                role: "CTO",
+                name: "Emeka Owo",
+                image: "/owo-blow.jpg",
+                // image: "https://images.pexels.com/photos/6584748/pexels-photo-6584748.jpeg?auto=compress&cs=tinysrgb&w=600",
+                linkedin: "https://www.linkedin.com/in/emeka-owo-204aaa2a5/",
+              },
               {
                 role: "Head of Training",
-                name: "Alice Johnson",
-                image: "https://images.pexels.com/photos/8872479/pexels-photo-8872479.jpeg?auto=compress&cs=tinysrgb&w=600",
+                name: "Nicholas Okoye",
+                image:
+                  "https://media.licdn.com/dms/image/v2/D4D03AQHRNTL3J6Dm_Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1689285926292?e=1747267200&v=beta&t=pndPPGTyAe57MImlcc-FwGc2Ob1u7LCUOGND4qCipak",
+                linkedin: "https://www.linkedin.com/in/obi-okoye-65b7381b3/",
               },
-            ].map(({ role, name, image }) => (
+            ].map(({ role, name, image, linkedin }) => (
               <div
                 key={role}
                 className="bg-white rounded-xl shadow-lg overflow-hidden transition hover:shadow-xl"
@@ -165,7 +196,19 @@ const AboutPage = () => {
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold">{name}</h3>
-                  <p className="text-gray-600">{role}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-gray-600">{role}</p>
+                    {linkedin && (
+                      <a
+                        href={linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                      >
+                        <FaLinkedin className="h-5 w-5" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -177,101 +220,3 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
-
-
-
-
-
-// import Image from "next/image";
-// import React from "react";
-// // import FooterPage from "@/components/layout/Footer";
-
-// const page = () => {
-//   return (
-//     <>
-//       <div className="">
-//         <h1 className="ml-[5%] sm:ml-14 my-auto gap-2 mx-auto mt-8 text-3xl sm:text-4xl font-bold">
-//           Collaborating to{" "}
-//           <span className="text-[#003E8F] text-4xl sm:text-4xl font-semibold">
-//             Redefine
-//           </span>
-//           <br /> Learning
-//         </h1>
-//         <div className="flex-row-reverse mt-8  flex flex-wrap max-sm:gap-4 justify-center max-w-7xl mx-auto">
-//           <div className="radiuser content-center bg-[#003B65] p-6 w-[90vw] sm:w-[45vw] sm:h-[75vh] h-fit flex sm:content-center flex-col sm:items-center sm:justify-center">
-//             <h1 className="text-white text-[21px] font-medium sm:text-3xl">
-//               Scale with Us
-//             </h1>
-//             <p className="text-[#ABBECC] sm:text-justify pt-3 pb-3 text-[18px]">
-//               Techxos is a dedicated online learning App. Made of local content,
-//               you can access well-curated courses ranging from Coding to
-//               Accounting, Tourism & Aviation, as well as in preparatory courses
-//               for ICAN, UTME, SSCE exams and so much more. Learn at your own
-//               pace.
-//             </p>
-//           </div>
-//           <div className="radius2 max-sm:rounded-lg sm:inline-block w-[90vw] sm:w-[45vw] h-[75vh] ">
-//             <Image
-//               className="radius4 max-sm:border-2 max-sm:border-[#1a2e05] w-[100%] h-[85%] overflow-hidden object-cover"
-//               src={"/wandyboss2.jpg"}
-//               width={700}
-//               height={600}
-//               alt=""
-//             />
-//             <div className=" w-[100%] p-6 h-[15%] flex flex-col justify-center items-center bg-lime-950 py-4 text-white">
-//               <p className="text-xl">Jonadab Omonigho</p>
-//               <p className="text-[14px] sm:text-sm">Founder, CEO Techxos</p>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* CTO SECTION */}
-//         <div className=" my-12 flex flex-wrap max-sm:gap-4 justify-center max-w-7xl mx-auto">
-//           <div className="radius3 content-center bg-[#003B65] p-6 w-[90vw] sm:w-[45vw] sm:h-[75vh] h-fit flex sm:content-center flex-col sm:items-center sm:justify-center">
-//             <h1 className="text-white text-[21px] font-medium sm:text-3xl">
-//               Leaverage Tech | e-Learn Today
-//             </h1>
-//             <p className="text-[#ABBECC] sm:text-justify pt-3 pb-3 text-[18px]">
-//               When traditional 9-5pm work schedule leaves you with little time
-//               and energy to develop yourself further or to read and pass your
-//               college or professional exams, Techxos has got you covered. Your
-//               instructors never sleep!
-//             </p>
-//           </div>
-//           <div className=" max-sm:rounded-lg sm:inline-block w-[90vw] sm:w-[45vw] h-[75vh] ">
-//             <Image
-//               className="radius5 max-sm:border-2 max-sm:border-[#1a2e05] w-[100%] h-[85%] overflow-hidden object-cover"
-//               src={"/owo.jpg"}
-//               width={700}
-//               height={600}
-//               alt=""
-//             />
-//             <div className="w-[100%] p-6 h-[15%] flex flex-col justify-center items-center bg-lime-950 py-4 text-white">
-//               <p className="text-xl">Emeka Owo</p>
-//               <div className="flex items-center pb-1 gap-2 max-sm:gap-0justify-between ">
-//                 <p className="text-[14px] sm:text-sm">
-//                   CTO & Co-founder, at Techxos
-//                 </p>
-//                 <a
-//                   href="https://www.linkedin.com/in/emeka-owo-204aaa2a5"
-//                   target="_blank"
-//                 >
-//                   <Image
-//                     className="rounded-full"
-//                     src={"/linkedin4.png"}
-//                     width={23}
-//                     height={23}
-//                     alt=""
-//                   />
-//                 </a>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//         {/* <FooterPage /> */}
-//       </div>
-//     </>
-//   );
-// };
-
-// export default page;

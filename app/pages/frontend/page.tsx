@@ -7,6 +7,7 @@ import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
+import Frontend from "@/components/curriculum/Frontend";
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -128,9 +129,10 @@ export default function Page() {
             150,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            In 12 weeks, master culinary skills, hospitality management, and
-            customer service through our comprehensive Catering and Hotel
-            Management program.
+            In 12 weeks, master the art of building websites and apps that run
+            on the internet. Explore the flexibility of Nextjs as a third-party library for Reactjs.
+            With Tailwindcss, a better knowledge of the color theory and other modern tools, you will be able to create responsive and
+            visually appealing websites. 
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
             <a
@@ -258,6 +260,7 @@ export default function Page() {
           </form>
         </div>
       </section>
+      <Frontend/>
     </div>
   );
 }
