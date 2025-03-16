@@ -108,6 +108,14 @@ const Topbar = () => {
         <nav className="flex w-full mx-auto justify-between bg-white h-[80px] my-auto items-center p-4 border-b-2 border-[#E79D09] relative">
           {/* Logo */}
           <Link className="flex items-center gap-3" href="/">
+            <Image
+              src="/logo-techxos-navy.svg"
+              // src="/logo-techxos-white-nav.svg"
+              width={40}
+              height={40}
+              alt="Techxos Logo"
+              priority
+            />
             <h1 className="text-2xl md:text-3xl font-extrabold text-[#003E8F]">
               Techxos
             </h1>

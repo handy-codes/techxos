@@ -5,7 +5,7 @@ import CourseCard from "@/components/courses/CourseCard";
 // import Intro from "@/components/layout/Intro";
 // import Slider from "../../components/layout/slider/Slider";
 import Welcome from "@/components/layout/Welcome";
-import OnsiteClass from "@/components/layout/OnsiteClass";
+// import OnsiteClass from "@/components/layout/OnsiteClass";
 // import WhatsAppLink from "@/components/layout/WhatsAppLink";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import HeroSection from "@/components/layout/HeroSection";
@@ -52,7 +52,7 @@ export default async function Home() {
         <CoursesBanner />
         <Courses />
         {/* <TestimonialSection/> */}
-        <OnsiteClass />
+        {/* <OnsiteClass /> */}
         <HeroSection />
         <Testimonials />
         {/* <WhatsAppLink /> */}
