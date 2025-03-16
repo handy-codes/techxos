@@ -98,26 +98,26 @@ const Footer = () => {
             <ul>
               <li className="mb-2">
                 <Link
-                  href="/pages/cateringsch"
+                  href="/pages/services"
                   className="text-[#CED1E4] cursor-pointer transform transition-all duration-300 hover:text-[#E5A111] hover:translate-x-1"
                 >
-                  Catering School
+                  Our Services
                 </Link>
               </li>
               <li className="mb-2">
                 <Link
-                  href="/pages/hotelmgt"
+                  href="/pages/services"
                   className="text-[#CED1E4] cursor-pointer transform transition-all duration-300 hover:text-[#E5A111] hover:translate-x-1"
                 >
-                  Hotel Management
+                  Website Developers
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/pages/flightattendant"
+                  href="/pages/services"
                   className="text-[#CED1E4] cursor-pointer transform transition-all duration-300 hover:text-[#E5A111] hover:translate-x-1"
                 >
-                  Travel & Tourism
+                  Tech Consultancy
                 </Link>
               </li>
             </ul>
@@ -125,14 +125,14 @@ const Footer = () => {
 
           {/* Aviation Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-[#F89928]">Aviation</h3>
+            <h3 className="text-lg font-semibold mb-4 text-[#F89928]">Policy</h3>
             <ul>
               <li className="mb-2">
                 <Link
-                  href="/pages/travelagent"
+                  href="/"
                   className="text-[#CED1E4] cursor-pointer transform transition-all duration-300 hover:text-[#E5A111] hover:translate-x-1"
                 >
-                  Travel Agent
+                  Community
                 </Link>
               </li>
               <li>

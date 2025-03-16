@@ -3,11 +3,15 @@ import React, { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle, FaRegClock } from "react-icons/fa";
+import { AiFillSchedule } from "react-icons/ai";
+import { HiLocationMarker } from "react-icons/hi";
+import { IoMdOptions } from "react-icons/io";
+import Cybersecurity from "@/components/curriculum/Cybersecurity";
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Catering School (CSH)",
+    courseTitle: "Frontend Development",
     name: "",
     surname: "",
     email: "",
@@ -56,7 +60,7 @@ export default function Page() {
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Catering School (CSH)",
+        courseTitle: "Frontend Development",
         name: "",
         surname: "",
         email: "",
@@ -77,29 +81,25 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Catering and Hotel Management Course"
+          content="Welcome to the Frontend Development Course"
         />
       </Head>
 
-      {/* <div className="w-[100vw] h-[250px] relative">
-        <Image
-          src="https://media.istockphoto.com/id/1389857295/photo/african-american-woman-bakers-looking-at-camera-chef-baker-in-a-chef-dress-and-hat-cooking.jpg?s=612x612&w=0&k=20&c=a6DaEjGakfhEykibC5LA1eknE7752wpQQdUUt9VjhRc="
-          layout="fill"
-          className="object-cover"
-          alt="Course banner"
-        />
-      </div> */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
+      <section className="relative py-20 px-4 mt-[8%] sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Catering School
+                Modern Web Development Cycle
               </h1>
               <p className="text-xl mb-8">
-                The WandyTex Catering School, we bridge the gap between
-                education and real-world experience through our comprehensive
-                skill development programs.
+                Web development is the art of building websites and apps that
+                run on the internet. It’s split into three core layers: 
+                Front-End (what users see)
+                Back-End (behind-the-scenes logic)
+                Full-Stack: (front-end + back-end).
+                Every site you visit—from blogs to e-commerce—is crafted with
+                these tools. Start your coding career today with Frontend Development!
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
@@ -115,25 +115,55 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8">
-        <div className="flex-1">
-          <h1 className="text-4xl font-bold mb-2">Catering School (CSH)</h1>
-          <p className="text-lg">
-            This is the ideal next-generation course for learning catering and
-            hotel management.
+        {/* Left Column - Course Details */}
+        <div className="flex-1 text-black">
+          <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
+            <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
+              Frontend Development
+            </h1>
+            <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
+          </div>
+          <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
+            150,000 NGN
+          </h1>
+          <p className="text-justify font-semibold max-sm:mb-1">
+            In 12 weeks, master the art of building websites and apps that run
+            on the internet. Explore the flexibility of Nextjs as a third-party library for Reactjs.
+            With Tailwindcss, a better knowledge of the color theory and other modern tools, you will be able to create responsive and
+            visually appealing websites. 
           </p>
-          <p className="text-lg mb-6">
-            Lorem ipsum dolor sit amet, quibusdam necessitatibus. Vitae commodi
-            eum cum at nostrum non.
-          </p>
-          <Link
-            href="https://wa.me/2348167715107"
-            className="text-white font-bold mt-6 bg-[green] p-4 rounded hover:text-[green] hover:bg-white hover:border hover:border-green-700 transition duration-500"
-          >
-            Contact the Course Advisor
-          </Link>
+          <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
+            <a
+              href="https://wa.me/2348167715107"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Contact an Advisor
+            </a>
+          </div>
+          <div className="font-semibold">
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <FaRegClock className="text-black text-[22px]" />
+              <span>Duration: 12 weeks</span>
+            </div>
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <AiFillSchedule className="text-black text-[24px]" />
+              <span>Schedule: 9 hours/week</span>
+            </div>
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <HiLocationMarker className="text-black text-[27px]" />
+              <span>Location: In-person or online</span>
+            </div>
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <IoMdOptions className="text-black text-[24px]" />
+              <span>Options: Evening Class, Executive (one-to-one) class</span>
+            </div>
+          </div>
         </div>
 
+        {/* Right Column - Contact Form */}
         <div
           id="contact"
           className="flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md"
@@ -230,6 +260,7 @@ export default function Page() {
           </form>
         </div>
       </section>
+      <Cybersecurity/>
     </div>
   );
 }

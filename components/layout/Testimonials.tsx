@@ -11,7 +11,7 @@ const testimonials = [
     name: "Jonadab Arueya",
     role: "CEO Wahalanodey  Travels",
     roleLink: "https://www.wahalanodey.com",
-    text: "Flexible learning at Techxos is next to none. Every busy professional like me has got a space.",
+    text: "Flexible learning at Techxos is next to none. Every busy professional has got a space.",
     image: "/wandyboss2.jpg",
     // linkedin: "https://www.linkedin.com/in/jonadab-arueya-74b81a2a",
   },
