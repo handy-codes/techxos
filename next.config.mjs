@@ -46,4 +46,24 @@ const nextConfig = {
   },
 };
 
+module.exports = {
+  reactStrictMode: true,
+  images: {
+    domains: ['www.techxos.com'], // Add your production domain
+  },
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'POST' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type' },
+        ],
+      },
+    ];
+  },
+};
+
 export default nextConfig;
