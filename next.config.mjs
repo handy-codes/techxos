@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
@@ -43,12 +45,6 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-  },
-};
-
-module.exports = {
-  reactStrictMode: true,
-  images: {
     domains: ['www.techxos.com'], // Add your production domain
   },
   async headers() {
