@@ -90,16 +90,24 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Modern Web Development Cycle
+                CyberSecurity
               </h1>
+              <p className="text-xl mb-8 ">
+                Become the Digital Guardian of the Future with Cybersecurity! Be
+                up to speed with outsmarting hackers, shielding sensitive data,
+                and fortifying the backbone of the internet—that’s
+                cybersecurity. In a world where cyber threats evolve by the
+                second, you’ll be the frontline defender, turning
+                vulnerabilities into vaults and chaos into control.
+              </p>
               <p className="text-xl mb-8">
-                Web development is the art of building websites and apps that
-                run on the internet. It’s split into three core layers: 
-                Front-End (what users see)
-                Back-End (behind-the-scenes logic)
-                Full-Stack: (front-end + back-end).
-                Every site you visit—from blogs to e-commerce—is crafted with
-                these tools. Start your coding career today with Frontend Development!
+                From stopping ransomware attacks that cripple Fortune 500
+                companies to securing smart homes and national infrastructure,
+                cybersecurity is the ultimate game of digital cat and mouse.
+                You’ll master ethical hacking, penetration testing, firewall
+                wizardry, and tools like Kali Linux, Wireshark, and
+                SIEM—transforming you into a cyber ninja who thwarts breaches
+                before they happen.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
@@ -129,10 +137,14 @@ export default function Page() {
             450,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            In 12 weeks, master the art of building websites and apps that run
-            on the internet. Explore the flexibility of Nextjs as a third-party library for Reactjs.
-            With Tailwindcss, a better knowledge of the color theory and other modern tools, you will be able to create responsive and
-            visually appealing websites. 
+            Techxos arms you for battle: Tackle real-world simulations (like
+            defending a live network or cracking encrypted puzzles), learn from
+            industry pros who’ve foiled cybercrime rings, and join a legion of
+            ethical hackers obsessed with outsmarting the dark web. Dive into
+            cryptography, incident response, and compliance frameworks, while
+            earning certifications that scream “hire me” to top employers. Ready
+            to be the hero the internet needs? Enroll now and start locking down
+            the digital frontier—one threat at a time. 🛡️🔒💻
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
             <a
@@ -260,7 +272,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <Cybersecurity/>
+      <Cybersecurity />
     </div>
   );
 }

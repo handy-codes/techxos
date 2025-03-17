@@ -189,14 +189,14 @@ const Footer = () => {
 
           <p className="text-sm text-[#CED1E4]">
             Developed by{" "}
-            <a
+            <Link
               href="/pages/services"
               className="text-[#F89928] text-lg hover:text-[#E5A111] transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
               Techxos
-            </a>
+            </Link>
           </p>
         </div>
       </div>

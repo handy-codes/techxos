@@ -79,10 +79,7 @@ export default function Page() {
     <div>
       <Head>
         <title>Course Page</title>
-        <meta
-          name="description"
-          content="Welcome to the UI-UX Design Course"
-        />
+        <meta name="description" content="Welcome to the UI-UX Design Course" />
       </Head>
 
       <section className="relative py-20 px-4 mt-[8%] sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
@@ -90,16 +87,21 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Modern Web Development Cycle
+                UI-UX Design
               </h1>
               <p className="text-xl mb-8">
-                Web development is the art of building websites and apps that
-                run on the internet. It’s split into three core layers: 
-                Front-End (what users see)
-                Back-End (behind-the-scenes logic)
-                Full-Stack: (front-end + back-end).
-                Every site you visit—from blogs to e-commerce—is crafted with
-                these tools. Start your coding career today with Frontend Development!
+                Craft interfaces so intuitive, they feel like second
+                nature—where every click, swipe, and scroll sparks joy. UI/UX
+                Design is the alchemy of blending aesthetics with empathy,
+                turning complex problems into seamless digital experiences that
+                users love.
+              </p>
+              <p className="text-xl mb-8">
+                You’ll master tools like Figma, Adobe XD, and Sketch,
+                wireframing prototypes, conducting user research, and perfecting
+                pixel-perfect layouts that balance form and function. Build
+                real-world projects—from e-commerce apps to fintech
+                dashboards—get feedback from design pros
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
@@ -130,9 +132,10 @@ export default function Page() {
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
             In 12 weeks, master the art of building websites and apps that run
-            on the internet. Explore the flexibility of Nextjs as a third-party library for Reactjs.
-            With Tailwindcss, a better knowledge of the color theory and other modern tools, you will be able to create responsive and
-            visually appealing websites. 
+            on the internet. Explore the flexibility of Nextjs as a third-party
+            library for Reactjs. With Tailwindcss, a better knowledge of the
+            color theory and other modern tools, you will be able to create
+            responsive and visually appealing websites.
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
             <a
@@ -260,7 +263,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <UIUX/>
+      <UIUX />
     </div>
   );
 }

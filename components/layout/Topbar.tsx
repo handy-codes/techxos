@@ -301,7 +301,7 @@ const Topbar = () => {
               <UserButton afterSignOutUrl="/" />
             ) : (
               <Link href="/sign-in">
-                <Button variant="outline" className="text-[#003E8F] p-4 bg-orange-500">
+                <Button variant="outline" className="text-[white] p-4 bg-orange-500">
                   Sign In
                 </Button>
               </Link>

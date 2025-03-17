@@ -90,16 +90,13 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Modern Web Development Cycle
+                Software Development
               </h1>
               <p className="text-xl mb-8">
-                Web development is the art of building websites and apps that
-                run on the internet. It’s split into three core layers: 
-                Front-End (what users see)
-                Back-End (behind-the-scenes logic)
-                Full-Stack: (front-end + back-end).
-                Every site you visit—from blogs to e-commerce—is crafted with
-                these tools. Start your coding career today with Frontend Development!
+                Engineer the Digital World with Software Development! Learn to
+                write code that breathes life into apps, games, and tools used
+                by billions. Software development is your blueprint to build the
+                future. It is the craft of transforming what if into what next?"
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
@@ -126,13 +123,16 @@ export default function Page() {
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            150,000 NGN
+            350,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            In 12 weeks, master the art of building websites and apps that run
-            on the internet. Explore the flexibility of Nextjs as a third-party library for Reactjs.
-            With Tailwindcss, a better knowledge of the color theory and other modern tools, you will be able to create responsive and
-            visually appealing websites. 
+            Techxos powers your rise: Code apps from day one, debug like a
+            pro, and learn from mentors who’ve shipped software to millions.
+            Dive into Agile workflows, DevOps pipelines, and UI/UX design, while
+            joining a global squad of builders obsessed with clean code and bold
+            innovation. Ready to turn imagination into iteration? Enroll now and
+            start crafting the digital universe—one groundbreaking program at a
+            time. 💻⚡🌍
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
             <a
@@ -260,7 +260,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <SoftwareDevt/>
+      <SoftwareDevt />
     </div>
   );
 }
