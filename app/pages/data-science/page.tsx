@@ -103,7 +103,7 @@ export default function Page() {
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://images.pexels.com/photos/31177212/pexels-photo-31177212/free-photo-of-colorful-javascript-code-on-a-computer-screen.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src="https://media.istockphoto.com/id/1431548795/photo/data-scientists-man-programmer-using-laptop-analyzing-and-development-at-various-information.jpg?b=1&s=612x612&w=0&k=20&c=o4EGCiCiVZjMb7_e9ifhRXYk8B9rQzjpiADFrasvLeQ="
                 alt="Team Collaboration"
                 fill
                 className="object-cover"
