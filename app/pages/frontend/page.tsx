@@ -90,7 +90,7 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Modern Web Development Cycle
+                Modern Web Development
               </h1>
               <p className="text-xl mb-8">
                 How about crafting stunning, interactive websites that millions
