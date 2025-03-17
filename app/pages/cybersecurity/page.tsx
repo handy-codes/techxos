@@ -11,7 +11,7 @@ import Cybersecurity from "@/components/curriculum/Cybersecurity";
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Frontend Development",
+    courseTitle: "CyberSecurity",
     name: "",
     surname: "",
     email: "",
@@ -60,7 +60,7 @@ export default function Page() {
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Frontend Development",
+        courseTitle: "CyberSecurity",
         name: "",
         surname: "",
         email: "",
@@ -81,7 +81,7 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Frontend Development Course"
+          content="Welcome to the Cybersecurity Course"
         />
       </Head>
 
@@ -121,12 +121,12 @@ export default function Page() {
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
-              Frontend Development
+              CyberSecurity
             </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            150,000 NGN
+            450,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
             In 12 weeks, master the art of building websites and apps that run
@@ -146,7 +146,7 @@ export default function Page() {
           <div className="font-semibold">
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <FaRegClock className="text-black text-[22px]" />
-              <span>Duration: 12 weeks</span>
+              <span>Duration: 16 weeks</span>
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <AiFillSchedule className="text-black text-[24px]" />

@@ -11,7 +11,7 @@ import UIUX from "@/components/curriculum/Ui-Ux";
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Frontend Development",
+    courseTitle: "UI-UX Design",
     name: "",
     surname: "",
     email: "",
@@ -60,7 +60,7 @@ export default function Page() {
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Frontend Development",
+        courseTitle: "UI-UX Design",
         name: "",
         surname: "",
         email: "",
@@ -81,7 +81,7 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Frontend Development Course"
+          content="Welcome to the UI-UX Design Course"
         />
       </Head>
 
@@ -121,7 +121,7 @@ export default function Page() {
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
-              Frontend Development
+              UI-UX Design
             </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>

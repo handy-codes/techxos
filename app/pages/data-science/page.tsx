@@ -81,7 +81,7 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Frontend Development Course"
+          content="Welcome to the Data Science Course"
         />
       </Head>
 
