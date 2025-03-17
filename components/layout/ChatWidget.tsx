@@ -66,8 +66,8 @@ export default function ChatWidget() {
         "Thank you for your message! Our team will get back to you shortly.",
         "That's an interesting question! I'll forward this to our support team.",
         "We appreciate your inquiry. Please check our FAQ section or contact us via email at hello@techxos.com",
-        "I'm still learning, but a human colleague will respond to you soon!",
-        "For immediate assistance, please reach out to our WhatsApp support at +1234567890."
+        "So sorry, but I'm still under training, a human colleague will respond to you soon!",
+        "For immediate assistance, please reach out to our WhatsApp support at +2348167715107."
       ];
 
       const randomResponse = defaultResponses[
