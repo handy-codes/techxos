@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-// import Image from "next/image";
 
 interface Message {
   user?: string;
-  bot?: React.ReactNode;
+  bot?: string;
 }
 
 export default function ChatWidget() {
@@ -28,14 +27,9 @@ export default function ChatWidget() {
 
   // Save messages to localStorage
   useEffect(() => {
-    try {
-      localStorage.setItem("chatMessages", JSON.stringify(messages));
-    } catch (error) {
-      console.error("Error saving chat messages:", error);
-    }
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
   }, [messages]);
 
-  // Scroll handling
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -50,17 +44,7 @@ export default function ChatWidget() {
         new Audio("/chat-popup.mp3").play().catch(console.error);
       }
       if (messages.length === 0) {
-        setMessages([{
-          bot: (
-            <div className="flex flex-col items-start gap-2">
-              <div className="flex items-center gap-2 mx-auto w-full">
-                {/* <TechxosLogo className="w-6 h-6 text-purple-600" /> */}
-                <span className="text-black">Hi! I&apos;m Wandy, Techxos AI sales expert</span>
-              </div>
-              <div className="ml-8 text-black">🤖 How can I help you today?</div>
-            </div>
-          ),
-        }]);
+        setMessages([{ bot: "wandy_welcome" }]);
       }
     }
     setIsOpen(!isOpen);
@@ -82,17 +66,14 @@ export default function ChatWidget() {
         body: JSON.stringify({ message: newMessage }),
       });
     
-      if (!response.ok) {
-        console.error(`API request failed with status: ${response.status}`);
-        throw new Error("API request failed");
-      }
-    
+      if (!response.ok) throw new Error("API request failed");
+      
       const data = await response.json();
       setMessages(prev => [...prev, { bot: data.reply }]);
     } catch (error) {
       console.error("Chat error:", error);
       setMessages(prev => [...prev, {
-        bot: "Sorry, my chatbot model is currently under training for improved user-experience. Please try again later or use our alternative channels: Email hello@techxos.com or chat a Course Advisor on Whatsapp,",
+        bot: "Sorry, I'm having trouble connecting. Please try again later or contact us at hello@techxos.com",
       }]);
     } finally {
       setIsTyping(false);
@@ -131,7 +112,20 @@ export default function ChatWidget() {
           <div className="chat-messages" aria-live="polite">
             {messages.map((msg, i) => (
               <div key={i} className={`message ${msg.user ? "user" : "bot"}`}>
-                {msg.user || msg.bot}
+                {msg.user || (
+                  msg.bot === "wandy_welcome" ? (
+                    <div className="flex flex-col items-start gap-2">
+                      <div className="flex items-center gap-2 mx-auto w-full">
+                        <TechxosLogo className="w-6 h-6 text-purple-600" />
+                        <span className="text-black">Hi! I am Wandy, Techxos AI sales expert</span>
+                        {/* <span className="text-black">Hi! I'm Wandy, Techxos AI sales expert</span> */}
+                      </div>
+                      <div className="ml-8 text-black">🤖 How can I help you today?</div>
+                    </div>
+                  ) : (
+                    msg.bot
+                  )
+                )}
               </div>
             ))}
             {isTyping && (
@@ -202,6 +196,7 @@ export default function ChatWidget() {
           padding: 16px 24px;
           background: linear-gradient(135deg, #0070f3, #0063cc);
           color: white;
+          border-radius: 16px 16px 0 0;
         }
 
         .chat-messages {
@@ -217,6 +212,7 @@ export default function ChatWidget() {
           border-radius: 16px;
           max-width: 80%;
           line-height: 1.4;
+          word-break: break-word;
         }
 
         .message.user {
@@ -229,7 +225,6 @@ export default function ChatWidget() {
           background: #f3f4f6;
           color: #1f2937;
           margin-right: auto;
-          width: fit-content; /* Ensure the bot message takes full width */
         }
 
         .typing-indicator {
@@ -255,13 +250,8 @@ export default function ChatWidget() {
         }
 
         @keyframes typing {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-4px);
-          }
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
         }
 
         .chat-input {
@@ -269,7 +259,6 @@ export default function ChatWidget() {
           gap: 8px;
           padding: 16px;
           border-top: 1px solid #e5e7eb;
-          overflow: hidden; 
         }
 
         input {
@@ -279,8 +268,6 @@ export default function ChatWidget() {
           border-radius: 8px;
           outline: none;
           font-size: 16px;
-          width: 100%; 
-          min-width: 0;
         }
 
         input:focus {
