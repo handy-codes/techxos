@@ -1,12 +1,6 @@
 import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
 
-console.log("OPENAI_API_KEY:", process.env.OPENAI_API_KEY);
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
@@ -19,6 +13,11 @@ export async function POST(req: Request) {
     if (!process.env.OPENAI_API_KEY) {
       throw new Error("OpenAI API key is missing. Skipping API call.");
     }
+
+    // Initialize OpenAI only if the API key is present
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
