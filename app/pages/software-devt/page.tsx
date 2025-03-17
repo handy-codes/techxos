@@ -96,7 +96,7 @@ export default function Page() {
                 Engineer the Digital World with Software Development! Learn to
                 write code that breathes life into apps, games, and tools used
                 by billions. Software development is your blueprint to build the
-                future. It is the craft of transforming what if into what next?"
+                future. It is the craft of transforming, what if? into what next?
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
