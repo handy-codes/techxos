@@ -93,18 +93,16 @@ export default function Page() {
                 Modern Web Development Cycle
               </h1>
               <p className="text-xl mb-8">
-                Web development is the art of building websites and apps that
-                run on the internet. It’s split into three core layers: 
-                Front-End (what users see)
-                Back-End (behind-the-scenes logic)
-                Full-Stack: (front-end + back-end).
-                Every site you visit—from blogs to e-commerce—is crafted with
-                these tools. Start your coding career today with Frontend Development!
+                How about crafting stunning, interactive websites that millions
+                of users adore—that’s Frontend Development. It’s where
+                creativity meets code, letting you design sleek interfaces,
+                animate pixels into life, and turn ideas into immersive digital
+                experiences.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://images.pexels.com/photos/1181370/pexels-photo-1181370.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src="https://media.istockphoto.com/id/1500238408/photo/program-code-development-icon-on-a-digital-lcd-display-with-reflection.jpg?b=1&s=612x612&w=0&k=20&c=PB45SiRelu95ne_GCzPcNJ7XZ0eN1nB_c-nBIAB1dFg="
                 alt="Team Collaboration"
                 fill
                 className="object-cover"
@@ -129,10 +127,13 @@ export default function Page() {
             150,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            In 12 weeks, master the art of building websites and apps that run
-            on the internet. Explore the flexibility of Nextjs as a third-party library for Reactjs.
-            With Tailwindcss, a better knowledge of the color theory and other modern tools, you will be able to create responsive and
-            visually appealing websites. 
+            In 12 weeks, Techxos turbocharges your journey: Code real
+            projects, collaborate with industry pros, and join a tribe of
+            creators obsessed with pixel perfection. Whether you’re animating a
+            button or architecting a full-scale web app, every lesson sharpens
+            your skills for a tech world hungry for design-savvy coders. Ready
+            to paint the digital canvas? Enroll now and start turning
+            imagination into code—one breathtaking webpage at a time. 🎨🚀
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
             <a
@@ -260,7 +261,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <Frontend/>
+      <Frontend />
     </div>
   );
 }

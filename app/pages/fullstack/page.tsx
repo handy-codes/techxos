@@ -7,12 +7,11 @@ import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
-import Frontend from "@/components/curriculum/Frontend";
 import Fullstack from "@/components/curriculum/Fullstack";
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Frontend Development",
+    courseTitle: "Fullstack Development",
     name: "",
     surname: "",
     email: "",
@@ -61,7 +60,7 @@ export default function Page() {
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Frontend Development",
+        courseTitle: "Fullstack Development",
         name: "",
         surname: "",
         email: "",
@@ -82,7 +81,7 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Frontend Development Course"
+          content="Welcome to the Fullstack Development Course"
         />
       </Head>
 
@@ -91,21 +90,21 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Modern Web Development Cycle
+                Go Fullstack
               </h1>
               <p className="text-xl mb-8">
-                Web development is the art of building websites and apps that
-                run on the internet. It’s split into three core layers: 
-                Front-End (what users see)
-                Back-End (behind-the-scenes logic)
-                Full-Stack: (front-end + back-end).
-                Every site you visit—from blogs to e-commerce—is crafted with
-                these tools. Start your coding career today with Frontend Development!
+                Become the Architect of the Digital Universe with Fullstack
+                Development! Imagine building entire web applications from
+                scratch—crafting sleek user interfaces and engineering powerful
+                backend systems. Fullstack development is your passport to
+                mastering both sides of the code, blending frontend artistry
+                with backend logic to create seamless, end-to-end digital
+                experiences.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://images.pexels.com/photos/1181370/pexels-photo-1181370.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=600"
                 alt="Team Collaboration"
                 fill
                 className="object-cover"
@@ -122,18 +121,21 @@ export default function Page() {
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
-              Frontend Development
+              Fullstack Development
             </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            150,000 NGN
+            250,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            In 12 weeks, master the art of building websites and apps that run
-            on the internet. Explore the flexibility of Nextjs as a third-party library for Reactjs.
-            With Tailwindcss, a better knowledge of the color theory and other modern tools, you will be able to create responsive and
-            visually appealing websites. 
+            Techxos fuels your mastery: Code dynamic projects, debug
+            real-world scenarios, and learn from mentors who’ve shipped global
+            apps. Dive into frontend design, backend architecture, and
+            everything in between, while joining a community of builders
+            obsessed with turning visions into live, scalable products. Ready to
+            command the entire tech stack? Enroll now and start creating the
+            future—one full-throttle application at a time. 💻🌐🚀
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
             <a
@@ -147,7 +149,7 @@ export default function Page() {
           <div className="font-semibold">
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <FaRegClock className="text-black text-[22px]" />
-              <span>Duration: 12 weeks</span>
+              <span>Duration: 16 weeks</span>
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <AiFillSchedule className="text-black text-[24px]" />
@@ -261,7 +263,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <Fullstack/>
+      <Fullstack />
     </div>
   );
 }
