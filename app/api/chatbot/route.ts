@@ -1,6 +1,8 @@
 import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
 
+console.log("OPENAI_API_KEY:", process.env.OPENAI_API_KEY);
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -11,6 +13,11 @@ export async function POST(req: Request) {
 
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
+    }
+
+    // Check if OPENAI_API_KEY is present
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OpenAI API key is missing. Skipping API call.");
     }
 
     const completion = await openai.chat.completions.create({
@@ -31,6 +38,12 @@ export async function POST(req: Request) {
     
   } catch (error: any) {
     console.error('OpenAI API error:', error);
+
+    if (error.message === "OpenAI API key is missing. Skipping API call.") {
+      return NextResponse.json({ 
+        reply: "Sorry, my chatbot model is currently under training for improved user-experience. Please try again later."
+      }, { status: 500 });
+    }
 
     if (error.code === 'insufficient_quota') {
       return NextResponse.json({ 
