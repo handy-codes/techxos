@@ -60,20 +60,25 @@ export default function ChatWidget() {
     setIsTyping(true);
 
     try {
-      const response = await fetch("/api/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: newMessage }),
-      });
-    
-      if (!response.ok) throw new Error("API request failed");
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const data = await response.json();
-      setMessages(prev => [...prev, { bot: data.reply }]);
+      const defaultResponses = [
+        "Thank you for your message! Our team will get back to you shortly.",
+        "That's an interesting question! I'll forward this to our support team.",
+        "We appreciate your inquiry. Please check our FAQ section or contact us via email at hello@techxos.com",
+        "I'm still learning, but a human colleague will respond to you soon!",
+        "For immediate assistance, please reach out to our WhatsApp support at +1234567890."
+      ];
+
+      const randomResponse = defaultResponses[
+        Math.floor(Math.random() * defaultResponses.length)
+      ];
+
+      setMessages(prev => [...prev, { bot: randomResponse }]);
     } catch (error) {
       console.error("Chat error:", error);
       setMessages(prev => [...prev, {
-        bot: "Sorry, I'm having trouble connecting. Please try again later or contact us at hello@techxos.com",
+        bot: "Sorry, there was an error processing your request. Please try again later.",
       }]);
     } finally {
       setIsTyping(false);
@@ -117,8 +122,7 @@ export default function ChatWidget() {
                     <div className="flex flex-col items-start gap-2">
                       <div className="flex items-center gap-2 mx-auto w-full">
                         <TechxosLogo className="w-6 h-6 text-purple-600" />
-                        <span className="text-black">Hi! I am Wandy, Techxos AI sales expert</span>
-                        {/* <span className="text-black">Hi! I'm Wandy, Techxos AI sales expert</span> */}
+                        <span className="text-black">Hi! I&apos;m Wandy, Techxos AI sales expert</span>
                       </div>
                       <div className="ml-8 text-black">🤖 How can I help you today?</div>
                     </div>
