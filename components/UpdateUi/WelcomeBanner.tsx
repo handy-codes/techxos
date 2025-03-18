@@ -13,7 +13,7 @@ const WelcomeBanner = () => {
                   <p className="text-xl mb-8">
                     At Techxos Coding Academy, we bridge the gap between education and
                     real-world experience through our modern, in-demand Tech courses. In this section, checkout our video courses to learn on the go or
-                    create and upload a quality course and earn as users buy the course.
+                    create and upload a quality course and earn as users purchase the course.
                   </p>
                 </div>
                 <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">

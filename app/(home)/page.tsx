@@ -34,7 +34,7 @@ export default async function Home() {
 
   const courses = await getCoursesByCategory(null);
   return (
-    <main className="mt-32">
+    <main className="mt-[8%]">
       <Welcome />
       <Slider />
       {/* <div className="mb-0 bg-[#1F1F1F] text-white"> */}

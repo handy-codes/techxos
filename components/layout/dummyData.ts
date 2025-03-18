@@ -63,4 +63,28 @@ export const dummyData = [
       reading: "LEARN MORE",
       link: "/pages/cybersecurity",
     },
+    {
+      id: 9,
+      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF-4cK7qw8-AroSfhE44AvDOvA-cyFM5p9ww&s",
+      title: "Project Management (PMG)",
+      comment: "Protect systems, networks, and databases from digital attacks and unauthorized access.",
+      reading: "LEARN MORE",
+      link: "/pages/cybersecurity",
+    },
+    {
+      id: 10,
+      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF-4cK7qw8-AroSfhE44AvDOvA-cyFM5p9ww&s",
+      title: "Graphic Design (CYB)",
+      comment: "Protect systems, networks, and databases from digital attacks and unauthorized access.",
+      reading: "LEARN MORE",
+      link: "/pages/cybersecurity",
+    },
+    {
+      id: 11,
+      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF-4cK7qw8-AroSfhE44AvDOvA-cyFM5p9ww&s",
+      title: "CYBERSECURITY (CYB)",
+      comment: "Protect systems, networks, and databases from digital attacks and unauthorized access.",
+      reading: "LEARN MORE",
+      link: "/pages/cybersecurity",
+    },
 ]
