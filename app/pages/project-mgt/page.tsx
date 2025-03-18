@@ -8,6 +8,7 @@ import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
 import Frontend from "@/components/curriculum/Frontend";
+import ProjectManagement from "@/components/curriculum/Project-Mgt";
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -261,7 +262,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <Project-Mgt />
+      <ProjectManagement/>
     </div>
   );
 }
