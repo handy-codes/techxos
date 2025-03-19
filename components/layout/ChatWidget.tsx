@@ -189,7 +189,7 @@ export default function ChatWidget() {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="chat-input">
+          <div className="chat-input outline-none">
             <input
               type="text"
               value={input}
@@ -317,6 +317,7 @@ export default function ChatWidget() {
           border-radius: 0.5rem;
           font-size: 1rem;
           color: #1f2937;
+          outline: none;
         }
 
         input::placeholder {
