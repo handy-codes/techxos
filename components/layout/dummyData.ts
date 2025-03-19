@@ -65,7 +65,7 @@ export const dummyData = [
     },
     {
       id: 9,
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF-4cK7qw8-AroSfhE44AvDOvA-cyFM5p9ww&s",
+      img: "https://i.ibb.co/4nDmr2nb/Gemini-Generated-Image-72ww6w72ww6w72ww.jpg",
       title: "Project Management (PMG)",
       comment: "Protect systems, networks, and databases from digital attacks and unauthorized access.",
       reading: "LEARN MORE",
@@ -73,10 +73,10 @@ export const dummyData = [
     },
     {
       id: 10,
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF-4cK7qw8-AroSfhE44AvDOvA-cyFM5p9ww&s",
-      title: "Graphic Design (CYB)",
+      img: "https://i.ibb.co/1JpnGRVX/Gemini-Generated-Image-sbecuesbecuesbec.jpg",
+      title: "Graphic Design (GRD)",
       comment: "Protect systems, networks, and databases from digital attacks and unauthorized access.",
       reading: "LEARN MORE",
-      link: "/pages/cybersecurity",
+      link: "/pages/graphic-design",
     },
 ]

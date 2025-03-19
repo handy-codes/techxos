@@ -7,11 +7,12 @@ import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
-import ProjectManagement from "@/components/curriculum/Project-Mgt";
+import Frontend from "@/components/curriculum/Frontend";
+import GraphicDesign from "@/components/curriculum/Graphic-Design";
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Project Management",
+    courseTitle: "Graphic Design",
     name: "",
     surname: "",
     email: "",
@@ -60,7 +61,7 @@ export default function Page() {
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Project Management",
+        courseTitle: "Graphic Design",
         name: "",
         surname: "",
         email: "",
@@ -81,7 +82,7 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Project Management Course"
+          content="Welcome to the Graphic Design Course"
         />
       </Head>
 
@@ -90,20 +91,20 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Project Management
+                Graphic Design
               </h1>
               <p className="text-xl mb-8">
-                Lead the Charge to Success with Project Management! Imagine
-                steering high-stakes projects from chaos to triumph—turning
-                blueprints into reality on time, under budget, and beyond
-                expectations. Project Management is the art of orchestrating
-                teams, resources, and strategy to deliver results that move
-                industries, spark innovation, and define careers.
+                Ignite Visual Brilliance with Graphic Design! Imagine turning
+                blank canvases into jaw-dropping visuals that stop thumbs, spark
+                emotions, and define brands—that’s graphic design. It’s the
+                heartbeat of visual storytelling, where color, typography, and
+                creativity collide to turn ideas into icons, logos into legends,
+                and ads into art.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://i.ibb.co/4nDmr2nb/Gemini-Generated-Image-72ww6w72ww6w72ww.jpg"
+                src="https://i.ibb.co/1JpnGRVX/Gemini-Generated-Image-sbecuesbecuesbec.jpg"
                 alt="Team Collaboration"
                 fill
                 className="object-cover"
@@ -120,23 +121,22 @@ export default function Page() {
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
-              Project Management
+              Graphic Design
             </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            250,000 NGN
+            150,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            Techxos powers your rise: Simulate real-world projects (think
-            software launches or event megaprojects), learn from PMs who’ve
-            delivered billion-dollar portfolios, and join a network of leaders
-            obsessed with efficiency and impact. Dive into stakeholder mapping,
-            risk mitigation, and Lean practices, while earning certifications
-            that scream “promote me.” Ready to transform ideas
-            {/* (PMP®, PRINCE2) that scream “promote me.” Ready to transform ideas */}
-            into legacy? Enroll now and start delivering success—one milestone
-            at a time. 🚀📅🎯
+            Techxos fuels your artistry: Design real campaigns (think album
+            covers, startup branding, or animated infographics), get critiqued
+            by pros who’ve shaped global visuals, and join a guild of creators
+            obsessed with pushing boundaries. Dive into color theory, typography
+            wars, and digital illustration, while building a portfolio that
+            screams “unstoppable creative.” Ready to turn pixels into persuasion
+            and ideas into visual revolutions? Enroll now and start designing
+            the world’s imagination—one masterpiece at a time. 🎨✏️🔥
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
             <a
@@ -264,7 +264,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <ProjectManagement />
+      <GraphicDesign />
     </div>
   );
 }
