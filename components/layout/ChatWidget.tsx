@@ -12,22 +12,38 @@ export default function ChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Load messages from localStorage on mount
+  // Load messages from localStorage with validation
   useEffect(() => {
-    const savedMessages = localStorage.getItem("chatMessages");
-    if (savedMessages) {
+    const safeParseMessages = () => {
       try {
-        setMessages(JSON.parse(savedMessages));
+        const saved = localStorage.getItem("chatMessages");
+        if (!saved) return [];
+        
+        const parsed = JSON.parse(saved);
+        if (!Array.isArray(parsed)) throw new Error("Invalid message format");
+        
+        return parsed.filter((msg: any) => (
+          (msg.user && typeof msg.user === "string") || 
+          (msg.bot && typeof msg.bot === "string")
+        ));
       } catch (error) {
-        console.error("Error loading chat messages:", error);
+        console.error("Message sanitization failed:", error);
         localStorage.removeItem("chatMessages");
+        return [];
       }
-    }
+    };
+
+    const loadedMessages = safeParseMessages();
+    setMessages(loadedMessages.length > 0 ? loadedMessages : [{ bot: "wandy_welcome" }]);
   }, []);
 
   // Save messages to localStorage
   useEffect(() => {
-    localStorage.setItem("chatMessages", JSON.stringify(messages));
+    try {
+      localStorage.setItem("chatMessages", JSON.stringify(messages));
+    } catch (error) {
+      console.error("Failed to save messages:", error);
+    }
   }, [messages]);
 
   const scrollToBottom = () => {
@@ -43,9 +59,6 @@ export default function ChatWidget() {
       if (typeof window !== "undefined") {
         new Audio("/chat-popup.mp3").play().catch(console.error);
       }
-      if (messages.length === 0) {
-        setMessages([{ bot: "wandy_welcome" }]);
-      }
     }
     setIsOpen(!isOpen);
   };
@@ -59,7 +72,6 @@ export default function ChatWidget() {
     setMessages((prev) => [...prev, { user: newMessage }]);
     setIsTyping(true);
 
-    // Meta Llama 3 integration via Groq Cloud
     try {
       const response = await fetch("/api/chatbot", {
         method: "POST",
@@ -72,12 +84,13 @@ export default function ChatWidget() {
       if (!response.ok) throw new Error("API request failed");
 
       const botResponse = await response.json();
-      // Check if botResponse is an object and extract the message
       const botMessage = typeof botResponse === 'object' && botResponse !== null ? botResponse.reply : botResponse;
-      setMessages((prev) => [...prev, { bot: botMessage }]);
+      
+      setMessages((prev) => [...prev, { 
+        bot: typeof botMessage === 'string' ? botMessage : "I didn't understand that response"
+      }]);
     } catch (error) {
       console.error("Chat error:", error);
-      // Fallback responses
       const defaultResponses = [
         "I'm currently experiencing technical difficulties. Please try again later.",
         "Our systems are busy. Contact us directly at hello@techxos.com",
@@ -89,6 +102,36 @@ export default function ChatWidget() {
     } finally {
       setIsTyping(false);
     }
+  };
+
+  // Validated message rendering
+  const renderMessageContent = (msg: Message) => {
+    if (msg.user) {
+      return <>{msg.user}</>;
+    }
+    
+    if (msg.bot === "wandy_welcome") {
+      return (
+        <div className="flex flex-col items-start gap-2">
+          <div className="flex items-center gap-2 mx-auto w-full">
+            <TechxosLogo className="w-6 h-6 text-purple-600" />
+            <span className="text-black">
+              Hi! I&apos;m Wandy, Techxos AI sales expert
+            </span>
+          </div>
+          <div className="ml-8 text-black">
+            🤖 How can I help you today?
+          </div>
+        </div>
+      );
+    }
+    
+    if (typeof msg.bot === "string") {
+      return <>{msg.bot}</>;
+    }
+
+    console.error('Invalid message format:', msg);
+    return null;
   };
 
   return (
@@ -123,22 +166,7 @@ export default function ChatWidget() {
           <div className="chat-messages" aria-live="polite">
             {messages.map((msg, i) => (
               <div key={i} className={`message ${msg.user ? "user" : "bot"}`}>
-                {msg.user ||
-                  (msg.bot === "wandy_welcome" ? (
-                    <div className="flex flex-col items-start gap-2">
-                      <div className="flex items-center gap-2 mx-auto w-full">
-                        <TechxosLogo className="w-6 h-6 text-purple-600" />
-                        <span className="text-black">
-                          Hi! I&apos;m Wandy, Techxos AI sales expert
-                        </span>
-                      </div>
-                      <div className="ml-8 text-black">
-                        🤖 How can I help you today?
-                      </div>
-                    </div>
-                  ) : (
-                    msg.bot
-                  ))}
+                {renderMessageContent(msg)}
               </div>
             ))}
             {isTyping && (
@@ -173,10 +201,10 @@ export default function ChatWidget() {
         </div>
       )}
 
+      {/* Keep the same styles */}
       <style jsx>{`
         .chat-container {
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-            sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           position: fixed;
           bottom: 24px;
           right: 24px;
@@ -264,13 +292,8 @@ export default function ChatWidget() {
         }
 
         @keyframes typing {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-4px);
-          }
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
         }
 
         .chat-input {
@@ -320,6 +343,8 @@ export default function ChatWidget() {
     </div>
   );
 }
+
+// Keep the same TechxosLogo and CloseIcon components
 
 const TechxosLogo = ({ className }: { className?: string }) => (
   <svg
