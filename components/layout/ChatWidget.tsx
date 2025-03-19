@@ -124,14 +124,14 @@ export default function ChatWidget() {
     if (msg.bot?.startsWith("wandy_")) {
       const isProd = window.location.hostname === "techxos.com";
       return (
-        <div className="welcome-message">
+        <div className="welcome-message flex flex-col justify-center">
           <div className="flex items-center gap-2">
             <TechxosLogo className="w-6 h-6 text-purple-600" />
             <span className="text-black">
               {isProd ? "Techxos Production Support" : "Hi! I'm Wandy, Techxos AI sales expert"}
             </span>
           </div>
-          <div className="mt-2 text-black">
+          <div className="mt-2 text-black self-center">
             {isProd ? "🔒 Secure enterprise assistance ready" : "🤖 How can I help you today?"}
           </div>
         </div>
