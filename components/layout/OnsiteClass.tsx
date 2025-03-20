@@ -25,8 +25,18 @@ const OnsiteClass = () => {
               course. Master the art of using ReactJs, TailwindCSS and the Color
               Theory, to create Websites people will love.
             </p>
-            <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border rounded-md border-green-700 inline-block bg-white font-bold" style={{ border: '2px solid #38a169' }}>
-              <a href="https://wa.me/2349038984567" target="_blank" rel="noopener noreferrer">Contact an Advisor</a>
+            {/* <div
+              className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border rounded-md border-green-700 inline-block bg-white font-bold"
+              style={{ border: "2px solid #38a169" }}
+            > */}
+          <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
+              <a
+                href="https://wa.me/2349038984567"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Contact an Advisor
+              </a>
             </div>
             <div className="font-semibold">
               <div className="flex items-center gap-3 mt-3 md:mt-4">

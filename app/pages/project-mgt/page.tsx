@@ -138,7 +138,7 @@ export default function Page() {
             into legacy? Enroll now and start delivering success—one milestone
             at a time. 🚀📅🎯
           </p>
-          <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 hover:bg-green-700 hover:text-white transition border-2 border-[#38a169] rounded-md inline-block bg-white font-bold">
+          <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
               href="https://wa.me/2348167715107"
               target="_blank"
