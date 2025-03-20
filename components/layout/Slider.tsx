@@ -48,7 +48,7 @@ export default function Slider() {
   };
 
   return (
-    <div className={`relative w-screen ${user ? 'h-[70vh]' : 'h-screen'} overflow-hidden`}>
+    <div className={`relative w-screen ${user ? 'h-screen' : 'h-screen'} overflow-hidden`}>
       {images.map((img, index) => (
         <div
           key={index}
