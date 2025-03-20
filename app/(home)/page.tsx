@@ -4,7 +4,7 @@ import Categories from "@/components/custom/Categories";
 import CourseCard from "@/components/courses/CourseCard";
 // import Intro from "@/components/layout/Intro";
 // import Slider from "../../components/layout/slider/Slider";
-import Welcome from "@/components/layout/Welcome";
+// import Welcome from "@/components/layout/Welcome";
 // import OnsiteClass from "@/components/layout/OnsiteClass";
 // import WhatsAppLink from "@/components/layout/WhatsAppLink";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
@@ -35,7 +35,7 @@ export default async function Home() {
   const courses = await getCoursesByCategory(null);
   return (
     <main className="mt-[8%]">
-      <Welcome />
+      {/* <Welcome /> */}
       <Slider />
       {/* <div className="mb-0 bg-[#1F1F1F] text-white"> */}
       <div className="mb-0 bg-[white] text-white">
