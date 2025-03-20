@@ -375,6 +375,26 @@ export default function ChatWidget() {
           border-top: 1px solid #e2e8f0;
         }
 
+        .chat-input {
+          gap: 0.25rem;
+          padding: 0.75rem;
+          flex-wrap: nowrap;
+        }
+
+        input {
+          min-width: 0;
+          flex-shrink: 1;
+          padding: 0.5rem;
+          font-size: 0.85rem;
+        }
+
+        .send-button {
+          min-width: 60px;
+          padding: 0.5rem;
+          font-size: 0.85rem;
+          flex-shrink: 0;
+        }
+
         input {
           flex: 1;
           padding: 0.75rem 1rem;
