@@ -74,7 +74,7 @@ const Topbar = () => {
     <div className="fixed top-0 z-50 w-full shadow-lg">
       <header className="z-50 w-full top-0">
         {/* Upper Contact Bar */}
-        <div className="bg-[black] text-white items-center justify-between py-3 px-6 hidden xl:flex">
+        <div className="h-[40px] bg-[black] text-white items-center justify-between py-7 px-6 hidden xl:flex">
         <div className="flex items-center space-x-2">
           <FaMapMarkerAlt className="text-[orange]" />
           <span>
@@ -105,8 +105,8 @@ const Topbar = () => {
       </div>
 
         {/* Main Navigation Bar */}
-          <nav className="flex w-full mx-auto justify-between bg-white h-[80px] my-auto items-center p-4 border-b-2 border-[#E79D09] relative">         
-           {/* Logo */}
+        <nav className="flex w-full mx-auto justify-between bg-white h-[80px] my-auto items-center p-4 border-b-2 border-[#E79D09] relative">
+          {/* Logo */}
           <Link className="flex items-center gap-3" href="/">
             <Image
               src="/logo-techxos-navy.svg"
@@ -167,7 +167,7 @@ const Topbar = () => {
 
                     {/* Dropdown Content */}
                     <div
-                      className={`absolute top-full -left-[30vw] w-[75vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
+                      className={`absolute top-full -left-[33vw] w-[75vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
                         isDropdownOpen
                           ? "opacity-100 translate-y-0 visible"
                           : "opacity-0 -translate-y-2 invisible"
@@ -187,14 +187,13 @@ const Topbar = () => {
                       </div>
                       {/* <div className="w-[33vw] bg-[#343B43] text-[#46D5FB] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
                       {/* <div className="w-[40vw] bg-gray-100 text-[#4F25CF] mt-1 grid grid-cols-2 font-semibold gap-3 p-6 overflow-y-auto"> */}
-                      <div className="w-[40vw] bg-[#4D5054] text-[#FFFCD5] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto">
-                      {/* <div className="w-[40vw] bg-[#FEE2E2] text-[black] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto"> */}
+                      <div className="w-[40vw] bg-[#FEE2E2] text-[black] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto">
                       {/* <div className="w-[33vw] bg-[#5025D1] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
                         {courses.map((course, index) => (
                           <Link
                             key={index}
                             href={course.link}
-                            className="hover:text-[#c5c5c4] text-sm md:text-[15px] transition-colors"
+                            className="hover:text-[#df5a5a] text-sm md:text-[15px] transition-colors"
                             onClick={() => setIsDropdownOpen(false)}
                           >
                             {course.title}
