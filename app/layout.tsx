@@ -13,6 +13,8 @@ const inter = Inter({
   display: 'swap', // Prevents layout shifts
 });
 
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
 export const metadata: Metadata = {
   title: "Techxos",
   description: "Empowering minds & shaping the future",

@@ -8,12 +8,12 @@ interface Message {
 const getStorageKey = () => {
   if (typeof window === "undefined") return "chatMessages";
   const hostname = window.location.hostname;
-  return `chatMessages_${hostname.replace(/\./g, '_')}`;
+  return `chatMessages_${hostname.replace(/\./g, "_")}`;
 };
 
 const getWelcomeMessage = () => {
   if (typeof window === "undefined") return { bot: "wandy_welcome" };
-  return window.location.hostname === "techxos.com" 
+  return window.location.hostname === "techxos.com"
     ? { bot: "wandy_prod_welcome" }
     : { bot: "wandy_welcome" };
 };
@@ -30,24 +30,27 @@ export default function ChatWidget() {
       try {
         const storageKey = getStorageKey();
         const saved = localStorage.getItem(storageKey);
-        
+
         if (!saved) {
           return [getWelcomeMessage()];
         }
 
         const parsed = JSON.parse(saved);
         if (!Array.isArray(parsed)) throw new Error("Invalid format");
-        
-        const cleanMessages = parsed.filter(msg => 
-          (msg.user && typeof msg.user === "string") || 
-          (msg.bot && typeof msg.bot === "string")
+
+        const cleanMessages = parsed.filter(
+          (msg) =>
+            (msg.user && typeof msg.user === "string") ||
+            (msg.bot && typeof msg.bot === "string")
         );
 
-        const hasWelcome = cleanMessages.some(msg => 
-          msg.bot?.startsWith("wandy_") && msg.bot.endsWith("_welcome")
+        const hasWelcome = cleanMessages.some(
+          (msg) => msg.bot?.startsWith("wandy_") && msg.bot.endsWith("_welcome")
         );
 
-        return hasWelcome ? cleanMessages : [getWelcomeMessage(), ...cleanMessages];
+        return hasWelcome
+          ? cleanMessages
+          : [getWelcomeMessage(), ...cleanMessages];
       } catch (error) {
         console.error("Failed to load messages:", error);
         return [getWelcomeMessage()];
@@ -87,7 +90,7 @@ export default function ChatWidget() {
 
     const newMessage = trimmedInput;
     setInput("");
-    setMessages(prev => [...prev, { user: newMessage }]);
+    setMessages((prev) => [...prev, { user: newMessage }]);
     setIsTyping(true);
 
     try {
@@ -97,13 +100,16 @@ export default function ChatWidget() {
         body: JSON.stringify({ message: newMessage }),
       });
 
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+
       const data = await response.json();
-      const botMessage = data?.choices?.[0]?.message?.content || data?.reply || 
+      const botMessage =
+        data?.choices?.[0]?.message?.content ||
+        data?.reply ||
         "I didn't understand that response";
 
-      setMessages(prev => [...prev, { bot: botMessage }]);
+      setMessages((prev) => [...prev, { bot: botMessage }]);
     } catch (error) {
       console.error("Chat error:", error);
       const fallbackResponses = [
@@ -111,8 +117,9 @@ export default function ChatWidget() {
         "Our systems are currently busy",
         "I'm having trouble connecting to the AI",
       ];
-      const fallback = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-      setMessages(prev => [...prev, { bot: fallback }]);
+      const fallback =
+        fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      setMessages((prev) => [...prev, { bot: fallback }]);
     } finally {
       setIsTyping(false);
     }
@@ -120,7 +127,7 @@ export default function ChatWidget() {
 
   const renderMessageContent = (msg: Message) => {
     if (msg.user) return <>{msg.user}</>;
-    
+
     if (msg.bot?.startsWith("wandy_")) {
       const isProd = window.location.hostname === "techxos.com";
       return (
@@ -128,18 +135,22 @@ export default function ChatWidget() {
           <div className="flex items-center gap-2">
             <TechxosLogo className="w-6 h-6 text-purple-600" />
             <span className="text-black">
-              {isProd ? "Techxos Production Support" : "Hi! I'm Wandy, Techxos AI sales expert"}
+              {isProd
+                ? "Techxos Production Support"
+                : "Hi! I'm Wandy, Techxos AI sales expert"}
             </span>
           </div>
           <div className="mt-2 text-black self-center">
-            {isProd ? "🔒 Secure enterprise assistance ready" : "🤖 How can I help you today?"}
+            {isProd
+              ? "🔒 Secure enterprise assistance ready"
+              : "🤖 How can I help you today?"}
           </div>
         </div>
       );
     }
-    
+
     if (typeof msg.bot === "string") return <>{msg.bot}</>;
-    
+
     console.warn("Invalid message format:", msg);
     return null;
   };
@@ -182,7 +193,11 @@ export default function ChatWidget() {
             {isTyping && (
               <div className="typing-indicator">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="dot" style={{ animationDelay: `${i * 0.2}s` }} />
+                  <div
+                    key={i}
+                    className="dot"
+                    style={{ animationDelay: `${i * 0.2}s` }}
+                  />
                 ))}
               </div>
             )}
@@ -213,10 +228,11 @@ export default function ChatWidget() {
       <style jsx>{`
         .chat-container {
           position: fixed;
-          bottom: 1.5rem;
-          right: 1.5rem;
+          bottom: 1rem;
+          right: 1rem;
           z-index: 1000;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            sans-serif;
         }
 
         .chat-button {
@@ -237,6 +253,50 @@ export default function ChatWidget() {
           right: 0;
           display: flex;
           flex-direction: column;
+        }
+
+        /* Add mobile responsiveness */
+        @media (max-width: 640px) {
+          .chat-container {
+            right: 0.5rem;
+            bottom: 0.5rem;
+          }
+
+          .chat-window {
+            width: calc(100vw - 1rem);
+            right: 0.5rem;
+            max-width: calc(100vw - 1rem);
+            bottom: calc(100% + 0.5rem);
+          }
+
+          .chat-messages {
+            min-height: 200px;
+          }
+
+          .message {
+            max-width: 90%;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+          }
+
+          input {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+          }
+
+          .send-button {
+            padding: 0.5rem 1rem;
+          }
+        }
+
+        @media (max-width: 400px) {
+          .chat-button h1 {
+            display: none;
+          }
+
+          .chat-header h3 {
+            font-size: 1rem;
+          }
         }
 
         .chat-header {
@@ -299,8 +359,13 @@ export default function ChatWidget() {
         }
 
         @keyframes typing {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-4px); }
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-4px);
+          }
         }
 
         .chat-input {
@@ -355,8 +420,8 @@ const TechxosLogo = ({ className }: { className?: string }) => (
     className={className}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M32 0C14.3 0 0 14.3 0 32s14.3 32 32 32 32-14.3 32-32S49.7 0 32 0zm0 58C17.6 58 6 46.4 6 32S17.6 6 32 6s26 11.6 26 26-11.6 26-26 26z"/>
-    <path d="M46 28.2L34.8 39.4c-1.2 1.2-3.1 1.2-4.2 0l-8.5-8.5-2.1 2.1 8.5 8.5c2.3 2.3 6.1 2.3 8.5 0L48 30.3l-2-2.1z"/>
+    <path d="M32 0C14.3 0 0 14.3 0 32s14.3 32 32 32 32-14.3 32-32S49.7 0 32 0zm0 58C17.6 58 6 46.4 6 32S17.6 6 32 6s26 11.6 26 26-11.6 26-26 26z" />
+    <path d="M46 28.2L34.8 39.4c-1.2 1.2-3.1 1.2-4.2 0l-8.5-8.5-2.1 2.1 8.5 8.5c2.3 2.3 6.1 2.3 8.5 0L48 30.3l-2-2.1z" />
   </svg>
 );
 
@@ -367,12 +432,9 @@ const CloseIcon = ({ className }: { className?: string }) => (
     className={className}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
   </svg>
 );
-
-
-
 
 // import { useState, useEffect, useRef } from "react";
 

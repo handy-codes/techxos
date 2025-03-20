@@ -42,6 +42,9 @@ export default async function Home() {
         {/* <div className="mb-0 bg-[#1C1F2E] text-white"> */}
         <WelcomeBanner />
         <div className="md:mt-5 mb-0 md:px-10 xl:px-16 pb-16">
+          {/* <span className="text-2xl md:text-3xl bg-black p-8 font-bold bg-gradient-to-r from-red-500 via-yellow-500 to-pink-500 text-transparent bg-clip-text">
+            WandyTex
+          </span> */}
           <Categories categories={categories} selectedCategory={null} />
           <div className="flex flex-wrap gap-7 justify-center">
             {courses.map((course) => (

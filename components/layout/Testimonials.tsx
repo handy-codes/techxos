@@ -26,7 +26,7 @@ const testimonials = [
   {
     name: "Chika Daniels",
     role: "Intern at NextGen",
-    text: "Learning new skills at Techxos is a brease. I am currently on an Industrial Training as a Fullstack Developer.",
+    text: "Learning new skills at Techxos is a breeze. I am currently on an Industrial Training as a Fullstack Developer.",
     image:
       "https://images.pexels.com/photos/1757281/pexels-photo-1757281.jpeg?auto=compress&cs=tinysrgb&w=600",
     // linkedin: "https://www.linkedin.com/in/chioma-ukaegbu-54290a20b",

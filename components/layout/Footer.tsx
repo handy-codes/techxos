@@ -192,8 +192,6 @@ const Footer = () => {
             <Link
               href="/pages/services"
               className="text-[#F89928] text-lg hover:text-[#E5A111] transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
             >
               Techxos
             </Link>
