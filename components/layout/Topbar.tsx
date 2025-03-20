@@ -187,13 +187,14 @@ const Topbar = () => {
                       </div>
                       {/* <div className="w-[33vw] bg-[#343B43] text-[#46D5FB] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
                       {/* <div className="w-[40vw] bg-gray-100 text-[#4F25CF] mt-1 grid grid-cols-2 font-semibold gap-3 p-6 overflow-y-auto"> */}
-                      <div className="w-[40vw] bg-[#FEE2E2] text-[black] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto">
+                      <div className="w-[40vw] bg-[#4D5054] text-[#FFFCD5] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto">
+                      {/* <div className="w-[40vw] bg-[#FEE2E2] text-[black] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto"> */}
                       {/* <div className="w-[33vw] bg-[#5025D1] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
                         {courses.map((course, index) => (
                           <Link
                             key={index}
                             href={course.link}
-                            className="hover:text-[#df5a5a] text-sm md:text-[15px] transition-colors"
+                            className="hover:text-[#c5c5c4] text-sm md:text-[15px] transition-colors"
                             onClick={() => setIsDropdownOpen(false)}
                           >
                             {course.title}

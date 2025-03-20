@@ -4,6 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
+import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -279,6 +280,7 @@ export default function Page() {
           </form>
         </div>
       </div>
+      <ScrollToTopButton />      
     </div>
   );
 }

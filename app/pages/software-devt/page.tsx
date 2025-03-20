@@ -8,6 +8,7 @@ import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
 import SoftwareDevt from "@/components/curriculum/Software-Devt";
+import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -261,6 +262,7 @@ export default function Page() {
         </div>
       </section>
       <SoftwareDevt />
+      <ScrollToTopButton />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import ScrollToTopButton from '@/components/layout/ScrollToTopButton'
 import Image from 'next/image'
 
 const ServicesPage = () => {
@@ -133,6 +134,8 @@ const ServicesPage = () => {
           </div>
         </div>
       </div>
+      <ScrollToTopButton />
+      
     </div>
   )
 }
