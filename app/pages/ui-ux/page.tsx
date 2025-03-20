@@ -102,12 +102,12 @@ export default function Page() {
                 wireframing prototypes, conducting user research, and perfecting
                 pixel-perfect layouts that balance form and function. Build
                 real-world projects—from e-commerce apps to fintech
-                dashboards—get feedback from design pros
+                dashboards—get feedback from design pros.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://images.pexels.com/photos/3585089/pexels-photo-3585089.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src="https://i.ibb.co/xqN3xy1J/Gemini-Generated-Image-v5ipemv5ipemv5ip.jpg"
                 alt="Team Collaboration"
                 fill
                 className="object-cover"
