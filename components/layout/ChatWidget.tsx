@@ -11,11 +11,21 @@ const getStorageKey = () => {
   return `chatMessages_${hostname.replace(/\./g, "_")}`;
 };
 
+// const getWelcomeMessage = () => {
+//   if (typeof window === "undefined") return { bot: "wandy_welcome" };
+//   return window.location.hostname === "techxos.com"
+//     ? { bot: "wandy_prod_welcome" }
+//     : { bot: "wandy_welcome" };
+// };
+
 const getWelcomeMessage = () => {
-  if (typeof window === "undefined") return { bot: "wandy_welcome" };
   return window.location.hostname === "techxos.com"
-    ? { bot: "wandy_prod_welcome" }
-    : { bot: "wandy_welcome" };
+    ? {
+        bot: "Welcome to Techxos LMS Support! How can I help you today?\n• Course Setup\n• User Management\n• Billing Questions\n• Technical Support",
+      }
+    : {
+        bot: "Hi! I'm Wandy, your Techxos LMS expert. Ask me about:\n- Creating courses\n- Student reports\n- Integration options\n- Pricing plans",
+      };
 };
 
 export default function ChatWidget() {
@@ -113,10 +123,15 @@ export default function ChatWidget() {
     } catch (error) {
       console.error("Chat error:", error);
       const fallbackResponses = [
-        "Please try again later or contact hello@techxos.com",
-        "Our systems are currently busy",
-        "I'm having trouble connecting to the AI",
+        "For immediate LMS support, please contact helpdesk@techxos.com",
+        "You can find detailed guides in our documentation portal: docs.techxos.com",
+        "Our support team is available 24/7 for Pro plan users",
       ];
+      // const fallbackResponses = [
+      //   "Please try again later or contact hello@techxos.com",
+      //   "Our systems are currently busy",
+      //   "I'm having trouble connecting to the AI",
+      // ];
       const fallback =
         fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
       setMessages((prev) => [...prev, { bot: fallback }]);
@@ -125,8 +140,24 @@ export default function ChatWidget() {
     }
   };
 
+  // const renderMessageContent = (msg: Message) => {
+  //   if (msg.user) return <>{msg.user}</>;
+
   const renderMessageContent = (msg: Message) => {
-    if (msg.user) return <>{msg.user}</>;
+    // Add this special case handling
+    if (msg.bot?.includes("[[PRICING]]")) {
+      return (
+        <div className="pricing-table">
+          <h4>LMS Pricing Plans:</h4>
+          <ul>
+            <li>Basic ($99/mo): Up to 100 users, 10 courses</li>
+            <li>Pro ($299/mo): Unlimited courses, advanced analytics</li>
+            <li>Enterprise: Custom solutions & SLA</li>
+          </ul>
+          <p>Contact sales@techxos.com for discounts</p>
+        </div>
+      );
+    }
 
     if (msg.bot?.startsWith("wandy_")) {
       const isProd = window.location.hostname === "techxos.com";
@@ -210,7 +241,8 @@ export default function ChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Tell us how we can help..."
+              placeholder="Ask about LMS features, pricing, or support..."
+              // placeholder="Tell us how we can help..."
               aria-label="Chat input"
             />
             <button
@@ -253,6 +285,29 @@ export default function ChatWidget() {
           right: 0;
           display: flex;
           flex-direction: column;
+        }
+
+        .pricing-table {
+          padding: 1rem;
+          background: #f8f9fa;
+          border-radius: 8px;
+          border: 1px solid #e0e0e0;
+        }
+
+        .pricing-table ul {
+          list-style: none;
+          padding-left: 0;
+          margin: 0.5rem 0;
+        }
+
+        .pricing-table li {
+          padding: 0.5rem 0;
+          border-bottom: 1px solid #eee;
+        }
+
+        .pricing-table h4 {
+          margin-top: 0;
+          color: #5025d1;
         }
 
         /* Add mobile responsiveness */
@@ -455,7 +510,6 @@ const CloseIcon = ({ className }: { className?: string }) => (
     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
   </svg>
 );
-
 
 // import { useState, useEffect, useRef } from "react";
 
@@ -914,12 +968,6 @@ const CloseIcon = ({ className }: { className?: string }) => (
 //     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
 //   </svg>
 // );
-
-
-
-
-
-
 
 // import { useState, useEffect, useRef } from "react";
 
