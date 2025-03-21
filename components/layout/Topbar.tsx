@@ -47,8 +47,9 @@ const Topbar = () => {
     { label: "HOME", path: "/" },
     { label: "ABOUT", path: "/about" },
     { label: "OUR COURSES", path: "" },
+    { label: "CAREERS", path: "/pages/careers" },
     { label: "INSTRUCTOR", path: "/instructor/courses" },
-    { label: "MY LEARNING", path: "/learning" },
+    // { label: "MY LEARNING", path: "/learning" },
   ];
 
   const sidebarRoutes = [
