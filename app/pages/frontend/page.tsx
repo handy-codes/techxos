@@ -128,7 +128,7 @@ export default function Page() {
             150,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            In 16 weeks, Techxos turbocharges your journey: Code real
+            In 12 weeks, Techxos turbocharges your journey: Code real
             projects, collaborate with industry pros, and join a tribe of
             creators obsessed with pixel perfection. Whether you’re animating a
             button or architecting a full-scale web app, every lesson sharpens

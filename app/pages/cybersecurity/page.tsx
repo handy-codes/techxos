@@ -136,7 +136,7 @@ export default function Page() {
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            450,000 NGN
+            350,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
             Techxos arms you for battle: Tackle real-world simulations (like

@@ -67,6 +67,24 @@ body{
   background-color: #c8d2de;
 }
 
+/* global.css or a CSS module */
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
 
 .custom-footer {
   height: 100px; 

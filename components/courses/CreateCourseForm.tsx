@@ -69,7 +69,7 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
   };
 
   return (
-    <div className="p-10">
+    <div className="p-10 -mt-[-12%]">
       <h1 className="text-xl font-bold">
         Let give some basics for your course
       </h1>

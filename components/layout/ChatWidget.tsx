@@ -21,10 +21,10 @@ const getStorageKey = () => {
 const getWelcomeMessage = () => {
   return window.location.hostname === "techxos.com"
     ? {
-        bot: "Welcome to Techxos LMS Support! How can I help you today?\n• Course Setup\n• User Management\n• Billing Questions\n• Technical Support",
+        bot: "Welcome to Techxos Support! How can I help you today?\n• Course Setup\n• User Management\n• Billing Questions\n• Technical Support",
       }
     : {
-        bot: "Hi! I'm Wandy, your Techxos LMS expert. Ask me about:\n- Creating courses\n- Student reports\n- Integration options\n- Pricing plans",
+        bot: "Hi! I'm Wandy, your Techxos sales expert. Ask me about:\n- Creating courses\n- Student reports\n- Integration options\n- Pricing plans",
       };
 };
 
@@ -144,43 +144,25 @@ export default function ChatWidget() {
   //   if (msg.user) return <>{msg.user}</>;
 
   const renderMessageContent = (msg: Message) => {
-    // Add this special case handling
+    // Handle user messages first
+    if (msg.user) {
+      return <span className="user-message">{msg.user}</span>;
+    }
+
+    // Then handle special bot cases
     if (msg.bot?.includes("[[PRICING]]")) {
-      return (
-        <div className="pricing-table">
-          <h4>LMS Pricing Plans:</h4>
-          <ul>
-            <li>Basic ($99/mo): Up to 100 users, 10 courses</li>
-            <li>Pro ($299/mo): Unlimited courses, advanced analytics</li>
-            <li>Enterprise: Custom solutions & SLA</li>
-          </ul>
-          <p>Contact sales@techxos.com for discounts</p>
-        </div>
-      );
+      return <div className="pricing-table">{/* Pricing table content */}</div>;
     }
 
     if (msg.bot?.startsWith("wandy_")) {
-      const isProd = window.location.hostname === "techxos.com";
       return (
-        <div className="welcome-message flex flex-col justify-center">
-          <div className="flex items-center gap-2">
-            <TechxosLogo className="w-6 h-6 text-purple-600" />
-            <span className="text-black">
-              {isProd
-                ? "Techxos Production Support"
-                : "Hi! I'm Wandy, Techxos AI sales expert"}
-            </span>
-          </div>
-          <div className="mt-2 text-black self-center">
-            {isProd
-              ? "🔒 Secure enterprise assistance ready"
-              : "🤖 How can I help you today?"}
-          </div>
-        </div>
+        <div className="welcome-message">{/* Welcome message content */}</div>
       );
     }
 
-    if (typeof msg.bot === "string") return <>{msg.bot}</>;
+    if (typeof msg.bot === "string") {
+      return <span className="bot-message">{msg.bot}</span>;
+    }
 
     console.warn("Invalid message format:", msg);
     return null;
@@ -241,8 +223,8 @@ export default function ChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Ask about LMS features, pricing, or support..."
-              // placeholder="Tell us how we can help..."
+              // placeholder="Ask about LMS features, pricing, or support..."
+              placeholder="Tell us how we can help..."
               aria-label="Chat input"
             />
             <button
@@ -326,6 +308,8 @@ export default function ChatWidget() {
 
           .chat-messages {
             min-height: 200px;
+            background: #ffffff;
+            color: #1f2937;
           }
 
           .message {
@@ -380,16 +364,38 @@ export default function ChatWidget() {
           word-break: break-word;
         }
 
+        .bot-message {
+          color: #1f2937;
+          display: block;
+          padding: 8px 12px;
+        }
+
+        .user-message {
+          color: #ffffff;
+          display: block;
+          padding: 8px 12px;
+        }
+
         .message.user {
           background: #0070f3;
           color: white;
           margin-left: auto;
+          background: #0070f3;
+          margin-left: auto;
+          border-radius: 15px 15px 0 15px;
+          margin-bottom: 12px;
+          max-width: 75%;
         }
 
         .message.bot {
           background: #f3f4f6;
           color: #1f2937;
           margin-right: auto;
+          background: #f3f4f6;
+          margin-right: auto;
+          border-radius: 15px 15px 15px 15px;
+          margin-bottom: 12px;
+          max-width: 75%;
         }
 
         .welcome-message {
@@ -641,26 +647,26 @@ const CloseIcon = ({ className }: { className?: string }) => (
 //   const renderMessageContent = (msg: Message) => {
 //     if (msg.user) return <>{msg.user}</>;
 
-//     if (msg.bot?.startsWith("wandy_")) {
-//       const isProd = window.location.hostname === "techxos.com";
-//       return (
-//         <div className="welcome-message flex flex-col justify-center">
-//           <div className="flex items-center gap-2">
-//             <TechxosLogo className="w-6 h-6 text-purple-600" />
-//             <span className="text-black">
-//               {isProd
-//                 ? "Techxos Production Support"
-//                 : "Hi! I'm Wandy, Techxos AI sales expert"}
-//             </span>
-//           </div>
-//           <div className="mt-2 text-black self-center">
-//             {isProd
-//               ? "🔒 Secure enterprise assistance ready"
-//               : "🤖 How can I help you today?"}
-//           </div>
-//         </div>
-//       );
-//     }
+    // if (msg.bot?.startsWith("wandy_")) {
+    //   const isProd = window.location.hostname === "techxos.com";
+    //   return (
+        // <div className="welcome-message flex flex-col justify-center">
+        //   <div className="flex items-center gap-2">
+        //     <TechxosLogo className="w-6 h-6 text-purple-600" />
+        //     <span className="text-black">
+        //       {isProd
+        //         ? "Techxos Production Support"
+        //         : "Hi! I'm Wandy, Techxos AI sales expert"}
+        //     </span>
+        //   </div>
+        //   <div className="mt-2 text-black self-center">
+        //     {isProd
+        //       ? "🔒 Secure enterprise assistance ready"
+        //       : "🤖 How can I help you today?"}
+        //   </div>
+        // </div>
+    //   );
+    // }
 
 //     if (typeof msg.bot === "string") return <>{msg.bot}</>;
 

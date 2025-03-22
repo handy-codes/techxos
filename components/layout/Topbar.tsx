@@ -48,12 +48,12 @@ const Topbar = () => {
     { label: "ABOUT", path: "/about" },
     { label: "OUR COURSES", path: "" },
     { label: "CAREERS", path: "/pages/careers" },
-    { label: "INSTRUCTOR", path: "/instructor/courses" },
+    // { label: "INSTRUCTOR", path: "/instructor/create-course" },
     // { label: "MY LEARNING", path: "/learning" },
   ];
 
   const sidebarRoutes = [
-    { label: "Courses", path: "/instructor/courses" },
+    { label: "Courses", path: "/instructor/create-course" },
     { label: "Performance", path: "/instructor/performance" },
   ];
 
