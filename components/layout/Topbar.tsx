@@ -227,8 +227,8 @@ const Topbar = () => {
                 <SheetTrigger aria-label="Open navigation menu">
                   <Menu className="w-8 h-8 mt-2 text-[#003E8F]" />
                 </SheetTrigger>
-                <SheetContent className="flex flex-col gap-4 bg-gray-800 text-white border-l-0 z-[1000] pt-16">
-                  <div className="flex flex-col gap-2">
+                <SheetContent className="flex flex-col gap-4 items-center bg-[#012B66] mt-[80px] text-white text-xl border-l-0 z-[1000] pt-16">
+                  <div className="flex flex-col overflow-scroll gap-3">
                     {topRoutes.map((route) =>
                       route.label === "OUR COURSES" ? (
                         <div key={route.path} className="flex flex-col gap-1">
@@ -238,7 +238,7 @@ const Topbar = () => {
                           >
                             <span>{route.label}</span>
                             <FaChevronDown
-                              className={`transition-transform ${
+                              className={`transition-transform ml-2 ${
                                 isMobileCoursesOpen ? "rotate-180" : ""
                               }`}
                             />
