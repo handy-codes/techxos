@@ -50,6 +50,18 @@ export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
 
+// middleware.ts
+
+export function middleware(request: Request) {
+  const response = NextResponse.next();
+  
+  if (request.url.includes('/api/')) {
+    response.headers.set('Content-Type', 'application/json');
+  }
+  
+  return response;
+}
+
 
 
 // import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";

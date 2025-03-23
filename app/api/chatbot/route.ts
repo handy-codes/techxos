@@ -1,16 +1,37 @@
 import { NextResponse } from "next/server";
 
-
+interface GroqResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+  error?: {
+    message: string;
+  };
+}
 
 export async function POST(req: Request) {
   try {
-    console.log("Received request");
-    const { message } = await req.json();
-    console.log("Processing message:", message);
+    // Validate request format
+    if (!req.headers.get("content-type")?.includes("application/json")) {
+      return NextResponse.json(
+        { error: "Invalid content type" },
+        { status: 400 }
+      );
+    }
 
+    const { message } = await req.json();
+    
+    // Validate environment configuration
+    if (!process.env.GROQ_API_KEY) {
+      throw new Error("GROQ_API_KEY environment variable not configured");
+    }
+
+    // System message template
     const systemMessage = {
       role: "system",
-            content: `# Wandy's Profile
+      content: `# Wandy's Profile
       ## Core Identity
       - Techxos LMS Sales Expert
       - Tone: Professional + friendly
@@ -41,10 +62,14 @@ export async function POST(req: Request) {
       3. Escalate to sales@techxos.com for:
         - Custom solutions
         - Enterprise pricing
-        - Bulk enrollments`,
+        - Bulk enrollments`
     };
 
-    const response = await fetch(
+    // API call with timeout protection
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+
+    const groqResponse = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
@@ -56,31 +81,138 @@ export async function POST(req: Request) {
           model: "llama3-8b-8192",
           messages: [systemMessage, { role: "user", content: message }],
           temperature: 0.3,
-          max_tokens: 300, // Increased for better responses
+          max_tokens: 300,
           stream: false,
         }),
+        signal: controller.signal,
       }
     );
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Groq API error: ${response.status} - ${
-          errorData?.error?.message || "Unknown error"
-        }`
-      );
+    clearTimeout(timeout);
+
+    // Handle non-JSON responses
+    const responseText = await groqResponse.text();
+    let data: GroqResponse;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      console.error("Invalid JSON from Groq API:", responseText.slice(0, 200));
+      throw new Error(`Received invalid response from AI provider`);
     }
 
-    const data = await response.json();
-    return NextResponse.json({ reply: data.choices[0].message.content });
+    // Handle API errors
+    if (!groqResponse.ok) {
+      const errorMessage = data?.error?.message || `Groq API error: ${groqResponse.status}`;
+      throw new Error(errorMessage);
+    }
+
+    // Validate response structure
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error("Invalid response structure from AI provider");
+    }
+
+    return NextResponse.json({ 
+      reply: data.choices[0].message.content 
+    });
+
   } catch (error: any) {
-    console.error("API error:", error);
+    // Consistent error format
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { 
+        error: "chat_error",
+        message: error.message || "Unable to process chat request"
+      },
       { status: 500 }
     );
   }
 }
+
+
+
+
+// import { NextResponse } from "next/server";
+
+
+
+// export async function POST(req: Request) {
+//   try {
+//     console.log("Received request");
+//     const { message } = await req.json();
+//     console.log("Processing message:", message);
+
+//     const systemMessage = {
+//       role: "system",
+//             content: `# Wandy's Profile
+//       ## Core Identity
+//       - Techxos LMS Sales Expert
+//       - Tone: Professional + friendly
+
+//       # Key Data
+//       **Courses** (NGN):
+//       | Course | Fee | Duration | Link |
+//       |--------|-----|----------|------|
+//       | Frontend | ₦150k | 12w | http://www.techxos.com/pages/frontend |
+//       | Fullstack | ₦250k | 16w | http://www.techxos.com/pages/fullstack |
+//       | Cybersecurity | ₦350k | 16w | http://www.techxos.com/pages/cybersecurity |
+//       | Software Development | ₦350k | 16w | http://www.techxos.com/pages/software-devt |
+//       | UI-UX Design | ₦150k | 12w | http://www.techxos.com/pages/ai-ml |
+//       | Artificial Intelligence | ₦450k | 16w | http://www.techxos.com/pages/ui-ux |
+//       | Digital Marketing | ₦250k | 16w | http://www.techxos.com/pages/graphic-design |
+//       | Graphic Design | ₦250k | 16w | http://www.techxos.com/pages/graphic design |
+//       | Project Management | ₦250k | 16w | http://www.techxos.com/pages/project-mgt |
+//       | Digital Marketing | ₦150k | 16w | http://www.techxos.com/pages/digital-marketing |
+//       | Data Science | ₦250k | 16w | http://www.techxos.com/pages/data-science |
+
+//       **Support**:
+//       - Email: <1hr response
+//       - Chat: 24/7 for Pro+
+
+//       # Rules
+//       1. ALWAYS use course data from table
+//       2. Redirect to www.techxos.com/about for guides
+//       3. Escalate to sales@techxos.com for:
+//         - Custom solutions
+//         - Enterprise pricing
+//         - Bulk enrollments`,
+//     };
+
+//     const response = await fetch(
+//       "https://api.groq.com/openai/v1/chat/completions",
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+//         },
+//         body: JSON.stringify({
+//           model: "llama3-8b-8192",
+//           messages: [systemMessage, { role: "user", content: message }],
+//           temperature: 0.3,
+//           max_tokens: 300, // Increased for better responses
+//           stream: false,
+//         }),
+//       }
+//     );
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(
+//         `Groq API error: ${response.status} - ${
+//           errorData?.error?.message || "Unknown error"
+//         }`
+//       );
+//     }
+
+//     const data = await response.json();
+//     return NextResponse.json({ reply: data.choices[0].message.content });
+//   } catch (error: any) {
+//     console.error("API error:", error);
+//     return NextResponse.json(
+//       { error: error.message || "Internal server error" },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 // import { NextResponse } from "next/server";
 
