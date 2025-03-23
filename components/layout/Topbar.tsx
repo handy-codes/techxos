@@ -5,7 +5,12 @@ import { Menu, Search } from "lucide-react";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { FaMapMarkerAlt, FaPhone, FaPaperPlane, FaChevronDown } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaPhone,
+  FaPaperPlane,
+  FaChevronDown,
+} from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Image from "next/image";
@@ -78,34 +83,34 @@ const Topbar = () => {
       <header className="z-50 w-full top-0">
         {/* Upper Contact Bar */}
         <div className="h-[40px] bg-[black] text-white items-center justify-between py-7 px-6 hidden xl:flex">
-        <div className="flex items-center space-x-2">
-          <FaMapMarkerAlt className="text-[orange]" />
-          <span>
-            101, Lagos Ikorodu Road, (Wandytech Suites) by Jumofak Aruna Bus Stop,
-            Ikorodu Lagos
-          </span>
-        </div>
-        <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-2">
-            <FaPhone className="text-[orange]" />
-            <span>+2349123444391</span>
+            <FaMapMarkerAlt className="text-[orange]" />
+            <span>
+              101, Lagos Ikorodu Road, (Wandytech Suites) by Jumofak Aruna Bus
+              Stop, Ikorodu Lagos
+            </span>
           </div>
-          <Link
-            href="mailto:hello@techxos.com"
-            className="flex items-center py-[6px] px-3 bg-[#638995] rounded-md space-x-2"
-          >
-            <FaPaperPlane className="text-[#C5CFD2]" />
-            <p className="text-dark-blue py-1 rounded">Contact Us</p>
-          </Link>
-          <Link
-            href="mailto:hello@wandytex.com"
-            className="flex items-center space-x-2"
-          >
-            <FaPaperPlane className="text-[orange]" />
-            <p className="text-dark-blue py-1 rounded">hello@techxos.com</p>
-          </Link>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <FaPhone className="text-[orange]" />
+              <span>+2349123444391</span>
+            </div>
+            <Link
+              href="mailto:hello@techxos.com"
+              className="flex items-center py-[6px] px-3 bg-[#638995] rounded-md space-x-2"
+            >
+              <FaPaperPlane className="text-[#C5CFD2]" />
+              <p className="text-dark-blue py-1 rounded">Contact Us</p>
+            </Link>
+            <Link
+              href="mailto:hello@wandytex.com"
+              className="flex items-center space-x-2"
+            >
+              <FaPaperPlane className="text-[orange]" />
+              <p className="text-dark-blue py-1 rounded">hello@techxos.com</p>
+            </Link>
+          </div>
         </div>
-      </div>
 
         {/* Main Navigation Bar */}
         <nav className="flex w-full mx-auto justify-between bg-white h-[80px] my-auto items-center p-4 border-b-2 border-[#E79D09] relative">
@@ -191,7 +196,7 @@ const Topbar = () => {
                       {/* <div className="w-[33vw] bg-[#343B43] text-[#46D5FB] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
                       {/* <div className="w-[40vw] bg-gray-100 text-[#4F25CF] mt-1 grid grid-cols-2 font-semibold gap-3 p-6 overflow-y-auto"> */}
                       <div className="w-[40vw] bg-[#FEE2E2] text-[black] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto">
-                      {/* <div className="w-[33vw] bg-[#5025D1] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
+                        {/* <div className="w-[33vw] bg-[#5025D1] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
                         {courses.map((course, index) => (
                           <Link
                             key={index}
@@ -227,14 +232,24 @@ const Topbar = () => {
                 <SheetTrigger aria-label="Open navigation menu">
                   <Menu className="w-8 h-8 mt-2 text-[#003E8F]" />
                 </SheetTrigger>
-                <SheetContent className="flex flex-col gap-4 items-center bg-[#012B66] mt-[80px] text-white text-xl 
-                    border-l-0 z-[1000] pt-16 [&>button]:size-10 [&>button]:right-2 [&>button]:bottom-6 [&>button]:text-3xl [&>button>svg]:stroke-[10px]">
+                <SheetContent
+                  className="flex flex-col gap-4 items-center bg-[#012B66] mt-[80px] text-white text-xl 
+                  border-l-0 z-[1000] pt-16 [&>button]:size-10 [&>button]:right-2 [&>button]:bottom-6 
+                  [&>button]:text-3xl [&>button>svg]:stroke-[10px]
+                  transition-all duration-300 ease-in-out
+                  data-[state=open]:animate-in data-[state=closed]:animate-out
+                  data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
+                  data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-right-full
+                  data-[state=closed]:duration-300 data-[state=open]:duration-500"
+                >
                   <div className="flex flex-col overflow-scroll mt-4 gap-3">
                     {topRoutes.map((route) =>
                       route.label === "OUR COURSES" ? (
                         <div key={route.path} className="flex flex-col gap-1">
                           <button
-                            onClick={() => setIsMobileCoursesOpen(!isMobileCoursesOpen)}
+                            onClick={() =>
+                              setIsMobileCoursesOpen(!isMobileCoursesOpen)
+                            }
                             className="flex items-center justify-between p-3 rounded-lg font-bold hover:bg-[#1B9BFF]/80"
                           >
                             <span>{route.label}</span>
@@ -305,7 +320,10 @@ const Topbar = () => {
               <UserButton afterSignOutUrl="/" />
             ) : (
               <Link href="/sign-in">
-                <Button variant="outline" className="text-[white] p-4 bg-orange-500">
+                <Button
+                  variant="outline"
+                  className="text-[white] p-4 bg-orange-500"
+                >
                   Sign In
                 </Button>
               </Link>
