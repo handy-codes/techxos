@@ -227,8 +227,9 @@ const Topbar = () => {
                 <SheetTrigger aria-label="Open navigation menu">
                   <Menu className="w-8 h-8 mt-2 text-[#003E8F]" />
                 </SheetTrigger>
-                <SheetContent className="flex flex-col gap-4 items-center bg-[#012B66] mt-[80px] text-white text-xl border-l-0 z-[1000] pt-16">
-                  <div className="flex flex-col overflow-scroll gap-3">
+                <SheetContent className="flex flex-col gap-4 items-center bg-[#012B66] mt-[80px] text-white text-xl 
+                    border-l-0 z-[1000] pt-16 [&>button]:size-10 [&>button]:right-2 [&>button]:bottom-6 [&>button]:text-3xl [&>button>svg]:stroke-[10px]">
+                  <div className="flex flex-col overflow-scroll mt-4 gap-3">
                     {topRoutes.map((route) =>
                       route.label === "OUR COURSES" ? (
                         <div key={route.path} className="flex flex-col gap-1">
