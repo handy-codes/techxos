@@ -30,6 +30,8 @@ const Topbar = () => {
     { title: "Digital Marketing", link: "/pages/digital-marketing" },
     { title: "UI/UX Design", link: "/pages/ui-ux" },
     { title: "Cybersecurity", link: "/pages/cybersecurity" },
+    { title: "Project Management", link: "/pages/project-mgt" },
+    { title: "Graphic Design", link: "/pages/graphic-design" },
   ];
 
   const handleMouseEnter = () => {
@@ -168,7 +170,7 @@ const Topbar = () => {
 
                     {/* Dropdown Content */}
                     <div
-                      className={`absolute top-full -left-[33vw] w-[75vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
+                      className={`absolute top-full -left-[43vw] w-[75vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
                         isDropdownOpen
                           ? "opacity-100 translate-y-0 visible"
                           : "opacity-0 -translate-y-2 invisible"
