@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 
+
+
 export async function POST(req: Request) {
   try {
+    console.log("Received request");
     const { message } = await req.json();
+    console.log("Processing message:", message);
 
     const systemMessage = {
       role: "system",

@@ -99,16 +99,22 @@ export default function ChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: newMessage }),
       });
-
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
-
-      const data = await response.json();
-      const botMessage =
-        data?.choices?.[0]?.message?.content ||
-        data?.reply ||
-        "I didn't understand that response";
-
+  
+      const textResponse = await response.text(); // First get text
+      
+      let data;
+      try {
+        data = JSON.parse(textResponse); // Try to parse as JSON
+      } catch (parseError) {
+        console.error("JSON parse error:", parseError);
+        throw new Error("Invalid JSON response");
+      }
+  
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+  
+      const botMessage = data?.reply || "I didn't understand that response";
       setMessages((prev) => [...prev, { bot: botMessage }]);
     } catch (error) {
       console.error("Chat error:", error);
