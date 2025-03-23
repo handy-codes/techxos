@@ -1,24 +1,35 @@
 import { useState, useEffect, useRef } from "react";
+import { useUser } from "@clerk/nextjs";
 
 interface Message {
   user?: string;
   bot?: string;
 }
 
-const getStorageKey = () => {
+const getStorageKey = (): string => {
   if (typeof window === "undefined") return "chatMessages";
   const hostname = window.location.hostname;
   return `chatMessages_${hostname.replace(/\./g, "_")}`;
 };
 
-const getWelcomeMessage = () => {
+const getWelcomeMessage = (user?: { firstName?: string | null; username?: string | null }): Message => {
   if (typeof window === "undefined") return { bot: "wandy_welcome" };
-  return window.location.hostname === "techxos.com"
-    ? { bot: "wandy_prod_welcome" }
-    : { bot: "wandy_welcome" };
+  
+  const baseType = window.location.hostname === "techxos.com" 
+    ? "wandy_prod_welcome" 
+    : "wandy_welcome";
+
+  if (user?.firstName) {
+    return { bot: `${baseType}:Welcome back, ${user.firstName}!` };
+  }
+  if (user?.username) {
+    return { bot: `${baseType}:Hi @${user.username}!` };
+  }
+  return { bot: baseType };
 };
 
 export default function ChatWidget() {
+  const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -26,36 +37,25 @@ export default function ChatWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const loadMessages = () => {
+    const loadMessages = (): Message[] => {
       try {
         const storageKey = getStorageKey();
         const saved = localStorage.getItem(storageKey);
-
-        if (!saved) return [getWelcomeMessage()];
-
-        const parsed = JSON.parse(saved);
-        if (!Array.isArray(parsed)) throw new Error("Invalid format");
-
-        const cleanMessages = parsed.filter(
-          (msg) =>
-            (msg.user && typeof msg.user === "string") ||
-            (msg.bot && typeof msg.bot === "string")
+        
+        const initialMessages: Message[] = saved ? JSON.parse(saved) : [];
+        const hasWelcome = initialMessages.some(msg => 
+          msg.bot?.startsWith("wandy_") && msg.bot.includes("_welcome")
         );
 
-        const hasWelcome = cleanMessages.some(
-          (msg) => msg.bot?.startsWith("wandy_") && msg.bot.endsWith("_welcome")
-        );
-
-        return hasWelcome
-          ? cleanMessages
-          : [getWelcomeMessage(), ...cleanMessages];
+        return hasWelcome ? initialMessages : [getWelcomeMessage(user ?? undefined), ...initialMessages];
       } catch (error) {
-        return [getWelcomeMessage()];
+        console.error("Failed to load messages:", error);
+        return [getWelcomeMessage(user ?? undefined)];
       }
     };
 
     setMessages(loadMessages());
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     try {
@@ -87,81 +87,64 @@ export default function ChatWidget() {
 
     const newMessage = trimmedInput;
     setInput("");
-    setMessages((prev) => [...prev, { user: newMessage }]);
+    setMessages(prev => [...prev, { user: newMessage }]);
     setIsTyping(true);
 
     try {
       const response = await fetch("/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: newMessage }),
+        body: JSON.stringify({ 
+          message: newMessage,
+          user: {
+            firstName: user?.firstName,
+            username: user?.username
+          }
+        }),
       });
 
       const textResponse = await response.text();
-      let data;
-      try {
-        data = JSON.parse(textResponse);
-      } catch (parseError) {
-        console.error("JSON parse error. Response:", textResponse.slice(0, 200));
-        throw new Error("Received invalid response format from server");
-      }
+      const data = JSON.parse(textResponse);
 
       if (!response.ok) {
-        const apiError = data?.error || 'api_error';
-        const message = data?.message || `Request failed (${response.status})`;
-        throw new Error(`${apiError}: ${message}`);
+        throw new Error(data.error || `Request failed with status ${response.status}`);
       }
 
-      if (!data?.reply) {
-        throw new Error("Invalid response structure from server");
-      }
-
-      setMessages((prev) => [...prev, { bot: data.reply }]);
+      setMessages(prev => [...prev, { bot: data.reply }]);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      const fallbackResponses = [
-        "Please try again later or contact hello@techxos.com",
-        "Our systems are currently busy",
-        "I'm having trouble connecting to the AI",
-      ];
-      
-      const fallback = errorMessage.startsWith("Received invalid") 
-        ? "Our chat service is experiencing technical difficulties. Please try again later."
-        : errorMessage.startsWith("timeout")
-        ? "The response is taking longer than usual. Please try again."
-        : fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-
-      setMessages((prev) => [...prev, { bot: fallback }]);
+      console.error("Chat error:", error);
+      const fallback = "Our chat service is currently unavailable. Please email hello@techxos.com";
+      setMessages(prev => [...prev, { bot: fallback }]);
     } finally {
       setIsTyping(false);
     }
   };
 
   const renderMessageContent = (msg: Message) => {
-    if (msg.user) return <>{msg.user}</>;
+    if (msg.user) return <div className="message-text">{msg.user}</div>;
 
     if (msg.bot?.startsWith("wandy_")) {
+      const [messageType, welcomeText] = msg.bot.split(":");
       const isProd = window.location.hostname === "techxos.com";
+      
       return (
         <div className="welcome-message flex flex-col justify-center">
           <div className="flex items-center gap-2">
             <TechxosLogo className="w-6 h-6 text-purple-600" />
             <span className="text-black">
-              {isProd
-                ? "Techxos Production Support"
-                : "Hi! I'm Wandy, Techxos AI sales expert"}
+              {welcomeText || (isProd 
+                ? "Techxos Production Support" 
+                : "Hi! I'm Wandy, Techxos AI sales expert")}
             </span>
           </div>
           <div className="mt-2 text-black self-center">
-            {isProd
-              ? "🔒 Secure enterprise assistance ready"
-              : "🤖 How can I help you today?"}
+            {isProd ? "🔒 Secure enterprise assistance ready" : "🤖 How can I help you today?"}
           </div>
         </div>
       );
     }
 
-    return <>{msg.bot}</>;
+    return <div className="message-text">{msg.bot}</div>;
   };
 
   return (
@@ -240,15 +223,6 @@ export default function ChatWidget() {
           bottom: 1rem;
           right: 1rem;
           z-index: 1000;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-            sans-serif;
-        }
-
-        .chat-button {
-          background: none;
-          border: none;
-          padding: 0;
-          cursor: pointer;
         }
 
         .chat-window {
@@ -264,57 +238,14 @@ export default function ChatWidget() {
           flex-direction: column;
         }
 
-        @media (max-width: 640px) {
-          .chat-container {
-            right: 0.5rem;
-            bottom: 0.5rem;
-          }
-
-          .chat-window {
-            width: calc(100vw - 1rem);
-            right: 0.5rem;
-            max-width: calc(100vw - 1rem);
-            bottom: calc(100% + 0.5rem);
-          }
-
-          .chat-messages {
-            min-height: 200px;
-          }
-
-          .message {
-            max-width: 90%;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.9rem;
-          }
-
-          input {
-            padding: 0.5rem 0.75rem;
-            font-size: 0.9rem;
-          }
-
-          .send-button {
-            padding: 0.5rem 1rem;
-          }
-        }
-
-        @media (max-width: 400px) {
-          .chat-button h1 {
-            display: none;
-          }
-
-          .chat-header h3 {
-            font-size: 1rem;
-          }
-        }
-
         .chat-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
           padding: 1rem 1.5rem;
           background: linear-gradient(135deg, #0070f3, #0063cc);
           color: white;
           border-radius: 1rem 1rem 0 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
         }
 
         .chat-messages {
@@ -329,8 +260,6 @@ export default function ChatWidget() {
           padding: 0.75rem 1rem;
           border-radius: 1rem;
           max-width: 80%;
-          line-height: 1.4;
-          word-break: break-word;
         }
 
         .message.user {
@@ -343,13 +272,6 @@ export default function ChatWidget() {
           background: #f3f4f6;
           color: #1f2937;
           margin-right: auto;
-        }
-
-        .welcome-message {
-          padding: 0.75rem;
-          background: #f8fafc;
-          border-radius: 0.75rem;
-          border: 1px solid #e2e8f0;
         }
 
         .typing-indicator {
@@ -367,13 +289,8 @@ export default function ChatWidget() {
         }
 
         @keyframes typing {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-4px);
-          }
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
         }
 
         .chat-input {
@@ -381,21 +298,16 @@ export default function ChatWidget() {
           gap: 0.5rem;
           padding: 1rem;
           border-top: 1px solid #e2e8f0;
+          color: black;
+          border: none:
+          outline: none:
         }
 
         input {
           flex: 1;
-          padding: 0.75rem 1rem;
+          padding: 0.75rem;
           border: 1px solid #e2e8f0;
           border-radius: 0.5rem;
-          font-size: 1rem;
-          color: #1f2937;
-          outline: none;
-        }
-
-        input::placeholder {
-          color: #6b7280;
-          opacity: 1;
         }
 
         .send-button {
@@ -405,16 +317,18 @@ export default function ChatWidget() {
           border: none;
           border-radius: 0.5rem;
           cursor: pointer;
-          transition: background 0.2s ease;
         }
 
-        .send-button.disabled {
+        .send-button:disabled {
           background: #e2e8f0;
           cursor: not-allowed;
         }
 
-        .send-button:hover:not(:disabled) {
-          background: #0063cc;
+        @media (max-width: 640px) {
+          .chat-window {
+            width: 95vw;
+            right: 2.5vw;
+          }
         }
       `}</style>
     </div>
@@ -443,9 +357,6 @@ const CloseIcon = ({ className }: { className?: string }) => (
     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
   </svg>
 );
-
-
-
 
 
 
@@ -914,9 +825,6 @@ const CloseIcon = ({ className }: { className?: string }) => (
 //     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
 //   </svg>
 // );
-
-
-
 
 // import { useState, useEffect, useRef } from "react";
 

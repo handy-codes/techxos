@@ -13,7 +13,6 @@ interface GroqResponse {
 
 export async function POST(req: Request) {
   try {
-    // Validate request format
     if (!req.headers.get("content-type")?.includes("application/json")) {
       return NextResponse.json(
         { error: "Invalid content type" },
@@ -21,20 +20,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const { message } = await req.json();
+    const { message, user } = await req.json();
     
-    // Validate environment configuration
     if (!process.env.GROQ_API_KEY) {
       throw new Error("GROQ_API_KEY environment variable not configured");
     }
 
-    // System message template
+    // User greeting logic
+    let welcomeMessage = "How can I assist you today?";
+    if (user?.firstName) {
+      welcomeMessage = `Welcome back, ${user.firstName}! How can I help?`;
+    } else if (user?.username) {
+      welcomeMessage = `Hi ${user.username}! How can I assist you?`;
+    }
+
     const systemMessage = {
       role: "system",
       content: `# Wandy's Profile
       ## Core Identity
       - Techxos LMS Sales Expert
+      - Next cohort starts: 1 April 2025
       - Tone: Professional + friendly
+      - Current user: ${user?.firstName || user?.username || "Guest"}
 
       # Key Data
       **Courses** (NGN):
@@ -44,28 +51,50 @@ export async function POST(req: Request) {
       | Fullstack | ₦250k | 16w | http://www.techxos.com/pages/fullstack |
       | Cybersecurity | ₦350k | 16w | http://www.techxos.com/pages/cybersecurity |
       | Software Development | ₦350k | 16w | http://www.techxos.com/pages/software-devt |
-      | UI-UX Design | ₦150k | 12w | http://www.techxos.com/pages/ai-ml |
-      | Artificial Intelligence | ₦450k | 16w | http://www.techxos.com/pages/ui-ux |
-      | Digital Marketing | ₦250k | 16w | http://www.techxos.com/pages/graphic-design |
-      | Graphic Design | ₦250k | 16w | http://www.techxos.com/pages/graphic design |
-      | Project Management | ₦250k | 16w | http://www.techxos.com/pages/project-mgt |
+      | UI-UX Design | ₦150k | 12w | http://www.techxos.com/pages/ui-ux |
+      | Artificial Intelligence | ₦450k | 16w | http://www.techxos.com/pages/ai-ml |
       | Digital Marketing | ₦150k | 16w | http://www.techxos.com/pages/digital-marketing |
+      | Graphic Design | ₦250k | 16w | http://www.techxos.com/pages/graphic-design |
+      | Project Management | ₦250k | 16w | http://www.techxos.com/pages/project-mgt |
       | Data Science | ₦250k | 16w | http://www.techxos.com/pages/data-science |
 
-      **Support**:
-      - Email: <1hr response
-      - Chat: 24/7 for Pro+
+      **Payment Options**:
+      - 50% initial payment required
+      - Remaining balance + 10% fee due within 30 days
+      - Example: ₦150k course = ₦75k deposit + ₦82.5k final payment
 
-      # Rules
-      1. ALWAYS use course data from table
-      2. Redirect to www.techxos.com/about for guides
-      3. Escalate to sales@techxos.com for:
-        - Custom solutions
-        - Enterprise pricing
-        - Bulk enrollments`
+      **Training Details**:
+      - Modes: Online (Zoom) or On-site (Lagos HQ)
+      - Address: Techxos Headquarters, Lagos, Nigeria
+      - Schedule Options:
+        • Morning: 9:00 AM - 12:00 PM
+        • Afternoon: 1:00 PM - 4:00 PM
+        • Evening: 6:00 PM - 9:00 PM
+      - Max 30-minute breaks between sessions
+
+      **Requirements**:
+      - Reliable internet connection
+      - Computer: Windows 10/11 or macOS 10.5+
+
+      **Certification & Resources**:
+      - Certificate of Completion for all courses
+      - Source code: Available via GitHub for enrolled students
+      - Course materials: www.techxos.com/portal
+
+      **Support**:
+      - Email: <1hr response time
+      - Live Chat: 24/7 for Pro+ members
+
+      # Conversation Rules
+      1. Start with: "${welcomeMessage}"
+      2. Present links as plain text without formatting
+      3. Address users by first name if available, otherwise username
+      4. Never reveal GitHub repository URL
+      5. Keep responses concise and focused
+      6. Escalate complex requests to sales@techxos.com
+      7. Never repeat introductory information`
     };
 
-    // API call with timeout protection
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
 
@@ -90,7 +119,6 @@ export async function POST(req: Request) {
 
     clearTimeout(timeout);
 
-    // Handle non-JSON responses
     const responseText = await groqResponse.text();
     let data: GroqResponse;
     try {
@@ -100,13 +128,11 @@ export async function POST(req: Request) {
       throw new Error(`Received invalid response from AI provider`);
     }
 
-    // Handle API errors
     if (!groqResponse.ok) {
       const errorMessage = data?.error?.message || `Groq API error: ${groqResponse.status}`;
       throw new Error(errorMessage);
     }
 
-    // Validate response structure
     if (!data.choices?.[0]?.message?.content) {
       throw new Error("Invalid response structure from AI provider");
     }
@@ -116,7 +142,6 @@ export async function POST(req: Request) {
     });
 
   } catch (error: any) {
-    // Consistent error format
     return NextResponse.json(
       { 
         error: "chat_error",
@@ -126,6 +151,140 @@ export async function POST(req: Request) {
     );
   }
 }
+
+
+
+
+
+
+// import { NextResponse } from "next/server";
+
+// interface GroqResponse {
+//   choices: Array<{
+//     message: {
+//       content: string;
+//     };
+//   }>;
+//   error?: {
+//     message: string;
+//   };
+// }
+
+// export async function POST(req: Request) {
+//   try {
+//     // Validate request format
+//     if (!req.headers.get("content-type")?.includes("application/json")) {
+//       return NextResponse.json(
+//         { error: "Invalid content type" },
+//         { status: 400 }
+//       );
+//     }
+
+//     const { message } = await req.json();
+    
+//     // Validate environment configuration
+//     if (!process.env.GROQ_API_KEY) {
+//       throw new Error("GROQ_API_KEY environment variable not configured");
+//     }
+
+//     // System message template
+//     const systemMessage = {
+//       role: "system",
+//       content: `# Wandy's Profile
+//       ## Core Identity
+//       - Techxos LMS Sales Expert
+//       - Tone: Professional + friendly
+
+//       # Key Data
+//       **Courses** (NGN):
+//       | Course | Fee | Duration | Link |
+//       |--------|-----|----------|------|
+//       | Frontend | ₦150k | 12w | http://www.techxos.com/pages/frontend |
+//       | Fullstack | ₦250k | 16w | http://www.techxos.com/pages/fullstack |
+//       | Cybersecurity | ₦350k | 16w | http://www.techxos.com/pages/cybersecurity |
+//       | Software Development | ₦350k | 16w | http://www.techxos.com/pages/software-devt |
+//       | UI-UX Design | ₦150k | 12w | http://www.techxos.com/pages/ai-ml |
+//       | Artificial Intelligence | ₦450k | 16w | http://www.techxos.com/pages/ui-ux |
+//       | Digital Marketing | ₦250k | 16w | http://www.techxos.com/pages/graphic-design |
+//       | Graphic Design | ₦250k | 16w | http://www.techxos.com/pages/graphic design |
+//       | Project Management | ₦250k | 16w | http://www.techxos.com/pages/project-mgt |
+//       | Digital Marketing | ₦150k | 16w | http://www.techxos.com/pages/digital-marketing |
+//       | Data Science | ₦250k | 16w | http://www.techxos.com/pages/data-science |
+
+//       **Support**:
+//       - Email: <1hr response
+//       - Chat: 24/7 for Pro+
+
+//       # Rules
+//       1. ALWAYS use course data from table
+//       2. Redirect to www.techxos.com/about for guides
+//       3. Escalate to sales@techxos.com for:
+//         - Custom solutions
+//         - Enterprise pricing
+//         - Bulk enrollments`
+//     };
+
+//     // API call with timeout protection
+//     const controller = new AbortController();
+//     const timeout = setTimeout(() => controller.abort(), 10000);
+
+//     const groqResponse = await fetch(
+//       "https://api.groq.com/openai/v1/chat/completions",
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+//         },
+//         body: JSON.stringify({
+//           model: "llama3-8b-8192",
+//           messages: [systemMessage, { role: "user", content: message }],
+//           temperature: 0.3,
+//           max_tokens: 300,
+//           stream: false,
+//         }),
+//         signal: controller.signal,
+//       }
+//     );
+
+//     clearTimeout(timeout);
+
+//     // Handle non-JSON responses
+//     const responseText = await groqResponse.text();
+//     let data: GroqResponse;
+//     try {
+//       data = JSON.parse(responseText);
+//     } catch (e) {
+//       console.error("Invalid JSON from Groq API:", responseText.slice(0, 200));
+//       throw new Error(`Received invalid response from AI provider`);
+//     }
+
+//     // Handle API errors
+//     if (!groqResponse.ok) {
+//       const errorMessage = data?.error?.message || `Groq API error: ${groqResponse.status}`;
+//       throw new Error(errorMessage);
+//     }
+
+//     // Validate response structure
+//     if (!data.choices?.[0]?.message?.content) {
+//       throw new Error("Invalid response structure from AI provider");
+//     }
+
+//     return NextResponse.json({ 
+//       reply: data.choices[0].message.content 
+//     });
+
+//   } catch (error: any) {
+//     // Consistent error format
+//     return NextResponse.json(
+//       { 
+//         error: "chat_error",
+//         message: error.message || "Unable to process chat request"
+//       },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 
 
