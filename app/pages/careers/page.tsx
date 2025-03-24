@@ -86,6 +86,7 @@ export default function Page() {
       setIsSubmitting(false);
     }
   };
+
   return (
     <div className="mt-[22%] sm:mt-[9%]">
       <Head>
@@ -213,25 +214,18 @@ export default function Page() {
                 name="subject"
                 required
                 value={formData.subject}
+                onChange={handleChange}
                 className="max-sm:w-[55%] xl:w-full p-2 border rounded outline-none"
               >
-                  <option value="">Select a course</option>
-                  <option value="Frontend Development">
-                    <p className="w-inline-block bg-red-500">Frontend Development</p>
-                  </option>
-                  <option value="Fullstack Development">
-                    Fullstack Development
-                  </option>
-                  <option value="Cybersecurity">Cybersecurity</option>
-                  <option value="UI/UX">UI/UX</option>
-                  <option value="Data Science">Data Science</option>
-                  <option value="Artificial Intelligence">
-                    Artificial Intelligence
-                  </option>
-                  <option value="Software Development">
-                    Software Development
-                  </option>
-                  <option value="Data Science">Data Science</option>
+                <option value="">Select a course</option>
+                <option value="Frontend Development">Frontend Development</option>
+                <option value="Fullstack Development">Fullstack Development</option>
+                <option value="Cybersecurity">Cybersecurity</option>
+                <option value="UI/UX">UI/UX</option>
+                <option value="Data Science">Data Science</option>
+                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                <option value="Software Development">Software Development</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <div className="mb-4">
@@ -280,7 +274,7 @@ export default function Page() {
           </form>
         </div>
       </div>
-      <ScrollToTopButton />      
+      <ScrollToTopButton />
     </div>
   );
 }
