@@ -260,7 +260,7 @@ export default function Page() {
                   value={formData.wage}
                   onValueChange={handleWageChange}
                   className="w-full p-2 border rounded outline-none"
-                  placeholder="Be competitive"
+                  placeholder="Be competitive (click end button for NGN or USD)"
                 />
                 <button
                   type="button"
@@ -284,7 +284,7 @@ export default function Page() {
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
                 rows={4}
-                placeholder="Cover Letter or briefly state why you are the best fit for this job."
+                placeholder="Easily paste a Cover Letter or briefly state why you are the best fit for this job."
               ></textarea>
             </div>
             <div className="mb-4">
