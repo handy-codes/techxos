@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
+import { NumericFormat } from "react-number-format"; // Corrected import
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ export default function Page() {
     email: "",
     subject: "",
     message: "",
+    wage: "",
+    currency: "NGN",
     resume: null as File | null,
   });
 
@@ -38,6 +41,18 @@ export default function Page() {
     }
   };
 
+  const handleCurrencyToggle = () => {
+    setFormData((prev) => ({
+      ...prev,
+      currency: prev.currency === "NGN" ? "USD" : "NGN",
+    }));
+  };
+
+  const handleWageChange = (values: any) => {
+    const { value } = values;
+    setFormData((prev) => ({ ...prev, wage: value }));
+  };
+
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -52,6 +67,8 @@ export default function Page() {
     formDataToSend.append("email", formData.email);
     formDataToSend.append("subject", formData.subject);
     formDataToSend.append("message", formData.message);
+    formDataToSend.append("wage", formData.wage);
+    formDataToSend.append("currency", formData.currency);
     if (formData.resume) {
       formDataToSend.append("resume", formData.resume);
     }
@@ -76,6 +93,8 @@ export default function Page() {
         email: "",
         subject: "",
         message: "",
+        wage: "",
+        currency: "NGN",
         resume: null,
       });
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -227,6 +246,34 @@ export default function Page() {
                 <option value="Software Development">Software Development</option>
                 <option value="Other">Other</option>
               </select>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">
+                Your Min. Wage Rate/Hr ({formData.currency})*
+              </label>
+              <div className="flex items-center">
+                <NumericFormat
+                  thousandSeparator={true}
+                  prefix={formData.currency === "NGN" ? "₦" : "$"}
+                  name="wage"
+                  required
+                  value={formData.wage}
+                  onValueChange={handleWageChange}
+                  className="w-full p-2 border rounded outline-none"
+                  placeholder="Be competitive"
+                />
+                <button
+                  type="button"
+                  onClick={handleCurrencyToggle}
+                  className={`ml-2 p-2 border rounded ${
+                    formData.currency === "NGN"
+                      ? "bg-green-600 text-white"
+                      : "bg-blue-600 text-white"
+                  }`}
+                >
+                  {formData.currency}
+                </button>
+              </div>
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Message*</label>
