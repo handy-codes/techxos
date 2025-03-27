@@ -177,9 +177,9 @@ export default function Page() {
           </h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">
+              {/* <label className="block text-sm font-medium mb-1">
                 Course Title:
-              </label>
+              </label> */}
               <input
                 type="text"
                 value={formData.courseTitle}
