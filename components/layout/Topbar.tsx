@@ -175,7 +175,7 @@ const Topbar = () => {
 
                     {/* Dropdown Content */}
                     <div
-                      className={`absolute top-full -left-[38vw] w-[75vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
+                      className={`absolute top-full -left-[40vw] w-[75vw] max-w-4xl bg-white font-semibold text-[#003B65] shadow-lg flex flex-row pt-4 transition-all duration-300 ${
                         isDropdownOpen
                           ? "opacity-100 translate-y-0 visible"
                           : "opacity-0 -translate-y-2 invisible"
