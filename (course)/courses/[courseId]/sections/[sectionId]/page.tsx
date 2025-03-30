@@ -1,3 +1,5 @@
+export {};
+
 const purchase = await db.purchase.findUnique({
   where: {
     userId_courseId: {
