@@ -1,6 +1,8 @@
 import CourseCard from "@/components/courses/CourseCard";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { PurchaseWithCourse } from "@/types";
 
 // Define TypeScript types for the data structure
 interface PurchaseWithCourse {
@@ -38,35 +40,15 @@ const LearningPage = async () => {
   const { userId } = auth();
 
   if (!userId) {
-    // This should never be reached due to middleware protection
-    throw new Error("Unauthorized - This should be handled by middleware");
+    return redirect("/");
   }
 
   const purchasedCourses = await db.purchase.findMany({
     where: {
-      customerId: userId,
-      course: {
-        // Ensure we only get purchases with valid courses
-        id: { not: undefined }
-      }
+      userId: userId,
     },
-    select: {
-      course: {
-        include: {
-          category: true,
-          subCategory: true,
-          sections: {
-            where: {
-              isPublished: true,
-            },
-            select: {
-              id: true,
-              title: true,
-              isPublished: true,
-            }
-          }
-        }
-      }
+    include: {
+      course: true
     }
   }) as PurchaseWithCourse[];
 
