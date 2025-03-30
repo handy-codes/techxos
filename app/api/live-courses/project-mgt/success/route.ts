@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs';
-import { prisma } from '@/lib/prisma';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     // Create enrollment record
-    await prisma.enrollment.create({
+    await db.enrollment.create({
       data: {
         userId,
         liveCourseId,
