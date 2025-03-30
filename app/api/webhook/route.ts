@@ -21,17 +21,17 @@ export const POST = async (req: NextRequest) => {
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
-  const customerId = session?.metadata?.customerId;
+  const userId = session?.metadata?.userId;
   const courseId = session?.metadata?.courseId;
 
   if (event.type === "checkout.session.completed") {
-    if (!customerId || !courseId) {
+    if (!userId || !courseId) {
       return new NextResponse("Missing metadata", { status: 400 });
     }
 
     await db.purchase.create({
       data: {
-        customerId,
+        userId,
         courseId,
       },
     });
