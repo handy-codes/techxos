@@ -14,6 +14,7 @@ interface PurchaseWithCourse {
     imageUrl: string | null;
     price: number | null;
     isPublished: boolean;
+    zoomLink: string | null;
     categoryId: string;
     subCategoryId: string;
     levelId: string | null;
