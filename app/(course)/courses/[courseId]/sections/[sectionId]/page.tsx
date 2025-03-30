@@ -48,8 +48,8 @@ const SectionDetailsPage = async ({
 
   const purchase = await db.purchase.findUnique({
     where: {
-      customerId_courseId: {
-        customerId: userId,
+      userId_courseId: {
+        userId: userId,
         courseId,
       },
     },
