@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
 
 import { db } from "@/lib/db";
 
@@ -8,40 +9,45 @@ export const POST = async (
   { params }: { params: { courseId: string } }
 ) => {
   try {
-    const user = await currentUser();
-
-    if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
+    const { userId } = auth();
+    if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const course = await db.course.findUnique({
-      where: { id: params.courseId, isPublished: true },
+      where: {
+        id: params.courseId,
+        isPublished: true,
+      },
     });
 
     if (!course) {
-      return new NextResponse("Course Not Found", { status: 404 });
+      return new NextResponse("Course not found", { status: 404 });
     }
 
     const purchase = await db.purchase.findUnique({
       where: {
-        customerId_courseId: { customerId: user.id, courseId: course.id },
+        userId_courseId: {
+          userId: userId,
+          courseId: course.id
+        },
       },
     });
 
     if (purchase) {
-      return new NextResponse("Course Already Purchased", { status: 400 });
+      return new NextResponse("Already purchased", { status: 400 });
     }
 
     await db.purchase.create({
       data: {
-        customerId: user.id,
+        userId: userId,
         courseId: course.id,
       }
     })
 
-  } catch (err) {
-    console.log("[courseId_checkout_POST]", err);
-    return new NextResponse("Internal Server Error", { status: 500 });
+  } catch (error) {
+    console.log("[COURSE_CHECKOUT]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 };
 
