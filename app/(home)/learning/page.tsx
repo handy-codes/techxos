@@ -2,7 +2,6 @@ import CourseCard from "@/components/courses/CourseCard";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { PurchaseWithCourse } from "@/types";
 
 // Define TypeScript types for the data structure
 interface PurchaseWithCourse {
@@ -48,7 +47,17 @@ const LearningPage = async () => {
       userId: userId,
     },
     include: {
-      course: true
+      course: {
+        include: {
+          category: true,
+          subCategory: true,
+          sections: {
+            where: {
+              isPublished: true,
+            }
+          }
+        }
+      }
     }
   }) as PurchaseWithCourse[];
 
