@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 
 async function CourseSectionPage({
@@ -5,6 +6,13 @@ async function CourseSectionPage({
 }: {
   params: { courseId: string; sectionId: string }
 }) {
+  const { userId } = auth();
+
+  // Check if user is authenticated
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
   const purchase = await db.purchase.findUnique({
     where: {
       userId_courseId: {
