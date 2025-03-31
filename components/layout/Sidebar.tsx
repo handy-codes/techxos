@@ -3,12 +3,9 @@
 import { BarChart4, MonitorPlay } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
-import type { UserResource } from '@/types/user';
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const { user } = useUser() as { user: UserResource | null };
 
   const sidebarRoutes = [
     { icon: <MonitorPlay />, label: "Courses", path: "/instructor/courses" },
@@ -32,14 +29,6 @@ const Sidebar = () => {
           {route.icon} {route.label}
         </Link>
       ))}
-      {(user?.role === 'ADMIN' || user?.role === 'LECTURER') && (
-        <Link 
-          href="/classes/create" 
-          className="block py-2 px-4 hover:bg-gray-100 rounded"
-        >
-          Create Class
-        </Link>
-      )}
     </div>
   );
 };
