@@ -194,3 +194,29 @@ model Enrollment {
   @@unique([userId, liveCourseId])
   @@index([liveCourseId])
 }
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(LEARNER)
+  // ... other fields
+}
+
+model Meeting {
+  id          String   @id @default(cuid())
+  zoomId      String   @unique
+  topic       String
+  startTime   DateTime
+  duration    Int
+  hostId      String
+  settings    Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  LECTURER
+  LEARNER
+}

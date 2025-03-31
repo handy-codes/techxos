@@ -88,4 +88,18 @@ export async function GET() {
       }
     );
   }
+}
+
+export async function POST(req: Request) {
+  try {
+    // Your existing code
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { error: 'Something went wrong' },
+      { status: 500 }
+    );
+  }
 } 
