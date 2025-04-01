@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import SessionWrapper from '@/components/layout/SessionWrapper';
 import "./globals.css";
-import ToasterProvider from "@/components/providers/ToasterProvider";
-import FooterPage from "@/components/layout/Footer";
+import { Toaster } from "react-hot-toast";
 import Topbar from "@/components/layout/Topbar";
+import FooterPage from "@/components/layout/Footer";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,28 +15,29 @@ const inter = Inter({
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 export const metadata: Metadata = {
-  title: "Techxos",
-  description: "Empowering minds & shaping the future",
+  title: "TechXOS",
+  description: "TechXOS - Your Learning Platform",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <ClerkProvider>
-      <SessionWrapper>
-        <html lang="en" className={`${inter.variable}`}>
-          <body className={inter.className}>
-            <ToasterProvider />
+    <html lang="en" className={`${inter.variable}`}>
+      <body className={inter.className}>
+        <ClerkProvider>
+          <div className="min-h-screen flex flex-col">
             <Topbar />
-            {children}
+            <main className="flex-grow mt-[120px]">
+              {children}
+            </main>
             <FooterPage />
-            {/* <FooterPage className="custom-footer" /> */}
-          </body>
-        </html>
-      </SessionWrapper>
-    </ClerkProvider>
+          </div>
+          <Toaster />
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

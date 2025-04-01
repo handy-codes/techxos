@@ -157,3 +157,155 @@ model StripeCustomer {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
+
+model LiveClassUser {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  role          LiveClassUserRole @default(LEARNER)
+  name          String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  liveClasses   LiveClass[]
+
+  @@index([role])
+  @@index([isActive])
+}
+
+enum LiveClassUserRole {
+  HEAD_ADMIN
+  ADMIN
+  LECTURER
+  LEARNER
+}
+
+model LiveClass {
+  id              String   @id @default(uuid())
+  title           String
+  description     String?
+  zoomLink        String?
+  zoomMeetingId   String?
+  zoomPassword    String?
+  startTime       DateTime
+  endTime         DateTime
+  isActive        Boolean  @default(false)
+  price           Float
+  maxStudents     Int?
+  duration        Int      // Duration in weeks
+  batchNumber     Int      // To track different batches
+  
+  // Relations
+  lecturerId      String
+  lecturer        LiveClassUser @relation(fields: [lecturerId], references: [id])
+  purchases       LiveClassPurchase[]
+  materials       LiveClassMaterial[]
+  schedules       LiveClassSchedule[]
+  attendance      LiveClassAttendance[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([lecturerId])
+  @@index([isActive])
+  @@index([startTime])
+  @@index([endTime])
+  @@index([price])
+  @@index([batchNumber])
+}
+
+model LiveClassPurchase {
+  id          String   @id @default(uuid())
+  studentId   String
+  liveClassId String
+  liveClass   LiveClass @relation(fields: [liveClassId], references: [id])
+  status      PurchaseStatus @default(PENDING)
+  amount      Float
+  transactionId String?
+  isActive    Boolean  @default(true)
+  startDate   DateTime @default(now())
+  endDate     DateTime
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([studentId, liveClassId])
+  @@index([liveClassId])
+  @@index([studentId])
+  @@index([status])
+  @@index([isActive])
+  @@index([startDate])
+  @@index([endDate])
+}
+
+enum PurchaseStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model LiveClassMaterial {
+  id          String   @id @default(uuid())
+  title       String
+  fileUrl     String
+  type        MaterialType
+  liveClassId String
+  liveClass   LiveClass @relation(fields: [liveClassId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([liveClassId])
+  @@index([type])
+}
+
+enum MaterialType {
+  DOCUMENT
+  VIDEO
+  ASSIGNMENT
+  QUIZ
+}
+
+model LiveClassSchedule {
+  id          String   @id @default(uuid())
+  liveClassId String
+  liveClass   LiveClass @relation(fields: [liveClassId], references: [id])
+  startTime   DateTime
+  endTime     DateTime
+  isRecurring Boolean  @default(false)
+  recurrence  String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([liveClassId])
+  @@index([startTime])
+  @@index([endTime])
+  @@index([isRecurring])
+}
+
+model LiveClassAttendance {
+  id          String   @id @default(uuid())
+  liveClassId String
+  liveClass   LiveClass @relation(fields: [liveClassId], references: [id])
+  studentId   String
+  joinTime    DateTime
+  leaveTime   DateTime?
+  duration    Int?
+  status      AttendanceStatus @default(PRESENT)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([liveClassId])
+  @@index([studentId])
+  @@index([joinTime])
+  @@index([status])
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  LEFT_EARLY
+}

@@ -42,7 +42,7 @@ const ServicesPage = () => {
   ]
 
   return (
-    <div className="min-h-screen mt-[8%] bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-blue-600 to-purple-700 py-20">
         <div className="container mx-auto px-4 text-center">

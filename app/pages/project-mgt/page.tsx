@@ -40,7 +40,9 @@ export default function Page() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   const { isSignedIn, userId } = useAuth();
   const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
@@ -61,7 +63,10 @@ export default function Page() {
       setLecture(response.data.lecture);
       setHasAccess(response.data.hasAccess);
     } catch (error: unknown) {
-      const err = error as { response?: { status?: number; statusText?: string; data?: any }; message?: string };
+      const err = error as {
+        response?: { status?: number; statusText?: string; data?: any };
+        message?: string;
+      };
       console.error("Detailed fetch error:", {
         status: err.response?.status,
         statusText: err.response?.statusText,
@@ -93,16 +98,23 @@ export default function Page() {
       }
     } catch (error: any) {
       console.error("Error details:", error.response?.data);
-      toast.error(error.response?.data?.error || "Failed to join the class. Please try again.");
+      toast.error(
+        error.response?.data?.error ||
+          "Failed to join the class. Please try again."
+      );
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus("idle");
@@ -170,11 +182,14 @@ export default function Page() {
 
   const handlePurchase = async () => {
     try {
-      const response = await axios.post("/api/live-courses/project-mgt/checkout", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "/api/live-courses/project-mgt/checkout",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const { price, studentEmail, studentName } = response.data;
 
@@ -213,20 +228,31 @@ export default function Page() {
       toast.error("Failed to initialize payment");
     }
   };
+
   return (
     <div>
       <Head>
         <title>Course Page</title>
-        <meta name="description" content="Welcome to the Project Management Course" />
+        <meta
+          name="description"
+          content="Welcome to the Project Management Course"
+        />
       </Head>
 
-      <section className="relative py-20 px-4 mt-[8%] sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
-              <h1 className="text-4xl sm:text-5xl font-bold mb-6">Project Management</h1>
+              <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+                Project Management
+              </h1>
               <p className="text-xl mb-8">
-                Lead the Charge to Success with Project Management! Imagine steering high-stakes projects from chaos to triumph—turning blueprints into reality on time, under budget, and beyond expectations. Project Management is the art of orchestrating teams, resources, and strategy to deliver results that move industries, spark innovation, and define careers.
+                Lead the Charge to Success with Project Management! Imagine
+                steering high-stakes projects from chaos to triumph—turning
+                blueprints into reality on time, under budget, and beyond
+                expectations. Project Management is the art of orchestrating
+                teams, resources, and strategy to deliver results that move
+                industries, spark innovation, and define careers.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
@@ -246,15 +272,30 @@ export default function Page() {
       <section className="container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8">
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
-            <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">Project Management</h1>
+            <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
+              Project Management
+            </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
-          <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">250,000 NGN</h1>
+          <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
+            250,000 NGN
+          </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            Techxos powers your rise: Simulate real-world projects (think software launches or event megaprojects), learn from PMs who&#39;ve delivered billion-dollar portfolios, and join a network of leaders obsessed with efficiency and impact. Dive into stakeholder mapping, risk mitigation, and Lean practices, while earning certifications that scream &quot;promote me.&quot; Ready to transform ideas into legacy? Enroll now and start delivering success—one milestone at a time. 🚀📅🎯
+            Techxos powers your rise: Simulate real-world projects (think
+            software launches or event megaprojects), learn from PMs who&#39;ve
+            delivered billion-dollar portfolios, and join a network of leaders
+            obsessed with efficiency and impact. Dive into stakeholder mapping,
+            risk mitigation, and Lean practices, while earning certifications
+            that scream &quot;promote me.&quot; Ready to transform ideas into
+            legacy? Enroll now and start delivering success—one milestone at a
+            time. 🚀📅🎯
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
-            <a href="https://wa.me/2348167715107" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://wa.me/2348167715107"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Contact an Advisor
             </a>
           </div>
@@ -275,14 +316,54 @@ export default function Page() {
               <IoMdOptions className="text-black text-[24px]" />
               <span>Options: Evening Class, Executive (one-to-one) class</span>
             </div>
+            <h2 className="text-2xl font-bold mb-2 mt-6">
+              Project Management Virtual
+            </h2>
+            <div className=" p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
+              {!isSignedIn ? (
+                <Link
+                  href="/sign-in"
+                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
+                >
+                  Enroll Now
+                </Link>
+              ) : hasAccess ? (
+                <Button onClick={handleJoinClass}>Join Live Class</Button>
+              ) : (
+                <Button onClick={handlePurchase}>Purchase Course</Button>
+              )}
+            </div>
           </div>
         </div>
+            {/* <div className=" p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
+              {!isSignedIn ? (
+                <Link
+                  href="/sign-in"
+                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
+                >
+                  Enroll Now
+                </Link>
+              ) : hasAccess ? (
+                <Button onClick={handleJoinClass}>Join Live Class</Button>
+              ) : (
+                <Button onClick={handlePurchase}>Purchase Course</Button>
+              )}
+            </div>
+          </div>
+        </div> */}
 
-        <div id="contact" className="flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold mb-4">Contact Us for More Enquiry</h1>
+        <div
+          id="contact"
+          className="flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md"
+        >
+          <h1 className="text-2xl font-bold mb-4">
+            Contact Us for More Enquiry
+          </h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Course Title:</label>
+              <label className="block text-sm font-medium mb-1">
+                Course Title:
+              </label>
               <input
                 type="text"
                 name="courseTitle"
@@ -360,26 +441,13 @@ export default function Page() {
               </div>
             )}
             {submitStatus === "error" && (
-              <p className="mt-4 text-red-600">Failed to submit the form. Please try again.</p>
+              <p className="mt-4 text-red-600">
+                Failed to submit the form. Please try again.
+              </p>
             )}
           </form>
         </div>
       </section>
-
-      <div className="mt-6 p-4 border rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Live Classes</h2>
-        {!isSignedIn ? (
-          <Link
-            href="/sign-in"
-            className="inline-block p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
-          >
-            Enroll Now
-          </Link>
-        ) : (
-          <Button onClick={handleJoinClass}>Join Live Class</Button>
-        )}
-      </div>
-
       <ProjectManagement />
       <ScrollToTopButton />
     </div>

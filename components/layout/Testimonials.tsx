@@ -215,7 +215,7 @@ export default function Testimonials() {
               </AnimatePresence>
             </div>
             {/* Navigation Controls */}
-            <div className="flex justify-center gap-2 mt-1 md:-mt-[8%]">
+            <div className="flex justify-center gap-2 mt-1">
               <button
                 onClick={() => navigate("left")}
                 className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors"

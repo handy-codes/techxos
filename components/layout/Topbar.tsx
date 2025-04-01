@@ -79,8 +79,8 @@ const Topbar = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 z-50 w-full shadow-lg">
-      <header className="z-50 w-full top-0">
+    <div className="fixed top-0 left-0 right-0 z-50">
+      <header className="w-full">
         {/* Upper Contact Bar */}
         <div className="h-[40px] bg-[black] text-white items-center justify-between py-7 px-6 hidden xl:flex">
           <div className="flex items-center space-x-2">
@@ -113,7 +113,7 @@ const Topbar = () => {
         </div>
 
         {/* Main Navigation Bar */}
-        <nav className="flex w-full mx-auto justify-between bg-white h-[80px] my-auto items-center p-4 border-b-2 border-[#E79D09] relative">
+        <nav className="flex w-full mx-auto justify-between bg-white h-[80px] items-center p-4 border-b-2 border-[#E79D09]">
           {/* Logo */}
           <Link className="flex items-center gap-3" href="/">
             <Image
