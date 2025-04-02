@@ -28,6 +28,11 @@ const formSchema = z.object({
   }),
 });
 
+interface Route {
+  label: string;
+  path: string;
+}
+
 const CreateSectionForm = ({
   course,
 }: {
@@ -36,7 +41,7 @@ const CreateSectionForm = ({
   const pathname = usePathname();
   const router = useRouter();
 
-  const routes = [
+  const routes: Route[] = [
     {
       label: "Basic Information",
       path: `/instructor/courses/${course.id}/basic`,
@@ -65,9 +70,9 @@ const CreateSectionForm = ({
         `/instructor/courses/${course.id}/sections/${response.data.id}`
       );
       toast.success("New Chapter created!");
-    } catch (err) {
+    } catch (error: unknown) {
+      console.error("Failed to create a new section:", error);
       toast.error("Something went wrong!");
-      console.log("Failed to create a new section", err);
     }
   };
 
@@ -77,8 +82,8 @@ const CreateSectionForm = ({
         list: updateData,
       });
       toast.success("Chapters reordered successfully");
-    } catch (err) {
-      console.log("Failed to reorder sections", err);
+    } catch (error: unknown) {
+      console.error("Failed to reorder sections:", error);
       toast.error("Something went wrong!");
     }
   };
@@ -86,7 +91,7 @@ const CreateSectionForm = ({
   return (
     <div className="px-10 py-6">
       <div className="flex gap-5">
-        {routes.map((route) => (
+        {routes.map((route: Route) => (
           <Link key={route.path} href={route.path}>
             <Button variant={pathname === route.path ? "default" : "outline"}>
               {route.label}

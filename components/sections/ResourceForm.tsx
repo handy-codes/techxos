@@ -91,7 +91,7 @@ const ResourceForm = ({ section, courseId }: ResourceFormProps) => {
       </p>
 
       <div className="mt-5 flex flex-col gap-5">
-        {section.resources.map((resource) => (
+        {section.resources.map((resource: Resource) => (
           <div key={resource.id} className="flex justify-between bg-[#FFF8EB] rounded-lg text-sm font-medium p-3">
             <div className="flex items-center">
               <File className="h-4 w-4 mr-4" />
@@ -139,7 +139,7 @@ const ResourceForm = ({ section, courseId }: ResourceFormProps) => {
                   <FormControl>
                     <FileUpload
                       value={field.value || ""}
-                      onChange={(url) => field.onChange(url)}
+                      onChange={(url: string) => field.onChange(url)}
                       endpoint="sectionResource"
                       page="Edit Section"
                     />

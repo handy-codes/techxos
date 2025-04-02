@@ -163,7 +163,7 @@ const SectionsDetails = ({
       {resources.length > 0 && (
         <div>
           <h2 className="text-xl font-bold mb-5">Resources</h2>
-          {resources.map((resource) => (
+          {resources.map((resource: Resource) => (
             <Link
               key={resource.id}
               href={resource.fileUrl}

@@ -40,9 +40,9 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
 
     setSections(items);
 
-    const bulkUpdateData = updatedSections.map((section) => ({
+    const bulkUpdateData = updatedSections.map((section: Section) => ({
       id: section.id,
-      position: items.findIndex((item) => item.id === section.id),
+      position: items.findIndex((item: Section) => item.id === section.id),
     }));
 
     onReorder(bulkUpdateData);
@@ -61,7 +61,7 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
               sections.length > 0 ? "my-10" : "mt-7"
             } flex flex-col gap-5`}
           >
-            {sections.map((section, index) => (
+            {sections.map((section: Section, index: number) => (
               <Draggable
                 key={section.id}
                 draggableId={section.id}
