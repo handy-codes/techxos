@@ -82,7 +82,7 @@ export default function UsersPage() {
     if (user) {
       fetchUsers();
     }
-  }, [isLoaded, user, page, roleFilter, statusFilter]);
+  }, [isLoaded, user, page, roleFilter, statusFilter, router]);
 
   const fetchUsers = async () => {
     try {
