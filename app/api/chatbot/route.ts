@@ -123,7 +123,7 @@ async function crawlWebsite(url: string): Promise<WebsiteCache['structuredData']
     const courses: Course[] = [];
     
     // Try multiple selectors to find course information
-    $('.course-card, .course-item, .course, [data-course]').each((index: number, element: cheerio.Element) => {
+    $('.course-card, .course-item, .course, [data-course]').each((index: number, element: cheerio.Cheerio) => {
       const course: Course = {
         name: $(element).find('.course-title, .title, h2, h3').first().text().trim(),
         price: $(element).find('.course-price, .price, [data-price]').first().text().trim(),
