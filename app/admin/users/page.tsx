@@ -52,6 +52,15 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+interface ApiError {
+  response?: {
+    status?: number;
+    statusText?: string;
+    data?: any;
+  };
+  message?: string;
+}
+
 interface User {
   id: string;
   email: string;
@@ -75,7 +84,7 @@ export default function UsersPage() {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const response = await axios.get("/api/admin/users");
+      const response = await axios.get<User[]>("/api/admin/users");
       let filteredUsers = response.data || [];
 
       // Apply filters
@@ -106,9 +115,10 @@ export default function UsersPage() {
       setTotalPages(Math.ceil(filteredUsers.length / itemsPerPage));
       setUsers(paginatedUsers);
       setIsUnauthorized(false);
-    } catch (error: any) {
-      console.error("Error fetching users:", error);
-      if (error.response?.status === 401) {
+    } catch (error: unknown) {
+      const err = error as ApiError;
+      console.error("Error fetching users:", err);
+      if (err.response?.status === 401) {
         setIsUnauthorized(true);
         toast.error("You don&apos;t have permission to view users");
       } else {
@@ -138,13 +148,14 @@ export default function UsersPage() {
       });
       toast.success("User status updated successfully");
       fetchUsers();
-    } catch (error: any) {
-      if (error.response?.status === 401) {
+    } catch (error: unknown) {
+      const err = error as ApiError;
+      if (err.response?.status === 401) {
         toast.error("You don&apos;t have permission to update users");
       } else {
         toast.error("Failed to update user status");
       }
-      console.error(error);
+      console.error(err);
     }
   };
 
@@ -153,13 +164,14 @@ export default function UsersPage() {
       await axios.delete(`/api/admin/users/${userId}`);
       toast.success("User deleted successfully");
       fetchUsers();
-    } catch (error: any) {
-      if (error.response?.status === 401) {
+    } catch (error: unknown) {
+      const err = error as ApiError;
+      if (err.response?.status === 401) {
         toast.error("You don&apos;t have permission to delete users");
       } else {
         toast.error("Failed to delete user");
       }
-      console.error(error);
+      console.error(err);
     }
   };
 

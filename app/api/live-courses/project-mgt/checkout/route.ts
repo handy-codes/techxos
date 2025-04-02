@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { LiveClass, LiveClassPurchase, LiveClassUser } from "@prisma/client";
+
+interface CheckoutResponse {
+  price: number;
+  studentId: string;
+  studentEmail: string;
+  studentName: string;
+  endDate: Date;
+}
 
 export async function POST(req: Request) {
   try {
@@ -18,7 +27,7 @@ export async function POST(req: Request) {
           gt: new Date()
         }
       }
-    });
+    }) as LiveClass | null;
 
     if (!liveClass) {
       return new NextResponse("No active class found", { status: 404 });
@@ -34,7 +43,7 @@ export async function POST(req: Request) {
           gt: new Date()
         }
       }
-    });
+    }) as LiveClassPurchase | null;
 
     if (existingPurchase) {
       return new NextResponse("Already purchased", { status: 400 });
@@ -43,7 +52,7 @@ export async function POST(req: Request) {
     // Get user details from Clerk
     const user = await db.liveClassUser.findUnique({
       where: { id: userId }
-    });
+    }) as LiveClassUser | null;
 
     if (!user) {
       return new NextResponse("User not found", { status: 404 });
@@ -53,13 +62,15 @@ export async function POST(req: Request) {
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + (liveClass.duration * 7));
 
-    return NextResponse.json({
+    const response: CheckoutResponse = {
       price: liveClass.price,
       studentId: userId,
       studentEmail: user.email,
       studentName: user.name,
       endDate
-    });
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error("[CHECKOUT_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
