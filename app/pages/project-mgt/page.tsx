@@ -47,10 +47,12 @@ export default function Page() {
   const { isSignedIn, userId } = useAuth();
   const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
   const [hasAccess, setHasAccess] = useState<boolean>(false);
+  const [userRoleState, setUserRoleState] = useState<string | null>(null);
 
   useEffect(() => {
     if (isSignedIn && userId) {
       fetchLectureDetails();
+      fetchUserRole();
     }
   }, [isSignedIn, userId]);
 
@@ -84,24 +86,49 @@ export default function Page() {
     }
   };
 
+  const fetchUserRole = async () => {
+    try {
+      const response = await axios.get('/api/live-courses/project-mgt/lecture');
+      console.log('API Response:', response.data);
+      if (response.data.role) {
+        console.log('Setting user role state:', response.data.role);
+        setUserRoleState(response.data.role);
+      }
+    } catch (error) {
+      console.error('Error fetching user role:', error);
+    }
+  };
+
+  // Add effect to log role state changes
+  useEffect(() => {
+    console.log('Current userRoleState:', userRoleState);
+  }, [userRoleState]);
+
   const handleJoinClass = async () => {
     try {
       const response = await axios.get(`/api/live-courses/project-mgt/lecture`);
       console.log("Full response:", response.data);
-      console.log("Zoom link:", response.data.lecture?.zoomLink);
+
+      if (response.data.error) {
+        toast.error(response.data.error);
+        return;
+      }
 
       if (response.data.lecture?.zoomLink) {
         window.open(response.data.lecture.zoomLink, "_blank");
       } else {
-        toast.error("No active class link available");
+        toast.error("No active class link available. Please contact support.");
         console.log("Missing zoom link in lecture data");
       }
     } catch (error: any) {
       console.error("Error details:", error.response?.data);
-      toast.error(
-        error.response?.data?.error ||
-          "Failed to join the class. Please try again."
-      );
+      if (error.response?.status === 401) {
+        toast.error("Please sign in to join the class");
+      } else if (error.response?.status === 404) {
+        toast.error("No active class found at this time");
+      } else {
+        toast.error("Failed to join the class. Please try again.");
+      }
     }
   };
 
@@ -327,30 +354,17 @@ export default function Page() {
                 >
                   Enroll Now
                 </Link>
-              ) : hasAccess ? (
-                <Button onClick={handleJoinClass}>Join Live Class</Button>
               ) : (
-                <Button onClick={handlePurchase}>Purchase Course</Button>
+                console.log('Rendering button with role:', userRoleState),
+                hasAccess || userRoleState === "HEAD_ADMIN" || userRoleState === "ADMIN" || userRoleState === "LECTURER" ? (
+                  <Button onClick={handleJoinClass}>Join Live Class</Button>
+                ) : (
+                  <Button onClick={handlePurchase}>Purchase Course</Button>
+                )
               )}
             </div>
           </div>
         </div>
-            {/* <div className=" p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
-              {!isSignedIn ? (
-                <Link
-                  href="/sign-in"
-                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
-                >
-                  Enroll Now
-                </Link>
-              ) : hasAccess ? (
-                <Button onClick={handleJoinClass}>Join Live Class</Button>
-              ) : (
-                <Button onClick={handlePurchase}>Purchase Course</Button>
-              )}
-            </div>
-          </div>
-        </div> */}
 
         <div
           id="contact"

@@ -5,11 +5,12 @@ import { db } from "@/lib/db";
 export async function POST(req: Request) {
   try {
     const { userId } = auth();
-    const { transactionId, status } = await req.json();
     
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    const { transactionId, txRef } = await req.json();
 
     const liveClass = await db.liveClass.findFirst({
       where: { 
@@ -22,28 +23,27 @@ export async function POST(req: Request) {
     });
 
     if (!liveClass) {
-      return new NextResponse("Course not found", { status: 404 });
+      return new NextResponse("No active class found", { status: 404 });
     }
 
-    if (status === "successful") {
-      // Calculate end date based on course duration
-      const endDate = new Date();
-      endDate.setDate(endDate.getDate() + (liveClass.duration * 7));
+    // Calculate end date based on course duration (12 weeks)
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + (12 * 7));
 
-      await db.liveClassPurchase.create({
-        data: {
-          studentId: userId,
-          liveClassId: liveClass.id,
-          status: "COMPLETED",
-          amount: liveClass.price,
-          transactionId,
-          endDate,
-          isActive: true
-        }
-      });
-    }
+    // Create the purchase record
+    const purchase = await db.liveClassPurchase.create({
+      data: {
+        studentId: userId,
+        liveClassId: liveClass.id,
+        status: "COMPLETED",
+        amount: 250000,
+        transactionId: transactionId.toString(), // Convert to string
+        endDate,
+        isActive: true
+      }
+    });
 
-    return NextResponse.json({ message: "Success" });
+    return NextResponse.json(purchase);
   } catch (error) {
     console.error("[PURCHASE_SUCCESS_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });

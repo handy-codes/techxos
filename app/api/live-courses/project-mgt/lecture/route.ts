@@ -10,15 +10,27 @@ export async function GET(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // First check if user is an admin
+    // First check if user is an admin or lecturer
     const user = await db.liveClassUser.findUnique({
       where: { id: userId }
     });
 
-    // If user is HEAD_ADMIN or ADMIN, they have access
-    if (user?.role === "HEAD_ADMIN" || user?.role === "ADMIN") {
+    // Debug logging
+    console.log("User details:", {
+      userId,
+      user,
+      userRole: user?.role,
+      userEmail: user?.email
+    });
+
+    // If user is HEAD_ADMIN, ADMIN, or LECTURER, they have access without purchase
+    if (user?.role === "HEAD_ADMIN" || user?.role === "ADMIN" || user?.role === "LECTURER") {
+      console.log("User has admin/lecturer access:", user.role);
       return NextResponse.json({
-        lecture: null,
+        lecture: {
+          zoomLink: process.env.ZOOM_PROJECT_MGT_MEETING_URL,
+          zoomMeetingId: process.env.ZOOM_PROJECT_MGT_MEETING_ID
+        },
         hasAccess: true,
         role: user.role
       });
@@ -32,10 +44,6 @@ export async function GET(req: Request) {
         endTime: {
           gt: new Date()
         }
-      },
-      include: {
-        materials: true,
-        schedules: true
       }
     });
 
@@ -55,13 +63,15 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json({
-      lecture: liveClass,
+      lecture: {
+        zoomLink: process.env.ZOOM_PROJECT_MGT_MEETING_URL,
+        zoomMeetingId: process.env.ZOOM_PROJECT_MGT_MEETING_ID
+      },
       hasAccess: !!hasPurchase,
       role: user?.role || "LEARNER"
     });
   } catch (error) {
     console.error("[LECTURE_GET]", error);
-    // Return a more graceful error response
     return NextResponse.json({
       lecture: null,
       hasAccess: false,
