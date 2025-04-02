@@ -3,6 +3,15 @@ import AlertBanner from "@/components/custom/AlertBanner";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { Course, Section, Category, SubCategory, Level } from "@prisma/client";
+
+interface CourseWithSections extends Course {
+  sections: Section[];
+}
+
+interface CategoryWithSubCategories extends Category {
+  subCategories: SubCategory[];
+}
 
 const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -19,7 +28,7 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
     include: {
       sections: true,
     },
-  });
+  }) as CourseWithSections | null;
 
   if (!course) {
     return redirect("/instructor/courses");
@@ -32,7 +41,7 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
     include: {
       subCategories: true,
     },
-  });
+  }) as CategoryWithSubCategories[];
 
   const levels = await db.level.findMany();
 
@@ -44,7 +53,7 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
     course.levelId,
     course.imageUrl,
     course.price,
-    course.sections.some((section) => section.isPublished),
+    course.sections.some((section: Section) => section.isPublished),
   ];
   const requiredFieldsCount = requiredFields.length;
   const missingFields = requiredFields.filter((field) => !Boolean(field));
@@ -60,15 +69,15 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
       />
       <EditCourseForm
         course={course}
-        categories={categories.map((category) => ({
+        categories={categories.map((category: CategoryWithSubCategories) => ({
           label: category.name,
           value: category.id,
-          subCategories: category.subCategories.map((subcategory) => ({
+          subCategories: category.subCategories.map((subcategory: SubCategory) => ({
             label: subcategory.name,
             value: subcategory.id,
           })),
         }))}
-        levels={levels.map((level) => ({
+        levels={levels.map((level: Level) => ({
           label: level.name,
           value: level.id,
         }))}

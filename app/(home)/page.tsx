@@ -15,8 +15,13 @@ import WelcomeBanner from "@/components/UpdateUi/WelcomeBanner";
 import CoursesBanner from "@/components/UpdateUi/CoursesBanner";
 import Slider from "@/components/layout/Slider";
 import Testimonials from "@/components/layout/Testimonials";
+import { Category, Course, SubCategory } from "@prisma/client";
 
 // import TestimonialSection from "@/components/layout/TestimonialSection";
+
+interface CategoryWithSubCategories extends Category {
+  subCategories: SubCategory[];
+}
 
 export default async function Home() {
   const categories = await db.category.findMany({
@@ -30,9 +35,9 @@ export default async function Home() {
         },
       },
     },
-  });
+  }) as CategoryWithSubCategories[];
 
-  const courses = await getCoursesByCategory(null);
+  const courses = await getCoursesByCategory(null) as Course[];
   return (
     <main className="">
       {/* <Welcome /> */}
@@ -47,7 +52,7 @@ export default async function Home() {
           </span> */}
           <Categories categories={categories} selectedCategory={null} />
           <div className="flex flex-wrap gap-7 justify-center">
-            {courses.map((course) => (
+            {courses.map((course: Course) => (
               <CourseCard key={course.id} course={course} />
             ))}
           </div>

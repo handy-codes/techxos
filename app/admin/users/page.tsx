@@ -271,19 +271,19 @@ export default function UsersPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  {[...Array(5)].map((_, i) => (
+                  {[...Array(5)].map((_: unknown, i: number) => (
                     <TableHead key={i}>
-                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-4 w-[250px]" />
                     </TableHead>
                   ))}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {[...Array(5)].map((_, i) => (
+                {[...Array(5)].map((_: unknown, i: number) => (
                   <TableRow key={i}>
-                    {[...Array(5)].map((_, j) => (
+                    {[...Array(5)].map((_: unknown, j: number) => (
                       <TableCell key={j}>
-                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-4 w-[250px]" />
                       </TableCell>
                     ))}
                   </TableRow>
@@ -304,7 +304,7 @@ export default function UsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
+                {users.map((user: User) => (
                   <TableRow key={user.id}>
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell className="hidden md:table-cell">{user.email}</TableCell>

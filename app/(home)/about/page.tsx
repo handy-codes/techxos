@@ -7,7 +7,62 @@ import {
 } from "@heroicons/react/24/outline";
 import { FaLinkedin } from "react-icons/fa"; // Importing LinkedIn icon from react-icons
 
+interface Step {
+  step: string;
+  description: string;
+}
+
+interface TeamMember {
+  role: string;
+  name: string;
+  image: string;
+  linkedin?: string;
+}
+
 const AboutPage = () => {
+  const internshipSteps: Step[] = [
+    {
+      step: "Skill Assessment",
+      description:
+        "Evaluate your current skills and identify areas for improvement.",
+    },
+    {
+      step: "Project-based Learning",
+      description:
+        "Engage in hands-on projects to apply your knowledge.",
+    },
+    {
+      step: "Mentorship",
+      description:
+        "Receive guidance and support from industry experts.",
+    },
+    {
+      step: "Placement",
+      description: "Secure a position in a reputable company.",
+    },
+  ];
+
+  const teamMembers: TeamMember[] = [
+    {
+      role: "CEO",
+      name: "Jonadab Areuya",
+      image: "/wandyboss2.jpg",
+    },
+    {
+      role: "CTO",
+      name: "Emeka Owo",
+      image: "/owo-blow.jpg",
+      linkedin: "https://www.linkedin.com/in/emeka-owo-204aaa2a5/",
+    },
+    {
+      role: "Head of Training",
+      name: "Nicholas Okoye",
+      image:
+        "https://media.licdn.com/dms/image/v2/D4D03AQHRNTL3J6Dm_Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1689285926292?e=1747267200&v=beta&t=pndPPGTyAe57MImlcc-FwGc2Ob1u7LCUOGND4qCipak",
+      linkedin: "https://www.linkedin.com/in/obi-okoye-65b7381b3/",
+    },
+  ];
+
   return (
     <div className="min-h-screen mt-32 bg-gray-50">
       {/* Hero Section */}
@@ -114,27 +169,7 @@ const AboutPage = () => {
             Internship Journey
           </h2>
           <div className="flex flex-col md:flex-row justify-between gap-8">
-            {[
-              {
-                step: "Skill Assessment",
-                description:
-                  "Evaluate your current skills and identify areas for improvement.",
-              },
-              {
-                step: "Project-based Learning",
-                description:
-                  "Engage in hands-on projects to apply your knowledge.",
-              },
-              {
-                step: "Mentorship",
-                description:
-                  "Receive guidance and support from industry experts.",
-              },
-              {
-                step: "Placement",
-                description: "Secure a position in a reputable company.",
-              },
-            ].map(({ step, description }, index) => (
+            {internshipSteps.map(({ step, description }: Step, index: number) => (
               <div key={step} className="relative flex-1 text-center">
                 <div className="mb-4">
                   <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto">
@@ -159,28 +194,7 @@ const AboutPage = () => {
             Meet Our Leadership
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                role: "CEO",
-                name: "Jonadab Areuya",
-                image: "/wandyboss2.jpg",
-                // linkedin: "https://linkedin.com/in/jonadabareuya"
-              },
-              {
-                role: "CTO",
-                name: "Emeka Owo",
-                image: "/owo-blow.jpg",
-                // image: "https://images.pexels.com/photos/6584748/pexels-photo-6584748.jpeg?auto=compress&cs=tinysrgb&w=600",
-                linkedin: "https://www.linkedin.com/in/emeka-owo-204aaa2a5/",
-              },
-              {
-                role: "Head of Training",
-                name: "Nicholas Okoye",
-                image:
-                  "https://media.licdn.com/dms/image/v2/D4D03AQHRNTL3J6Dm_Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1689285926292?e=1747267200&v=beta&t=pndPPGTyAe57MImlcc-FwGc2Ob1u7LCUOGND4qCipak",
-                linkedin: "https://www.linkedin.com/in/obi-okoye-65b7381b3/",
-              },
-            ].map(({ role, name, image, linkedin }) => (
+            {teamMembers.map(({ role, name, image, linkedin }: TeamMember) => (
               <div
                 key={role}
                 className="bg-white rounded-xl shadow-lg overflow-hidden transition hover:shadow-xl"
@@ -203,9 +217,9 @@ const AboutPage = () => {
                         href={linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                        className="text-blue-600 hover:text-blue-800"
                       >
-                        <FaLinkedin className="h-5 w-5" />
+                        <FaLinkedin className="w-5 h-5" />
                       </a>
                     )}
                   </div>

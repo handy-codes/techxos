@@ -42,9 +42,10 @@ export default function LiveClassesPage() {
 
   const fetchLiveClasses = async () => {
     try {
-      const response = await axios.get("/api/admin/live-classes");
+      const response = await axios.get<LiveClass[]>("/api/admin/live-classes");
       setLiveClasses(response.data);
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error("Error fetching live classes:", error);
       toast.error("Failed to fetch live classes");
     } finally {
       setIsLoading(false);
@@ -58,7 +59,8 @@ export default function LiveClassesPage() {
       });
       toast.success("Class status updated successfully");
       fetchLiveClasses();
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error("Error updating class status:", error);
       toast.error("Failed to update class status");
     }
   };
@@ -88,7 +90,7 @@ export default function LiveClassesPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {liveClasses.map((liveClass) => (
+          {liveClasses.map((liveClass: LiveClass) => (
             <TableRow key={liveClass.id}>
               <TableCell>{liveClass.title}</TableCell>
               <TableCell>{liveClass.lecturer.name}</TableCell>
