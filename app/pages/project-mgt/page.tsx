@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -49,14 +49,7 @@ export default function Page() {
   const [hasAccess, setHasAccess] = useState<boolean>(false);
   const [userRoleState, setUserRoleState] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isSignedIn && userId) {
-      fetchLectureDetails();
-      fetchUserRole();
-    }
-  }, [isSignedIn, userId]);
-
-  const fetchLectureDetails = async () => {
+  const fetchLectureDetails = useCallback(async () => {
     try {
       console.log("Fetching lecture details...");
       const response = await axios.get("/api/live-courses/project-mgt/lecture");
@@ -84,9 +77,9 @@ export default function Page() {
         toast.error("Failed to load lecture details");
       }
     }
-  };
+  }, []);
 
-  const fetchUserRole = async () => {
+  const fetchUserRole = useCallback(async () => {
     try {
       const response = await axios.get('/api/live-courses/project-mgt/lecture');
       console.log('API Response:', response.data);
@@ -97,7 +90,14 @@ export default function Page() {
     } catch (error) {
       console.error('Error fetching user role:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isSignedIn && userId) {
+      fetchLectureDetails();
+      fetchUserRole();
+    }
+  }, [isSignedIn, userId, fetchLectureDetails, fetchUserRole]);
 
   // Add effect to log role state changes
   useEffect(() => {

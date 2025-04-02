@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
@@ -73,18 +73,7 @@ export default function UsersPage() {
   const [isUnauthorized, setIsUnauthorized] = useState(false);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    if (isLoaded && !user) {
-      router.push("/");
-      return;
-    }
-
-    if (user) {
-      fetchUsers();
-    }
-  }, [isLoaded, user, page, roleFilter, statusFilter, router]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await axios.get("/api/admin/users");
       let filteredUsers = response.data || [];
@@ -121,7 +110,7 @@ export default function UsersPage() {
       console.error("Error fetching users:", error);
       if (error.response?.status === 401) {
         setIsUnauthorized(true);
-        toast.error("You don't have permission to view users");
+        toast.error("You don&apos;t have permission to view users");
       } else {
         toast.error("Failed to fetch users");
       }
@@ -129,7 +118,18 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchQuery, roleFilter, statusFilter, page, itemsPerPage]);
+
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/");
+      return;
+    }
+
+    if (user) {
+      fetchUsers();
+    }
+  }, [isLoaded, user, router, fetchUsers]);
 
   const toggleUserStatus = async (userId: string, currentStatus: boolean) => {
     try {
@@ -140,7 +140,7 @@ export default function UsersPage() {
       fetchUsers();
     } catch (error: any) {
       if (error.response?.status === 401) {
-        toast.error("You don't have permission to update users");
+        toast.error("You don&apos;t have permission to update users");
       } else {
         toast.error("Failed to update user status");
       }
@@ -155,7 +155,7 @@ export default function UsersPage() {
       fetchUsers();
     } catch (error: any) {
       if (error.response?.status === 401) {
-        toast.error("You don't have permission to delete users");
+        toast.error("You don&apos;t have permission to delete users");
       } else {
         toast.error("Failed to delete user");
       }
@@ -177,7 +177,7 @@ export default function UsersPage() {
         <div className="rounded-md border p-4 md:p-6 text-center">
           <h2 className="text-xl md:text-2xl font-bold mb-2">Access Denied</h2>
           <p className="text-muted-foreground mb-4">
-            You don't have permission to access this page. Please contact your administrator if you believe this is a mistake.
+            You don&apos;t have permission to access this page. Please contact your administrator if you believe this is a mistake.
           </p>
           <Button onClick={() => router.push("/")}>
             Return to Home
