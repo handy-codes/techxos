@@ -15,6 +15,16 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Image from "next/image";
 
+interface Route {
+  label: string;
+  path: string;
+}
+
+interface Course {
+  title: string;
+  link: string;
+}
+
 const Topbar = () => {
   const { isSignedIn } = useAuth();
   const router = useRouter();
@@ -26,7 +36,7 @@ const Topbar = () => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const courses = [
+  const courses: Course[] = [
     { title: "Frontend Development", link: "/pages/frontend" },
     { title: "Fullstack Development", link: "/pages/fullstack" },
     { title: "Data Science & Analytics", link: "/pages/data-science" },
@@ -50,7 +60,7 @@ const Topbar = () => {
     }, 200);
   };
 
-  const topRoutes = [
+  const topRoutes: Route[] = [
     { label: "HOME", path: "/" },
     { label: "ABOUT", path: "/about" },
     { label: "OUR COURSES", path: "" },
@@ -59,7 +69,7 @@ const Topbar = () => {
     // { label: "MY LEARNING", path: "/learning" },
   ];
 
-  const sidebarRoutes = [
+  const sidebarRoutes: Route[] = [
     { label: "Courses", path: "/instructor/create-course" },
     { label: "Performance", path: "/instructor/performance" },
   ];
@@ -153,7 +163,7 @@ const Topbar = () => {
           <div className="flex items-center font-semibold gap-4">
             {/* Desktop Links */}
             <div className="hidden lg:flex md:text-[13px] gap-2">
-              {topRoutes.map((route) =>
+              {topRoutes.map((route: Route) =>
                 route.label === "OUR COURSES" ? (
                   <div
                     key={route.path}
@@ -197,7 +207,7 @@ const Topbar = () => {
                       {/* <div className="w-[40vw] bg-gray-100 text-[#4F25CF] mt-1 grid grid-cols-2 font-semibold gap-3 p-6 overflow-y-auto"> */}
                       <div className="w-[40vw] bg-[#FEE2E2] text-[black] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto">
                         {/* <div className="w-[33vw] bg-[#5025D1] text-[white] mt-1 grid grid-cols-2 gap-3 p-6 overflow-y-auto"> */}
-                        {courses.map((course, index) => (
+                        {courses.map((course: Course, index: number) => (
                           <Link
                             key={index}
                             href={course.link}
@@ -243,7 +253,7 @@ const Topbar = () => {
                   data-[state=closed]:duration-300 data-[state=open]:duration-500"
                 >
                   <div className="flex flex-col overflow-scroll mt-4 gap-3">
-                    {topRoutes.map((route) =>
+                    {topRoutes.map((route: Route) =>
                       route.label === "OUR COURSES" ? (
                         <div key={route.path} className="flex flex-col gap-1">
                           <button
@@ -261,7 +271,7 @@ const Topbar = () => {
                           </button>
                           {isMobileCoursesOpen && (
                             <div className="pl-4 flex flex-col gap-2">
-                              {courses.map((course, index) => (
+                              {courses.map((course: Course, index: number) => (
                                 <Link
                                   key={index}
                                   href={course.link}
@@ -295,7 +305,7 @@ const Topbar = () => {
                   </div>
                   {pathName.startsWith("/instructor") && (
                     <div className="flex flex-col gap-4">
-                      {sidebarRoutes.map((route) => (
+                      {sidebarRoutes.map((route: Route) => (
                         <Link
                           href={route.path}
                           key={route.path}

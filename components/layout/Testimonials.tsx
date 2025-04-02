@@ -6,7 +6,16 @@ import Image from "next/image";
 import { FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
 
-const testimonials = [
+interface Testimonial {
+  name: string;
+  role: string;
+  roleLink?: string;
+  text: string;
+  image: string;
+  linkedin?: string;
+}
+
+const testimonials: Testimonial[] = [
   {
     name: "Jonadab Arueya",
     role: "CEO Wahalanodey  Travels",
@@ -154,7 +163,7 @@ export default function Testimonials() {
                       <div className="flex items-center gap-2 mt-1">
                         <p className="text-[#47D1FD] text-sm">
                           {testimonials[currentIndex].role.split(" ").map(
-                            (word, index) => {
+                            (word: string, index: number) => {
                               let link = null;
                               if (
                                 testimonials[currentIndex].name ===

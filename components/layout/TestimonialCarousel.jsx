@@ -2,7 +2,14 @@ import Image from "next/image";
 import React from "react";
 import Slider from "react-slick";
 
-const TestimonialData = [
+interface TestimonialData {
+  id: number;
+  name: string;
+  text: string;
+  img: string;
+}
+
+const TestimonialData: TestimonialData[] = [
   {
     id: 1,
     name: "Emeka",
@@ -88,7 +95,7 @@ const Testimonials = () => {
         {/* Testimonial cards */}
         <div data-aos="zoom-in">
           <Slider {...settings}>
-            {TestimonialData.map((data) => (
+            {TestimonialData.map((data: TestimonialData) => (
               <div key={data.id} className="my-6">
                 <div
                   

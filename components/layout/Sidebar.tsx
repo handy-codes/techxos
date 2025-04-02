@@ -4,10 +4,16 @@ import { BarChart4, MonitorPlay } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+interface SidebarRoute {
+  icon: JSX.Element;
+  label: string;
+  path: string;
+}
+
 const Sidebar = () => {
   const pathname = usePathname();
 
-  const sidebarRoutes = [
+  const sidebarRoutes: SidebarRoute[] = [
     { icon: <MonitorPlay />, label: "Courses", path: "/instructor/courses" },
     {
       icon: <BarChart4 />,
@@ -18,7 +24,7 @@ const Sidebar = () => {
 
   return (
     <div className="max-sm:hidden flex flex-col w-64 border-r shadow-md px-3 my-4 gap-4 text-sm font-medium">
-      {sidebarRoutes.map((route) => (
+      {sidebarRoutes.map((route: SidebarRoute) => (
         <Link
           href={route.path}
           key={route.path}

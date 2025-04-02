@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
+import { Section } from "@prisma/client";
 
 export const POST = async (
   req: NextRequest,
@@ -30,7 +31,7 @@ export const POST = async (
     }
 
     const isPublishedSections = course.sections.some(
-      (section) => section.isPublished
+      (section: Section) => section.isPublished
     );
 
     if (

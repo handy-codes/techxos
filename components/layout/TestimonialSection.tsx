@@ -5,8 +5,14 @@ import 'swiper/css/autoplay';
 import { Autoplay } from 'swiper/modules';
 import Image from 'next/image';
 
+interface Testimonial {
+  name: string;
+  image: string;
+  feedback: string;
+}
+
 export default function Home() {
-  const testimonials = [
+  const testimonials: Testimonial[] = [
     {
       name: "John Doe",
       image: "/owo.jpg",
@@ -58,7 +64,7 @@ export default function Home() {
           }}
           className="pb-8"
         >
-          {testimonials.map((testimonial, index) => (
+          {testimonials.map((testimonial: Testimonial, index: number) => (
             <SwiperSlide key={index}>
               <div className="p-6 bg-white rounded-lg shadow-lg">
                 <div className="flex items-center space-x-4 mb-4">
