@@ -39,7 +39,11 @@ const ProgressButton = ({
   };
 
   return (
-    <Button variant={isCompleted ? "complete" : "default"} onClick={onClick}>
+    <Button 
+      variant={isCompleted ? "default" : "outline"} 
+      onClick={onClick}
+      className={isCompleted ? "bg-green-500 hover:bg-green-600 text-white" : ""}
+    >
       {isLoading ? (
         <Loader2 className="h-4 w-4 animate-spin" />
       ) : isCompleted ? (

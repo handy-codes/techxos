@@ -310,7 +310,10 @@ export default function UsersPage() {
                     <TableCell className="hidden md:table-cell">{user.email}</TableCell>
                     <TableCell className="hidden sm:table-cell">{user.role}</TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <Badge variant={user.isActive ? "success" : "destructive"}>
+                      <Badge 
+                        variant={user.isActive ? "default" : "destructive"}
+                        className={user.isActive ? "bg-green-500 hover:bg-green-600" : ""}
+                      >
                         {user.isActive ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>

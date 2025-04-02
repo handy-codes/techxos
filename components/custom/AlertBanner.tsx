@@ -14,8 +14,8 @@ const AlertBanner = ({
 }: AlertBannerProps) => {
   return (
     <Alert
-      className="my-4"
-      variant={`${isCompleted ? "complete" : "destructive"}`}
+      className={`my-4 ${isCompleted ? "bg-green-500 text-white" : ""}`}
+      variant={isCompleted ? "default" : "destructive"}
     >
       {isCompleted ? (
         <Rocket className="h-4 w-4" />
