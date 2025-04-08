@@ -90,25 +90,34 @@ export default function UsersPage() {
 
   const fetchUsers = useCallback(async () => {
     try {
+      console.log("Fetching users with query:", searchQuery);
+      setLoading(true);
       const response = await axios.get<User[]>("/api/admin/users");
+      console.log("Got response with", response.data.length, "users");
       let filteredUsers = response.data || [];
 
-      // Apply filters
+      // Apply filters - use toLowerCase() for case-insensitive search
       if (searchQuery) {
+        console.log("Filtering by search query:", searchQuery);
+        const searchLower = searchQuery.toLowerCase();
         filteredUsers = filteredUsers.filter(
           (user: User) =>
-            user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchQuery.toLowerCase())
+            (user.name || "").toLowerCase().includes(searchLower) ||
+            (user.email || "").toLowerCase().includes(searchLower) ||
+            (user.role || "").toLowerCase().includes(searchLower)
         );
+        console.log("After filtering, found", filteredUsers.length, "matching users");
       }
 
-      if (roleFilter) {
+      // Only apply role filter if it's not "all"
+      if (roleFilter && roleFilter !== "all") {
         filteredUsers = filteredUsers.filter(
           (user: User) => user.role === roleFilter
         );
       }
 
-      if (statusFilter) {
+      // Only apply status filter if it's not "all"
+      if (statusFilter && statusFilter !== "all") {
         filteredUsers = filteredUsers.filter(
           (user: User) => user.isActive === (statusFilter === "active")
         );
@@ -231,7 +240,7 @@ export default function UsersPage() {
             {isMounted && (
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" className="w-full sm:w-auto">
+                  <Button variant="outline" className="w-full sm:w-auto hidden">
                     <Filter className="w-4 h-4 mr-2" />
                     Filters
                   </Button>
@@ -248,7 +257,7 @@ export default function UsersPage() {
                           <SelectValue placeholder="Select role" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">All Roles</SelectItem>
+                          <SelectItem value="all">All Roles</SelectItem>
                           <SelectItem value="HEAD_ADMIN">Head Admin</SelectItem>
                           <SelectItem value="ADMIN">Admin</SelectItem>
                           <SelectItem value="LECTURER">Lecturer</SelectItem>
@@ -262,7 +271,7 @@ export default function UsersPage() {
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">All Status</SelectItem>
+                          <SelectItem value="all">All Status</SelectItem>
                           <SelectItem value="active">Active</SelectItem>
                           <SelectItem value="inactive">Inactive</SelectItem>
                         </SelectContent>

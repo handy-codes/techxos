@@ -4,17 +4,19 @@ import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const { userId } = auth();
+    const { userId: clerkUserId } = auth();
 
-    if (!userId) {
+    if (!clerkUserId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Check if user is HEAD_ADMIN
+    // Check if user is admin
     const user = await db.liveClassUser.findFirst({
       where: {
-        userId: userId,
-        role: "HEAD_ADMIN",
+        clerkUserId: clerkUserId,
+        role: {
+          in: ["HEAD_ADMIN", "ADMIN", "LECTURER"]
+        }
       },
     });
 
@@ -31,11 +33,14 @@ export async function GET() {
     ] = await Promise.all([
       db.liveClassUser.count(),
       db.liveClass.count(),
-      db.liveClassSchedule.count(),
+      db.liveClassSchedule.count({ where: { isActive: true } }),
       db.liveClassPurchase.aggregate({
         _sum: {
           amount: true,
         },
+        where: {
+          status: "COMPLETED"
+        }
       }),
     ]);
 

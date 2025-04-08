@@ -249,6 +249,21 @@ enum PurchaseStatus {
   REFUNDED
 }
 
+model SystemSettings {
+  id                    String   @id @default(uuid())
+  siteName              String   @default("TechXOS Academy")
+  siteUrl               String   @default("https://techxos.com")
+  maintenanceMode       Boolean  @default(false)
+  emailNotifications    Boolean  @default(true)
+  studentEnrollmentNotifications Boolean @default(true)
+  paymentNotifications  Boolean  @default(true)
+  twoFactorAuth         Boolean  @default(false)
+  sessionTimeout        Boolean  @default(true)
+  sessionTimeoutMinutes Int      @default(60)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
 model LiveClassMaterial {
   id          String   @id @default(uuid())
   title       String

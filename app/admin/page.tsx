@@ -34,10 +34,18 @@ export default function AdminDashboard() {
   const fetchDashboardStats = async () => {
     try {
       const response = await axios.get("/api/admin/dashboard");
+      console.log("Dashboard stats response:", response.data);
       setStats(response.data);
     } catch (error) {
-      toast.error("Failed to fetch dashboard stats");
-      console.error(error);
+      console.error("Dashboard error:", error);
+      toast.error("Failed to fetch dashboard stats. Using default values.");
+      // Keep the default values
+      setStats({
+        totalUsers: 0,
+        totalClasses: 0,
+        totalSchedules: 0,
+        totalRevenue: 0,
+      });
     } finally {
       setLoading(false);
     }

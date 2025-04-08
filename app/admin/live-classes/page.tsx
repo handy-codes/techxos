@@ -43,10 +43,12 @@ export default function LiveClassesPage() {
   const fetchLiveClasses = async () => {
     try {
       const response = await axios.get<LiveClass[]>("/api/admin/live-classes");
+      console.log("Live classes response:", response.data);
       setLiveClasses(response.data);
     } catch (error: unknown) {
       console.error("Error fetching live classes:", error);
-      toast.error("Failed to fetch live classes");
+      toast.error("Failed to fetch live classes. Showing empty state.");
+      setLiveClasses([]);
     } finally {
       setIsLoading(false);
     }
