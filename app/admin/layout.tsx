@@ -9,6 +9,7 @@ import {
   Calendar,
   Settings,
   LayoutDashboard,
+  CreditCard
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -28,6 +29,11 @@ const routes = [
     label: "Live Classes",
     icon: BookOpen,
     href: "/admin/live-classes",
+  },
+  {
+    label: "Payments",
+    icon: CreditCard,
+    href: "/pages/admin/purchases",
   },
   {
     label: "Schedule",

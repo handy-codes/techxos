@@ -223,6 +223,8 @@ model LiveClassPurchase {
   status      PurchaseStatus @default(PENDING)
   amount      Float
   transactionId String?
+  flwRef      String?   // Flutterwave reference
+  txRef       String?   // Transaction reference
   isActive    Boolean  @default(true)
   startDate   DateTime @default(now())
   endDate     DateTime

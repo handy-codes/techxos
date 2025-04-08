@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { LiveClassUserRole } from "@prisma/client";
 import { syncUserRole } from "@/lib/user-sync";
 import { requireAdmin } from "@/lib/auth-utils";
+import { createClerkClient } from "@clerk/backend";
 
 export async function GET(
   req: Request,
@@ -97,27 +98,62 @@ export async function DELETE(
   { params }: { params: { userId: string } }
 ) {
   try {
-    // Validate admin access
-    const adminCheck = await requireAdmin();
-    if (!adminCheck.success) {
-      return new NextResponse(adminCheck.message, { status: adminCheck.status });
+    const authCheck = await requireAdmin();
+    if (!authCheck.success) {
+      return authCheck.response;
     }
 
-    const user = await db.liveClassUser.findUnique({
-      where: { id: params.userId },
+    // Only HEAD_ADMIN can delete users
+    if (authCheck.user.role !== "HEAD_ADMIN") {
+      return new NextResponse("Only HEAD_ADMIN can delete users", { status: 403 });
+    }
+
+    const { userId } = params;
+    if (!userId) {
+      return new NextResponse("User ID is required", { status: 400 });
+    }
+
+    console.log(`[USER_DELETE] Deleting user: ${userId}`);
+
+    // Get the user to be deleted
+    const userToDelete = await db.liveClassUser.findUnique({
+      where: { id: userId }
     });
 
-    if (!user) {
+    if (!userToDelete) {
       return new NextResponse("User not found", { status: 404 });
     }
 
-    // Consider soft-delete by setting isActive to false instead of actual deletion
-    const deletedUser = await db.liveClassUser.update({
-      where: { id: params.userId },
-      data: { isActive: false }
+    // Delete purchases associated with this user
+    await db.liveClassPurchase.deleteMany({
+      where: { studentId: userId }
     });
 
-    return NextResponse.json(deletedUser);
+    // Delete the user from our database
+    await db.liveClassUser.delete({
+      where: { id: userId }
+    });
+
+    // Attempt to deactivate the Clerk user if there's a clerkUserId
+    if (userToDelete.clerkUserId) {
+      try {
+        const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY! });
+        await clerk.users.updateUser(userToDelete.clerkUserId, {
+          banned: true
+        });
+        console.log(`[USER_DELETE] Banned Clerk user: ${userToDelete.clerkUserId}`);
+      } catch (clerkError) {
+        console.error("[USER_DELETE] Error deactivating Clerk user:", clerkError);
+        // Continue with the deletion even if Clerk update fails
+      }
+    }
+
+    console.log(`[USER_DELETE] Successfully deleted user: ${userId}`);
+    return NextResponse.json({ 
+      success: true, 
+      message: "User deleted successfully",
+      deletedUserId: userId
+    });
   } catch (error) {
     console.error("[USER_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });

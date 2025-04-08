@@ -16,7 +16,6 @@ import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 
-
 interface LiveLecture {
   id: string;
   date: Date;
@@ -29,6 +28,20 @@ interface LiveCourseWithLectures {
   id: string;
   zoomLink: string | null;
   lectures: LiveLecture[];
+}
+
+interface FlutterWaveResponse {
+  status: string;
+  transaction_id?: number;
+  id?: number;
+  tx_ref?: string;
+  flw_ref?: string;
+  amount?: number;
+  currency?: string;
+  customer?: {
+    email?: string;
+    name?: string;
+  };
 }
 
 export default function Page() {
@@ -266,99 +279,92 @@ export default function Page() {
     }
   };
 
-  const config = {
-    public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
-    tx_ref: `TX-${Date.now()}`,
-    amount: 0,
-    currency: "NGN",
-    payment_options: "card",
-    meta: {
-      consumer_id: "",
-      consumer_mac: "92a3-912ba-1192a",
-    },
-    customer: {
-      email: "",
-      name: "",
-      phone_number: "N/A",
-    },
-    customizations: {
-      title: "Techxos Live Classes",
-      description: "Payment for Live Course Access",
-      logo: "https://your-logo-url.com/logo.png",
-    },
-  };
-
-  const handleFlutterPayment = useFlutterwave(config);
-
   const handlePurchase = async () => {
     try {
       console.log("Initializing purchase...");
       const response = await axios.post(
         "/api/live-courses/project-mgt/checkout",
-        {}, // Ensure the body is correctly passed if needed
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        {}
       );
 
       console.log("Checkout response:", response.data);
 
-      const { price, studentEmail, studentName } = response.data;
+      // Use the data from checkout endpoint
+      const { price, studentEmail, studentName, courseTitle } = response.data;
 
-      config.amount = price;
-      config.meta.consumer_id = studentEmail;
-      config.customer.email = studentEmail;
-      config.customer.name = studentName;
+      if (!studentEmail || !studentEmail.includes('@')) {
+        toast.error("Valid email is required for payment. Please update your profile.");
+        return;
+      }
 
-      handleFlutterPayment({
-        callback: async (response) => {
-          try {
-            if (response.status === "successful") {
-              await axios.post("/api/live-courses/project-mgt/success", {
-                transactionId: response.transaction_id,
-                status: response.status,
-              });
+      if (!price || price <= 0) {
+        toast.error("Invalid course price. Please contact support.");
+        return;
+      }
 
-              toast.success("Payment successful!");
-              await fetchLectureDetails();
-            } else {
-              toast.error("Payment was not successful");
-            }
-          } catch (error) {
-            console.error("Payment verification error:", error);
-            toast.error("Failed to verify payment");
-          } finally {
-            closePaymentModal();
-          }
+      // Ensure price is a number
+      const numericPrice = Number(price);
+      
+      console.log("Processing payment with amount:", numericPrice);
+
+      // Simple payment config - minimal to avoid errors
+      const flwConfig = {
+        public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
+        tx_ref: `PM-${Date.now()}`,
+        amount: numericPrice,
+        currency: "NGN",
+        payment_options: "card",
+        customer: {
+          email: studentEmail,
+          name: studentName || "Student",
+          phone_number: "N/A",
         },
-        onClose: () => {
-          toast("Payment cancelled");
-        },
-      });
-    } catch (error: unknown) {
-      const err = error as {
-        response?: { status?: number; data?: any; statusText?: string };
-        message?: string;
+        customizations: {
+          title: "Techxos Project Management",
+          description: "Project Management Course",
+          logo: "https://techxos.com/logo.png",
+        }
       };
 
-      console.error("Purchase initialization error:", {
-        status: err.response?.status,
-        statusText: err.response?.statusText,
-        data: err.response?.data,
-        message: err.message,
-      });
+      console.log("Payment config:", JSON.stringify(flwConfig));
 
-      if (err.response?.status === 404) {
-        toast.error("Checkout endpoint not found. Please contact support.");
-      } else if (err.response?.status === 500) {
-        toast.error(
-          "Server error during purchase initialization. Try again later."
-        );
-      } else {
-        toast.error("Failed to initialize payment. Please try again.");
-      }
+      // Create payment handler
+      const makePayment = useFlutterwave(flwConfig);
+      
+      // Make payment
+      makePayment({
+        callback: function(response) {
+          console.log("Payment response:", JSON.stringify(response));
+          closePaymentModal();
+          
+          if (response.status === "successful" || response.status === "completed") {
+            // Process successful payment
+            toast.success("Payment successful!");
+            
+            // Submit to server
+            axios.post("/api/live-courses/project-mgt/success", {
+              transactionId: response.transaction_id || Date.now(),
+              status: response.status,
+              txRef: response.tx_ref
+            })
+            .then(() => {
+              fetchLectureDetails();
+            })
+            .catch(error => {
+              console.error("Error verifying payment:", error);
+              toast.error("Payment received but verification failed.");
+            });
+          } else {
+            toast.error("Payment was not successful");
+          }
+        },
+        onClose: function() {
+          toast("Payment canceled");
+        }
+      });
+    } catch (error) {
+      console.error("Purchase error:", error);
+      toast.error("Could not process payment. Please try again.");
     }
   };
 
@@ -502,15 +508,24 @@ export default function Page() {
                   Enroll Now
                 </Link>
               ) : (
-                (console.log("Rendering button with role:", userRoleState, "hasAccess:", hasAccess),
-                hasAccess ||
-                userRoleState === "HEAD_ADMIN" ||
-                userRoleState === "ADMIN" ||
-                userRoleState === "LECTURER" ? (
-                  <Button onClick={handleJoinClass}>Join Live Class</Button>
-                ) : (
-                  <Button onClick={handlePurchase}>Purchase Course</Button>
-                ))
+                (() => {
+                  console.log("Rendering button with role:", userRoleState, "hasAccess:", hasAccess);
+                  
+                  // Admin roles always get access
+                  const isAdmin = 
+                    userRoleState === "HEAD_ADMIN" || 
+                    userRoleState === "ADMIN" || 
+                    userRoleState === "LECTURER";
+                  
+                  // Final access decision
+                  const shouldShowJoinButton = hasAccess || isAdmin;
+                  
+                  return shouldShowJoinButton ? (
+                    <Button onClick={handleJoinClass}>Join Live Class</Button>
+                  ) : (
+                    <Button onClick={handlePurchase}>Purchase Course</Button>
+                  );
+                })()
               )}
             </div>
           </div>
