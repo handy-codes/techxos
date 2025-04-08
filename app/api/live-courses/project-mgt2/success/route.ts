@@ -10,7 +10,7 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { transactionId } = await req.json();
+    const { transactionId, txRef } = await req.json();
 
     const liveClass = await db.liveClass.findFirst({
       where: { 

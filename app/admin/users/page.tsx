@@ -80,7 +80,13 @@ export default function UsersPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isUnauthorized, setIsUnauthorized] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const itemsPerPage = 10;
+
+  // Fix hydration issues by ensuring components only render on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -118,9 +124,9 @@ export default function UsersPage() {
     } catch (error: unknown) {
       const err = error as ApiError;
       console.error("Error fetching users:", err);
-      if (err.response?.status === 401) {
+      if (err.response?.status === 401 || err.response?.status === 403) {
         setIsUnauthorized(true);
-        toast.error("You don&apos;t have permission to view users");
+        toast.error("You don't have permission to view users");
       } else {
         toast.error("Failed to fetch users");
       }
@@ -150,8 +156,8 @@ export default function UsersPage() {
       fetchUsers();
     } catch (error: unknown) {
       const err = error as ApiError;
-      if (err.response?.status === 401) {
-        toast.error("You don&apos;t have permission to update users");
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        toast.error("You don't have permission to update users");
       } else {
         toast.error("Failed to update user status");
       }
@@ -166,8 +172,8 @@ export default function UsersPage() {
       fetchUsers();
     } catch (error: unknown) {
       const err = error as ApiError;
-      if (err.response?.status === 401) {
-        toast.error("You don&apos;t have permission to delete users");
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        toast.error("You don't have permission to delete users");
       } else {
         toast.error("Failed to delete user");
       }
@@ -189,7 +195,7 @@ export default function UsersPage() {
         <div className="rounded-md border p-4 md:p-6 text-center">
           <h2 className="text-xl md:text-2xl font-bold mb-2">Access Denied</h2>
           <p className="text-muted-foreground mb-4">
-            You don&apos;t have permission to access this page. Please contact your administrator if you believe this is a mistake.
+            You don't have permission to access this page. Please contact your administrator if you believe this is a mistake.
           </p>
           <Button onClick={() => router.push("/")}>
             Return to Home
@@ -222,47 +228,50 @@ export default function UsersPage() {
           </div>
 
           <div className="flex gap-2">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="w-full sm:w-auto">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filters
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Filter Users</SheetTitle>
-                </SheetHeader>
-                <div className="space-y-4 mt-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Role</label>
-                    <Select value={roleFilter} onValueChange={setRoleFilter}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="">All Roles</SelectItem>
-                        <SelectItem value="ADMIN">Admin</SelectItem>
-                        <SelectItem value="LECTURER">Lecturer</SelectItem>
-                      </SelectContent>
-                    </Select>
+            {isMounted && (
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="w-full sm:w-auto">
+                    <Filter className="w-4 h-4 mr-2" />
+                    Filters
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>Filter Users</SheetTitle>
+                  </SheetHeader>
+                  <div className="space-y-4 mt-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Role</label>
+                      <Select value={roleFilter} onValueChange={setRoleFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">All Roles</SelectItem>
+                          <SelectItem value="HEAD_ADMIN">Head Admin</SelectItem>
+                          <SelectItem value="ADMIN">Admin</SelectItem>
+                          <SelectItem value="LECTURER">Lecturer</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Status</label>
+                      <Select value={statusFilter} onValueChange={setStatusFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">All Status</SelectItem>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="inactive">Inactive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Status</label>
-                    <Select value={statusFilter} onValueChange={setStatusFilter}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="">All Status</SelectItem>
-                        <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="inactive">Inactive</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </SheetContent>
+              </Sheet>
+            )}
           </div>
         </div>
 
@@ -304,45 +313,86 @@ export default function UsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user: User) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.name}</TableCell>
-                    <TableCell className="hidden md:table-cell">{user.email}</TableCell>
-                    <TableCell className="hidden sm:table-cell">{user.role}</TableCell>
+                {users.map((userData: User) => (
+                  <TableRow key={userData.id}>
+                    <TableCell className="font-medium">{userData.name}</TableCell>
+                    <TableCell className="hidden md:table-cell">{userData.email}</TableCell>
+                    <TableCell className="hidden sm:table-cell">{userData.role}</TableCell>
                     <TableCell className="hidden sm:table-cell">
                       <Badge 
-                        variant={user.isActive ? "default" : "destructive"}
-                        className={user.isActive ? "bg-green-500 hover:bg-green-600" : ""}
+                        variant={userData.isActive ? "default" : "destructive"}
+                        className={userData.isActive ? "bg-green-500 hover:bg-green-600" : ""}
                       >
-                        {user.isActive ? "Active" : "Inactive"}
+                        {userData.isActive ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Sheet>
-                        <SheetTrigger asChild>
-                          <Button variant="ghost" size="icon" className="md:hidden">
-                            <Menu className="h-4 w-4" />
-                          </Button>
-                        </SheetTrigger>
-                        <SheetContent side="right">
-                          <div className="flex flex-col gap-2 mt-4">
+                      {isMounted && (
+                        <>
+                          <Sheet>
+                            <SheetTrigger asChild>
+                              <Button variant="ghost" size="icon" className="md:hidden">
+                                <Menu className="h-4 w-4" />
+                              </Button>
+                            </SheetTrigger>
+                            <SheetContent side="right">
+                              <div className="flex flex-col gap-2 mt-4">
+                                <Button
+                                  variant="outline"
+                                  className="w-full justify-start"
+                                  onClick={() => router.push(`/admin/users/${userData.id}/edit`)}
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  className="w-full justify-start"
+                                  onClick={() => toggleUserStatus(userData.id, userData.isActive)}
+                                >
+                                  {userData.isActive ? "Deactivate" : "Activate"}
+                                </Button>
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button variant="destructive" className="w-full justify-start">
+                                      Delete
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete the user.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => deleteUser(userData.id)}>
+                                        Delete
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </div>
+                            </SheetContent>
+                          </Sheet>
+                          <div className="hidden md:flex gap-2">
                             <Button
                               variant="outline"
-                              className="w-full justify-start"
-                              onClick={() => router.push(`/admin/users/${user.id}/edit`)}
+                              size="sm"
+                              onClick={() => router.push(`/admin/users/${userData.id}/edit`)}
                             >
                               Edit
                             </Button>
                             <Button
                               variant="outline"
-                              className="w-full justify-start"
-                              onClick={() => toggleUserStatus(user.id, user.isActive)}
+                              size="sm"
+                              onClick={() => toggleUserStatus(userData.id, userData.isActive)}
                             >
-                              {user.isActive ? "Deactivate" : "Activate"}
+                              {userData.isActive ? "Deactivate" : "Activate"}
                             </Button>
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
-                                <Button variant="destructive" className="w-full justify-start">
+                                <Button variant="destructive" size="sm">
                                   Delete
                                 </Button>
                               </AlertDialogTrigger>
@@ -355,52 +405,15 @@ export default function UsersPage() {
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={() => deleteUser(user.id)}>
+                                  <AlertDialogAction onClick={() => deleteUser(userData.id)}>
                                     Delete
                                   </AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
                           </div>
-                        </SheetContent>
-                      </Sheet>
-                      <div className="hidden md:flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => router.push(`/admin/users/${user.id}/edit`)}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => toggleUserStatus(user.id, user.isActive)}
-                        >
-                          {user.isActive ? "Deactivate" : "Activate"}
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="destructive" size="sm">
-                              Delete
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete the user.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => deleteUser(user.id)}>
-                                Delete
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

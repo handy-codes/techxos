@@ -160,6 +160,7 @@ model StripeCustomer {
 
 model LiveClassUser {
   id            String   @id @default(uuid())
+  clerkUserId   String   @unique
   email         String   @unique
   role          LiveClassUserRole @default(LEARNER)
   name          String?
@@ -170,6 +171,7 @@ model LiveClassUser {
 
   @@index([role])
   @@index([isActive])
+  @@index([clerkUserId])
 }
 
 enum LiveClassUserRole {

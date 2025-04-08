@@ -10,10 +10,19 @@ const publicRoutes = [
   "/sign-up(.*)",
   "/api/webhook/clerk",
   "/pages/project-mgt",
-  "/api/live-courses/project-mgt/lecture"
+  "/api/live-courses/project-mgt/lecture",
+  "/api/live-courses/project-mgt/checkout",
+  "/api/test-clerk-admin"
+];
+
+const adminRoutes = [
+  "/admin(.*)",
+  "/pages/admin(.*)",
+  "/api/admin(.*)"
 ];
 
 const isPublicRoute = createRouteMatcher(publicRoutes);
+const isAdminRoute = createRouteMatcher(adminRoutes);
 
 export default clerkMiddleware((auth, req) => {
   // Handle public routes
@@ -29,6 +38,9 @@ export default clerkMiddleware((auth, req) => {
     return auth().redirectToSignIn({ returnBackUrl: req.url });
   }
 
+  // For admin routes, let the API route handle authorization
+  // This removes the Prisma dependency in the middleware
+  
   // Allow authenticated users to proceed
   return NextResponse.next();
 });

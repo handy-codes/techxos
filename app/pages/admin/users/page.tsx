@@ -3,6 +3,14 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { UserRoleUpdate } from "./user-role-update";
 
+// Define the User type to fix the TypeScript error
+type User = {
+  id: string;
+  name: string | null;
+  email: string;
+  role: string;
+};
+
 export default async function AdminUsersPage() {
   const { userId } = auth();
   
@@ -28,7 +36,7 @@ export default async function AdminUsersPage() {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
       <div className="space-y-4">
-        {users.map((user) => (
+        {users.map((user: User) => (
           <div key={user.id} className="border p-4 rounded-lg">
             <div className="flex justify-between items-center">
               <div>

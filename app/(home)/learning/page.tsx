@@ -1,8 +1,36 @@
-import CourseCard from "@/components/courses/CourseCard"
+import CourseCardWrapper from "@/components/courses/CourseCardWrapper"
 import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
-import { Purchase, Course, Category, SubCategory, Section } from "@prisma/client"
+
+type Course = {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  isPublished: boolean;
+  categoryId: string;
+  subCategoryId: string;
+  instructorId: string;
+  levelId?: string;
+}
+
+type Category = {
+  id: string;
+  name: string;
+}
+
+type SubCategory = {
+  id: string;
+  name: string;
+}
+
+type Section = {
+  id: string;
+  title: string;
+  isPublished: boolean;
+}
 
 interface CourseWithDetails extends Course {
   category: Category;
@@ -10,11 +38,14 @@ interface CourseWithDetails extends Course {
   sections: Section[];
 }
 
-interface PurchaseWithCourse extends Purchase {
+interface PurchaseWithCourse {
+  id: string;
+  customerId: string;
+  courseId: string;
   course: CourseWithDetails;
 }
 
-const LearningPage = async () => {
+export default async function LearningPage() {
   const { userId } = auth()
 
   if (!userId) {
@@ -25,7 +56,7 @@ const LearningPage = async () => {
     where: {
       customerId: userId,
     },
-    select: {
+    include: {
       course: {
         include: {
           category: true,
@@ -46,12 +77,10 @@ const LearningPage = async () => {
         Your courses
       </h1>
       <div className="flex flex-wrap gap-7 mt-7">
-        {purchasedCourses.map((purchase: PurchaseWithCourse): JSX.Element => (
-          <CourseCard key={purchase.course.id} course={purchase.course} />
+        {purchasedCourses.map((purchase) => (
+          <CourseCardWrapper key={purchase.course.id} course={purchase.course} />
         ))}
       </div>
     </div>
   )
 }
-
-export default LearningPage

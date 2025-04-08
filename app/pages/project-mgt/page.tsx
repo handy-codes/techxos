@@ -14,6 +14,8 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
+
 
 interface LiveLecture {
   id: string;
@@ -45,6 +47,7 @@ export default function Page() {
   >("idle");
 
   const { isSignedIn, userId } = useAuth();
+  const { user } = useUser();
   const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
   const [hasAccess, setHasAccess] = useState<boolean>(false);
   const [userRoleState, setUserRoleState] = useState<string | null>(null);
@@ -81,27 +84,107 @@ export default function Page() {
 
   const fetchUserRole = useCallback(async () => {
     try {
-      const response = await axios.get('/api/live-courses/project-mgt/lecture');
-      console.log('API Response:', response.data);
+      // Debug log
+      console.log("Fetching user role...");
+      
+      // Call the API
+      const response = await axios.get("/api/live-courses/project-mgt/lecture");
+      
+      // Debug log the full response
+      console.log("API Response:", response.data);
+      
+      // Check if the response has role property directly
       if (response.data.role) {
-        console.log('Setting user role state:', response.data.role);
+        console.log("Setting user role state from response.data.role:", response.data.role);
         setUserRoleState(response.data.role);
       }
+      
+      // Also check if hasAccess is set in the response
+      if (response.data.hasAccess !== undefined) {
+        console.log("Setting hasAccess state:", response.data.hasAccess);
+        setHasAccess(response.data.hasAccess);
+      }
+      
+      // Set lecture data if available
+      if (response.data.lecture) {
+        console.log("Setting lecture state:", response.data.lecture);
+        setLecture(response.data.lecture);
+      }
+      
+      return response.data;
     } catch (error) {
-      console.error('Error fetching user role:', error);
+      console.error("Error fetching user role:", error);
+      return null;
     }
   }, []);
 
+  // Function to determine if the current user is an admin based on their email
+  const checkIfUserIsAdmin = useCallback(async () => {
+    if (!isSignedIn || !userId) return false;
+    
+    try {
+      // Use user from component scope instead of calling useUser() here
+      const userEmail = user?.primaryEmailAddress?.emailAddress;
+      console.log("Current user email:", userEmail);
+      
+      if (!userEmail) return false;
+      
+      // Known admin emails - add any admin emails here
+      const adminEmails = [
+        "paxymekventures@gmail.com",
+        "admin@techxos.com",
+        "emeka@techxos.com"
+      ];
+      
+      // Direct check for known admin emails
+      if (adminEmails.includes(userEmail.toLowerCase())) {
+        console.log("User is admin based on email match!");
+        setUserRoleState("HEAD_ADMIN");
+        setHasAccess(true);
+        return true;
+      }
+      
+      // Try to fetch the sync file
+      try {
+        const syncResponse = await fetch('/role-sync.json');
+        if (syncResponse.ok) {
+          const syncData = await syncResponse.json();
+          
+          // Check if user's email matches the admin email in sync file
+          if (userEmail.toLowerCase() === syncData.adminEmail.toLowerCase()) {
+            console.log("User is admin based on sync file match!");
+            setUserRoleState("HEAD_ADMIN");
+            setHasAccess(true);
+            return true;
+          }
+        }
+      } catch (syncError) {
+        console.log("No sync file found or error reading it");
+      }
+      
+      return false;
+    } catch (error) {
+      console.error("Error in admin check:", error);
+      return false;
+    }
+  }, [isSignedIn, userId, user]);
+
   useEffect(() => {
     if (isSignedIn && userId) {
-      fetchLectureDetails();
-      fetchUserRole();
+      // First try the direct admin check
+      checkIfUserIsAdmin().then(isAdmin => {
+        if (!isAdmin) {
+          // If not an admin by direct check, try the API routes
+          fetchLectureDetails();
+          fetchUserRole();
+        }
+      });
     }
-  }, [isSignedIn, userId, fetchLectureDetails, fetchUserRole]);
+  }, [isSignedIn, userId, fetchLectureDetails, fetchUserRole, checkIfUserIsAdmin]);
 
   // Add effect to log role state changes
   useEffect(() => {
-    console.log('Current userRoleState:', userRoleState);
+    console.log("Current userRoleState:", userRoleState);
   }, [userRoleState]);
 
   const handleJoinClass = async () => {
@@ -209,14 +292,18 @@ export default function Page() {
 
   const handlePurchase = async () => {
     try {
+      console.log("Initializing purchase...");
       const response = await axios.post(
         "/api/live-courses/project-mgt/checkout",
+        {}, // Ensure the body is correctly passed if needed
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
+
+      console.log("Checkout response:", response.data);
 
       const { price, studentEmail, studentName } = response.data;
 
@@ -250,10 +337,66 @@ export default function Page() {
           toast("Payment cancelled");
         },
       });
-    } catch (error) {
-      console.error("Purchase initialization error:", error);
-      toast.error("Failed to initialize payment");
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { status?: number; data?: any; statusText?: string };
+        message?: string;
+      };
+
+      console.error("Purchase initialization error:", {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message,
+      });
+
+      if (err.response?.status === 404) {
+        toast.error("Checkout endpoint not found. Please contact support.");
+      } else if (err.response?.status === 500) {
+        toast.error(
+          "Server error during purchase initialization. Try again later."
+        );
+      } else {
+        toast.error("Failed to initialize payment. Please try again.");
+      }
     }
+  };
+
+  // Function to render lecture information if available
+  const renderLectureInfo = () => {
+    if (!lecture) return null;
+    
+    return (
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
+        <h3 className="text-xl font-semibold mb-2">Current Class Information</h3>
+        {lecture.lectures && lecture.lectures.length > 0 ? (
+          <div>
+            <p className="mb-2">
+              <span className="font-medium">Latest lecture:</span>{" "}
+              {lecture.lectures[0].title || "Upcoming Session"}
+            </p>
+            <p className="mb-2">
+              <span className="font-medium">Date:</span>{" "}
+              {new Date(lecture.lectures[0].date).toLocaleString()}
+            </p>
+            {lecture.lectures[0].isRecorded && lecture.lectures[0].recordingUrl && (
+              <div className="mt-2">
+                <a 
+                  href={lecture.lectures[0].recordingUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  View Recording
+                </a>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p>No scheduled lectures at this time. Please check back later.</p>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -346,6 +489,10 @@ export default function Page() {
             <h2 className="text-2xl font-bold mb-2 mt-6">
               Project Management Virtual
             </h2>
+            
+            {/* Display lecture information if available */}
+            {renderLectureInfo()}
+            
             <div className=" p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
               {!isSignedIn ? (
                 <Link
@@ -355,12 +502,15 @@ export default function Page() {
                   Enroll Now
                 </Link>
               ) : (
-                console.log('Rendering button with role:', userRoleState),
-                hasAccess || userRoleState === "HEAD_ADMIN" || userRoleState === "ADMIN" || userRoleState === "LECTURER" ? (
+                (console.log("Rendering button with role:", userRoleState, "hasAccess:", hasAccess),
+                hasAccess ||
+                userRoleState === "HEAD_ADMIN" ||
+                userRoleState === "ADMIN" ||
+                userRoleState === "LECTURER" ? (
                   <Button onClick={handleJoinClass}>Join Live Class</Button>
                 ) : (
                   <Button onClick={handlePurchase}>Purchase Course</Button>
-                )
+                ))
               )}
             </div>
           </div>
