@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { LiveClassUserRole } from "@prisma/client";
 
 export async function POST(req: Request) {
   try {
@@ -33,12 +34,46 @@ export async function POST(req: Request) {
     }
     
     // Find the user in our database
-    const user = await db.liveClassUser.findUnique({
+    let user = await db.liveClassUser.findUnique({
       where: { clerkUserId }
     });
 
+    // If user doesn't exist, check if there's a user with the same email
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      // Check if user exists by email
+      const existingUserByEmail = await db.liveClassUser.findUnique({
+        where: { email: userEmail }
+      });
+
+      if (existingUserByEmail) {
+        // Update existing user with clerk ID
+        console.log("Found existing user by email, updating with Clerk ID");
+        user = await db.liveClassUser.update({
+          where: { id: existingUserByEmail.id },
+          data: { 
+            clerkUserId,
+            name: userName || existingUserByEmail.name
+          }
+        });
+      } else {
+        // Create a new user record for this purchase
+        console.log("Creating new user record for purchase");
+        try {
+          user = await db.liveClassUser.create({
+            data: {
+              clerkUserId,
+              email: userEmail,
+              name: userName || "New Student",
+              role: LiveClassUserRole.LEARNER,
+              isActive: true
+            }
+          });
+          console.log("Created new user:", user.id);
+        } catch (createError) {
+          console.error("Failed to create user:", createError);
+          return new NextResponse("Could not create user record", { status: 500 });
+        }
+      }
     }
 
     // Find the Project Management course
@@ -78,7 +113,7 @@ export async function POST(req: Request) {
     console.log("Payment checkout data:", {
       price, 
       courseTitle: liveClass.title,
-        studentId: user.id,
+      studentId: user.id,
       studentEmail: userEmail,
       studentName: userName
     });

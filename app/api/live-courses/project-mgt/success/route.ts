@@ -7,27 +7,57 @@ export async function POST(req: Request) {
     const { userId: clerkUserId } = auth();
     
     if (!clerkUserId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Get payment data from request
+    const { transactionId, status, flwRef, txRef } = await req.json();
+    
+    console.log("Payment success data:", { transactionId, status, flwRef, txRef, clerkUserId });
+
+    if (!transactionId) {
+      return NextResponse.json({ error: "Transaction ID is required" }, { status: 400 });
     }
 
     // Find the user by Clerk ID
-    const user = await db.liveClassUser.findUnique({
+    let user = await db.liveClassUser.findUnique({
       where: { clerkUserId }
     });
 
+    // Get user data from Clerk
+    let clerkUserData;
+    try {
+      clerkUserData = await clerkClient.users.getUser(clerkUserId);
+    } catch (clerkError) {
+      console.error("Error fetching Clerk user data:", clerkError);
+      return NextResponse.json({ error: "Failed to fetch user data" }, { status: 500 });
+    }
+
+    const userEmail = clerkUserData.emailAddresses[0]?.emailAddress || "";
+    const userName = clerkUserData.firstName && clerkUserData.lastName 
+      ? `${clerkUserData.firstName} ${clerkUserData.lastName}`
+      : clerkUserData.firstName || "";
+
+    // If user doesn't exist in database, create them as a LEARNER
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      try {
+        user = await db.liveClassUser.create({
+          data: {
+            clerkUserId,
+            email: userEmail,
+            name: userName,
+            role: "LEARNER", // Direct to LEARNER role (no VISITOR first)
+            isActive: true
+          }
+        });
+        console.log("Created new LEARNER record for purchasing user:", user.id);
+      } catch (createError) {
+        console.error("Error creating user:", createError);
+        return NextResponse.json({ error: "Failed to create user record" }, { status: 500 });
+      }
     }
 
-    // Get payment data
-    const { transactionId, status, flwRef, txRef } = await req.json();
-    
-    console.log("Payment success data:", { transactionId, status, flwRef, txRef, userId: user.id });
-
-    if (!transactionId) {
-      return new NextResponse("Transaction ID is required", { status: 400 });
-    }
-
+    // Find the active course
     const liveClass = await db.liveClass.findFirst({
       where: { 
         title: "Project Management",
@@ -39,7 +69,7 @@ export async function POST(req: Request) {
     });
 
     if (!liveClass) {
-      return new NextResponse("No active class found", { status: 404 });
+      return NextResponse.json({ error: "No active class found" }, { status: 404 });
     }
 
     // Calculate end date based on course duration (12 weeks)
@@ -54,17 +84,18 @@ export async function POST(req: Request) {
       }
     });
 
-    let purchase;
-    
+    // Prepare purchase data
     const purchaseData = {
-        status: "COMPLETED",
+      status: "COMPLETED",
       amount: liveClass.price,
       transactionId: transactionId.toString(),
       flwRef: flwRef?.toString() || null,
       txRef: txRef?.toString() || null,
-        endDate,
-        isActive: true
+      endDate,
+      isActive: true
     };
+    
+    let purchase;
     
     if (existingPurchase) {
       // Update existing purchase
@@ -87,25 +118,6 @@ export async function POST(req: Request) {
       console.log("Created new purchase:", purchase.id);
     }
 
-    // Update user info from Clerk if needed
-    try {
-      const clerkUser = await clerkClient.users.getUser(clerkUserId);
-      const userEmail = clerkUser.emailAddresses[0]?.emailAddress || "";
-      const userName = clerkUser.firstName && clerkUser.lastName 
-        ? `${clerkUser.firstName} ${clerkUser.lastName}`
-        : clerkUser.firstName || "";
-      
-      // Only update name to avoid unique email constraint issues
-      if (userName && user.name !== userName) {
-        await db.liveClassUser.update({
-          where: { id: user.id },
-          data: { name: userName }
-        });
-      }
-    } catch (clerkError) {
-      console.error("Error updating user details:", clerkError);
-    }
-
     return NextResponse.json({
       success: true,
       purchase,
@@ -113,6 +125,6 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("[PURCHASE_SUCCESS_POST]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    return NextResponse.json({ error: "Internal Error" }, { status: 500 });
   }
 } 

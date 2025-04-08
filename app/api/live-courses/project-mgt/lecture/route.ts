@@ -36,35 +36,62 @@ export async function GET(req: Request) {
       where: { clerkUserId },
     });
 
-    // If user doesn't exist in our database but is authenticated with Clerk, create it
+    // If user doesn't exist in our database but is authenticated with Clerk, check if email exists
     if (!user) {
-      console.log("[LECTURE_GET] User not found, creating user record for:", clerkUserId);
-      try {
-        // Create a basic user record with proper Clerk info
-        user = await db.liveClassUser.create({
+      console.log("[LECTURE_GET] User not found by Clerk ID, checking email:", userEmail);
+      
+      // Check if a user with this email already exists (for admins/lecturers set up manually)
+      const existingUserByEmail = await db.liveClassUser.findUnique({
+        where: { email: userEmail }
+      });
+      
+      if (existingUserByEmail) {
+        // Update the existing user with the Clerk ID
+        console.log("[LECTURE_GET] Found existing user with matching email, updating with Clerk ID");
+        user = await db.liveClassUser.update({
+          where: { id: existingUserByEmail.id },
           data: {
             clerkUserId,
-            email: userEmail,
-            name: userName,
-            role: LiveClassUserRole.LEARNER,
-            isActive: true
+            name: userName || existingUserByEmail.name
           }
         });
-        console.log("[LECTURE_GET] Created new user:", user.id);
-      } catch (userCreateError) {
-        console.error("[LECTURE_GET] Error creating user:", userCreateError);
-        return new NextResponse("Could not create user record", { status: 500 });
-      }
-    } else {
-      // Update user details if they've changed in Clerk
-      if (user.name !== userName) {
-        // Only update the name, not the email to avoid unique constraint violations
-        user = await db.liveClassUser.update({
-          where: { id: user.id },
-          data: {
-            name: userName
+        console.log("[LECTURE_GET] Updated existing user with Clerk ID:", user.id);
+      } else {
+        // Do NOT create a database entry for regular visitors
+        // We'll just check admins by email
+        console.log("[LECTURE_GET] No database entry for this user, checking admin email status");
+        
+        // List of admin emails to check
+        const adminEmails = [
+          "paxymekventures@gmail.com",
+          "admin@techxos.com",
+          "emeka@techxos.com"
+        ];
+        
+        // If this is a known admin email, create a record
+        if (adminEmails.includes(userEmail.toLowerCase())) {
+          console.log("[LECTURE_GET] Creating admin record for known admin email:", userEmail);
+          try {
+            user = await db.liveClassUser.create({
+              data: {
+                clerkUserId,
+                email: userEmail,
+                name: userName,
+                role: LiveClassUserRole.HEAD_ADMIN,
+                isActive: true
+              }
+            });
+            console.log("[LECTURE_GET] Created new admin user:", user.id);
+          } catch (userCreateError) {
+            console.error("[LECTURE_GET] Error creating admin user:", userCreateError);
+            return new NextResponse("Could not create user record", { status: 500 });
           }
-        });
+        } else {
+          // For regular visitors, we won't create a database entry
+          console.log("[LECTURE_GET] Not creating database entry for visitor:", userEmail);
+          // Set user to null so we know this is a visitor with no database record
+          user = null;
+        }
       }
     }
 
@@ -150,24 +177,48 @@ export async function GET(req: Request) {
       }
     }
 
-    // Check if user has purchased the course or is admin/lecturer
-    const isPurchased = await db.liveClassPurchase.findFirst({
-      where: {
-        studentId: user.id,
-        liveClassId: liveClass.id,
-        isActive: true,
-        endDate: { gt: new Date() }
-      },
-    });
+    // Check access for users without database records (regular visitors)
+    let hasAccess = false;
+    let userRole = null;
 
-    // Add an explicit check for admin/lecturer roles
-    const isAdminOrHigher = user.role === LiveClassUserRole.LECTURER || 
-      user.role === LiveClassUserRole.ADMIN || 
-      user.role === LiveClassUserRole.HEAD_ADMIN;
-    console.log(`User role: ${user.role}, isAdminOrHigher: ${isAdminOrHigher}`);
+    if (user) {
+      // For users with database records, check purchases and roles
+      const isPurchased = await db.liveClassPurchase.findFirst({
+        where: {
+          studentId: user.id,
+          liveClassId: liveClass.id,
+          isActive: true,
+          endDate: { gt: new Date() }
+        },
+      });
 
-    const hasAccess = isPurchased || isAdminOrHigher;
-    
+      // Add an explicit check for admin/lecturer roles
+      const isAdminOrHigher = user.role === LiveClassUserRole.LECTURER || 
+        user.role === LiveClassUserRole.ADMIN || 
+        user.role === LiveClassUserRole.HEAD_ADMIN;
+      
+      userRole = user.role;
+      hasAccess = isPurchased || isAdminOrHigher;
+      console.log(`User role: ${userRole}, isAdminOrHigher: ${isAdminOrHigher}`);
+    } else {
+      // For visitors without database records, check if their email is a known admin
+      const adminEmails = [
+        "paxymekventures@gmail.com",
+        "admin@techxos.com",
+        "emeka@techxos.com"
+      ];
+      
+      if (adminEmails.includes(userEmail.toLowerCase())) {
+        hasAccess = true;
+        userRole = "HEAD_ADMIN";
+        console.log(`Email admin detected: ${userEmail}, granting access`);
+      } else {
+        hasAccess = false;
+        userRole = "VISITOR";
+        console.log(`Visitor without database record: ${userEmail}, no access`);
+      }
+    }
+
     // Format the response to match what the page expects
     const now = new Date();
     const tomorrow = new Date();
@@ -201,7 +252,7 @@ export async function GET(req: Request) {
         lectures: lectures
       },
       hasAccess: hasAccess,
-      role: user.role,
+      role: userRole,
       lecturer: {
         name: liveClass.lecturer?.name || "Instructor",
         email: liveClass.lecturer?.email || "",

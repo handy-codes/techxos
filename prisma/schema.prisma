@@ -179,6 +179,7 @@ enum LiveClassUserRole {
   ADMIN
   LECTURER
   LEARNER
+  VISITOR
 }
 
 model LiveClass {
