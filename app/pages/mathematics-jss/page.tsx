@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,17 +7,16 @@ import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
-import DataScience from "@/components/curriculum/DataScience";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
 import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
-
+import MathematicsJSS from "@/components/curriculum/Mathematics-jss";
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Data Science & Analytics",
+    courseTitle: "Mathematics (JSS 1-3)",
     name: "",
     surname: "",
     email: "",
@@ -25,17 +24,16 @@ export default function Page() {
     message: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
   
   const { isSignedIn, userId } = useAuth();
   const { user } = useUser();
   const [hasAccess, setHasAccess] = useState<boolean>(false);
   const [userRoleState, setUserRoleState] = useState<string | null>(null);
-const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
 
-  
   // Function to determine if the current user is an admin based on their email
   const checkIfUserIsAdmin = async () => {
     if (!isSignedIn || !userId) return false;
@@ -72,8 +70,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     if (isSignedIn && userId) {
       checkIfUserIsAdmin();
     }
-  }, [isSignedIn, userId, user]);
-const handleChange = (
+  }, [isSignedIn, userId, user, checkIfUserIsAdmin]);
+
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
@@ -109,7 +108,7 @@ const handleChange = (
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Data Science & Analytics",
+        courseTitle: "Mathematics (JSS 1-3)",
         name: "",
         surname: "",
         email: "",
@@ -130,7 +129,7 @@ const handleChange = (
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Data Science Course"
+          content="Welcome to the Mathematics (JSS 1-3) Course"
         />
       </Head>
 
@@ -139,20 +138,23 @@ const handleChange = (
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Data Science & Analytics
+                Mathematics (JSS 1-3)
               </h1>
               <p className="text-xl mb-8">
-                Unlock the Future with Data Science & Analytics! Imagine turning
-                raw data into powerful stories that predict trends, solve global
-                challenges, and shape tomorrow’s innovations—that’s Data
-                Science. In a world drowning in information, this field equips
-                you to extract gold from chaos, blending coding, statistics, and
-                creativity to answer questions we haven’t even asked yet.
+              Crush Junior WAEC Maths with Confidence – Master Numbers Like a Pro!
+              Imagine solving equations with ease and facing exam questions with unshakable 
+              confidence—this is your year to own Junior
+              WAEC Mathematics! Our course isn&apos;t just about formulas; it&apos;s your secret weapon
+              to turn anxiety into A&apos;s and confusion into success. From conquering fractions,
+              simple equations, angle of elevation and depression, or plotting graphs
+              to acing real-life word problems, we break down Nigeria&apos;s JSS curriculum into tiny parts. 
+              Say goodbye to "maths phobia"—you&apos;ll tackle past WAEC questions and mock exams 
+              like a champion.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://media.istockphoto.com/id/1431548795/photo/data-scientists-man-programmer-using-laptop-analyzing-and-development-at-various-information.jpg?b=1&s=612x612&w=0&k=20&c=o4EGCiCiVZjMb7_e9ifhRXYk8B9rQzjpiADFrasvLeQ="
+                src="https://media.istockphoto.com/id/636332456/photo/online-education-concept.jpg?b=1&s=612x612&w=0&k=20&c=B3Qb1fWVWdKcibGsE_ikxdpKjWkwKrIFtWzL7vJyq5c="
                 alt="Team Collaboration"
                 fill
                 className="object-cover"
@@ -169,19 +171,18 @@ const handleChange = (
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
-              Data Science & Analytics
+              Mathematics (JSS 1-3)
             </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            250,000 NGN
+            5,000 NGN (Per Month)
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            Techxos supercharges your journey: Dive into real-world
-            projects, collaborate with mentors, and join a vibrant community of
-            data enthusiasts.  Ready to turn data into
-            your superpower? Enroll now and start decoding the future—one
-            dataset at a time. 🌟
+            Happening in 16 weeks. Junior WAEC isn&apos;t just a test—it&apos;s your stepping stone to SS1 greatness. 
+            With every lesson, you&apos;ll build logic, critical thinking, and the maths swagger to 
+            top your class. Ready to be the maths hero your school talks about? Enroll now and 
+            turn "I hate maths" into "Bring on the WAEC!" 🧮🏆🇳🇬
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
@@ -208,6 +209,41 @@ const handleChange = (
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <IoMdOptions className="text-black text-[24px]" />
               <span>Options: Evening Class, Executive (one-to-one) class</span>
+            </div>
+            <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
+              {!isSignedIn ? (
+                <Link
+                  href="/sign-in"
+                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
+                >
+                  Enroll Now
+                </Link>
+              ) : (
+                (() => {
+                  console.log("Rendering button with role:", userRoleState, "hasAccess:", hasAccess);
+                  
+                  // Admin roles always get access
+                  const isAdmin = 
+                    userRoleState === "HEAD_ADMIN" ||
+                    userRoleState === "ADMIN" ||
+                    userRoleState === "LECTURER";
+                  
+                  // Final access decision
+                  const shouldShowJoinButton = hasAccess || isAdmin;
+                  
+                  return shouldShowJoinButton ? (
+                    <JoinLiveClassButton 
+                      courseId="mathematics-jss" 
+                      courseName="Mathematics (JSS 1-3)" 
+                    />
+                  ) : (
+                    <CoursePurchaseButton 
+                      courseId="mathematics-jss" 
+                      courseName="Mathematics (JSS 1-3)" 
+                    />
+                  );
+                })()
+              )}
             </div>
           </div>
         </div>
@@ -309,8 +345,8 @@ const handleChange = (
           </form>
         </div>
       </section>
-      <DataScience />
-      <ScrollToTopButton />      
+      <MathematicsJSS />
+      <ScrollToTopButton />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +9,11 @@ import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
 import Cybersecurity from "@/components/curriculum/Cybersecurity";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
+
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -20,12 +25,55 @@ export default function Page() {
     message: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const { isSignedIn, userId } = useAuth();
+  const { user } = useUser();
+  const [hasAccess, setHasAccess] = useState<boolean>(false);
+  const [userRoleState, setUserRoleState] = useState<string | null>(null);
+const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
 
-  const handleChange = (
+  
+  // Function to determine if the current user is an admin based on their email
+  const checkIfUserIsAdmin = async () => {
+    if (!isSignedIn || !userId) return false;
+    
+    try {
+      const userEmail = user?.primaryEmailAddress?.emailAddress;
+      console.log("Current user email:", userEmail);
+      
+      if (!userEmail) return false;
+      
+      // Known admin emails - add any admin emails here
+      const adminEmails = [
+        "paxymekventures@gmail.com",
+        "admin@techxos.com",
+        "emeka@techxos.com"
+      ];
+      
+      // Direct check for known admin emails
+      if (adminEmails.includes(userEmail.toLowerCase())) {
+        console.log("User is admin based on email match!");
+        setUserRoleState("HEAD_ADMIN");
+        setHasAccess(true);
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error("Error in admin check:", error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (isSignedIn && userId) {
+      checkIfUserIsAdmin();
+    }
+  }, [isSignedIn, userId, user, checkIfUserIsAdmin]);
+const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
@@ -96,16 +144,16 @@ export default function Page() {
               <p className="text-xl mb-8 ">
                 Become the Digital Guardian of the Future with Cybersecurity! Be
                 up to speed with outsmarting hackers, shielding sensitive data,
-                and fortifying the backbone of the internet—that’s
+                and fortifying the backbone of the internet—that&apos;s
                 cybersecurity. In a world where cyber threats evolve by the
-                second, you’ll be the frontline defender, turning
+                second, you&apos;ll be the frontline defender, turning
                 vulnerabilities into vaults and chaos into control.
               </p>
               <p className="text-xl mb-8">
                 From stopping ransomware attacks that cripple Fortune 500
                 companies to securing smart homes and national infrastructure,
                 cybersecurity is the ultimate game of digital cat and mouse.
-                You’ll master ethical hacking, penetration testing, firewall
+                You&apos;ll master ethical hacking, penetration testing, firewall
                 wizardry, and tools like Kali Linux, Wireshark, and
                 SIEM—transforming you into a cyber ninja who thwarts breaches
                 before they happen.
@@ -141,10 +189,10 @@ export default function Page() {
           <p className="text-justify font-semibold max-sm:mb-1">
             Techxos arms you for battle: Tackle real-world simulations (like
             defending a live network or cracking encrypted puzzles), learn from
-            industry pros who’ve foiled cybercrime rings, and join a legion of
+            industry pros who&apos;ve foiled cybercrime rings, and join a legion of
             ethical hackers obsessed with outsmarting the dark web. Dive into
             cryptography, incident response, and compliance frameworks, while
-            earning certifications that scream “hire me” to top employers. Ready
+            earning certifications that scream "hire me" to top employers. Ready
             to be the hero the internet needs? Enroll now and start locking down
             the digital frontier—one threat at a time. 🛡️🔒💻
           </p>

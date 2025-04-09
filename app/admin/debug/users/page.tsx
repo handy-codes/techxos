@@ -8,6 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 export default function DebugUsersPage() {
   const [users, setUsers] = useState<any[]>([]);

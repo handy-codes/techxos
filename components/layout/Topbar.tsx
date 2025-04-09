@@ -47,6 +47,7 @@ const Topbar = () => {
     { title: "Cybersecurity", link: "/pages/cybersecurity" },
     { title: "Project Management", link: "/pages/project-mgt" },
     { title: "Graphic Design", link: "/pages/graphic-design" },
+    { title: "Mathematics (JSS 1-3)", link: "/pages/mathematics-jss" },
   ];
 
   const handleMouseEnter = () => {

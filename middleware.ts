@@ -24,6 +24,12 @@ const adminRoutes = [
 const isPublicRoute = createRouteMatcher(publicRoutes);
 const isAdminRoute = createRouteMatcher(adminRoutes);
 
+// Add configuration to handle clock skew
+const clerkConfig = {
+  // Allow a 5-minute clock skew to handle system time discrepancies
+  clockSkewInMs: 5 * 60 * 1000,
+};
+
 export default clerkMiddleware((auth, req) => {
   // Handle public routes
   if (isPublicRoute(req)) {
@@ -43,7 +49,7 @@ export default clerkMiddleware((auth, req) => {
   
   // Allow authenticated users to proceed
   return NextResponse.next();
-});
+}, clerkConfig);
 
 export const config = {
   matcher: [

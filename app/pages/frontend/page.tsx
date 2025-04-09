@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +9,10 @@ import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
 import Frontend from "@/components/curriculum/Frontend";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -24,6 +28,49 @@ export default function Page() {
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  
+  const { isSignedIn, userId } = useAuth();
+  const { user } = useUser();
+  const [hasAccess, setHasAccess] = useState<boolean>(false);
+  const [userRoleState, setUserRoleState] = useState<string | null>(null);
+
+  // Function to determine if the current user is an admin based on their email
+  const checkIfUserIsAdmin = async () => {
+    if (!isSignedIn || !userId) return false;
+    
+    try {
+      const userEmail = user?.primaryEmailAddress?.emailAddress;
+      console.log("Current user email:", userEmail);
+      
+      if (!userEmail) return false;
+      
+      // Known admin emails - add any admin emails here
+      const adminEmails = [
+        "paxymekventures@gmail.com",
+        "admin@techxos.com",
+        "emeka@techxos.com"
+      ];
+      
+      // Direct check for known admin emails
+      if (adminEmails.includes(userEmail.toLowerCase())) {
+        console.log("User is admin based on email match!");
+        setUserRoleState("HEAD_ADMIN");
+        setHasAccess(true);
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error("Error in admin check:", error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (isSignedIn && userId) {
+      checkIfUserIsAdmin();
+    }
+  }, [isSignedIn, userId, user, checkIfUserIsAdmin]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -95,7 +142,7 @@ export default function Page() {
               </h1>
               <p className="text-xl mb-8">
                 How about crafting stunning, interactive websites that millions
-                of users adore—that’s Frontend Development. It’s where
+                of users adore—that&apos;s Frontend Development. It&apos;s where
                 creativity meets code, letting you design sleek interfaces,
                 animate pixels into life, and turn ideas into immersive digital
                 experiences.
@@ -130,7 +177,7 @@ export default function Page() {
           <p className="text-justify font-semibold max-sm:mb-1">
             In 12 weeks, Techxos turbocharges your journey: Code real
             projects, collaborate with industry pros, and join a tribe of
-            creators obsessed with pixel perfection. Whether you’re animating a
+            creators obsessed with pixel perfection. Whether you&apos;re animating a
             button or architecting a full-scale web app, every lesson sharpens
             your skills for a tech world hungry for design-savvy coders. Ready
             to paint the digital canvas? Enroll now and start turning
@@ -161,6 +208,41 @@ export default function Page() {
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <IoMdOptions className="text-black text-[24px]" />
               <span>Options: Evening Class, Executive (one-to-one) class</span>
+            </div>
+            <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
+              {!isSignedIn ? (
+                <Link
+                  href="/sign-in"
+                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
+                >
+                  Enroll Now
+                </Link>
+              ) : (
+                (() => {
+                  console.log("Rendering button with role:", userRoleState, "hasAccess:", hasAccess);
+                  
+                  // Admin roles always get access
+                  const isAdmin = 
+                    userRoleState === "HEAD_ADMIN" ||
+                    userRoleState === "ADMIN" ||
+                    userRoleState === "LECTURER";
+                  
+                  // Final access decision
+                  const shouldShowJoinButton = hasAccess || isAdmin;
+                  
+                  return shouldShowJoinButton ? (
+                    <JoinLiveClassButton 
+                      courseId="frontend" 
+                      courseName="Frontend Development" 
+                    />
+                  ) : (
+                    <CoursePurchaseButton 
+                      courseId="frontend" 
+                      courseName="Frontend Development" 
+                    />
+                  );
+                })()
+              )}
             </div>
           </div>
         </div>

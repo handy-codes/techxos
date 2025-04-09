@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +9,11 @@ import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
 import UIUX from "@/components/curriculum/Ui-Ux";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
+
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -20,12 +25,55 @@ export default function Page() {
     message: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const { isSignedIn, userId } = useAuth();
+  const { user } = useUser();
+  const [hasAccess, setHasAccess] = useState<boolean>(false);
+  const [userRoleState, setUserRoleState] = useState<string | null>(null);
+const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
 
-  const handleChange = (
+  
+  // Function to determine if the current user is an admin based on their email
+  const checkIfUserIsAdmin = async () => {
+    if (!isSignedIn || !userId) return false;
+    
+    try {
+      const userEmail = user?.primaryEmailAddress?.emailAddress;
+      console.log("Current user email:", userEmail);
+      
+      if (!userEmail) return false;
+      
+      // Known admin emails - add any admin emails here
+      const adminEmails = [
+        "paxymekventures@gmail.com",
+        "admin@techxos.com",
+        "emeka@techxos.com"
+      ];
+      
+      // Direct check for known admin emails
+      if (adminEmails.includes(userEmail.toLowerCase())) {
+        console.log("User is admin based on email match!");
+        setUserRoleState("HEAD_ADMIN");
+        setHasAccess(true);
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error("Error in admin check:", error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (isSignedIn && userId) {
+      checkIfUserIsAdmin();
+    }
+  }, [isSignedIn, userId, user, checkIfUserIsAdmin]);
+const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
@@ -98,7 +146,7 @@ export default function Page() {
                 users love.
               </p>
               <p className="text-xl mb-8">
-                You’ll master tools like Figma, Adobe XD, and Sketch,
+                You&apos;ll master tools like Figma, Adobe XD, and Sketch,
                 wireframing prototypes, conducting user research, and perfecting
                 pixel-perfect layouts that balance form and function. Build
                 real-world projects—from e-commerce apps to fintech

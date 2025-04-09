@@ -15,6 +15,8 @@ import { toast } from "react-hot-toast";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
+import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
 
 interface LiveLecture {
   id: string;
@@ -200,34 +202,6 @@ export default function Page() {
     console.log("Current userRoleState:", userRoleState);
   }, [userRoleState]);
 
-  const handleJoinClass = async () => {
-    try {
-      const response = await axios.get(`/api/live-courses/project-mgt/lecture`);
-      console.log("Full response:", response.data);
-
-      if (response.data.error) {
-        toast.error(response.data.error);
-        return;
-      }
-
-      if (response.data.lecture?.zoomLink) {
-        window.open(response.data.lecture.zoomLink, "_blank");
-      } else {
-        toast.error("No active class link available. Please contact support.");
-        console.log("Missing zoom link in lecture data");
-      }
-    } catch (error: any) {
-      console.error("Error details:", error.response?.data);
-      if (error.response?.status === 401) {
-        toast.error("Please sign in to join the class");
-      } else if (error.response?.status === 404) {
-        toast.error("No active class found at this time");
-      } else {
-        toast.error("Failed to join the class. Please try again.");
-      }
-    }
-  };
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
@@ -279,95 +253,6 @@ export default function Page() {
     }
   };
 
-  const handlePurchase = async () => {
-    try {
-      console.log("Initializing purchase...");
-      const response = await axios.post(
-        "/api/live-courses/project-mgt/checkout",
-        {}
-      );
-
-      console.log("Checkout response:", response.data);
-
-      // Use the data from checkout endpoint
-      const { price, studentEmail, studentName, courseTitle } = response.data;
-
-      if (!studentEmail || !studentEmail.includes('@')) {
-        toast.error("Valid email is required for payment. Please update your profile.");
-        return;
-      }
-
-      if (!price || price <= 0) {
-        toast.error("Invalid course price. Please contact support.");
-        return;
-      }
-
-      // Ensure price is a number
-      const numericPrice = Number(price);
-      
-      console.log("Processing payment with amount:", numericPrice);
-
-      // Simple payment config - minimal to avoid errors
-      const flwConfig = {
-        public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
-        tx_ref: `PM-${Date.now()}`,
-        amount: numericPrice,
-        currency: "NGN",
-        payment_options: "card",
-        customer: {
-          email: studentEmail,
-          name: studentName || "Student",
-          phone_number: "N/A",
-        },
-        customizations: {
-          title: "Techxos Project Management",
-          description: "Project Management Course",
-          logo: "https://techxos.com/logo.png",
-        }
-      };
-
-      console.log("Payment config:", JSON.stringify(flwConfig));
-
-      // Create payment handler
-      const makePayment = useFlutterwave(flwConfig);
-      
-      // Make payment
-      makePayment({
-        callback: function(response) {
-          console.log("Payment response:", JSON.stringify(response));
-          closePaymentModal();
-          
-          if (response.status === "successful" || response.status === "completed") {
-            // Process successful payment
-            toast.success("Payment successful!");
-            
-            // Submit to server
-            axios.post("/api/live-courses/project-mgt/success", {
-              transactionId: response.transaction_id || Date.now(),
-                status: response.status,
-              txRef: response.tx_ref
-            })
-            .then(() => {
-              fetchLectureDetails();
-            })
-            .catch(error => {
-              console.error("Error verifying payment:", error);
-              toast.error("Payment received but verification failed.");
-            });
-            } else {
-              toast.error("Payment was not successful");
-          }
-        },
-        onClose: function() {
-          toast("Payment canceled");
-        }
-      });
-    } catch (error) {
-      console.error("Purchase error:", error);
-      toast.error("Could not process payment. Please try again.");
-    }
-  };
-
   // Function to render lecture information if available
   const renderLectureInfo = () => {
     if (!lecture) return null;
@@ -401,9 +286,18 @@ export default function Page() {
         ) : (
           <p>No scheduled lectures at this time. Please check back later.</p>
         )}
+        <div className="mt-4">
+          <JoinLiveClassButton 
+            courseId="project-mgt" 
+            courseName="Project Management" 
+          />
+        </div>
       </div>
     );
   };
+
+  // Replace the handleJoinClass function with a reference to the course ID
+  const courseId = "project-management-course-id"; // This should be the actual course ID from your database
 
   return (
     <div>
@@ -513,17 +407,23 @@ export default function Page() {
                   
                   // Admin roles always get access
                   const isAdmin = 
-                userRoleState === "HEAD_ADMIN" ||
-                userRoleState === "ADMIN" ||
+                    userRoleState === "HEAD_ADMIN" ||
+                    userRoleState === "ADMIN" ||
                     userRoleState === "LECTURER";
                   
                   // Final access decision
                   const shouldShowJoinButton = hasAccess || isAdmin;
                   
                   return shouldShowJoinButton ? (
-                  <Button onClick={handleJoinClass}>Join Live Class</Button>
-                ) : (
-                  <Button onClick={handlePurchase}>Purchase Course</Button>
+                    <JoinLiveClassButton 
+                      courseId="project-mgt" 
+                      courseName="Project Management" 
+                    />
+                  ) : (
+                    <CoursePurchaseButton 
+                      courseId="project-mgt" 
+                      courseName="Project Management" 
+                    />
                   );
                 })()
               )}

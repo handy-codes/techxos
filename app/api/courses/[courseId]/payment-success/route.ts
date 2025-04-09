@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 
 export async function POST(
@@ -19,13 +19,11 @@ export async function POST(
       return new NextResponse("Course ID is required", { status: 400 });
     }
 
-    // Get user details from Clerk
-    const user = await clerkClient.users.getUser(userId);
-    const userEmail = user.emailAddresses[0]?.emailAddress;
-    const userName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Student";
+    const body = await req.json();
+    const { transactionId, status, txRef } = body;
 
-    if (!userEmail) {
-      return new NextResponse("User email is required for payment", { status: 400 });
+    if (!transactionId || !status) {
+      return new NextResponse("Transaction details are required", { status: 400 });
     }
 
     // Find the course
@@ -49,15 +47,24 @@ export async function POST(
       return new NextResponse("You have already purchased this course", { status: 400 });
     }
 
-    // Return course details for payment
+    // Create a new purchase record
+    await db.purchase.create({
+      data: {
+        customerId: userId,
+        courseId: courseId,
+      },
+    });
+
+    // Log the transaction details
+    console.log(`Payment successful for course ${courseId} by user ${userId}`);
+    console.log(`Transaction ID: ${transactionId}, Status: ${status}, Reference: ${txRef}`);
+
     return NextResponse.json({
-      price: course.price || 0,
-      studentEmail: userEmail,
-      studentName: userName,
-      courseTitle: course.title,
+      success: true,
+      message: "Course purchase recorded successfully",
     });
   } catch (error) {
-    console.error("[COURSE_CHECKOUT] Error:", error);
+    console.error("[PAYMENT_SUCCESS] Error:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
-}
+} 

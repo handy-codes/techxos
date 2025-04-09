@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,9 +7,13 @@ import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
-import Frontend from "@/components/curriculum/Frontend";
 import GraphicDesign from "@/components/curriculum/Graphic-Design";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
+
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -21,12 +25,55 @@ export default function Page() {
     message: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const { isSignedIn, userId } = useAuth();
+  const { user } = useUser();
+  const [hasAccess, setHasAccess] = useState<boolean>(false);
+  const [userRoleState, setUserRoleState] = useState<string | null>(null);
+const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
 
-  const handleChange = (
+  
+  // Function to determine if the current user is an admin based on their email
+  const checkIfUserIsAdmin = async () => {
+    if (!isSignedIn || !userId) return false;
+    
+    try {
+      const userEmail = user?.primaryEmailAddress?.emailAddress;
+      console.log("Current user email:", userEmail);
+      
+      if (!userEmail) return false;
+      
+      // Known admin emails - add any admin emails here
+      const adminEmails = [
+        "paxymekventures@gmail.com",
+        "admin@techxos.com",
+        "emeka@techxos.com"
+      ];
+      
+      // Direct check for known admin emails
+      if (adminEmails.includes(userEmail.toLowerCase())) {
+        console.log("User is admin based on email match!");
+        setUserRoleState("HEAD_ADMIN");
+        setHasAccess(true);
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error("Error in admin check:", error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (isSignedIn && userId) {
+      checkIfUserIsAdmin();
+    }
+  }, [isSignedIn, userId, user, checkIfUserIsAdmin]);
+const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
@@ -97,7 +144,7 @@ export default function Page() {
               <p className="text-xl mb-8">
                 Ignite Visual Brilliance with Graphic Design! Imagine turning
                 blank canvases into jaw-dropping visuals that stop thumbs, spark
-                emotions, and define brands—that’s graphic design. It’s the
+                emotions, and define brands—that&apos;s graphic design. It&apos;s the
                 heartbeat of visual storytelling, where color, typography, and
                 creativity collide to turn ideas into icons, logos into legends,
                 and ads into art.
@@ -132,12 +179,12 @@ export default function Page() {
           <p className="text-justify font-semibold max-sm:mb-1">
             Techxos fuels your artistry: Design real campaigns (think album
             covers, startup branding, or animated infographics), get critiqued
-            by pros who’ve shaped global visuals, and join a guild of creators
+            by pros who&apos;ve shaped global visuals, and join a guild of creators
             obsessed with pushing boundaries. Dive into color theory, typography
             wars, and digital illustration, while building a portfolio that
-            screams “unstoppable creative.” Ready to turn pixels into persuasion
+            screams "unstoppable creative." Ready to turn pixels into persuasion
             and ideas into visual revolutions? Enroll now and start designing
-            the world’s imagination—one masterpiece at a time. 🎨✏️🔥
+            the world&apos;s imagination—one masterpiece at a time. 🎨✏️🔥
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a

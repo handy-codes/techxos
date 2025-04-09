@@ -79,4 +79,12 @@ export const dummyData = [
       reading: "LEARN MORE",
       link: "/pages/graphic-design",
     },
+    {
+      id: 11,
+      img: "https://media.istockphoto.com/id/636332456/photo/online-education-concept.jpg?b=1&s=612x612&w=0&k=20&c=B3Qb1fWVWdKcibGsE_ikxdpKjWkwKrIFtWzL7vJyq5c=",
+      title: "Mathematics (JSS)",
+      comment: "Meet Mathematics, the easiest but poorly thought subject. Turn it into your best subject. Crush Junior WAEC Maths with Confidence – Master Numbers Like a Pro!",
+      reading: "LEARN MORE",
+      link: "/pages/mathematics-jss",
+    },
 ]

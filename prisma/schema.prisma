@@ -37,6 +37,9 @@ model Course {
 
   purchases Purchase[]
 
+  // Add relation to CourseZoomMeeting
+  zoomMeetings CourseZoomMeeting[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
@@ -409,4 +412,18 @@ model ZoomAttendance {
   @@index([meetingId])
   @@index([userId])
   @@index([joinTime])
+}
+
+// Add new model for course zoom meetings
+model CourseZoomMeeting {
+  id          String   @id @default(uuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  zoomLink    String   @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([isActive])
 }
