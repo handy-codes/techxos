@@ -183,19 +183,19 @@ export async function GET(req: Request) {
 
     if (user) {
       // For users with database records, check purchases and roles
-      const isPurchased = await db.liveClassPurchase.findFirst({
-        where: {
-          studentId: user.id,
-          liveClassId: liveClass.id,
-          isActive: true,
-          endDate: { gt: new Date() }
-        },
-      });
+    const isPurchased = await db.liveClassPurchase.findFirst({
+      where: {
+        studentId: user.id,
+        liveClassId: liveClass.id,
+        isActive: true,
+        endDate: { gt: new Date() }
+      },
+    });
 
       // Add an explicit check for admin/lecturer roles
       const isAdminOrHigher = user.role === LiveClassUserRole.LECTURER || 
-        user.role === LiveClassUserRole.ADMIN || 
-        user.role === LiveClassUserRole.HEAD_ADMIN;
+      user.role === LiveClassUserRole.ADMIN || 
+      user.role === LiveClassUserRole.HEAD_ADMIN;
       
       userRole = user.role;
       hasAccess = isPurchased || isAdminOrHigher;
@@ -218,7 +218,7 @@ export async function GET(req: Request) {
         console.log(`Visitor without database record: ${userEmail}, no access`);
       }
     }
-
+    
     // Format the response to match what the page expects
     const now = new Date();
     const tomorrow = new Date();

@@ -186,9 +186,9 @@ model LiveClass {
   id              String   @id @default(uuid())
   title           String
   description     String?
-  zoomLink        String?
-  zoomMeetingId   String?
-  zoomPassword    String?
+  zoomLink        String?  // Legacy field - to be deprecated
+  zoomMeetingId   String?  // Legacy field - to be deprecated
+  zoomPassword    String?  // Legacy field - to be deprecated
   startTime       DateTime
   endTime         DateTime
   isActive        Boolean  @default(false)
@@ -204,6 +204,9 @@ model LiveClass {
   materials       LiveClassMaterial[]
   schedules       LiveClassSchedule[]
   attendance      LiveClassAttendance[]
+  
+  // New relations
+  zoomMeetings    ZoomMeeting[]
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -328,4 +331,82 @@ enum AttendanceStatus {
   ABSENT
   LATE
   LEFT_EARLY
+}
+
+model ZoomMeeting {
+  id                String   @id @default(uuid())
+  zoomMeetingId     String?  @unique // The actual Zoom meeting ID from Zoom API
+  topic             String
+  password          String?
+  startTime         DateTime
+  duration          Int      // Duration in minutes
+  agenda            String?
+  status            ZoomMeetingStatus @default(SCHEDULED)
+  joinUrl           String?
+  startUrl          String?  // URL that hosts can use to start the meeting
+  hostEmail         String?  // Email of the user who should be the host
+  
+  // Relations
+  liveClassId       String
+  liveClass         LiveClass @relation(fields: [liveClassId], references: [id], onDelete: Cascade)
+  
+  // Recordings
+  recordings        ZoomRecording[]
+  
+  // Attendance
+  attendees         ZoomAttendance[]
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([liveClassId])
+  @@index([status])
+  @@index([startTime])
+}
+
+enum ZoomMeetingStatus {
+  SCHEDULED
+  STARTED
+  ENDED
+  CANCELLED
+}
+
+model ZoomRecording {
+  id               String   @id @default(uuid())
+  zoomRecordingId  String?  @unique
+  meetingId        String
+  meeting          ZoomMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  recordingType    String   // "shared_screen_with_speaker_view", "shared_screen", etc.
+  recordingStart   DateTime
+  recordingEnd     DateTime?
+  fileType         String   // "MP4", "M4A", etc.
+  fileSize         Int?
+  playUrl          String?
+  downloadUrl      String?
+  status           String   // "processing", "completed", etc.
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([meetingId])
+}
+
+model ZoomAttendance {
+  id               String   @id @default(uuid())
+  meetingId        String
+  meeting          ZoomMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  userId           String
+  userName         String
+  userEmail        String
+  userRole         LiveClassUserRole
+  joinTime         DateTime
+  leaveTime        DateTime?
+  duration         Int?     // Duration in minutes
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([meetingId])
+  @@index([userId])
+  @@index([joinTime])
 }

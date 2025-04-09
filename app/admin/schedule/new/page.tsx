@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 export default function NewSchedulePage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +72,7 @@ export default function NewSchedulePage() {
                 
                 <div className="space-y-2">
                   <Label>Date</Label>
-                  <Popover>
+                  <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -88,7 +89,10 @@ export default function NewSchedulePage() {
                       <Calendar
                         mode="single"
                         selected={date}
-                        onSelect={setDate}
+                        onSelect={(date) => {
+                          setDate(date);
+                          setCalendarOpen(false);
+                        }}
                         initialFocus
                       />
                     </PopoverContent>

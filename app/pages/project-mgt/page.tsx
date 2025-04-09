@@ -344,7 +344,7 @@ export default function Page() {
             // Submit to server
             axios.post("/api/live-courses/project-mgt/success", {
               transactionId: response.transaction_id || Date.now(),
-              status: response.status,
+                status: response.status,
               txRef: response.tx_ref
             })
             .then(() => {
@@ -354,8 +354,8 @@ export default function Page() {
               console.error("Error verifying payment:", error);
               toast.error("Payment received but verification failed.");
             });
-          } else {
-            toast.error("Payment was not successful");
+            } else {
+              toast.error("Payment was not successful");
           }
         },
         onClose: function() {
@@ -513,17 +513,17 @@ export default function Page() {
                   
                   // Admin roles always get access
                   const isAdmin = 
-                    userRoleState === "HEAD_ADMIN" || 
-                    userRoleState === "ADMIN" || 
+                userRoleState === "HEAD_ADMIN" ||
+                userRoleState === "ADMIN" ||
                     userRoleState === "LECTURER";
                   
                   // Final access decision
                   const shouldShowJoinButton = hasAccess || isAdmin;
                   
                   return shouldShowJoinButton ? (
-                    <Button onClick={handleJoinClass}>Join Live Class</Button>
-                  ) : (
-                    <Button onClick={handlePurchase}>Purchase Course</Button>
+                  <Button onClick={handleJoinClass}>Join Live Class</Button>
+                ) : (
+                  <Button onClick={handlePurchase}>Purchase Course</Button>
                   );
                 })()
               )}

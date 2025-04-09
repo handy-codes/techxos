@@ -9,43 +9,11 @@ import {
   Calendar,
   Settings,
   LayoutDashboard,
-  CreditCard
+  CreditCard,
+  Video
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-
-const routes = [
-  {
-    label: "Dashboard",
-    icon: LayoutDashboard,
-    href: "/admin",
-  },
-  {
-    label: "Users",
-    icon: Users,
-    href: "/admin/users",
-  },
-  {
-    label: "Live Classes",
-    icon: BookOpen,
-    href: "/admin/live-classes",
-  },
-  {
-    label: "Payments",
-    icon: CreditCard,
-    href: "/pages/admin/purchases",
-  },
-  {
-    label: "Schedule",
-    icon: Calendar,
-    href: "/admin/schedule",
-  },
-  {
-    label: "Settings",
-    icon: Settings,
-    href: "/admin/settings",
-  },
-];
 
 export default function AdminLayout({
   children,
@@ -53,6 +21,51 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  
+  const routes = [
+    {
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      href: "/admin",
+      active: pathname === "/admin",
+    },
+    {
+      label: "Users",
+      icon: Users,
+      href: "/admin/users",
+      active: pathname === "/admin/users" || pathname?.startsWith("/admin/users/"),
+    },
+    {
+      label: "Live Classes",
+      icon: BookOpen,
+      href: "/admin/live-classes",
+      active: pathname === "/admin/live-classes" || pathname?.startsWith("/admin/live-classes/"),
+    },
+    {
+      label: "Schedule",
+      icon: Calendar,
+      href: "/admin/schedule",
+      active: pathname === "/admin/schedule" || pathname?.startsWith("/admin/schedule/"),
+    },
+    {
+      label: "Zoom Meetings",
+      icon: Video,
+      href: "/admin/zoom-meetings",
+      active: pathname === "/admin/zoom-meetings" || pathname?.startsWith("/admin/zoom-meetings/"),
+    },
+    {
+      label: "Payments",
+      icon: CreditCard,
+      href: "/admin/pages/purchases",
+      active: pathname === "/admin/pages/purchases" || pathname?.startsWith("/admin/pages/purchases/"),
+    },
+    {
+      label: "Settings",
+      icon: Settings,
+      href: "/admin/settings",
+      active: pathname === "/admin/settings" || pathname?.startsWith("/admin/settings/"),
+    },
+  ];
 
   return (
     <div className="flex h-screen">
@@ -70,7 +83,7 @@ export default function AdminLayout({
                 href={route.href}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                  pathname === route.href
+                  route.active
                     ? "bg-accent text-accent-foreground"
                     : "text-muted-foreground"
                 )}
