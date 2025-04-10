@@ -182,7 +182,7 @@ const handleChange = (
             by pros who&apos;ve shaped global visuals, and join a guild of creators
             obsessed with pushing boundaries. Dive into color theory, typography
             wars, and digital illustration, while building a portfolio that
-            screams "unstoppable creative." Ready to turn pixels into persuasion
+            screams &#34;unstoppable creative.&#34; Ready to turn pixels into persuasion
             and ideas into visual revolutions? Enroll now and start designing
             the world&apos;s imagination—one masterpiece at a time. 🎨✏️🔥
           </p>

@@ -148,7 +148,7 @@ export default function Page() {
               to turn anxiety into A&apos;s and confusion into success. From conquering fractions,
               simple equations, angle of elevation and depression, or plotting graphs
               to acing real-life word problems, we break down Nigeria&apos;s JSS curriculum into tiny parts. 
-              Say goodbye to "maths phobia"—you&apos;ll tackle past WAEC questions and mock exams 
+              Say goodbye to &#34;maths phobia&#34;—you&apos;ll tackle past WAEC questions and mock exams 
               like a champion.
               </p>
             </div>
@@ -182,7 +182,7 @@ export default function Page() {
             Happening in 16 weeks. Junior WAEC isn&apos;t just a test—it&apos;s your stepping stone to SS1 greatness. 
             With every lesson, you&apos;ll build logic, critical thinking, and the maths swagger to 
             top your class. Ready to be the maths hero your school talks about? Enroll now and 
-            turn "I hate maths" into "Bring on the WAEC!" 🧮🏆🇳🇬
+            turn &#34;I hate maths&#34; into &#34;Bring on the WAEC!&#34; 🧮🏆🇳🇬
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
