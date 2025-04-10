@@ -1,11 +1,11 @@
-import { prisma } from "@/lib/db"
+import { db } from "@/lib/db"
 import { Course } from "@prisma/client"
 
 const getCoursesByCategory = async (categoryId: string | null): Promise<Course[]> => {
   const whereClause: any = {
     ...(categoryId ? { categoryId, isPublished: true } : { isPublished: true }),
   }
-  const courses = await prisma.course.findMany({
+  const courses = await db.course.findMany({
     where: whereClause,
     include: {
       category: true,

@@ -50,7 +50,7 @@ async function main() {
       console.log(`Email: ${primaryEmail || 'No primary email'}`);
       
       // Find or create user in database
-      let dbUser = await prisma.liveClassUser.findFirst({
+      let dbUser = await db.liveClassUser.findFirst({
         where: { clerkUserId }
       });
       
@@ -59,7 +59,7 @@ async function main() {
         console.log(`Current role: ${dbUser.role}`);
         
         // Update user role
-        dbUser = await prisma.liveClassUser.update({
+        dbUser = await db.liveClassUser.update({
           where: { id: dbUser.id },
           data: { 
             role: role as LiveClassUserRole,
@@ -72,7 +72,7 @@ async function main() {
         console.log(`Creating new user in database...`);
         
         // Create new user
-        dbUser = await prisma.liveClassUser.create({
+        dbUser = await db.liveClassUser.create({
           data: {
             name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'User',
             email: primaryEmail || `user-${clerkUser.id}@example.com`,
@@ -104,7 +104,7 @@ async function main() {
   } catch (error) {
     console.error("Error in script:", error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 

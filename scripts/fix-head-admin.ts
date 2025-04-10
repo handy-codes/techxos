@@ -38,7 +38,7 @@ async function main() {
     console.log(`Found Clerk user: ${clerkUser.id} (${clerkUser.firstName} ${clerkUser.lastName})`);
     
     // 3. Check if they exist in our database
-    let dbUser = await prisma.liveClassUser.findFirst({
+    let dbUser = await db.liveClassUser.findFirst({
       where: {
         OR: [
           { clerkUserId: clerkUser.id },
@@ -50,7 +50,7 @@ async function main() {
     // 4. Create or update the user
     if (!dbUser) {
       console.log("Creating HEAD_ADMIN user in database...");
-      dbUser = await prisma.liveClassUser.create({
+      dbUser = await db.liveClassUser.create({
         data: {
           name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim(),
           email: headAdminEmail,
@@ -62,7 +62,7 @@ async function main() {
       console.log("Created new HEAD_ADMIN user in database.");
     } else if (dbUser.role !== LiveClassUserRole.HEAD_ADMIN) {
       console.log(`Updating user role from ${dbUser.role} to HEAD_ADMIN...`);
-      dbUser = await prisma.liveClassUser.update({
+      dbUser = await db.liveClassUser.update({
         where: { id: dbUser.id },
         data: { 
           role: LiveClassUserRole.HEAD_ADMIN,
@@ -73,7 +73,7 @@ async function main() {
       console.log("User role updated to HEAD_ADMIN.");
     } else if (!dbUser.clerkUserId) {
       console.log("Linking database user to Clerk user ID...");
-      dbUser = await prisma.liveClassUser.update({
+      dbUser = await db.liveClassUser.update({
         where: { id: dbUser.id },
         data: { clerkUserId: clerkUser.id }
       });
@@ -101,7 +101,7 @@ async function main() {
   } catch (error) {
     console.error("Error fixing HEAD_ADMIN:", error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 import getCoursesByCategory from "../actions/getCourses";
 import Categories from "@/components/custom/Categories";
 import CourseCard from "@/components/courses/CourseCard";
@@ -24,7 +24,7 @@ interface CategoryWithSubCategories extends Category {
 }
 
 export default async function Home() {
-  const categories = await prisma.category.findMany({
+  const categories = await db.category.findMany({
     orderBy: {
       name: "asc",
     },

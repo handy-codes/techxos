@@ -27,7 +27,7 @@ async function main() {
   
   try {
     // Check if user already exists
-    const existingUser = await prisma.liveClassUser.findUnique({
+    const existingUser = await db.liveClassUser.findUnique({
       where: { email }
     });
     
@@ -37,7 +37,7 @@ async function main() {
       console.log('Current Clerk User ID:', existingUser.clerkUserId || 'None');
       
       // Update user role
-      const updatedUser = await prisma.liveClassUser.update({
+      const updatedUser = await db.liveClassUser.update({
         where: { id: existingUser.id },
         data: { 
           role,
@@ -55,7 +55,7 @@ async function main() {
       console.log('\n✅ User will now have', role, 'permissions and see "Join Live Class" instead of "Purchase Course"');
     } else {
       // Create new user
-      const newUser = await prisma.liveClassUser.create({
+      const newUser = await db.liveClassUser.create({
         data: {
           email,
           name: email.split('@')[0],
@@ -83,7 +83,7 @@ async function main() {
   } catch (error) {
     console.error('Error:', error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 

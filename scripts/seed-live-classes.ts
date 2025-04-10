@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 async function main() {
   try {
     // Check if Head Admin exists
-    let headAdmin = await prisma.liveClassUser.findUnique({
+    let headAdmin = await db.liveClassUser.findUnique({
       where: { email: "paxymekventures@gmail.com" }
     });
 
     // Create Head Admin if doesn't exist
     if (!headAdmin) {
-      headAdmin = await prisma.liveClassUser.create({
+      headAdmin = await db.liveClassUser.create({
         data: {
           email: "paxymekventures@gmail.com",
           role: "HEAD_ADMIN",
@@ -22,13 +22,13 @@ async function main() {
     }
 
     // Check if live class exists
-    let liveClass = await prisma.liveClass.findFirst({
+    let liveClass = await db.liveClass.findFirst({
       where: { title: "Project Management" }
     });
 
     // Create live class if doesn't exist
     if (!liveClass) {
-      liveClass = await prisma.liveClass.create({
+      liveClass = await db.liveClass.create({
         data: {
           title: "Project Management",
           description: "Comprehensive project management course covering all aspects of modern project management.",
@@ -48,12 +48,12 @@ async function main() {
     }
 
     // Create class materials if they don't exist
-    const materials = await prisma.liveClassMaterial.findMany({
+    const materials = await db.liveClassMaterial.findMany({
       where: { liveClassId: liveClass.id }
     });
 
     if (materials.length === 0) {
-      await prisma.liveClassMaterial.createMany({
+      await db.liveClassMaterial.createMany({
         data: [
           {
             title: "Course Syllabus",
@@ -78,12 +78,12 @@ async function main() {
     }
 
     // Create class schedules if they don't exist
-    const schedules = await prisma.liveClassSchedule.findMany({
+    const schedules = await db.liveClassSchedule.findMany({
       where: { liveClassId: liveClass.id }
     });
 
     if (schedules.length === 0) {
-      await prisma.liveClassSchedule.createMany({
+      await db.liveClassSchedule.createMany({
         data: [
           {
             liveClassId: liveClass.id,
@@ -107,7 +107,7 @@ async function main() {
   } catch (error) {
     console.error("Error seeding live class data:", error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 

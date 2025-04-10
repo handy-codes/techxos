@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import CourseLayoutClient from "./CourseLayoutClient";
@@ -16,7 +16,7 @@ const CourseDetailsLayout = async ({
     return redirect("/sign-in");
   }
 
-  const course = await prisma.course.findUnique({
+  const course = await db.course.findUnique({
     where: {
       id: params.courseId,
     },

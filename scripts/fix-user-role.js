@@ -30,7 +30,7 @@ async function main() {
     const email = param1;
     console.log(`\n=== Checking for users with email: ${email} ===\n`);
     
-    const users = await prisma.liveClassUser.findMany({
+    const users = await db.liveClassUser.findMany({
       where: {
         email: {
           equals: email,
@@ -67,7 +67,7 @@ async function main() {
     console.log(`\n=== Deleting user with ID: ${userId} ===\n`);
     
     try {
-      const user = await prisma.liveClassUser.findUnique({
+      const user = await db.liveClassUser.findUnique({
         where: { id: userId }
       });
       
@@ -83,7 +83,7 @@ async function main() {
       console.log('Role:', user.role);
       
       // Delete user
-      await prisma.liveClassUser.delete({
+      await db.liveClassUser.delete({
         where: { id: userId }
       });
       
@@ -104,7 +104,7 @@ async function main() {
     console.log(`\n=== Fixing user role for email: ${email} to ${role} ===\n`);
     
     // Check for duplicate users
-    const users = await prisma.liveClassUser.findMany({
+    const users = await db.liveClassUser.findMany({
       where: {
         email: {
           equals: email,
@@ -116,7 +116,7 @@ async function main() {
       console.log('❌ No users found with this email');
       
       // Create new user
-      const newUser = await prisma.liveClassUser.create({
+      const newUser = await db.liveClassUser.create({
         data: {
           email,
           name: email.split('@')[0],
@@ -136,7 +136,7 @@ async function main() {
       console.log('ID:', user.id);
       console.log('Current role:', user.role);
       
-      const updatedUser = await prisma.liveClassUser.update({
+      const updatedUser = await db.liveClassUser.update({
         where: { id: user.id },
         data: { 
           role,
@@ -166,7 +166,7 @@ async function main() {
   }
   
   // Disconnect from the database
-  await prisma.$disconnect();
+  await db.$disconnect();
 }
 
 main(); 

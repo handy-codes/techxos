@@ -34,7 +34,7 @@ async function createHeadAdmin() {
     console.log(`Created Clerk user with ID: ${clerkUser.id}`);
     
     // Create user in database
-    const dbUser = await prisma.liveClassUser.create({
+    const dbUser = await db.liveClassUser.create({
       data: {
         clerkUserId: clerkUser.id,
         email,
@@ -51,7 +51,7 @@ async function createHeadAdmin() {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 

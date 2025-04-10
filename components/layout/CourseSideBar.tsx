@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 import { Course, Section } from "@prisma/client";
 import Link from "next/link";
 import { Progress } from "../ui/progress";
@@ -9,7 +9,7 @@ interface CourseSideBarProps {
 }
 
 const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
-  const publishedSections = await prisma.section.findMany({
+  const publishedSections = await db.section.findMany({
     where: {
       courseId: course.id,
       isPublished: true,
@@ -21,7 +21,7 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
 
   const publishedSectionIds = publishedSections.map((section) => section.id);
 
-  const purchase = await prisma.purchase.findUnique({
+  const purchase = await db.purchase.findUnique({
     where: {
       customerId_courseId: {
         customerId: studentId,
@@ -30,7 +30,7 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
     },
   });
 
-  const completedSections = await prisma.progress.count({
+  const completedSections = await db.progress.count({
     where: {
       studentId,
       sectionId: {

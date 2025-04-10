@@ -31,13 +31,13 @@ async function linkExistingClerkUser() {
     console.log(`Found Clerk user with ID: ${clerkUser.id}`);
     
     // Check if user already exists in database
-    const existingDbUser = await prisma.liveClassUser.findUnique({
+    const existingDbUser = await db.liveClassUser.findUnique({
       where: { email },
     });
     
     if (existingDbUser) {
       // Update existing user with Clerk ID and HEAD_ADMIN role
-      const updatedUser = await prisma.liveClassUser.update({
+      const updatedUser = await db.liveClassUser.update({
         where: { id: existingDbUser.id },
         data: { 
           clerkUserId: clerkUser.id,
@@ -49,7 +49,7 @@ async function linkExistingClerkUser() {
       console.log(`Updated existing user in database:`, updatedUser);
     } else {
       // Create new user in database
-      const newUser = await prisma.liveClassUser.create({
+      const newUser = await db.liveClassUser.create({
         data: {
           clerkUserId: clerkUser.id,
           email,
@@ -75,7 +75,7 @@ async function linkExistingClerkUser() {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 

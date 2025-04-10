@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   try {
     // Get all live classes
-    const liveClasses = await prisma.liveClass.findMany({
+    const liveClasses = await db.liveClass.findMany({
       where: {
         zoomMeetingId: null
       }
@@ -15,7 +15,7 @@ async function main() {
     // Update each live class with the project management meeting ID
     for (const liveClass of liveClasses) {
       if (liveClass.title === "Project Management") {
-        await prisma.liveClass.update({
+        await db.liveClass.update({
           where: { id: liveClass.id },
           data: {
             zoomMeetingId: process.env.ZOOM_PROJECT_MGT_MEETING_ID?.replace(/\s/g, '') || "89661114279",
@@ -30,7 +30,7 @@ async function main() {
   } catch (error) {
     console.error('Error updating Zoom meeting IDs:', error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 

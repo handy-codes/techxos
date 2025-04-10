@@ -9,7 +9,7 @@ async function main() {
     console.log("Starting database update...");
     
     // 1. Get count of users with each role
-    const roleCounts = await prisma.$queryRaw`
+    const roleCounts = await db.$queryRaw`
       SELECT "role", COUNT(*) as count 
       FROM "LiveClassUser" 
       GROUP BY "role" 
@@ -22,7 +22,7 @@ async function main() {
     });
     
     // 2. Count users who have purchases (actual learners)
-    const purchaseCountResult = await prisma.$queryRaw`
+    const purchaseCountResult = await db.$queryRaw`
       SELECT COUNT(DISTINCT "studentId") as count 
       FROM "LiveClassPurchase"
     `;
@@ -31,7 +31,7 @@ async function main() {
     console.log(`\nUsers with purchases: ${purchaseCount}`);
     
     // 3. Count users with LEARNER role but no purchases
-    const nonPurchaseLearners = await prisma.$queryRaw`
+    const nonPurchaseLearners = await db.$queryRaw`
       SELECT COUNT(*) as count
       FROM "LiveClassUser" u
       WHERE u.role = 'LEARNER'
@@ -55,7 +55,7 @@ async function main() {
       console.log("\n=== EXECUTING UPDATE ===");
       
       // Perform the update on users with LEARNER role but no purchases
-      const updateResult = await prisma.$executeRaw`
+      const updateResult = await db.$executeRaw`
         UPDATE "LiveClassUser" u
         SET role = 'VISITOR'
         WHERE u.role = 'LEARNER'
@@ -68,7 +68,7 @@ async function main() {
       console.log(`Updated ${updateResult} users from LEARNER to VISITOR`);
       
       // Show final counts
-      const finalRoleCounts = await prisma.$queryRaw`
+      const finalRoleCounts = await db.$queryRaw`
         SELECT "role", COUNT(*) as count 
         FROM "LiveClassUser" 
         GROUP BY "role" 
@@ -84,7 +84,7 @@ async function main() {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 
