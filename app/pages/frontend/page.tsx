@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,18 +24,17 @@ export default function Page() {
     message: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
-  
   const { isSignedIn, userId } = useAuth();
   const { user } = useUser();
   const [hasAccess, setHasAccess] = useState<boolean>(false);
   const [userRoleState, setUserRoleState] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   // Function to determine if the current user is an admin based on their email
-  const checkIfUserIsAdmin = async () => {
+  const checkIfUserIsAdmin = useCallback(async () => {
     if (!isSignedIn || !userId) return false;
     
     try {
@@ -64,13 +63,13 @@ export default function Page() {
       console.error("Error in admin check:", error);
       return false;
     }
-  };
+  }, [isSignedIn, userId, user]);
 
   useEffect(() => {
     if (isSignedIn && userId) {
       checkIfUserIsAdmin();
     }
-  }, [isSignedIn, userId, user, checkIfUserIsAdmin]);
+  }, [isSignedIn, userId, checkIfUserIsAdmin]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

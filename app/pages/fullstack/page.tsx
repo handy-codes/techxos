@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,7 +35,7 @@ export default function Page() {
   const [userRoleState, setUserRoleState] = useState<string | null>(null);
 
   // Function to determine if the current user is an admin based on their email
-  const checkIfUserIsAdmin = async () => {
+  const checkIfUserIsAdmin = useCallback(async () => {
     if (!isSignedIn || !userId) return false;
     
     try {
@@ -64,13 +64,13 @@ export default function Page() {
       console.error("Error in admin check:", error);
       return false;
     }
-  };
+  }, [isSignedIn, userId, user]);
 
   useEffect(() => {
     if (isSignedIn && userId) {
       checkIfUserIsAdmin();
     }
-  }, [isSignedIn, userId, user]);
+  }, [isSignedIn, userId, checkIfUserIsAdmin]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -180,13 +180,13 @@ export default function Page() {
             250,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            Techxos fuels your mastery: Code dynamic projects, debug
-            real-world scenarios, and learn from mentors who've shipped global
-            apps. Dive into frontend design, backend architecture, and
-            everything in between, while joining a community of builders
-            obsessed with turning visions into live, scalable products. Ready to
-            command the entire tech stack? Enroll now and start creating the
-            future—one full-throttle application at a time. 💻🌐🚀
+            Techxos powers your rise: Code apps from day one, debug like a
+            pro, and learn from mentors who&apos;ve shipped global
+            applications. Dive into Agile workflows, DevOps pipelines, and UI/UX design, while
+            joining a global squad of builders obsessed with clean code and bold
+            innovation. Ready to turn imagination into iteration? Enroll now and
+            start crafting the digital universe—one groundbreaking program at a
+            time. 💻⚡🌍
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a

@@ -9,7 +9,7 @@ import {
   Section,
 } from "@prisma/client";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { File, Loader2, Lock } from "lucide-react";
 
@@ -31,6 +31,24 @@ interface SectionsDetailsProps {
   progress: Progress | null;
 }
 
+type FlutterwaveConfig = {
+  public_key: string | undefined;
+  tx_ref?: number;
+  amount: number;
+  currency: string;
+  payment_options: string;
+  customer: {
+    email: string;
+    phone_number: string;
+    name: string;
+  };
+  customizations: {
+    title: string;
+    description: string;
+    logo: string;
+  };
+};
+
 const SectionsDetails = ({
   course,
   section,
@@ -40,52 +58,37 @@ const SectionsDetails = ({
   progress,
 }: SectionsDetailsProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentConfig, setPaymentConfig] = useState<FlutterwaveConfig | null>(null);
   const isLocked = !purchase && !section.isFree;
-
-  type Config = {
-    public_key: string | undefined;
-    tx_ref?: number;
-    amount: number;
-    currency: string;
-    payment_options: string;
-    customer: {
-      email: string;
-      phone_number: string;
-      name: string;
-    };
-    customizations: {
-      title: string;
-      description: string;
-      logo: string;
-    };
-  };
-  const config: Config = {
-    public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY,
-    tx_ref: Date.now(),
-    amount: Math.round(course.price!),
-    currency: "NGN",
-    payment_options: "card,mobilemoney,ussd",
-    customer: {
-      email: "paxymekventures@gmail.com",
-      phone_number: "09038984567",
-      name: "Prince Emy",
-    },
-    customizations: {
-      title: "Techxos Tutors",
-      description: "Payment for Courses in cart",
-      logo: "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
-    },
-  };
-
-  //@ts-ignore
-  const handleFlutterPayment = useFlutterwave(config);
-
   const router = useRouter();
+
+  const makePayment = useFlutterwave(paymentConfig || {});
+
+  useEffect(() => {
+    const config: FlutterwaveConfig = {
+      public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY,
+      tx_ref: Date.now(),
+      amount: Math.round(course.price!),
+      currency: "NGN",
+      payment_options: "card,mobilemoney,ussd",
+      customer: {
+        email: "paxymekventures@gmail.com",
+        phone_number: "09038984567",
+        name: "Prince Emy",
+      },
+      customizations: {
+        title: "Techxos Tutors",
+        description: "Payment for Courses in cart",
+        logo: "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
+      },
+    };
+    setPaymentConfig(config);
+  }, [course.price]);
 
   const buyCourse = async () => {
     try {
       setIsLoading(true);
-      handleFlutterPayment({
+      makePayment({
         callback: async (response) => {
           if (response.status === "successful") {
             console.log("Payment successful", response);
@@ -98,24 +101,18 @@ const SectionsDetails = ({
               console.log("Failed to checkout course", err);
               toast.error("Payment failed!");
             }
-            closePaymentModal(); // this will close the modal programmatically
-            // Redirect or perform other actions here
           } else {
-            console.log("Payment failed", response);
-            // Handle failed payment
+            toast.error("Payment failed!");
           }
         },
         onClose: () => {
-          console.log("Payment modal closed");
-          // Handle actions when the payment modal is closed
+          setIsLoading(false);
         },
       });
-    } catch (err) {
-      console.log("Failed to chechout course", err);
-      toast.error("Something went wrong!");
-    } finally {
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast.error("Payment failed!");
       setIsLoading(false);
-      router.refresh();
     }
   };
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,7 +14,6 @@ import { useUser } from "@clerk/nextjs";
 import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
 import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
 
-
 export default function Page() {
   const [formData, setFormData] = useState({
     courseTitle: "Software Development",
@@ -25,19 +24,17 @@ export default function Page() {
     message: "",
   });
 
-  
   const { isSignedIn, userId } = useAuth();
   const { user } = useUser();
   const [hasAccess, setHasAccess] = useState<boolean>(false);
   const [userRoleState, setUserRoleState] = useState<string | null>(null);
-const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
 
-  
   // Function to determine if the current user is an admin based on their email
-  const checkIfUserIsAdmin = async () => {
+  const checkIfUserIsAdmin = useCallback(async () => {
     if (!isSignedIn || !userId) return false;
     
     try {
@@ -66,14 +63,15 @@ const [isSubmitting, setIsSubmitting] = useState(false);
       console.error("Error in admin check:", error);
       return false;
     }
-  };
+  }, [isSignedIn, userId, user]);
 
   useEffect(() => {
     if (isSignedIn && userId) {
       checkIfUserIsAdmin();
     }
-  }, [isSignedIn, userId, user]);
-const handleChange = (
+  }, [isSignedIn, userId, checkIfUserIsAdmin]);
+
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
@@ -176,7 +174,7 @@ const handleChange = (
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
             Techxos powers your rise: Code apps from day one, debug like a
-            pro, and learn from mentors who've shipped software to millions.
+            pro, and learn from mentors who&apos;ve shipped software to millions.
             Dive into Agile workflows, DevOps pipelines, and UI/UX design, while
             joining a global squad of builders obsessed with clean code and bold
             innovation. Ready to turn imagination into iteration? Enroll now and

@@ -21,6 +21,8 @@ export default function CoursePurchaseButton({
 }: CoursePurchaseButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { isSignedIn } = useAuth();
+  const [paymentConfig, setPaymentConfig] = useState<any>(null);
+  const makePayment = useFlutterwave(paymentConfig || {});
 
   const handlePurchase = async () => {
     if (!isSignedIn) {
@@ -77,9 +79,7 @@ export default function CoursePurchaseButton({
       };
 
       console.log("Payment config:", JSON.stringify(flwConfig));
-
-      // Create payment handler
-      const makePayment = useFlutterwave(flwConfig);
+      setPaymentConfig(flwConfig);
       
       // Make payment
       makePayment({
@@ -99,24 +99,23 @@ export default function CoursePurchaseButton({
             })
             .then(() => {
               toast.success("Course access granted!");
-              // Refresh the page or update UI to show course content
               window.location.reload();
             })
-            .catch(error => {
-              console.error("Error verifying payment:", error);
-              toast.error("Payment received but verification failed.");
+            .catch((error) => {
+              console.error("Error processing payment success:", error);
+              toast.error("Error processing payment. Please contact support.");
             });
           } else {
-            toast.error("Payment was not successful");
+            toast.error("Payment failed or was cancelled");
           }
         },
         onClose: function() {
-          toast("Payment canceled");
+          console.log("Payment modal closed");
         }
       });
     } catch (error) {
       console.error("Purchase error:", error);
-      toast.error("Could not process payment. Please try again.");
+      toast.error("Failed to process purchase. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,7 +37,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 
   
   // Function to determine if the current user is an admin based on their email
-  const checkIfUserIsAdmin = async () => {
+  const checkIfUserIsAdmin = useCallback(async () => {
     if (!isSignedIn || !userId) return false;
     
     try {
@@ -66,13 +66,13 @@ const [isSubmitting, setIsSubmitting] = useState(false);
       console.error("Error in admin check:", error);
       return false;
     }
-  };
+  }, [isSignedIn, userId, user]);
 
   useEffect(() => {
     if (isSignedIn && userId) {
       checkIfUserIsAdmin();
     }
-  }, [isSignedIn, userId, user]);
+  }, [isSignedIn, userId, checkIfUserIsAdmin]);
 const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
@@ -144,10 +144,10 @@ const handleChange = (
               <p className="text-xl mb-8">
                 Unlock the Future with Data Science & Analytics! Imagine turning
                 raw data into powerful stories that predict trends, solve global
-                challenges, and shape tomorrow’s innovations—that’s Data
+                challenges, and shape tomorrow's innovations—that's Data
                 Science. In a world drowning in information, this field equips
                 you to extract gold from chaos, blending coding, statistics, and
-                creativity to answer questions we haven’t even asked yet.
+                creativity to answer questions we haven't even asked yet.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">

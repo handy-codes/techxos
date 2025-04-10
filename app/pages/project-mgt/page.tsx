@@ -138,7 +138,6 @@ export default function Page() {
     if (!isSignedIn || !userId) return false;
     
     try {
-      // Use user from component scope instead of calling useUser() here
       const userEmail = user?.primaryEmailAddress?.emailAddress;
       console.log("Current user email:", userEmail);
       
@@ -159,24 +158,6 @@ export default function Page() {
         return true;
       }
       
-      // Try to fetch the sync file
-      try {
-        const syncResponse = await fetch('/role-sync.json');
-        if (syncResponse.ok) {
-          const syncData = await syncResponse.json();
-          
-          // Check if user's email matches the admin email in sync file
-          if (userEmail.toLowerCase() === syncData.adminEmail.toLowerCase()) {
-            console.log("User is admin based on sync file match!");
-            setUserRoleState("HEAD_ADMIN");
-            setHasAccess(true);
-            return true;
-          }
-        }
-      } catch (syncError) {
-        console.log("No sync file found or error reading it");
-      }
-      
       return false;
     } catch (error) {
       console.error("Error in admin check:", error);
@@ -186,16 +167,9 @@ export default function Page() {
 
   useEffect(() => {
     if (isSignedIn && userId) {
-      // First try the direct admin check
-      checkIfUserIsAdmin().then(isAdmin => {
-        if (!isAdmin) {
-          // If not an admin by direct check, try the API routes
-          fetchLectureDetails();
-          fetchUserRole();
-        }
-      });
+      checkIfUserIsAdmin();
     }
-  }, [isSignedIn, userId, fetchLectureDetails, fetchUserRole, checkIfUserIsAdmin]);
+  }, [isSignedIn, userId, checkIfUserIsAdmin]);
 
   // Add effect to log role state changes
   useEffect(() => {
