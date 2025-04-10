@@ -174,7 +174,7 @@ export default function DebugUserPage() {
         <CardHeader>
           <CardTitle>Fix User Role</CardTitle>
           <CardDescription>
-            Update the user's role or create a new user with the specified email and role
+            Update the user&apos;s role or create a new user with the specified email and role
           </CardDescription>
         </CardHeader>
         <CardContent>

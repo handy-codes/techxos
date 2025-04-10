@@ -174,7 +174,7 @@ export default function NewZoomMeetingPage() {
           <AlertCircle className="h-4 w-4 text-red-600" />
           <AlertTitle>No classes assigned</AlertTitle>
           <AlertDescription className="text-red-700">
-            You haven't been assigned to any classes yet. Please contact an administrator to be assigned as a lecturer to a class before you can schedule meetings.
+            You haven&apos;t been assigned to any classes yet. Please contact an administrator to be assigned as a lecturer to a class before you can schedule meetings.
           </AlertDescription>
         </Alert>
       )}
@@ -224,7 +224,7 @@ export default function NewZoomMeetingPage() {
                         <SelectContent>
                           {liveClasses.length === 0 ? (
                             <div className="p-2 text-sm text-muted-foreground">
-                              You haven't been assigned to any classes yet.
+                              You haven&apos;t been assigned to any classes yet.
                             </div>
                           ) : (
                             liveClasses.map((liveClass) => (

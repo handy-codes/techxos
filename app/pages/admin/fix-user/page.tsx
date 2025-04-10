@@ -44,7 +44,7 @@ export default function FixUserPage() {
       
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Fix Prince Owo's Account</CardTitle>
+          <CardTitle>Fix Prince Owo&apos;s Account</CardTitle>
           <CardDescription>
             Connect the correct Clerk ID to the database user record
           </CardDescription>

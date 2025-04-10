@@ -204,7 +204,7 @@ export default function UsersPage() {
         <div className="rounded-md border p-4 md:p-6 text-center">
           <h2 className="text-xl md:text-2xl font-bold mb-2">Access Denied</h2>
           <p className="text-muted-foreground mb-4">
-            You don't have permission to access this page. Please contact your administrator if you believe this is a mistake.
+            You don&apos;t have permission to access this page. Please contact your administrator if you believe this is a mistake.
           </p>
           <Button onClick={() => router.push("/")}>
             Return to Home

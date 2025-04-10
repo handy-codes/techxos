@@ -123,7 +123,7 @@ export default function LecturerStudentsPage() {
         <h1 className="text-2xl font-bold">Students</h1>
         <Card>
           <CardContent className="pt-6 text-center">
-            <p className="text-muted-foreground">You don't have any students yet</p>
+            <p className="text-muted-foreground">You don&apos;t have any students yet</p>
             <p className="text-muted-foreground mt-1">
               Students will appear here when they purchase your courses
             </p>

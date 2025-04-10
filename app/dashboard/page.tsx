@@ -62,7 +62,7 @@ export default function DashboardPage() {
             <div className="space-y-4">
               <h1 className="text-3xl font-bold">Welcome back, {user.firstName}!</h1>
               <p className="text-muted-foreground">
-                Here's an overview of your learning journey
+                Here&apos;s an overview of your learning journey
               </p>
             </div>
             <Button 
@@ -83,7 +83,7 @@ export default function DashboardPage() {
               <CardContent>
                 <p className="text-3xl font-bold">0</p>
                 <p className="text-sm text-muted-foreground">
-                  You haven't enrolled in any classes yet
+                  You haven&apos;t enrolled in any classes yet
                 </p>
               </CardContent>
             </Card>

@@ -122,7 +122,7 @@ export default function ClassroomPage({ params }: { params: { meetingId: string 
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Meeting Not Found</AlertTitle>
           <AlertDescription>
-            The meeting you're looking for could not be found. It may have been deleted or you don't have permission to access it.
+            The meeting you&apos;re looking for could not be found. It may have been deleted or you don&apos;t have permission to access it.
           </AlertDescription>
         </Alert>
         <Button 

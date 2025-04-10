@@ -74,7 +74,7 @@ export default function SchedulePage() {
             <Calendar className="h-12 w-12 text-gray-400" />
             <h3 className="text-xl font-medium">No Schedules Found</h3>
             <p className="text-muted-foreground text-center max-w-md">
-              This feature is coming soon. You'll be able to create and manage class schedules here.
+              This feature is coming soon. You&apos;ll be able to create and manage class schedules here.
             </p>
             <Button asChild>
               <Link href="/admin">Return to Dashboard</Link>

@@ -82,7 +82,7 @@ export default function AddRolePage() {
           <CardTitle>Add User Role</CardTitle>
           <CardDescription>
             Pre-register a user with a specified role. When they sign up with this email,
-            they'll automatically have the assigned permissions.
+            they&apos;ll automatically have the assigned permissions.
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -242,7 +242,7 @@ export default function Page() {
             delivered billion-dollar portfolios, and join a network of leaders
             obsessed with efficiency and impact. Dive into stakeholder mapping,
             risk mitigation, and Lean practices, while earning certifications
-            that scream "promote me." Ready to transform ideas into
+            that scream &quot;promote me.&quot; Ready to transform ideas into
             legacy? Enroll now and start delivering success—one milestone at a
             time. 🚀📅🎯
           </p>
