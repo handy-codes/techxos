@@ -1,19 +1,19 @@
-"use client"
+"use client&quot;
 
-import dynamic from "next/dynamic";
-import { useMemo } from "react";
-import "react-quill/dist/quill.bubble.css";
+import dynamic from &quot;next/dynamic&quot;;
+import { useMemo } from &quot;react&quot;;
+import &quot;react-quill/dist/quill.bubble.css&quot;;
 
 
 const ReadText = ({ value }: { value: string }) => {
   const ReactQuill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
+    () => dynamic(() => import(&quot;react-quill&quot;), { ssr: false }),
     []
   );
 
   return (
     <ReactQuill
-      theme="bubble"
+      theme=&quot;bubble"
       value={value}
       readOnly
     />

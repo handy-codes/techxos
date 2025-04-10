@@ -1,11 +1,11 @@
-"use client";
+"use client&quot;;
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Course } from "@prisma/client";
+import { z } from &quot;zod&quot;;
+import { zodResolver } from &quot;@hookform/resolvers/zod&quot;;
+import { useForm } from &quot;react-hook-form&quot;;
+import { Course } from &quot;@prisma/client&quot;;
 
-import { Button } from "@/components/ui/button";
+import { Button } from &quot;@/components/ui/button&quot;;
 import {
   Form,
   FormControl,
@@ -13,30 +13,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import RichEditor from "@/components/custom/RichEditor";
-import { ComboBox } from "../custom/ComboBox";
-import FileUpload from "../custom/FileUpload";
-import Link from "next/link";
-import axios from "axios";
-import { usePathname, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { Loader2, Trash } from "lucide-react";
-import Delete from "../custom/Delete";
-import PublishButton from "../custom/PublishButton";
+} from &quot;@/components/ui/form&quot;;
+import { Input } from &quot;@/components/ui/input&quot;;
+import RichEditor from &quot;@/components/custom/RichEditor&quot;;
+import { ComboBox } from &quot;../custom/ComboBox&quot;;
+import FileUpload from &quot;../custom/FileUpload&quot;;
+import Link from &quot;next/link&quot;;
+import axios from &quot;axios&quot;;
+import { usePathname, useRouter } from &quot;next/navigation&quot;;
+import toast from &quot;react-hot-toast&quot;;
+import { Loader2, Trash } from &quot;lucide-react&quot;;
+import Delete from &quot;../custom/Delete&quot;;
+import PublishButton from &quot;../custom/PublishButton&quot;;
 
 const formSchema = z.object({
   title: z.string().min(2, {
-    message: "Title is required and must be at least 2 characters long",
+    message: &quot;Title is required and must be at least 2 characters long&quot;,
   }),
   subtitle: z.string().optional(),
   description: z.string().optional(),
   categoryId: z.string().min(1, {
-    message: "Category is required",
+    message: &quot;Category is required&quot;,
   }),
   subCategoryId: z.string().min(1, {
-    message: "Subcategory is required",
+    message: &quot;Subcategory is required&quot;,
   }),
   levelId: z.string().optional(),
   imageUrl: z.string().optional(),
@@ -68,12 +68,12 @@ const EditCourseForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: course.title,
-      subtitle: course.subtitle || "",
-      description: course.description || "",
+      subtitle: course.subtitle || &quot;",
+      description: course.description || &quot;&quot;,
       categoryId: course.categoryId,
       subCategoryId: course.subCategoryId,
-      levelId: course.levelId || "",
-      imageUrl: course.imageUrl || "",
+      levelId: course.levelId || &quot;&quot;,
+      imageUrl: course.imageUrl || &quot;&quot;,
       price: course.price || undefined,
     },
   });
@@ -84,59 +84,59 @@ const EditCourseForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${course.id}`, values);
-      toast.success("Course Updated");
+      toast.success(&quot;Course Updated&quot;);
       router.refresh();
     } catch (err) {
-      console.log("Failed to update the course", err);
-      toast.error("Something went wrong!");
+      console.log(&quot;Failed to update the course&quot;, err);
+      toast.error(&quot;Something went wrong!&quot;);
     }
   };
 
   const routes = [
     {
-      label: "Basic Information",
+      label: &quot;Basic Information&quot;,
       path: `/instructor/courses/${course.id}/basic`,
     },
-    { label: "Chapters", path: `/instructor/courses/${course.id}/sections` },
+    { label: &quot;Chapters&quot;, path: `/instructor/courses/${course.id}/sections` },
   ];
 
   return (
     <>
-      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7">
-        <div className="flex gap-5">
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7&quot;>
+        <div className=&quot;flex gap-5&quot;>
           {routes.map((route) => (
             <Link key={route.path} href={route.path}>
-              <Button variant={pathname === route.path ? "default" : "outline"}>
+              <Button variant={pathname === route.path ? &quot;default&quot; : &quot;outline&quot;}>
                 {route.label}
               </Button>
             </Link>
           ))}
         </div>
 
-        <div className="flex gap-5 items-start">
+        <div className=&quot;flex gap-5 items-start&quot;>
           <PublishButton
             disabled={!isCompleted}
             courseId={course.id}
             isPublished={course.isPublished}
-            page="Course"
+            page=&quot;Course&quot;
           />
-          <Delete item="course" courseId={course.id} />
+          <Delete item=&quot;course&quot; courseId={course.id} />
         </div>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className=&quot;space-y-8&quot;>
           <FormField
             control={form.control}
-            name="title"
+            name=&quot;title&quot;
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Title <span className="text-red-500">*</span>
+                  Title <span className=&quot;text-red-500&quot;>*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Ex: Web Development for Beginners"
+                    placeholder=&quot;Ex: Web Development for Beginners&quot;
                     {...field}
                   />
                 </FormControl>
@@ -147,13 +147,13 @@ const EditCourseForm = ({
 
           <FormField
             control={form.control}
-            name="subtitle"
+            name=&quot;subtitle&quot;
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Subtitle</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Ex: Become a Full-stack Developer with just ONE course. HTML, CSS, Javascript, Node, React, MongoDB and more!"
+                    placeholder=&quot;Ex: Become a Full-stack Developer with just ONE course. HTML, CSS, Javascript, Node, React, MongoDB and more!&quot;
                     {...field}
                   />
                 </FormControl>
@@ -164,15 +164,15 @@ const EditCourseForm = ({
 
           <FormField
             control={form.control}
-            name="description"
+            name=&quot;description&quot;
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Description <span className="text-red-500">*</span>
+                  Description <span className=&quot;text-red-500&quot;>*</span>
                 </FormLabel>
                 <FormControl>
                   <RichEditor
-                    placeholder="What is this course about?"
+                    placeholder=&quot;What is this course about?&quot;
                     {...field}
                   />
                 </FormControl>
@@ -181,14 +181,14 @@ const EditCourseForm = ({
             )}
           />
 
-          <div className="flex flex-wrap gap-10">
+          <div className=&quot;flex flex-wrap gap-10&quot;>
             <FormField
               control={form.control}
-              name="categoryId"
+              name=&quot;categoryId&quot;
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className=&quot;flex flex-col&quot;>
                   <FormLabel>
-                    Category <span className="text-red-500">*</span>
+                    Category <span className=&quot;text-red-500&quot;>*</span>
                   </FormLabel>
                   <FormControl>
                     <ComboBox options={categories} {...field} />
@@ -200,18 +200,18 @@ const EditCourseForm = ({
 
             <FormField
               control={form.control}
-              name="subCategoryId"
+              name=&quot;subCategoryId&quot;
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className=&quot;flex flex-col&quot;>
                   <FormLabel>
-                    Subcategory <span className="text-red-500">*</span>
+                    Subcategory <span className=&quot;text-red-500&quot;>*</span>
                   </FormLabel>
                   <FormControl>
                     <ComboBox
                       options={
                         categories.find(
                           (category) =>
-                            category.value === form.watch("categoryId")
+                            category.value === form.watch(&quot;categoryId&quot;)
                         )?.subCategories || []
                       }
                       {...field}
@@ -224,11 +224,11 @@ const EditCourseForm = ({
 
             <FormField
               control={form.control}
-              name="levelId"
+              name=&quot;levelId&quot;
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className=&quot;flex flex-col&quot;>
                   <FormLabel>
-                    Level <span className="text-red-500">*</span>
+                    Level <span className=&quot;text-red-500&quot;>*</span>
                   </FormLabel>
                   <FormControl>
                     <ComboBox options={levels} {...field} />
@@ -241,18 +241,18 @@ const EditCourseForm = ({
 
           <FormField
             control={form.control}
-            name="imageUrl"
+            name=&quot;imageUrl&quot;
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className=&quot;flex flex-col&quot;>
                 <FormLabel>
-                  Course Banner <span className="text-red-500">*</span>
+                  Course Banner <span className=&quot;text-red-500&quot;>*</span>
                 </FormLabel>
                 <FormControl>
                   <FileUpload
-                    value={field.value || ""}
+                    value={field.value || &quot;"}
                     onChange={(url) => field.onChange(url)}
-                    endpoint="courseBanner"
-                    page="Edit Course"
+                    endpoint=&quot;courseBanner&quot;
+                    page=&quot;Edit Course&quot;
                   />
                 </FormControl>
                 <FormMessage />
@@ -262,17 +262,17 @@ const EditCourseForm = ({
 
           <FormField
             control={form.control}
-            name="price"
+            name=&quot;price&quot;
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Price <span className="text-red-500">*</span> (NGN)
+                  Price <span className="text-red-500&quot;>*</span> (NGN)
                 </FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
-                    step="0.01"
-                    placeholder="5,000"
+                    type=&quot;number&quot;
+                    step=&quot;0.01&quot;
+                    placeholder=&quot;5,000&quot;
                     {...field}
                   />
                 </FormControl>
@@ -280,17 +280,17 @@ const EditCourseForm = ({
               </FormItem>
             )}
           />
-          <div className="flex gap-5">
-            <Link href="/instructor/courses">
-              <Button variant="outline" type="button">
+          <div className=&quot;flex gap-5&quot;>
+            <Link href=&quot;/instructor/courses&quot;>
+              <Button variant=&quot;outline&quot; type=&quot;button&quot;>
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" disabled={!isValid || isSubmitting}>
+            <Button type=&quot;submit&quot; disabled={!isValid || isSubmitting}>
               {isSubmitting ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className=&quot;h-4 w-4 animate-spin&quot; />
               ) : (
-                "Save"
+                &quot;Save"
               )}
             </Button>
           </div>

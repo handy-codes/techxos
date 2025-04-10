@@ -1,9 +1,9 @@
-"use client";
+"use client&quot;;
 
-import { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useState, useEffect } from &quot;react&quot;;
+import { useUser } from &quot;@clerk/nextjs&quot;;
+import { Button } from &quot;@/components/ui/button&quot;;
+import Link from &quot;next/link&quot;;
 import {
   Table,
   TableBody,
@@ -11,8 +11,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Card } from "@/components/ui/card";
+} from &quot;@/components/ui/table&quot;;
+import { Card } from &quot;@/components/ui/card&quot;;
 import { 
   Clock, 
   Play, 
@@ -21,11 +21,11 @@ import {
   Trash2, 
   ExternalLink,
   Calendar
-} from "lucide-react";
-import { toast } from "react-hot-toast";
-import { formatDistanceToNow } from "date-fns";
-import axios from "axios";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from &quot;lucide-react&quot;;
+import { toast } from &quot;react-hot-toast&quot;;
+import { formatDistanceToNow } from &quot;date-fns&quot;;
+import axios from &quot;axios&quot;;
+import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
 
 interface ZoomMeeting {
   id: string;
@@ -55,11 +55,11 @@ export default function ZoomMeetingsPage() {
   const fetchMeetings = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get<ZoomMeeting[]>("/api/zoom/meetings");
+      const response = await axios.get<ZoomMeeting[]>(&quot;/api/zoom/meetings&quot;);
       setMeetings(response.data);
     } catch (error: unknown) {
-      console.error("Error fetching meetings:", error);
-      toast.error("Failed to fetch Zoom meetings");
+      console.error(&quot;Error fetching meetings:&quot;, error);
+      toast.error(&quot;Failed to fetch Zoom meetings&quot;);
     } finally {
       setIsLoading(false);
     }
@@ -71,40 +71,40 @@ export default function ZoomMeetingsPage() {
       
       if (response.data.startUrl) {
         // Open the start URL in a new window
-        window.open(response.data.startUrl, "_blank");
-        toast.success("Starting Zoom meeting...");
+        window.open(response.data.startUrl, &quot;_blank&quot;);
+        toast.success(&quot;Starting Zoom meeting...&quot;);
         // Refresh the meetings list after a short delay
         setTimeout(fetchMeetings, 2000);
       }
     } catch (error: unknown) {
-      console.error("Error starting meeting:", error);
-      toast.error("Failed to start the meeting");
+      console.error(&quot;Error starting meeting:&quot;, error);
+      toast.error(&quot;Failed to start the meeting&quot;);
     }
   };
 
   const endMeeting = async (meetingId: string) => {
     try {
       await axios.post(`/api/zoom/meetings/${meetingId}/end`);
-      toast.success("Meeting ended successfully");
+      toast.success(&quot;Meeting ended successfully&quot;);
       fetchMeetings();
     } catch (error: unknown) {
-      console.error("Error ending meeting:", error);
-      toast.error("Failed to end the meeting");
+      console.error(&quot;Error ending meeting:&quot;, error);
+      toast.error(&quot;Failed to end the meeting&quot;);
     }
   };
 
   const deleteMeeting = async (meetingId: string) => {
-    if (!confirm("Are you sure you want to delete this meeting?")) {
+    if (!confirm(&quot;Are you sure you want to delete this meeting?&quot;)) {
       return;
     }
     
     try {
       await axios.delete(`/api/zoom/meetings/${meetingId}`);
-      toast.success("Meeting deleted successfully");
+      toast.success(&quot;Meeting deleted successfully&quot;);
       fetchMeetings();
     } catch (error: unknown) {
-      console.error("Error deleting meeting:", error);
-      toast.error("Failed to delete the meeting");
+      console.error(&quot;Error deleting meeting:&quot;, error);
+      toast.error(&quot;Failed to delete the meeting&quot;);
     }
   };
 
@@ -113,14 +113,14 @@ export default function ZoomMeetingsPage() {
       const response = await axios.post(`/api/zoom/meetings/${meetingId}/join`);
       
       if (response.data.joinUrl) {
-        window.open(response.data.joinUrl, "_blank");
+        window.open(response.data.joinUrl, &quot;_blank&quot;);
       } else {
         // Redirect to a classroom page that uses our ZoomMeeting component
         window.location.href = `/admin/zoom-meetings/${meetingId}/join`;
       }
     } catch (error: unknown) {
-      console.error("Error joining meeting:", error);
-      toast.error("Failed to join the meeting");
+      console.error(&quot;Error joining meeting:&quot;, error);
+      toast.error(&quot;Failed to join the meeting&quot;);
     }
   };
 
@@ -135,24 +135,24 @@ export default function ZoomMeetingsPage() {
 
   const getMeetingStatusColor = (status: string) => {
     switch (status) {
-      case "SCHEDULED":
-        return "bg-blue-100 text-blue-800";
-      case "STARTED":
-        return "bg-green-100 text-green-800";
-      case "ENDED":
-        return "bg-gray-100 text-gray-800";
-      case "CANCELLED":
-        return "bg-red-100 text-red-800";
+      case &quot;SCHEDULED&quot;:
+        return &quot;bg-blue-100 text-blue-800&quot;;
+      case &quot;STARTED&quot;:
+        return &quot;bg-green-100 text-green-800&quot;;
+      case &quot;ENDED&quot;:
+        return &quot;bg-gray-100 text-gray-800&quot;;
+      case &quot;CANCELLED&quot;:
+        return &quot;bg-red-100 text-red-800&quot;;
       default:
-        return "bg-gray-100 text-gray-800";
+        return &quot;bg-gray-100 text-gray-800&quot;;
     }
   };
 
   if (isLoading) {
     return (
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Zoom Meetings</h1>
+      <div className=&quot;p-6&quot;>
+        <div className=&quot;flex justify-between items-center mb-6&quot;>
+          <h1 className=&quot;text-2xl font-bold&quot;>Zoom Meetings</h1>
         </div>
         <p>Loading meetings...</p>
       </div>
@@ -160,25 +160,25 @@ export default function ZoomMeetingsPage() {
   }
 
   return (
-    <ScrollArea className="h-full">
-      <div className="p-6 space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Zoom Meetings</h1>
-          <Link href="/admin/zoom-meetings/new">
+    <ScrollArea className=&quot;h-full&quot;>
+      <div className=&quot;p-6 space-y-6&quot;>
+        <div className=&quot;flex justify-between items-center&quot;>
+          <h1 className=&quot;text-2xl font-bold&quot;>Zoom Meetings</h1>
+          <Link href=&quot;/admin/zoom-meetings/new&quot;>
             <Button>
-              <Calendar className="h-4 w-4 mr-2" />
+              <Calendar className=&quot;h-4 w-4 mr-2&quot; />
               Schedule New Meeting
             </Button>
           </Link>
         </div>
 
         {meetings.length === 0 ? (
-          <Card className="p-8 text-center">
-            <h3 className="text-lg font-medium mb-2">No meetings scheduled</h3>
-            <p className="text-muted-foreground mb-4">
+          <Card className=&quot;p-8 text-center&quot;>
+            <h3 className=&quot;text-lg font-medium mb-2&quot;>No meetings scheduled</h3>
+            <p className=&quot;text-muted-foreground mb-4&quot;>
               Schedule your first Zoom meeting to get started
             </p>
-            <Link href="/admin/zoom-meetings/new">
+            <Link href=&quot;/admin/zoom-meetings/new&quot;>
               <Button>Schedule Meeting</Button>
             </Link>
           </Card>
@@ -192,13 +192,13 @@ export default function ZoomMeetingsPage() {
                 <TableHead>Scheduled Time</TableHead>
                 <TableHead>Duration</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className=&quot;text-right&quot;>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {meetings.map((meeting) => (
                 <TableRow key={meeting.id}>
-                  <TableCell className="font-medium">{meeting.topic}</TableCell>
+                  <TableCell className=&quot;font-medium&quot;>{meeting.topic}</TableCell>
                   <TableCell>{meeting.liveClass.title}</TableCell>
                   <TableCell>{meeting.liveClass.lecturer.name || meeting.liveClass.lecturer.email}</TableCell>
                   <TableCell>{formatDateRelative(meeting.startTime)}</TableCell>
@@ -212,63 +212,63 @@ export default function ZoomMeetingsPage() {
                       {meeting.status}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
+                  <TableCell className=&quot;text-right&quot;>
+                    <div className=&quot;flex justify-end gap-2&quot;>
                       {/* Join button - always available */}
                       <Button 
-                        variant="outline" 
-                        size="sm"
+                        variant=&quot;outline&quot; 
+                        size=&quot;sm&quot;
                         onClick={() => joinMeeting(meeting.id)}
                       >
-                        <ExternalLink className="h-4 w-4 mr-1" />
+                        <ExternalLink className=&quot;h-4 w-4 mr-1&quot; />
                         Join
                       </Button>
                       
                       {/* Start button - only for SCHEDULED meetings */}
-                      {meeting.status === "SCHEDULED" && (
+                      {meeting.status === &quot;SCHEDULED&quot; && (
                         <Button 
-                          variant="outline" 
-                          size="sm"
+                          variant=&quot;outline&quot; 
+                          size=&quot;sm&quot;
                           onClick={() => startMeeting(meeting.id)}
                         >
-                          <Play className="h-4 w-4 mr-1" />
+                          <Play className=&quot;h-4 w-4 mr-1&quot; />
                           Start
                         </Button>
                       )}
                       
                       {/* End button - only for STARTED meetings */}
-                      {meeting.status === "STARTED" && (
+                      {meeting.status === &quot;STARTED&quot; && (
                         <Button 
-                          variant="outline" 
-                          size="sm"
+                          variant=&quot;outline&quot; 
+                          size=&quot;sm&quot;
                           onClick={() => endMeeting(meeting.id)}
                         >
-                          <Square className="h-4 w-4 mr-1" />
+                          <Square className=&quot;h-4 w-4 mr-1&quot; />
                           End
                         </Button>
                       )}
                       
                       {/* Edit button - for SCHEDULED meetings */}
-                      {meeting.status === "SCHEDULED" && (
+                      {meeting.status === &quot;SCHEDULED&quot; && (
                         <Link href={`/admin/zoom-meetings/${meeting.id}/edit`}>
                           <Button 
-                            variant="outline" 
-                            size="sm"
+                            variant=&quot;outline&quot; 
+                            size=&quot;sm&quot;
                           >
-                            <Edit className="h-4 w-4 mr-1" />
+                            <Edit className=&quot;h-4 w-4 mr-1&quot; />
                             Edit
                           </Button>
                         </Link>
                       )}
                       
                       {/* Delete button - for non-STARTED meetings */}
-                      {meeting.status !== "STARTED" && (
+                      {meeting.status !== &quot;STARTED&quot; && (
                         <Button 
-                          variant="outline" 
-                          size="sm"
+                          variant=&quot;outline&quot; 
+                          size=&quot;sm&quot;
                           onClick={() => deleteMeeting(meeting.id)}
                         >
-                          <Trash2 className="h-4 w-4 mr-1" />
+                          <Trash2 className=&quot;h-4 w-4 mr-1" />
                           Delete
                         </Button>
                       )}

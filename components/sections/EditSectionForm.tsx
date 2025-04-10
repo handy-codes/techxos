@@ -1,17 +1,17 @@
-"use client";
+"use client&quot;;
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { MuxData, Resource, Section } from "@prisma/client";
-import Link from "next/link";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { ArrowLeft, Loader2, Trash } from "lucide-react";
-import MuxPlayer from "@mux/mux-player-react";
+import { z } from &quot;zod&quot;;
+import { zodResolver } from &quot;@hookform/resolvers/zod&quot;;
+import { useForm } from &quot;react-hook-form&quot;;
+import { MuxData, Resource, Section } from &quot;@prisma/client&quot;;
+import Link from &quot;next/link&quot;;
+import axios from &quot;axios&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import toast from &quot;react-hot-toast&quot;;
+import { ArrowLeft, Loader2, Trash } from &quot;lucide-react&quot;;
+import MuxPlayer from &quot;@mux/mux-player-react&quot;;
 
-import { Button } from "@/components/ui/button";
+import { Button } from &quot;@/components/ui/button&quot;;
 import {
   Form,
   FormControl,
@@ -20,18 +20,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import RichEditor from "@/components/custom/RichEditor";
-import FileUpload from "../custom/FileUpload";
-import { Switch } from "@/components/ui/switch";
-import ResourceForm from "@/components/sections/ResourceForm";
-import Delete from "@/components/custom/Delete";
-import PublishButton from "@/components/custom/PublishButton";
+} from &quot;@/components/ui/form&quot;;
+import { Input } from &quot;@/components/ui/input&quot;;
+import RichEditor from &quot;@/components/custom/RichEditor&quot;;
+import FileUpload from &quot;../custom/FileUpload&quot;;
+import { Switch } from &quot;@/components/ui/switch&quot;;
+import ResourceForm from &quot;@/components/sections/ResourceForm&quot;;
+import Delete from &quot;@/components/custom/Delete&quot;;
+import PublishButton from &quot;@/components/custom/PublishButton&quot;;
 
 const formSchema = z.object({
   title: z.string().min(2, {
-    message: "Title is required and must be at least 2 characters long",
+    message: &quot;Title is required and must be at least 2 characters long&quot;,
   }),
   description: z.string().optional(),
   videoUrl: z.string().optional(),
@@ -56,8 +56,8 @@ const EditSectionForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: section.title,
-      description: section.description || "",
-      videoUrl: section.videoUrl || "",
+      description: section.description || &quot;",
+      videoUrl: section.videoUrl || &quot;&quot;,
       isFree: section.isFree,
     },
   });
@@ -71,55 +71,55 @@ const EditSectionForm = ({
         `/api/courses/${courseId}/sections/${section.id}`,
         values
       );
-      toast.success("Chapter Updated");
+      toast.success(&quot;Chapter Updated&quot;);
       router.refresh();
     } catch (err) {
-      console.log("Failed to update the section", err);
-      toast.error("Something went wrong!");
+      console.log(&quot;Failed to update the section&quot;, err);
+      toast.error(&quot;Something went wrong!&quot;);
     }
   };
 
   return (
     <>
-      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7">
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7&quot;>
         <Link href={`/instructor/courses/${courseId}/sections`}>
-          <Button variant="outline" className="text-sm bg-[#FBB11C] font-medium">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+          <Button variant=&quot;outline&quot; className=&quot;text-sm bg-[#FBB11C] font-medium&quot;>
+            <ArrowLeft className=&quot;h-4 w-4 mr-2&quot; />
             Back to Chapters
           </Button>
         </Link>
 
-        <div className="flex gap-5 items-start">
+        <div className=&quot;flex gap-5 items-start&quot;>
           <PublishButton
             disabled={!isCompleted}
             courseId={courseId}
             sectionId={section.id}
             isPublished={section.isPublished}
-            page="Section"
+            page=&quot;Section&quot;
           />
-          <Delete item="section" courseId={courseId} sectionId={section.id} />
+          <Delete item=&quot;section&quot; courseId={courseId} sectionId={section.id} />
         </div>
       </div>
 
-      <h1 className="text-xl font-bold">Section Details</h1>
-      <p className="text-sm font-medium mt-2">
+      <h1 className=&quot;text-xl font-bold&quot;>Section Details</h1>
+      <p className=&quot;text-sm font-medium mt-2&quot;>
         Complete this section with detailed information, good video and
         resources to give your students the best learning experience
       </p>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className=&quot;space-y-8 mt-5&quot;>
           <FormField
             control={form.control}
-            name="title"
+            name=&quot;title&quot;
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Title <span className="text-red-500">*</span>
+                  Title <span className=&quot;text-red-500&quot;>*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Ex: Introduction to Web Development"
+                    placeholder=&quot;Ex: Introduction to Web Development&quot;
                     {...field}
                   />
                 </FormControl>
@@ -130,15 +130,15 @@ const EditSectionForm = ({
 
           <FormField
             control={form.control}
-            name="description"
+            name=&quot;description&quot;
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Description <span className="text-red-500">*</span>
+                  Description <span className=&quot;text-red-500&quot;>*</span>
                 </FormLabel>
                 <FormControl>
                   <RichEditor
-                    placeholder="What is this section about?"
+                    placeholder=&quot;What is this section about?&quot;
                     {...field}
                   />
                 </FormControl>
@@ -148,27 +148,27 @@ const EditSectionForm = ({
           />
 
           {section.videoUrl && (
-            <div className="my-5">
+            <div className=&quot;my-5&quot;>
               <MuxPlayer
-                playbackId={section.muxData?.playbackId || ""}
-                className="md:max-w-[600px]"
+                playbackId={section.muxData?.playbackId || &quot;"}
+                className=&quot;md:max-w-[600px]&quot;
               />
             </div>
           )}
           <FormField
             control={form.control}
-            name="videoUrl"
+            name=&quot;videoUrl&quot;
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="flex flex-col&quot;>
                 <FormLabel>
-                  Video <span className="text-red-500">*</span>
+                  Video <span className=&quot;text-red-500&quot;>*</span>
                 </FormLabel>
                 <FormControl>
                   <FileUpload
-                    value={field.value || ""}
+                    value={field.value || &quot;"}
                     onChange={(url) => field.onChange(url)}
-                    endpoint="sectionVideo"
-                    page="Edit Section"
+                    endpoint=&quot;sectionVideo&quot;
+                    page=&quot;Edit Section&quot;
                   />
                 </FormControl>
                 <FormMessage />
@@ -178,10 +178,10 @@ const EditSectionForm = ({
 
           <FormField
             control={form.control}
-            name="isFree"
+            name=&quot;isFree&quot;
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                <div className="space-y-0.5">
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm&quot;>
+                <div className=&quot;space-y-0.5&quot;>
                   <FormLabel>Accessibility</FormLabel>
                   <FormDescription>
                     Everyone can access this section for FREE
@@ -197,17 +197,17 @@ const EditSectionForm = ({
             )}
           />
 
-          <div className="flex gap-5">
+          <div className=&quot;flex gap-5&quot;>
             <Link href={`/instructor/courses/${courseId}/sections`}>
-              <Button variant="outline" type="button">
+              <Button variant=&quot;outline&quot; type=&quot;button&quot;>
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" disabled={!isValid || isSubmitting}>
+            <Button type=&quot;submit&quot; disabled={!isValid || isSubmitting}>
               {isSubmitting ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className=&quot;h-4 w-4 animate-spin&quot; />
               ) : (
-                "Save"
+                &quot;Save"
               )}
             </Button>
           </div>

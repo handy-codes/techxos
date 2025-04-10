@@ -1,7 +1,7 @@
-'use client';
+'use client&apos;;
 
-import React, { ReactNode } from 'react';
-import { RecoilRoot } from 'recoil';
+import React, { ReactNode } from &apos;react&apos;;
+import { RecoilRoot } from &apos;recoil';
 
 interface SessionWrapperProps {
   children: ReactNode;

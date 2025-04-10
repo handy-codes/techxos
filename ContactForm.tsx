@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from &apos;react&apos;;
 
 const ContactForm = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [message, setMessage] = useState('');
+    const [firstName, setFirstName] = useState(&apos;&apos;);
+    const [lastName, setLastName] = useState(&apos;&apos;);
+    const [email, setEmail] = useState(&apos;&apos;);
+    const [message, setMessage] = useState(&apos;&apos;);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!firstName || !lastName || !email) {
-            alert('Please fill in all required fields.');
+            alert(&apos;Please fill in all required fields.&apos;);
             return;
         }
 
@@ -24,15 +24,15 @@ const ContactForm = () => {
             <form onSubmit={handleSubmit}>
                 <label>
                     First name*
-                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                    <input type=&quot;text&quot; value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
                 </label>
                 <label>
                     Last name*
-                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                    <input type=&quot;text&quot; value={lastName} onChange={(e) => setLastName(e.target.value)} required />
                 </label>
                 <label>
                     Email*
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <input type=&quot;email&quot; value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </label>
                 <label>
                     Message

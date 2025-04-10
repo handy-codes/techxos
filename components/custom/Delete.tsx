@@ -8,13 +8,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import axios from "axios";
-import { Loader2, Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { Button } from "../ui/button";
+} from &quot;@/components/ui/alert-dialog&quot;;
+import axios from &quot;axios&quot;;
+import { Loader2, Trash } from &quot;lucide-react&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import { useState } from &quot;react&quot;;
+import toast from &quot;react-hot-toast&quot;;
+import { Button } from &quot;../ui/button&quot;;
 
 interface DeleteProps {
   item: string;
@@ -30,15 +30,15 @@ const Delete = ({ item, courseId, sectionId }: DeleteProps) => {
     try {
       setIsDeleting(true);
       const url =
-        item === "course"
+        item === &quot;course&quot;
           ? `/api/courses/${courseId}`
           : `/api/courses/${courseId}/sections/${sectionId}`;
       await axios.delete(url);
 
       setIsDeleting(false);
       const pushedUrl =
-        item === "course"
-          ? "/instructor/courses"
+        item === &quot;course&quot;
+          ? &quot;/instructor/courses&quot;
           : `/instructor/courses/${courseId}/sections`;
       router.push(pushedUrl);
       router.refresh();
@@ -54,15 +54,15 @@ const Delete = ({ item, courseId, sectionId }: DeleteProps) => {
       <AlertDialogTrigger>
         <Button>
           {isDeleting ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className=&quot;h-4 w-4 animate-spin&quot; />
           ) : (
-            <Trash className="h-4 w-4" />
+            <Trash className=&quot;h-4 w-4&quot; />
           )}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-red-500">
+          <AlertDialogTitle className="text-red-500&quot;>
             Are you absolutely sure?
           </AlertDialogTitle>
           <AlertDialogDescription>
@@ -71,7 +71,7 @@ const Delete = ({ item, courseId, sectionId }: DeleteProps) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-[#FDAB04]" onClick={onDelete}>Delete</AlertDialogAction>
+          <AlertDialogAction className=&quot;bg-[#FDAB04]" onClick={onDelete}>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -1,12 +1,12 @@
-import { Section } from "@prisma/client";
+import { Section } from &quot;@prisma/client&quot;;
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
-} from "@hello-pangea/dnd";
-import { useEffect, useState } from "react";
-import { Grip, Pencil } from "lucide-react";
+} from &quot;@hello-pangea/dnd&quot;;
+import { useEffect, useState } from &quot;react&quot;;
+import { Grip, Pencil } from &quot;lucide-react&quot;;
 
 interface SectionListProps {
   items: Section[];
@@ -52,13 +52,13 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="sections">
+      <Droppable droppableId="sections&quot;>
         {(provided) => (
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
             className={`${
-              sections.length > 0 ? "my-10" : "mt-7"
+              sections.length > 0 ? &quot;my-10&quot; : &quot;mt-7&quot;
             } flex flex-col gap-5`}
           >
             {sections.map((section: Section, index: number) => (
@@ -71,15 +71,15 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
                   <div
                     {...provided.draggableProps}
                     ref={provided.innerRef}
-                    className="flex items-center bg-[#FFF8EB] rounded-lg text-sm font-medium p-3"
+                    className=&quot;flex items-center bg-[#FFF8EB] rounded-lg text-sm font-medium p-3&quot;
                   >
                     <div {...provided.dragHandleProps}>
-                      <Grip className="h-4 w-4 cursor-pointer mr-4 hover:text-[#FDAB04]" />
+                      <Grip className=&quot;h-4 w-4 cursor-pointer mr-4 hover:text-[#FDAB04]&quot; />
                     </div>
                     {section.title}
-                    <div className="ml-auto">
+                    <div className=&quot;ml-auto&quot;>
                       <Pencil
-                        className="h-4 w-4 cursor-pointer hover:text-[#FDAB04]"
+                        className=&quot;h-4 w-4 cursor-pointer hover:text-[#FDAB04]"
                         onClick={() => onEdit(section.id)}
                       />
                     </div>

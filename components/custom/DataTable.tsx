@@ -1,4 +1,4 @@
-"use client";
+"use client&quot;;
 
 import {
   ColumnDef,
@@ -10,7 +10,7 @@ import {
   ColumnFiltersState,
   getFilteredRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from &quot;@tanstack/react-table&quot;;
 
 import {
   Table,
@@ -19,12 +19,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from &quot;@/components/ui/table&quot;;
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"
+import { Button } from &quot;@/components/ui/button&quot;;
+import { Input } from &quot;@/components/ui/input&quot;
 
-import { useState } from "react";
+import { useState } from &quot;react&quot;;
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -57,18 +57,18 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className=&quot;flex items-center py-4&quot;>
         <Input
-          placeholder="Filter courses by title..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          placeholder=&quot;Filter courses by title...&quot;
+          value={(table.getColumn(&quot;title&quot;)?.getFilterValue() as string) ?? &quot;"}
           onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+            table.getColumn(&quot;title&quot;)?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className=&quot;max-w-sm&quot;
         />
       </div>
 
-      <div className="rounded-md border max-sm:w-[88vw] mx-auto">
+      <div className="rounded-md border max-sm:w-[88vw] mx-auto&quot;>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -88,12 +88,12 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className="text-sm font-medium">
+          <TableBody className=&quot;text-sm font-medium&quot;>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && &quot;selected&quot;}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -109,7 +109,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className=&quot;h-24 text-center&quot;
                 >
                   No results.
                 </TableCell>
@@ -118,18 +118,18 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center max-sm:justify-center justify-end space-x-2 py-4">
+      <div className=&quot;flex items-center max-sm:justify-center justify-end space-x-2 py-4&quot;>
         <Button
-          variant="outline"
-          size="sm"
+          variant=&quot;outline&quot;
+          size=&quot;sm&quot;
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
           Previous
         </Button>
         <Button
-          variant="outline"
-          size="sm"
+          variant=&quot;outline&quot;
+          size=&quot;sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >

@@ -1,9 +1,9 @@
-"use client";
+"use client&quot;;
 
-import { ourFileRouter } from "@/app/api/uploadthing/core";
-import { UploadDropzone } from "@/lib/uploadthing";
-import Image from "next/image";
-import toast from "react-hot-toast";
+import { ourFileRouter } from &quot;@/app/api/uploadthing/core&quot;;
+import { UploadDropzone } from &quot;@/lib/uploadthing&quot;;
+import Image from &quot;next/image&quot;;
+import toast from &quot;react-hot-toast&quot;;
 
 interface FileUploadProps {
   value: string;
@@ -14,19 +14,19 @@ interface FileUploadProps {
 
 const FileUpload = ({ value, onChange, endpoint, page }: FileUploadProps) => {
   return (
-    <div className="flex flex-col gap-2">
-      {page === "Edit Course" && value !== "" && (
+    <div className=&quot;flex flex-col gap-2&quot;>
+      {page === &quot;Edit Course&quot; && value !== &quot;" && (
         <Image
           src={value}
-          alt="image"
+          alt=&quot;image&quot;
           width={500}
           height={500}
-          className="w-[280px] h-[200px] object-cover rounded-xl"
+          className=&quot;w-[280px] h-[200px] object-cover rounded-xl&quot;
         />
       )}
 
-      {page === "Edit Section" && value !== "" && (
-        <p className="text-sm font-medium">{value}</p>
+      {page === &quot;Edit Section&quot; && value !== &quot;&quot; && (
+        <p className="text-sm font-medium&quot;>{value}</p>
       )}
 
       <UploadDropzone
@@ -37,7 +37,7 @@ const FileUpload = ({ value, onChange, endpoint, page }: FileUploadProps) => {
         onUploadError={(error: Error) => {
           toast.error(error.message);
         }}
-        className="w-[280px] h-[200px]"
+        className=&quot;w-[280px] h-[200px]"
       />
     </div>
   );

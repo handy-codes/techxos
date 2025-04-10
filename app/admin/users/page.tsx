@@ -1,8 +1,8 @@
-"use client";
+"use client&quot;;
 
-import { useEffect, useState, useCallback } from "react";
-import { useUser } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState, useCallback } from &quot;react&quot;;
+import { useUser } from &quot;@clerk/nextjs&quot;;
+import { Button } from &quot;@/components/ui/button&quot;;
 import {
   Table,
   TableBody,
@@ -10,29 +10,29 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import { Plus, Search, Filter, Menu } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
+} from &quot;@/components/ui/table&quot;;
+import { toast } from &quot;react-hot-toast&quot;;
+import axios from &quot;axios&quot;;
+import { Plus, Search, Filter, Menu } from &quot;lucide-react&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import { Input } from &quot;@/components/ui/input&quot;;
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from &quot;@/components/ui/select&quot;;
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Skeleton } from "@/components/ui/skeleton";
+} from &quot;@/components/ui/dialog&quot;;
+import { Badge } from &quot;@/components/ui/badge&quot;;
+import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
+import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,14 +43,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from &quot;@/components/ui/alert-dialog&quot;;
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from &quot;@/components/ui/sheet&quot;;
 
 interface ApiError {
   response?: {
@@ -65,7 +65,7 @@ interface User {
   id: string;
   email: string;
   name: string;
-  role: "HEAD_ADMIN" | "ADMIN" | "LECTURER";
+  role: &quot;HEAD_ADMIN&quot; | &quot;ADMIN&quot; | &quot;LECTURER&quot;;
   isActive: boolean;
 }
 
@@ -74,9 +74,9 @@ export default function UsersPage() {
   const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [roleFilter, setRoleFilter] = useState<string>("");
-  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState(&quot;");
+  const [roleFilter, setRoleFilter] = useState<string>(&quot;&quot;);
+  const [statusFilter, setStatusFilter] = useState<string>(&quot;&quot;);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isUnauthorized, setIsUnauthorized] = useState(false);
@@ -90,36 +90,36 @@ export default function UsersPage() {
 
   const fetchUsers = useCallback(async () => {
     try {
-      console.log("Fetching users with query:", searchQuery);
+      console.log(&quot;Fetching users with query:&quot;, searchQuery);
       setLoading(true);
-      const response = await axios.get<User[]>("/api/admin/users");
-      console.log("Got response with", response.data.length, "users");
+      const response = await axios.get<User[]>(&quot;/api/admin/users&quot;);
+      console.log(&quot;Got response with&quot;, response.data.length, &quot;users&quot;);
       let filteredUsers = response.data || [];
 
       // Apply filters - use toLowerCase() for case-insensitive search
       if (searchQuery) {
-        console.log("Filtering by search query:", searchQuery);
+        console.log(&quot;Filtering by search query:&quot;, searchQuery);
         const searchLower = searchQuery.toLowerCase();
         filteredUsers = filteredUsers.filter(
           (user: User) =>
-            (user.name || "").toLowerCase().includes(searchLower) ||
-            (user.email || "").toLowerCase().includes(searchLower) ||
-            (user.role || "").toLowerCase().includes(searchLower)
+            (user.name || &quot;&quot;).toLowerCase().includes(searchLower) ||
+            (user.email || &quot;&quot;).toLowerCase().includes(searchLower) ||
+            (user.role || &quot;&quot;).toLowerCase().includes(searchLower)
         );
-        console.log("After filtering, found", filteredUsers.length, "matching users");
+        console.log(&quot;After filtering, found&quot;, filteredUsers.length, &quot;matching users&quot;);
       }
 
-      // Only apply role filter if it's not "all"
-      if (roleFilter && roleFilter !== "all") {
+      // Only apply role filter if it&apos;s not &quot;all&quot;
+      if (roleFilter && roleFilter !== &quot;all&quot;) {
         filteredUsers = filteredUsers.filter(
           (user: User) => user.role === roleFilter
         );
       }
 
-      // Only apply status filter if it's not "all"
-      if (statusFilter && statusFilter !== "all") {
+      // Only apply status filter if it&apos;s not &quot;all&quot;
+      if (statusFilter && statusFilter !== &quot;all&quot;) {
         filteredUsers = filteredUsers.filter(
-          (user: User) => user.isActive === (statusFilter === "active")
+          (user: User) => user.isActive === (statusFilter === &quot;active&quot;)
         );
       }
 
@@ -132,12 +132,12 @@ export default function UsersPage() {
       setIsUnauthorized(false);
     } catch (error: unknown) {
       const err = error as ApiError;
-      console.error("Error fetching users:", err);
+      console.error(&quot;Error fetching users:&quot;, err);
       if (err.response?.status === 401 || err.response?.status === 403) {
         setIsUnauthorized(true);
-        toast.error("You don't have permission to view users");
+        toast.error(&quot;You don&apos;t have permission to view users&quot;);
       } else {
-        toast.error("Failed to fetch users");
+        toast.error(&quot;Failed to fetch users&quot;);
       }
       setUsers([]);
     } finally {
@@ -147,7 +147,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     if (isLoaded && !user) {
-      router.push("/");
+      router.push(&quot;/&quot;);
       return;
     }
 
@@ -161,14 +161,14 @@ export default function UsersPage() {
       await axios.patch(`/api/admin/users/${userId}`, {
         isActive: !currentStatus,
       });
-      toast.success("User status updated successfully");
+      toast.success(&quot;User status updated successfully&quot;);
       fetchUsers();
     } catch (error: unknown) {
       const err = error as ApiError;
       if (err.response?.status === 401 || err.response?.status === 403) {
-        toast.error("You don't have permission to update users");
+        toast.error(&quot;You don&apos;t have permission to update users&quot;);
       } else {
-        toast.error("Failed to update user status");
+        toast.error(&quot;Failed to update user status&quot;);
       }
       console.error(err);
     }
@@ -177,14 +177,14 @@ export default function UsersPage() {
   const deleteUser = async (userId: string) => {
     try {
       await axios.delete(`/api/admin/users/${userId}`);
-      toast.success("User deleted successfully");
+      toast.success(&quot;User deleted successfully&quot;);
       fetchUsers();
     } catch (error: unknown) {
       const err = error as ApiError;
       if (err.response?.status === 401 || err.response?.status === 403) {
-        toast.error("You don't have permission to delete users");
+        toast.error(&quot;You don&apos;t have permission to delete users&quot;);
       } else {
-        toast.error("Failed to delete user");
+        toast.error(&quot;Failed to delete user&quot;);
       }
       console.error(err);
     }
@@ -200,13 +200,13 @@ export default function UsersPage() {
 
   if (isUnauthorized) {
     return (
-      <div className="p-4 md:p-6">
-        <div className="rounded-md border p-4 md:p-6 text-center">
-          <h2 className="text-xl md:text-2xl font-bold mb-2">Access Denied</h2>
-          <p className="text-muted-foreground mb-4">
-            You don't have permission to access this page. Please contact your administrator if you believe this is a mistake.
+      <div className="p-4 md:p-6&quot;>
+        <div className=&quot;rounded-md border p-4 md:p-6 text-center&quot;>
+          <h2 className=&quot;text-xl md:text-2xl font-bold mb-2&quot;>Access Denied</h2>
+          <p className=&quot;text-muted-foreground mb-4&quot;>
+            You don&apos;t have permission to access this page. Please contact your administrator if you believe this is a mistake.
           </p>
-          <Button onClick={() => router.push("/")}>
+          <Button onClick={() => router.push(&quot;/")}>
             Return to Home
           </Button>
         </div>
@@ -215,33 +215,33 @@ export default function UsersPage() {
   }
 
   return (
-    <ScrollArea className="h-[calc(100vh-120px)]">
-      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-xl md:text-2xl font-bold">Manage Users</h1>
-          <Button onClick={() => router.push("/admin/users/new")}>
-            <Plus className="w-4 h-4 mr-2" />
+    <ScrollArea className="h-[calc(100vh-120px)]&quot;>
+      <div className=&quot;p-4 md:p-6 space-y-4 md:space-y-6&quot;>
+        <div className=&quot;flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4&quot;>
+          <h1 className=&quot;text-xl md:text-2xl font-bold&quot;>Manage Users</h1>
+          <Button onClick={() => router.push(&quot;/admin/users/new&quot;)}>
+            <Plus className=&quot;w-4 h-4 mr-2&quot; />
             Add New User
           </Button>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+        <div className=&quot;flex flex-col sm:flex-row gap-4&quot;>
+          <div className=&quot;relative flex-1&quot;>
+            <Search className=&quot;absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4&quot; />
             <Input
-              placeholder="Search users..."
-              className="pl-10"
+              placeholder=&quot;Search users...&quot;
+              className=&quot;pl-10&quot;
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          <div className="flex gap-2">
+          <div className=&quot;flex gap-2&quot;>
             {isMounted && (
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" className="w-full sm:w-auto hidden">
-                    <Filter className="w-4 h-4 mr-2" />
+                  <Button variant=&quot;outline&quot; className=&quot;w-full sm:w-auto hidden&quot;>
+                    <Filter className=&quot;w-4 h-4 mr-2&quot; />
                     Filters
                   </Button>
                 </SheetTrigger>
@@ -249,31 +249,31 @@ export default function UsersPage() {
                   <SheetHeader>
                     <SheetTitle>Filter Users</SheetTitle>
                   </SheetHeader>
-                  <div className="space-y-4 mt-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Role</label>
+                  <div className=&quot;space-y-4 mt-4&quot;>
+                    <div className=&quot;space-y-2&quot;>
+                      <label className=&quot;text-sm font-medium&quot;>Role</label>
                       <Select value={roleFilter} onValueChange={setRoleFilter}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select role" />
+                          <SelectValue placeholder=&quot;Select role&quot; />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">All Roles</SelectItem>
-                          <SelectItem value="HEAD_ADMIN">Head Admin</SelectItem>
-                          <SelectItem value="ADMIN">Admin</SelectItem>
-                          <SelectItem value="LECTURER">Lecturer</SelectItem>
+                          <SelectItem value=&quot;all&quot;>All Roles</SelectItem>
+                          <SelectItem value=&quot;HEAD_ADMIN&quot;>Head Admin</SelectItem>
+                          <SelectItem value=&quot;ADMIN&quot;>Admin</SelectItem>
+                          <SelectItem value=&quot;LECTURER&quot;>Lecturer</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Status</label>
+                    <div className=&quot;space-y-2&quot;>
+                      <label className=&quot;text-sm font-medium&quot;>Status</label>
                       <Select value={statusFilter} onValueChange={setStatusFilter}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
+                          <SelectValue placeholder=&quot;Select status&quot; />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">All Status</SelectItem>
-                          <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="inactive">Inactive</SelectItem>
+                          <SelectItem value=&quot;all&quot;>All Status</SelectItem>
+                          <SelectItem value=&quot;active&quot;>Active</SelectItem>
+                          <SelectItem value=&quot;inactive&quot;>Inactive</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -285,13 +285,13 @@ export default function UsersPage() {
         </div>
 
         {loading ? (
-          <div className="rounded-md border">
+          <div className=&quot;rounded-md border&quot;>
             <Table>
               <TableHeader>
                 <TableRow>
                   {[...Array(5)].map((_: unknown, i: number) => (
                     <TableHead key={i}>
-                      <Skeleton className="h-4 w-[250px]" />
+                      <Skeleton className=&quot;h-4 w-[250px]&quot; />
                     </TableHead>
                   ))}
                 </TableRow>
@@ -301,7 +301,7 @@ export default function UsersPage() {
                   <TableRow key={i}>
                     {[...Array(5)].map((_: unknown, j: number) => (
                       <TableCell key={j}>
-                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className=&quot;h-4 w-[250px]&quot; />
                       </TableCell>
                     ))}
                   </TableRow>
@@ -310,29 +310,29 @@ export default function UsersPage() {
             </Table>
           </div>
         ) : (
-          <div className="rounded-md border overflow-x-auto">
+          <div className=&quot;rounded-md border overflow-x-auto&quot;>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead className="hidden md:table-cell">Email</TableHead>
-                  <TableHead className="hidden sm:table-cell">Role</TableHead>
-                  <TableHead className="hidden sm:table-cell">Status</TableHead>
+                  <TableHead className=&quot;hidden md:table-cell&quot;>Email</TableHead>
+                  <TableHead className=&quot;hidden sm:table-cell&quot;>Role</TableHead>
+                  <TableHead className=&quot;hidden sm:table-cell&quot;>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {users.map((userData: User) => (
                   <TableRow key={userData.id}>
-                    <TableCell className="font-medium">{userData.name}</TableCell>
-                    <TableCell className="hidden md:table-cell">{userData.email}</TableCell>
-                    <TableCell className="hidden sm:table-cell">{userData.role}</TableCell>
-                    <TableCell className="hidden sm:table-cell">
+                    <TableCell className=&quot;font-medium&quot;>{userData.name}</TableCell>
+                    <TableCell className=&quot;hidden md:table-cell&quot;>{userData.email}</TableCell>
+                    <TableCell className=&quot;hidden sm:table-cell&quot;>{userData.role}</TableCell>
+                    <TableCell className=&quot;hidden sm:table-cell&quot;>
                       <Badge 
-                        variant={userData.isActive ? "default" : "destructive"}
-                        className={userData.isActive ? "bg-green-500 hover:bg-green-600" : ""}
+                        variant={userData.isActive ? &quot;default&quot; : &quot;destructive&quot;}
+                        className={userData.isActive ? &quot;bg-green-500 hover:bg-green-600&quot; : &quot;"}
                       >
-                        {userData.isActive ? "Active" : "Inactive"}
+                        {userData.isActive ? &quot;Active&quot; : &quot;Inactive&quot;}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -340,29 +340,29 @@ export default function UsersPage() {
                         <>
                           <Sheet>
                             <SheetTrigger asChild>
-                              <Button variant="ghost" size="icon" className="md:hidden">
-                                <Menu className="h-4 w-4" />
+                              <Button variant=&quot;ghost&quot; size=&quot;icon&quot; className="md:hidden&quot;>
+                                <Menu className=&quot;h-4 w-4&quot; />
                               </Button>
                             </SheetTrigger>
-                            <SheetContent side="right">
-                              <div className="flex flex-col gap-2 mt-4">
+                            <SheetContent side=&quot;right&quot;>
+                              <div className=&quot;flex flex-col gap-2 mt-4&quot;>
                                 <Button
-                                  variant="outline"
-                                  className="w-full justify-start"
+                                  variant=&quot;outline&quot;
+                                  className=&quot;w-full justify-start&quot;
                                   onClick={() => router.push(`/admin/users/${userData.id}/edit`)}
                                 >
                                   Edit
                                 </Button>
                                 <Button
-                                  variant="outline"
-                                  className="w-full justify-start"
+                                  variant=&quot;outline&quot;
+                                  className=&quot;w-full justify-start&quot;
                                   onClick={() => toggleUserStatus(userData.id, userData.isActive)}
                                 >
-                                  {userData.isActive ? "Deactivate" : "Activate"}
+                                  {userData.isActive ? &quot;Deactivate&quot; : &quot;Activate&quot;}
                                 </Button>
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
-                                    <Button variant="destructive" className="w-full justify-start">
+                                    <Button variant=&quot;destructive&quot; className=&quot;w-full justify-start&quot;>
                                       Delete
                                     </Button>
                                   </AlertDialogTrigger>
@@ -384,24 +384,24 @@ export default function UsersPage() {
                               </div>
                             </SheetContent>
                           </Sheet>
-                          <div className="hidden md:flex gap-2">
+                          <div className=&quot;hidden md:flex gap-2&quot;>
                             <Button
-                              variant="outline"
-                              size="sm"
+                              variant=&quot;outline&quot;
+                              size=&quot;sm&quot;
                               onClick={() => router.push(`/admin/users/${userData.id}/edit`)}
                             >
                               Edit
                             </Button>
                             <Button
-                              variant="outline"
-                              size="sm"
+                              variant=&quot;outline&quot;
+                              size=&quot;sm&quot;
                               onClick={() => toggleUserStatus(userData.id, userData.isActive)}
                             >
-                              {userData.isActive ? "Deactivate" : "Activate"}
+                              {userData.isActive ? &quot;Deactivate&quot; : &quot;Activate&quot;}
                             </Button>
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
-                                <Button variant="destructive" size="sm">
+                                <Button variant=&quot;destructive&quot; size=&quot;sm&quot;>
                                   Delete
                                 </Button>
                               </AlertDialogTrigger>
@@ -431,20 +431,20 @@ export default function UsersPage() {
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-muted-foreground">
+        <div className=&quot;flex flex-col sm:flex-row justify-between items-center gap-4&quot;>
+          <div className=&quot;text-sm text-muted-foreground&quot;>
             Showing {users.length} of {totalPages * itemsPerPage} users
           </div>
-          <div className="flex gap-2">
+          <div className=&quot;flex gap-2&quot;>
             <Button
-              variant="outline"
+              variant=&quot;outline&quot;
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
             >
               Previous
             </Button>
             <Button
-              variant="outline"
+              variant=&quot;outline"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
             >

@@ -1,14 +1,14 @@
-"use client";
+"use client&quot;;
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import ZoomMeeting from "@/components/zoom/ZoomMeeting";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import Link from "next/link";
+import { useState, useEffect } from &quot;react&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import ZoomMeeting from &quot;@/components/zoom/ZoomMeeting&quot;;
+import { Button } from &quot;@/components/ui/button&quot;;
+import { Card, CardContent, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
+import { ArrowLeft, Loader2 } from &quot;lucide-react&quot;;
+import { toast } from &quot;react-hot-toast&quot;;
+import axios from &quot;axios&quot;;
+import Link from &quot;next/link&quot;;
 
 interface ZoomMeetingDetails {
   id: string;
@@ -46,11 +46,11 @@ export default function JoinMeetingPage({
         );
         setMeeting(response.data);
       } catch (error: any) {
-        console.error("Error fetching meeting:", error);
+        console.error(&quot;Error fetching meeting:&quot;, error);
         setError(
-          error.response?.data || "Failed to fetch meeting details"
+          error.response?.data || &quot;Failed to fetch meeting details&quot;
         );
-        toast.error("Failed to fetch meeting details");
+        toast.error(&quot;Failed to fetch meeting details&quot;);
       } finally {
         setIsLoading(false);
       }
@@ -62,26 +62,26 @@ export default function JoinMeetingPage({
   }, [params.meetingId]);
 
   const handleJoinSuccess = () => {
-    toast.success("Successfully joined the meeting");
+    toast.success(&quot;Successfully joined the meeting&quot;);
   };
 
   const handleJoinError = (error: any) => {
-    console.error("Error joining meeting:", error);
-    toast.error("Failed to join the meeting");
+    console.error(&quot;Error joining meeting:&quot;, error);
+    toast.error(&quot;Failed to join the meeting&quot;);
   };
 
   if (isLoading) {
     return (
-      <div className="p-6">
-        <div className="flex items-center space-x-2 mb-6">
-          <Button variant="outline" size="sm" onClick={() => router.back()}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
+      <div className=&quot;p-6&quot;>
+        <div className=&quot;flex items-center space-x-2 mb-6&quot;>
+          <Button variant=&quot;outline&quot; size=&quot;sm&quot; onClick={() => router.back()}>
+            <ArrowLeft className=&quot;mr-2 h-4 w-4&quot; />
             Back
           </Button>
-          <h1 className="text-2xl font-bold">Loading Meeting...</h1>
+          <h1 className=&quot;text-2xl font-bold&quot;>Loading Meeting...</h1>
         </div>
-        <div className="flex justify-center items-center h-[600px]">
-          <Loader2 className="h-8 w-8 animate-spin" />
+        <div className=&quot;flex justify-center items-center h-[600px]&quot;>
+          <Loader2 className=&quot;h-8 w-8 animate-spin&quot; />
         </div>
       </div>
     );
@@ -89,23 +89,23 @@ export default function JoinMeetingPage({
 
   if (error || !meeting) {
     return (
-      <div className="p-6">
-        <div className="flex items-center space-x-2 mb-6">
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/admin/zoom-meetings">
-              <ArrowLeft className="mr-2 h-4 w-4" />
+      <div className=&quot;p-6&quot;>
+        <div className=&quot;flex items-center space-x-2 mb-6&quot;>
+          <Button variant=&quot;outline&quot; size=&quot;sm&quot; asChild>
+            <Link href=&quot;/admin/zoom-meetings&quot;>
+              <ArrowLeft className=&quot;mr-2 h-4 w-4&quot; />
               Back to Meetings
             </Link>
           </Button>
-          <h1 className="text-2xl font-bold">Error</h1>
+          <h1 className=&quot;text-2xl font-bold&quot;>Error</h1>
         </div>
         <Card>
           <CardHeader>
-            <CardTitle className="text-red-600">Failed to Load Meeting</CardTitle>
+            <CardTitle className=&quot;text-red-600&quot;>Failed to Load Meeting</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="mb-4">{error || "Unable to load the meeting details."}</p>
-            <Button onClick={() => router.push("/admin/zoom-meetings")}>
+            <p className=&quot;mb-4&quot;>{error || &quot;Unable to load the meeting details.&quot;}</p>
+            <Button onClick={() => router.push(&quot;/admin/zoom-meetings&quot;)}>
               Return to Meetings
             </Button>
           </CardContent>
@@ -115,42 +115,42 @@ export default function JoinMeetingPage({
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center space-x-2 mb-6">
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/admin/zoom-meetings">
-            <ArrowLeft className="mr-2 h-4 w-4" />
+    <div className=&quot;p-6 space-y-6&quot;>
+      <div className=&quot;flex items-center space-x-2 mb-6&quot;>
+        <Button variant=&quot;outline&quot; size=&quot;sm&quot; asChild>
+          <Link href=&quot;/admin/zoom-meetings&quot;>
+            <ArrowLeft className=&quot;mr-2 h-4 w-4&quot; />
             Back to Meetings
           </Link>
         </Button>
-        <h1 className="text-2xl font-bold">{meeting.topic}</h1>
+        <h1 className=&quot;text-2xl font-bold&quot;>{meeting.topic}</h1>
       </div>
 
-      <Card className="mb-6">
+      <Card className=&quot;mb-6&quot;>
         <CardHeader>
           <CardTitle>Meeting Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className=&quot;grid grid-cols-1 md:grid-cols-2 gap-4&quot;>
             <div>
-              <p className="text-sm text-muted-foreground">Class</p>
-              <p className="font-medium">{meeting.liveClass.title}</p>
+              <p className=&quot;text-sm text-muted-foreground&quot;>Class</p>
+              <p className=&quot;font-medium&quot;>{meeting.liveClass.title}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Host</p>
-              <p className="font-medium">
+              <p className=&quot;text-sm text-muted-foreground&quot;>Host</p>
+              <p className=&quot;font-medium&quot;>
                 {meeting.liveClass.lecturer.name || meeting.liveClass.lecturer.email}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Start Time</p>
-              <p className="font-medium">
+              <p className=&quot;text-sm text-muted-foreground&quot;>Start Time</p>
+              <p className=&quot;font-medium&quot;>
                 {new Date(meeting.startTime).toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Duration</p>
-              <p className="font-medium">{meeting.duration} minutes</p>
+              <p className=&quot;text-sm text-muted-foreground&quot;>Duration</p>
+              <p className=&quot;font-medium">{meeting.duration} minutes</p>
             </div>
           </div>
         </CardContent>

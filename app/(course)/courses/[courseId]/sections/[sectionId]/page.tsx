@@ -1,8 +1,8 @@
-import SectionsDetails from "@/components/sections/SectionsDetails";
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
-import { Resource } from "@prisma/client";
-import { redirect } from "next/navigation";
+import SectionsDetails from &quot;@/components/sections/SectionsDetails&quot;;
+import { db } from &quot;@/lib/db&quot;;
+import { auth } from &quot;@clerk/nextjs/server&quot;;
+import { Resource } from &quot;@prisma/client&quot;;
+import { redirect } from &quot;next/navigation&quot;;
 
 const SectionDetailsPage = async ({
   params,
@@ -13,7 +13,7 @@ const SectionDetailsPage = async ({
   const { userId } = auth();
 
   if (!userId) {
-    return redirect("/sign-in");
+    return redirect(&quot;/sign-in&quot;);
   }
 
   const course = await db.course.findUnique({
@@ -31,7 +31,7 @@ const SectionDetailsPage = async ({
   });
 
   if (!course) {
-    return redirect("/");
+    return redirect(&quot;/&quot;);
   }
 
   const section = await db.section.findUnique({

@@ -1,28 +1,28 @@
-"use client";
-import React, { useState, useEffect, useCallback } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import { FaCheckCircle, FaRegClock } from "react-icons/fa";
-import { AiFillSchedule } from "react-icons/ai";
-import { HiLocationMarker } from "react-icons/hi";
-import { IoMdOptions } from "react-icons/io";
-import GraphicDesign from "@/components/curriculum/Graphic-Design";
-import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
-import { useAuth } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
-import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
-import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
+"use client&quot;;
+import React, { useState, useEffect, useCallback } from &quot;react&quot;;
+import Head from &quot;next/head&quot;;
+import Image from &quot;next/image&quot;;
+import Link from &quot;next/link&quot;;
+import { FaCheckCircle, FaRegClock } from &quot;react-icons/fa&quot;;
+import { AiFillSchedule } from &quot;react-icons/ai&quot;;
+import { HiLocationMarker } from &quot;react-icons/hi&quot;;
+import { IoMdOptions } from &quot;react-icons/io&quot;;
+import GraphicDesign from &quot;@/components/curriculum/Graphic-Design&quot;;
+import ScrollToTopButton from &quot;@/components/layout/ScrollToTopButton&quot;;
+import { useAuth } from &quot;@clerk/nextjs&quot;;
+import { useUser } from &quot;@clerk/nextjs&quot;;
+import JoinLiveClassButton from &quot;@/components/course/JoinLiveClassButton&quot;;
+import CoursePurchaseButton from &quot;@/components/course/CoursePurchaseButton&quot;;
 
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Graphic Design",
-    name: "",
-    surname: "",
-    email: "",
-    subject: "",
-    message: "",
+    courseTitle: &quot;Graphic Design&quot;,
+    name: &quot;",
+    surname: &quot;&quot;,
+    email: &quot;&quot;,
+    subject: &quot;&quot;,
+    message: &quot;&quot;,
   });
 
   
@@ -32,8 +32,8 @@ export default function Page() {
   const [userRoleState, setUserRoleState] = useState<string | null>(null);
 const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
+    &quot;idle&quot; | &quot;success&quot; | &quot;error&quot;
+  >(&quot;idle&quot;);
 
   
   // Function to determine if the current user is an admin based on their email
@@ -42,28 +42,28 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     
     try {
       const userEmail = user?.primaryEmailAddress?.emailAddress;
-      console.log("Current user email:", userEmail);
+      console.log(&quot;Current user email:&quot;, userEmail);
       
       if (!userEmail) return false;
       
       // Known admin emails - add any admin emails here
       const adminEmails = [
-        "paxymekventures@gmail.com",
-        "admin@techxos.com",
-        "emeka@techxos.com"
+        &quot;paxymekventures@gmail.com&quot;,
+        &quot;admin@techxos.com&quot;,
+        &quot;emeka@techxos.com&quot;
       ];
       
       // Direct check for known admin emails
       if (adminEmails.includes(userEmail.toLowerCase())) {
-        console.log("User is admin based on email match!");
-        setUserRoleState("HEAD_ADMIN");
+        console.log(&quot;User is admin based on email match!&quot;);
+        setUserRoleState(&quot;HEAD_ADMIN&quot;);
         setHasAccess(true);
         return true;
       }
       
       return false;
     } catch (error) {
-      console.error("Error in admin check:", error);
+      console.error(&quot;Error in admin check:&quot;, error);
       return false;
     }
   }, [isSignedIn, userId, user]);
@@ -85,40 +85,40 @@ const handleChange = (
   ): Promise<void> => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus("idle");
+    setSubmitStatus(&quot;idle&quot;);
 
     const formDataToSend = new FormData();
-    formDataToSend.append("courseTitle", formData.courseTitle);
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("surname", formData.surname);
-    formDataToSend.append("email", formData.email);
-    formDataToSend.append("subject", formData.subject);
-    formDataToSend.append("message", formData.message);
+    formDataToSend.append(&quot;courseTitle&quot;, formData.courseTitle);
+    formDataToSend.append(&quot;name&quot;, formData.name);
+    formDataToSend.append(&quot;surname&quot;, formData.surname);
+    formDataToSend.append(&quot;email&quot;, formData.email);
+    formDataToSend.append(&quot;subject&quot;, formData.subject);
+    formDataToSend.append(&quot;message&quot;, formData.message);
 
     try {
-      const response = await fetch("/api/nofilesubmit-form", {
-        method: "POST",
+      const response = await fetch(&quot;/api/nofilesubmit-form&quot;, {
+        method: &quot;POST&quot;,
         body: formDataToSend,
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Submission failed");
+        throw new Error(data.error || &quot;Submission failed&quot;);
       }
 
-      setSubmitStatus("success");
+      setSubmitStatus(&quot;success&quot;);
       setFormData({
-        courseTitle: "Graphic Design",
-        name: "",
-        surname: "",
-        email: "",
-        subject: "",
-        message: "",
+        courseTitle: &quot;Graphic Design&quot;,
+        name: &quot;&quot;,
+        surname: &quot;&quot;,
+        email: &quot;&quot;,
+        subject: &quot;&quot;,
+        message: &quot;&quot;,
       });
     } catch (error) {
-      console.error("Submission error:", error);
-      setSubmitStatus("error");
+      console.error(&quot;Submission error:&quot;, error);
+      setSubmitStatus(&quot;error&quot;);
     } finally {
       setIsSubmitting(false);
     }
@@ -129,19 +129,19 @@ const handleChange = (
       <Head>
         <title>Course Page</title>
         <meta
-          name="description"
-          content="Welcome to the Graphic Design Course"
+          name=&quot;description&quot;
+          content=&quot;Welcome to the Graphic Design Course&quot;
         />
       </Head>
 
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
-              <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700&quot;>
+        <div className=&quot;max-w-7xl mx-auto&quot;>
+          <div className=&quot;grid lg:grid-cols-2 gap-12 items-center&quot;>
+            <div className=&quot;text-white&quot;>
+              <h1 className=&quot;text-4xl sm:text-5xl font-bold mb-6&quot;>
                 Graphic Design
               </h1>
-              <p className="text-xl mb-8">
+              <p className=&quot;text-xl mb-8&quot;>
                 Ignite Visual Brilliance with Graphic Design! Imagine turning
                 blank canvases into jaw-dropping visuals that stop thumbs, spark
                 emotions, and define brands—that&apos;s graphic design. It&apos;s the
@@ -150,33 +150,33 @@ const handleChange = (
                 and ads into art.
               </p>
             </div>
-            <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
+            <div className=&quot;relative h-96 rounded-2xl overflow-hidden shadow-xl&quot;>
               <Image
-                src="https://i.ibb.co/1JpnGRVX/Gemini-Generated-Image-sbecuesbecuesbec.jpg"
-                alt="Team Collaboration"
+                src=&quot;https://i.ibb.co/1JpnGRVX/Gemini-Generated-Image-sbecuesbecuesbec.jpg&quot;
+                alt=&quot;Team Collaboration&quot;
                 fill
-                className="object-cover"
+                className=&quot;object-cover&quot;
                 priority
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes=&quot;(max-width: 768px) 100vw, 50vw&quot;
               />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8">
+      <section className=&quot;container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8&quot;>
         {/* Left Column - Course Details */}
-        <div className="flex-1 text-black">
-          <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
-            <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
+        <div className=&quot;flex-1 text-black&quot;>
+          <div className=&quot;mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6&quot;>
+            <h1 className=&quot;text-2xl lg:text-4xl font-bold mb-[4px]&quot;>
               Graphic Design
             </h1>
-            <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
+            <div className=&quot;h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]&quot;></div>
           </div>
-          <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
+          <h1 className=&quot;text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6&quot;>
             150,000 NGN
           </h1>
-          <p className="text-justify font-semibold max-sm:mb-1">
+          <p className=&quot;text-justify font-semibold max-sm:mb-1&quot;>
             Techxos fuels your artistry: Design real campaigns (think album
             covers, startup branding, or animated infographics), get critiqued
             by pros who&apos;ve shaped global visuals, and join a guild of creators
@@ -186,30 +186,30 @@ const handleChange = (
             and ideas into visual revolutions? Enroll now and start designing
             the world&apos;s imagination—one masterpiece at a time. 🎨✏️🔥
           </p>
-          <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
+          <div className=&quot;p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid&quot;>
             <a
-              href="https://wa.me/2348167715107"
-              target="_blank"
-              rel="noopener noreferrer"
+              href=&quot;https://wa.me/2348167715107&quot;
+              target=&quot;_blank&quot;
+              rel=&quot;noopener noreferrer&quot;
             >
               Contact an Advisor
             </a>
           </div>
-          <div className="font-semibold">
-            <div className="flex items-center gap-3 mt-3 md:mt-4">
-              <FaRegClock className="text-black text-[22px]" />
+          <div className=&quot;font-semibold&quot;>
+            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
+              <FaRegClock className=&quot;text-black text-[22px]&quot; />
               <span>Duration: 12 weeks</span>
             </div>
-            <div className="flex items-center gap-3 mt-3 md:mt-4">
-              <AiFillSchedule className="text-black text-[24px]" />
+            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
+              <AiFillSchedule className=&quot;text-black text-[24px]&quot; />
               <span>Schedule: 9 hours/week</span>
             </div>
-            <div className="flex items-center gap-3 mt-3 md:mt-4">
-              <HiLocationMarker className="text-black text-[27px]" />
+            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
+              <HiLocationMarker className=&quot;text-black text-[27px]&quot; />
               <span>Location: In-person or online</span>
             </div>
-            <div className="flex items-center gap-3 mt-3 md:mt-4">
-              <IoMdOptions className="text-black text-[24px]" />
+            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
+              <IoMdOptions className=&quot;text-black text-[24px]&quot; />
               <span>Options: Evening Class, Executive (one-to-one) class</span>
             </div>
           </div>
@@ -217,95 +217,95 @@ const handleChange = (
 
         {/* Right Column - Contact Form */}
         <div
-          id="contact"
-          className="flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md"
+          id=&quot;contact&quot;
+          className=&quot;flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md&quot;
         >
-          <h1 className="text-2xl font-bold mb-4">
+          <h1 className=&quot;text-2xl font-bold mb-4&quot;>
             Contact Us for More Enquiry
           </h1>
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">
+            <div className=&quot;mb-4&quot;>
+              <label className=&quot;block text-sm font-medium mb-1&quot;>
                 Course Title:
               </label>
               <input
-                type="text"
-                name="courseTitle"
+                type=&quot;text&quot;
+                name=&quot;courseTitle&quot;
                 value={formData.courseTitle}
                 readOnly
-                className="w-full p-2 border font-bold text-2xl rounded bg-gray-200"
+                className=&quot;w-full p-2 border font-bold text-2xl rounded bg-gray-200&quot;
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Name*</label>
+            <div className=&quot;mb-4&quot;>
+              <label className=&quot;block text-sm font-medium mb-1&quot;>Name*</label>
               <input
-                type="text"
-                name="name"
+                type=&quot;text&quot;
+                name=&quot;name&quot;
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className=&quot;w-full p-2 border rounded&quot;
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Surname*</label>
+            <div className=&quot;mb-4&quot;>
+              <label className=&quot;block text-sm font-medium mb-1&quot;>Surname*</label>
               <input
-                type="text"
-                name="surname"
+                type=&quot;text&quot;
+                name=&quot;surname&quot;
                 required
                 value={formData.surname}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className=&quot;w-full p-2 border rounded&quot;
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Email*</label>
+            <div className=&quot;mb-4&quot;>
+              <label className=&quot;block text-sm font-medium mb-1&quot;>Email*</label>
               <input
-                type="email"
-                name="email"
+                type=&quot;email&quot;
+                name=&quot;email&quot;
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className=&quot;w-full p-2 border rounded&quot;
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Subject*</label>
+            <div className=&quot;mb-4&quot;>
+              <label className=&quot;block text-sm font-medium mb-1&quot;>Subject*</label>
               <input
-                type="text"
-                name="subject"
+                type=&quot;text&quot;
+                name=&quot;subject&quot;
                 required
                 value={formData.subject}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className=&quot;w-full p-2 border rounded&quot;
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Message*</label>
+            <div className=&quot;mb-4&quot;>
+              <label className=&quot;block text-sm font-medium mb-1&quot;>Message*</label>
               <textarea
-                name="message"
+                name=&quot;message&quot;
                 required
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className=&quot;w-full p-2 border rounded&quot;
                 rows={4}
               ></textarea>
             </div>
             <button
-              type="submit"
+              type=&quot;submit&quot;
               disabled={isSubmitting}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-blue-300"
+              className=&quot;w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-blue-300&quot;
             >
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {isSubmitting ? &quot;Submitting...&quot; : &quot;Submit&quot;}
             </button>
-            {submitStatus === "success" && (
-              <div className="mt-4 flex items-center text-green-600">
-                <FaCheckCircle className="mr-2" size={24} />
-                <p className="font-bold">Form submitted successfully!</p>
+            {submitStatus === &quot;success&quot; && (
+              <div className=&quot;mt-4 flex items-center text-green-600&quot;>
+                <FaCheckCircle className=&quot;mr-2&quot; size={24} />
+                <p className=&quot;font-bold&quot;>Form submitted successfully!</p>
               </div>
             )}
-            {submitStatus === "error" && (
-              <p className="mt-4 text-red-600">
+            {submitStatus === &quot;error&quot; && (
+              <p className=&quot;mt-4 text-red-600">
                 Failed to submit the form. Please try again.
               </p>
             )}

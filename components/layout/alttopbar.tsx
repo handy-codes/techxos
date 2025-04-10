@@ -1,10 +1,10 @@
-"use client";
+"use client&quot;;
 
-import { useUser } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useUser } from &quot;@clerk/nextjs&quot;;
+import { Button } from &quot;@/components/ui/button&quot;;
+import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
+import Link from &quot;next/link&quot;;
+import { usePathname } from &quot;next/navigation&quot;;
 
 export default function Topbar() {
   const { user, isLoaded } = useUser();
@@ -12,11 +12,11 @@ export default function Topbar() {
 
   if (!isLoaded) {
     return (
-      <header className="border-b">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Skeleton className="h-8 w-32" />
-          <div className="flex gap-4">
-            <Skeleton className="h-9 w-20" />
+      <header className=&quot;border-b&quot;>
+        <div className=&quot;container mx-auto px-4 h-16 flex items-center justify-between&quot;>
+          <Skeleton className=&quot;h-8 w-32&quot; />
+          <div className=&quot;flex gap-4&quot;>
+            <Skeleton className=&quot;h-9 w-20&quot; />
           </div>
         </div>
       </header>
@@ -24,32 +24,32 @@ export default function Topbar() {
   }
 
   return (
-    <header className="border-b">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold">
+    <header className=&quot;border-b&quot;>
+      <div className=&quot;container mx-auto px-4 h-16 flex items-center justify-between&quot;>
+        <Link href=&quot;/" className="text-xl font-bold&quot;>
           TechXOS
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className=&quot;flex items-center gap-4&quot;>
           {user ? (
             <>
-              <Link href="/dashboard">
-                <Button variant="ghost">Dashboard</Button>
+              <Link href=&quot;/dashboard&quot;>
+                <Button variant=&quot;ghost&quot;>Dashboard</Button>
               </Link>
-              {user.publicMetadata.role === "HEAD_ADMIN" && (
-                <Link href="/admin">
-                  <Button variant="ghost">Admin</Button>
+              {user.publicMetadata.role === &quot;HEAD_ADMIN&quot; && (
+                <Link href=&quot;/admin&quot;>
+                  <Button variant=&quot;ghost&quot;>Admin</Button>
                 </Link>
               )}
-              <Link href="/profile">
-                <Button variant="ghost">Profile</Button>
+              <Link href=&quot;/profile&quot;>
+                <Button variant=&quot;ghost&quot;>Profile</Button>
               </Link>
             </>
           ) : (
             <>
-              <Link href="/sign-in">
-                <Button variant="ghost">Sign In</Button>
+              <Link href=&quot;/sign-in&quot;>
+                <Button variant=&quot;ghost&quot;>Sign In</Button>
               </Link>
-              <Link href="/sign-up">
+              <Link href=&quot;/sign-up">
                 <Button>Sign Up</Button>
               </Link>
             </>

@@ -1,17 +1,17 @@
-import { auth } from "@clerk/nextjs/server";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { auth } from &quot;@clerk/nextjs/server&quot;;
+import Link from &quot;next/link&quot;;
+import { redirect } from &quot;next/navigation&quot;;
 
-import { Button } from "@/components/ui/button";
-import { db } from "@/lib/db";
-import { DataTable } from "@/components/custom/DataTable";
-import { columns } from "@/components/courses/Columns";
+import { Button } from &quot;@/components/ui/button&quot;;
+import { db } from &quot;@/lib/db&quot;;
+import { DataTable } from &quot;@/components/custom/DataTable&quot;;
+import { columns } from &quot;@/components/courses/Columns&quot;;
 
 const CoursesPage = async () => {
   const { userId } = auth();
 
   if (!userId) {
-    return redirect("/sign-in");
+    return redirect(&quot;/sign-in&quot;);
   }
 
   const courses = await db.course.findMany({
@@ -19,17 +19,17 @@ const CoursesPage = async () => {
       instructorId: userId,
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: &quot;desc&quot;,
     },
   });
 
   return (
-    <div className="px-6 py-4">
-      <Link href="/instructor/create-course">
+    <div className="px-6 py-4&quot;>
+      <Link href=&quot;/instructor/create-course&quot;>
         <Button>Create New Course</Button>
       </Link>
 
-      <div className="mt-5">
+      <div className=&quot;mt-5">
         <DataTable columns={columns} data={courses} />
       </div>
     </div>

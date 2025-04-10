@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
+import { useState, useEffect, useRef } from &quot;react&quot;;
+import { useUser } from &quot;@clerk/nextjs&quot;;
+import Link from &quot;next/link&quot;;
 
 interface Message {
   user?: string;
@@ -8,17 +8,17 @@ interface Message {
 }
 
 const getStorageKey = (): string => {
-  if (typeof window === "undefined") return "chatMessages";
+  if (typeof window === &quot;undefined&quot;) return &quot;chatMessages&quot;;
   const hostname = window.location.hostname;
-  return `chatMessages_${hostname.replace(/\./g, "_")}`;
+  return `chatMessages_${hostname.replace(/\./g, &quot;_&quot;)}`;
 };
 
 const getWelcomeMessage = (user?: { firstName?: string | null; username?: string | null }): Message => {
-  if (typeof window === "undefined") return { bot: "wandy_welcome" };
+  if (typeof window === &quot;undefined&quot;) return { bot: &quot;wandy_welcome&quot; };
   
-  const baseType = window.location.hostname === "techxos.com" 
-    ? "wandy_prod_welcome" 
-    : "wandy_welcome";
+  const baseType = window.location.hostname === &quot;techxos.com&quot; 
+    ? &quot;wandy_prod_welcome&quot; 
+    : &quot;wandy_welcome&quot;;
 
   if (user?.firstName) {
     return { bot: `${baseType}:Welcome back, ${user.firstName}!` };
@@ -33,7 +33,7 @@ export default function ChatWidget() {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(&quot;&quot;);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -45,12 +45,12 @@ export default function ChatWidget() {
         
         const initialMessages: Message[] = saved ? JSON.parse(saved) : [];
         const hasWelcome = initialMessages.some(msg => 
-          msg.bot?.startsWith("wandy_") && msg.bot.includes("_welcome")
+          msg.bot?.startsWith(&quot;wandy_&quot;) && msg.bot.includes(&quot;_welcome&quot;)
         );
 
         return hasWelcome ? initialMessages : [getWelcomeMessage(user ?? undefined), ...initialMessages];
       } catch (error) {
-        console.error("Failed to load messages:", error);
+        console.error(&quot;Failed to load messages:&quot;, error);
         return [getWelcomeMessage(user ?? undefined)];
       }
     };
@@ -63,12 +63,12 @@ export default function ChatWidget() {
       const storageKey = getStorageKey();
       localStorage.setItem(storageKey, JSON.stringify(messages));
     } catch (error) {
-      console.error("Failed to save messages:", error);
+      console.error(&quot;Failed to save messages:&quot;, error);
     }
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: &quot;smooth&quot; });
   };
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function ChatWidget() {
 
   const toggleChat = () => {
     if (!isOpen) {
-      new Audio("/chat-popup.mp3").play().catch(console.error);
+      new Audio(&quot;/chat-popup.mp3&quot;).play().catch(console.error);
     }
     setIsOpen(!isOpen);
   };
@@ -87,14 +87,14 @@ export default function ChatWidget() {
     if (!trimmedInput) return;
 
     const newMessage = trimmedInput;
-    setInput("");
+    setInput(&quot;&quot;);
     setMessages(prev => [...prev, { user: newMessage }]);
     setIsTyping(true);
 
     try {
-      const response = await fetch("/api/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch(&quot;/api/chatbot&quot;, {
+        method: &quot;POST&quot;,
+        headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
         body: JSON.stringify({ 
           message: newMessage,
           user: {
@@ -113,8 +113,8 @@ export default function ChatWidget() {
 
       setMessages(prev => [...prev, { bot: data.reply }]);
     } catch (error) {
-      console.error("Chat error:", error);
-      const fallback = "Our chat service is currently unavailable. Please email hello@techxos.com";
+      console.error(&quot;Chat error:&quot;, error);
+      const fallback = &quot;Our chat service is currently unavailable. Please email hello@techxos.com&quot;;
       setMessages(prev => [...prev, { bot: fallback }]);
     } finally {
       setIsTyping(false);
@@ -122,24 +122,24 @@ export default function ChatWidget() {
   };
 
   const renderMessageContent = (msg: Message) => {
-    if (msg.user) return <div className="message-text">{msg.user}</div>;
+    if (msg.user) return <div className="message-text&quot;>{msg.user}</div>;
 
-    if (msg.bot?.startsWith("wandy_")) {
-      const [messageType, welcomeText] = msg.bot.split(":");
-      const isProd = window.location.hostname === "techxos.com";
+    if (msg.bot?.startsWith(&quot;wandy_&quot;)) {
+      const [messageType, welcomeText] = msg.bot.split(&quot;:");
+      const isProd = window.location.hostname === &quot;techxos.com&quot;;
       
       return (
-        <div className="welcome-message flex flex-col justify-center">
-          <div className="flex items-center gap-2">
-            <TechxosLogo className="w-6 h-6 text-purple-600" />
-            <span className="text-black">
+        <div className="welcome-message flex flex-col justify-center&quot;>
+          <div className=&quot;flex items-center gap-2&quot;>
+            <TechxosLogo className=&quot;w-6 h-6 text-purple-600&quot; />
+            <span className=&quot;text-black&quot;>
               {welcomeText || (isProd 
-                ? "Techxos Production Support" 
-                : "Hi! I'm Wandy, Techxos AI sales expert")}
+                ? &quot;Techxos Production Support&quot; 
+                : &quot;Hi! I'm Wandy, Techxos AI sales expert&quot;)}
             </span>
           </div>
-          <div className="mt-2 text-black self-center">
-            {isProd ? "🔒 Secure enterprise assistance ready" : "🤖 How can I help you today?"}
+          <div className=&quot;mt-2 text-black self-center&quot;>
+            {isProd ? &quot;🔒 Secure enterprise assistance ready&quot; : &quot;🤖 How can I help you today?&quot;}
           </div>
         </div>
       );
@@ -151,7 +151,7 @@ export default function ChatWidget() {
       const parts = msg.bot.split(urlRegex);
       
       return (
-        <div className="message-text">
+        <div className=&quot;message-text&quot;>
           {parts.map((part: string, index: number) => {
             if (part.match(urlRegex)) {
               // Extract the path from the full URL
@@ -162,7 +162,7 @@ export default function ChatWidget() {
                 <Link 
                   key={index} 
                   href={path}
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className=&quot;text-blue-600 hover:text-blue-800 underline&quot;
                 >
                   {part}
                 </Link>
@@ -178,45 +178,45 @@ export default function ChatWidget() {
   };
 
   return (
-    <div className="chat-container">
+    <div className=&quot;chat-container&quot;>
       <button
-        className="chat-button flex items-center text-white"
+        className=&quot;chat-button flex items-center text-white&quot;
         onClick={toggleChat}
-        aria-label={isOpen ? "Close chat" : "Open chat"}
+        aria-label={isOpen ? &quot;Close chat&quot; : &quot;Open chat&quot;}
       >
-        <div className="flex w-fit h-fit items-center justify-center gap-2 rounded-full bg-[#5025D1] shadow-md cursor-pointer transition-transform hover:scale-105 px-4 py-3">
-          <TechxosLogo className="text-white w-6 h-6" />
-          <h1 className="whitespace-nowrap">Ask Wandy</h1>
+        <div className=&quot;flex w-fit h-fit items-center justify-center gap-2 rounded-full bg-[#5025D1] shadow-md cursor-pointer transition-transform hover:scale-105 px-4 py-3&quot;>
+          <TechxosLogo className=&quot;text-white w-6 h-6&quot; />
+          <h1 className=&quot;whitespace-nowrap&quot;>Ask Wandy</h1>
         </div>
       </button>
 
       {isOpen && (
-        <div className="chat-window">
-          <div className="chat-header">
-            <h3 className="flex items-center gap-2">
-              <TechxosLogo className="text-white w-5 h-5" />
+        <div className=&quot;chat-window&quot;>
+          <div className=&quot;chat-header&quot;>
+            <h3 className=&quot;flex items-center gap-2&quot;>
+              <TechxosLogo className=&quot;text-white w-5 h-5&quot; />
               Wandy
             </h3>
             <button
-              className="close-button"
+              className=&quot;close-button&quot;
               onClick={() => setIsOpen(false)}
-              aria-label="Close chat"
+              aria-label=&quot;Close chat&quot;
             >
-              <CloseIcon className="text-white w-4 h-4" />
+              <CloseIcon className=&quot;text-white w-4 h-4&quot; />
             </button>
           </div>
 
-          <div className="chat-messages" aria-live="polite">
+          <div className=&quot;chat-messages&quot; aria-live=&quot;polite&quot;>
             {messages.map((msg: Message, i: number) => (
-              <div key={i} className={`message ${msg.user ? "user" : "bot"}`}>
+              <div key={i} className={`message ${msg.user ? &quot;user&quot; : &quot;bot&quot;}`}>
                 {renderMessageContent(msg)}
               </div>
             ))}
             {isTyping && (
-              <div className="message bot">
-                <div className="typing-indicator">
+              <div className=&quot;message bot&quot;>
+                <div className=&quot;typing-indicator&quot;>
                   {[...Array(3)].map((_: unknown, i: number) => (
-                    <span key={i} className="dot" />
+                    <span key={i} className=&quot;dot&quot; />
                   ))}
                 </div>
               </div>
@@ -224,20 +224,20 @@ export default function ChatWidget() {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="chat-input outline-none">
+          <div className=&quot;chat-input outline-none&quot;>
             <input
-              type="text"
+              type=&quot;text&quot;
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Tell us how we can help..."
-              aria-label="Chat input"
+              onKeyDown={(e) => e.key === &quot;Enter&quot; && sendMessage()}
+              placeholder=&quot;Tell us how we can help...&quot;
+              aria-label=&quot;Chat input&quot;
             />
             <button
-              className={`send-button ${input.trim() ? "active" : "disabled"}`}
+              className={`send-button ${input.trim() ? &quot;active&quot; : &quot;disabled&quot;}`}
               onClick={sendMessage}
               disabled={!input.trim() || isTyping}
-              aria-label="Send message"
+              aria-label=&quot;Send message&quot;
             >
               Send
             </button>
@@ -441,23 +441,23 @@ export default function ChatWidget() {
 
 const TechxosLogo = ({ className }: { className?: string }) => (
   <svg
-    viewBox="0 0 64 64"
-    fill="currentColor"
+    viewBox=&quot;0 0 64 64&quot;
+    fill=&quot;currentColor&quot;
     className={className}
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns=&quot;http://www.w3.org/2000/svg&quot;
   >
-    <path d="M32 0C14.3 0 0 14.3 0 32s14.3 32 32 32 32-14.3 32-32S49.7 0 32 0zm0 58C17.6 58 6 46.4 6 32S17.6 6 32 6s26 11.6 26 26-11.6 26-26 26z" />
-    <path d="M46 28.2L34.8 39.4c-1.2 1.2-3.1 1.2-4.2 0l-8.5-8.5-2.1 2.1 8.5 8.5c2.3 2.3 6.1 2.3 8.5 0L48 30.3l-2-2.1z" />
+    <path d=&quot;M32 0C14.3 0 0 14.3 0 32s14.3 32 32 32 32-14.3 32-32S49.7 0 32 0zm0 58C17.6 58 6 46.4 6 32S17.6 6 32 6s26 11.6 26 26-11.6 26-26 26z&quot; />
+    <path d=&quot;M46 28.2L34.8 39.4c-1.2 1.2-3.1 1.2-4.2 0l-8.5-8.5-2.1 2.1 8.5 8.5c2.3 2.3 6.1 2.3 8.5 0L48 30.3l-2-2.1z&quot; />
   </svg>
 );
 
 const CloseIcon = ({ className }: { className?: string }) => (
   <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
+    viewBox=&quot;0 0 24 24&quot;
+    fill=&quot;currentColor&quot;
     className={className}
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns=&quot;http://www.w3.org/2000/svg&quot;
   >
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+    <path d=&quot;M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
   </svg>
 );

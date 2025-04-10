@@ -1,9 +1,9 @@
-"use client";
+"use client&quot;;
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
+import { useEffect, useState } from &quot;react&quot;;
+import { usePathname } from &quot;next/navigation&quot;;
+import { useUser } from &quot;@clerk/nextjs&quot;;
+import Link from &quot;next/link&quot;;
 import { 
   Calendar, 
   BarChart3, 
@@ -12,10 +12,10 @@ import {
   Settings, 
   Home,
   Clock
-} from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { redirect } from "next/navigation";
+} from &quot;lucide-react&quot;;
+import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
+import { cn } from &quot;@/lib/utils&quot;;
+import { redirect } from &quot;next/navigation&quot;;
 
 export default function LecturerLayout({
   children,
@@ -24,92 +24,92 @@ export default function LecturerLayout({
 }) {
   const pathname = usePathname();
   const { user, isLoaded } = useUser();
-  const [greeting, setGreeting] = useState("");
+  const [greeting, setGreeting] = useState(&quot;");
 
   useEffect(() => {
     if (!isLoaded) return;
     
     // Redirect if not logged in or not a lecturer
     if (!user) {
-      redirect("/sign-in");
+      redirect(&quot;/sign-in&quot;);
     }
     
     // Get the current hour to determine greeting
     const hour = new Date().getHours();
     if (hour < 12) {
-      setGreeting("Good Morning");
+      setGreeting(&quot;Good Morning&quot;);
     } else if (hour < 18) {
-      setGreeting("Good Afternoon");
+      setGreeting(&quot;Good Afternoon&quot;);
     } else {
-      setGreeting("Good Evening");
+      setGreeting(&quot;Good Evening&quot;);
     }
   }, [user, isLoaded]);
 
   const routes = [
     {
-      label: "Dashboard",
-      icon: <Home className="h-4 w-4 mr-2" />,
-      href: "/lecturer",
-      active: pathname === "/lecturer",
+      label: &quot;Dashboard&quot;,
+      icon: <Home className=&quot;h-4 w-4 mr-2&quot; />,
+      href: &quot;/lecturer&quot;,
+      active: pathname === &quot;/lecturer&quot;,
     },
     {
-      label: "My Classes",
-      icon: <Video className="h-4 w-4 mr-2" />,
-      href: "/lecturer/classes",
-      active: pathname === "/lecturer/classes" || pathname.startsWith("/lecturer/classes/"),
+      label: &quot;My Classes&quot;,
+      icon: <Video className=&quot;h-4 w-4 mr-2&quot; />,
+      href: &quot;/lecturer/classes&quot;,
+      active: pathname === &quot;/lecturer/classes&quot; || pathname.startsWith(&quot;/lecturer/classes/&quot;),
     },
     {
-      label: "Live Sessions",
-      icon: <Clock className="h-4 w-4 mr-2" />,
-      href: "/lecturer/zoom-meetings",
-      active: pathname === "/lecturer/zoom-meetings" || pathname.startsWith("/lecturer/zoom-meetings/"),
+      label: &quot;Live Sessions&quot;,
+      icon: <Clock className=&quot;h-4 w-4 mr-2&quot; />,
+      href: &quot;/lecturer/zoom-meetings&quot;,
+      active: pathname === &quot;/lecturer/zoom-meetings&quot; || pathname.startsWith(&quot;/lecturer/zoom-meetings/&quot;),
     },
     {
-      label: "Students",
-      icon: <Users className="h-4 w-4 mr-2" />,
-      href: "/lecturer/students",
-      active: pathname === "/lecturer/students",
+      label: &quot;Students&quot;,
+      icon: <Users className=&quot;h-4 w-4 mr-2&quot; />,
+      href: &quot;/lecturer/students&quot;,
+      active: pathname === &quot;/lecturer/students&quot;,
     },
     {
-      label: "Schedule",
-      icon: <Calendar className="h-4 w-4 mr-2" />,
-      href: "/lecturer/schedule",
-      active: pathname === "/lecturer/schedule",
+      label: &quot;Schedule&quot;,
+      icon: <Calendar className=&quot;h-4 w-4 mr-2&quot; />,
+      href: &quot;/lecturer/schedule&quot;,
+      active: pathname === &quot;/lecturer/schedule&quot;,
     },
     {
-      label: "Analytics",
-      icon: <BarChart3 className="h-4 w-4 mr-2" />,
-      href: "/lecturer/analytics",
-      active: pathname === "/lecturer/analytics",
+      label: &quot;Analytics&quot;,
+      icon: <BarChart3 className=&quot;h-4 w-4 mr-2&quot; />,
+      href: &quot;/lecturer/analytics&quot;,
+      active: pathname === &quot;/lecturer/analytics&quot;,
     },
     {
-      label: "Settings",
-      icon: <Settings className="h-4 w-4 mr-2" />,
-      href: "/lecturer/settings",
-      active: pathname === "/lecturer/settings",
+      label: &quot;Settings&quot;,
+      icon: <Settings className=&quot;h-4 w-4 mr-2&quot; />,
+      href: &quot;/lecturer/settings&quot;,
+      active: pathname === &quot;/lecturer/settings&quot;,
     },
   ];
 
   if (!isLoaded) {
-    return <div className="h-full flex items-center justify-center">Loading...</div>;
+    return <div className="h-full flex items-center justify-center&quot;>Loading...</div>;
   }
 
   return (
-    <div className="h-full flex">
-      <div className="hidden md:flex h-full w-64 flex-col fixed inset-y-0 z-50 bg-white border-r">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold">TechXOS</h1>
-          <p className="text-sm text-muted-foreground">Lecturer Portal</p>
+    <div className=&quot;h-full flex&quot;>
+      <div className=&quot;hidden md:flex h-full w-64 flex-col fixed inset-y-0 z-50 bg-white border-r&quot;>
+        <div className=&quot;p-6&quot;>
+          <h1 className=&quot;text-2xl font-bold&quot;>TechXOS</h1>
+          <p className=&quot;text-sm text-muted-foreground&quot;>Lecturer Portal</p>
         </div>
-        <ScrollArea className="flex-1 p-6">
-          <div className="flex flex-col space-y-2">
+        <ScrollArea className=&quot;flex-1 p-6&quot;>
+          <div className=&quot;flex flex-col space-y-2&quot;>
             {routes.map((route) => (
               <Link
                 key={route.href}
                 href={route.href}
                 className={cn(
-                  "flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-100",
-                  route.active ? "bg-slate-100 text-black font-medium" : "text-muted-foreground"
+                  &quot;flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-100&quot;,
+                  route.active ? &quot;bg-slate-100 text-black font-medium&quot; : &quot;text-muted-foreground&quot;
                 )}
               >
                 {route.icon}
@@ -118,29 +118,29 @@ export default function LecturerLayout({
             ))}
           </div>
         </ScrollArea>
-        <div className="p-6 border-t">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
+        <div className=&quot;p-6 border-t&quot;>
+          <div className=&quot;flex items-center gap-2&quot;>
+            <div className=&quot;w-8 h-8 rounded-full bg-slate-200 overflow-hidden&quot;>
               {user?.imageUrl && (
                 <img 
                   src={user.imageUrl} 
-                  alt={user.firstName || "User"} 
-                  className="w-full h-full object-cover"
+                  alt={user.firstName || &quot;User&quot;} 
+                  className=&quot;w-full h-full object-cover&quot;
                 />
               )}
             </div>
             <div>
-              <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
-              <p className="text-xs text-muted-foreground">Lecturer</p>
+              <p className=&quot;text-sm font-medium&quot;>{user?.firstName} {user?.lastName}</p>
+              <p className=&quot;text-xs text-muted-foreground&quot;>Lecturer</p>
             </div>
           </div>
         </div>
       </div>
-      <main className="md:pl-64 w-full">
-        <div className="p-6 h-full">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">
-              {greeting}, {user?.firstName || "Lecturer"}
+      <main className=&quot;md:pl-64 w-full&quot;>
+        <div className=&quot;p-6 h-full&quot;>
+          <div className=&quot;flex justify-between items-center mb-6&quot;>
+            <h1 className=&quot;text-2xl font-bold&quot;>
+              {greeting}, {user?.firstName || &quot;Lecturer"}
             </h1>
           </div>
           {children}

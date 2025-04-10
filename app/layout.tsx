@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
-import "./globals.css";
-import { Toaster } from "react-hot-toast";
-import Topbar from "@/components/layout/Topbar";
-import FooterPage from "@/components/layout/Footer";
+import type { Metadata } from &quot;next&quot;;
+import { Inter } from &quot;next/font/google&quot;;
+import { ClerkProvider } from &quot;@clerk/nextjs&quot;;
+import &quot;./globals.css&quot;;
+import { Toaster } from &quot;react-hot-toast&quot;;
+import Topbar from &quot;@/components/layout/Topbar&quot;;
+import FooterPage from &quot;@/components/layout/Footer&quot;;
 
 const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap', // Prevents layout shifts
+  subsets: [&apos;latin&apos;],
+  variable: &apos;--font-inter&apos;,
+  display: &apos;swap&apos;, // Prevents layout shifts
 });
 
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; />
 
 export const metadata: Metadata = {
-  title: "TechXOS",
-  description: "TechXOS - Your Learning Platform",
+  title: &quot;TechXOS&quot;,
+  description: &quot;TechXOS - Your Learning Platform&quot;,
 };
 
 export default function RootLayout({
@@ -25,12 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
+    <html lang=&quot;en&quot; className={`${inter.variable}`}>
       <body className={inter.className}>
         <ClerkProvider>
-          <div className="min-h-screen flex flex-col">
+          <div className="min-h-screen flex flex-col&quot;>
             <Topbar />
-            <main className="flex-grow mt-[120px]">
+            <main className=&quot;flex-grow mt-[120px]">
               {children}
             </main>
             <FooterPage />

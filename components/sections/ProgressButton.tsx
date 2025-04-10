@@ -1,12 +1,12 @@
-"use client";
+"use client&quot;;
 
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import axios from &quot;axios&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import { useState } from &quot;react&quot;;
+import toast from &quot;react-hot-toast&quot;;
 
-import { Button } from "@/components/ui/button";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { Button } from &quot;@/components/ui/button&quot;;
+import { CheckCircle, Loader2 } from &quot;lucide-react&quot;;
 
 interface ProgressButtonProps {
   courseId: string;
@@ -28,11 +28,11 @@ const ProgressButton = ({
       await axios.post(`/api/courses/${courseId}/sections/${sectionId}/progress`, {
         isCompleted: !isCompleted,
       });
-      toast.success("Progress updated!");
+      toast.success(&quot;Progress updated!&quot;);
       router.refresh();
     } catch (err) {
-      console.log("Failed to update progress", err);
-      toast.error("Something went wrong!");
+      console.log(&quot;Failed to update progress&quot;, err);
+      toast.error(&quot;Something went wrong!&quot;);
     } finally {
       setIsLoading(false);
     }
@@ -40,19 +40,19 @@ const ProgressButton = ({
 
   return (
     <Button 
-      variant={isCompleted ? "default" : "outline"} 
+      variant={isCompleted ? &quot;default&quot; : &quot;outline&quot;} 
       onClick={onClick}
-      className={isCompleted ? "bg-green-500 hover:bg-green-600 text-white" : ""}
+      className={isCompleted ? &quot;bg-green-500 hover:bg-green-600 text-white&quot; : &quot;"}
     >
       {isLoading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2 className=&quot;h-4 w-4 animate-spin&quot; />
       ) : isCompleted ? (
-        <div className="flex items-center">
-          <CheckCircle className="h-4 w-4 mr-2" />
+        <div className="flex items-center&quot;>
+          <CheckCircle className=&quot;h-4 w-4 mr-2&quot; />
           <span>Completed</span>
         </div>
       ) : (
-        "Mark as complete"
+        &quot;Mark as complete"
       )}
     </Button>
   );

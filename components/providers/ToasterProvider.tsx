@@ -1,6 +1,6 @@
-"use client"
+"use client&quot;
 
-import { Toaster } from "react-hot-toast"
+import { Toaster } from &quot;react-hot-toast"
 
 const ToasterProvider = () => {
   return (

@@ -1,8 +1,8 @@
 'use client';
 
-import { Gem } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { Gem } from &quot;lucide-react&quot;;
+import Image from &quot;next/image&quot;;
+import Link from &quot;next/link&quot;;
 
 interface CourseCardProps {
   course: {
@@ -30,45 +30,45 @@ const CourseCard = ({ course, instructor, level }: CourseCardProps) => {
   return (
     <Link
       href={`/courses/${course.id}/overview`}
-      className="border rounded-lg cursor-pointer bg-[white] text-black"
+      className=&quot;border rounded-lg cursor-pointer bg-[white] text-black&quot;
     >
       <Image
-        src={course.imageUrl ? course.imageUrl : "/image_placeholder.webp"}
+        src={course.imageUrl ? course.imageUrl : &quot;/image_placeholder.webp&quot;}
         alt={course.title}
         width={500}
         height={300}
-        className="rounded-t-xl w-[320px] h-[180px] object-cover"
+        className=&quot;rounded-t-xl w-[320px] h-[180px] object-cover&quot;
       />
-      <div className="px-4 py-3 flex flex-col gap-2">
-        <h2 className="text-lg font-bold hover:[#FDAB04]">{course.title}</h2>
-        <div className="flex justify-between text-sm font-medium">
+      <div className="px-4 py-3 flex flex-col gap-2&quot;>
+        <h2 className=&quot;text-lg font-bold hover:[#FDAB04]&quot;>{course.title}</h2>
+        <div className=&quot;flex justify-between text-sm font-medium&quot;>
           {instructor && (
-            <div className="flex gap-2 items-center">
+            <div className=&quot;flex gap-2 items-center&quot;>
               <Image
                 src={
                   instructor.imageUrl
                     ? instructor.imageUrl
-                    : "/avatar_placeholder.jpg"
+                    : &quot;/avatar_placeholder.jpg&quot;
                 }
                 alt={
-                  instructor.fullName ? instructor.fullName : "Instructor photo"
+                  instructor.fullName ? instructor.fullName : &quot;Instructor photo&quot;
                 }
                 width={30}
                 height={30}
-                className="rounded-full"
+                className=&quot;rounded-full&quot;
               />
               <p>{instructor.fullName}</p>
             </div>
           )}
           {level && (
-            <div className="flex gap-2">
+            <div className=&quot;flex gap-2&quot;>
               <Gem size={20} />
               <p>{level.name}</p>
             </div>
           )}
         </div>
 
-        <p className="text-sm font-bold">NGN {course.price}</p>
+        <p className=&quot;text-sm font-bold">NGN {course.price}</p>
       </div>
     </Link>
   );

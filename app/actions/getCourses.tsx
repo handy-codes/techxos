@@ -1,5 +1,5 @@
-import { db } from "@/lib/db"
-import { Course } from "@prisma/client"
+import { db } from &quot;@/lib/db&quot;
+import { Course } from &quot;@prisma/client&quot;
 
 const getCoursesByCategory = async (categoryId: string | null): Promise<Course[]> => {
   const whereClause: any = {
@@ -18,7 +18,7 @@ const getCoursesByCategory = async (categoryId: string | null): Promise<Course[]
       },
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: &quot;desc&quot;,
     },
   })
 

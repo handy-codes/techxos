@@ -1,11 +1,11 @@
-"use client";
+"use client&quot;;
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import axios from "axios";
+import { z } from &quot;zod&quot;;
+import { zodResolver } from &quot;@hookform/resolvers/zod&quot;;
+import { useForm } from &quot;react-hook-form&quot;;
+import axios from &quot;axios&quot;;
 
-import { Button } from "@/components/ui/button";
+import { Button } from &quot;@/components/ui/button&quot;;
 import {
   Form,
   FormControl,
@@ -14,22 +14,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { ComboBox } from "@/components/custom/ComboBox";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { Loader2 } from "lucide-react";
+} from &quot;@/components/ui/form&quot;;
+import { Input } from &quot;@/components/ui/input&quot;;
+import { ComboBox } from &quot;@/components/custom/ComboBox&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import toast from &quot;react-hot-toast&quot;;
+import { Loader2 } from &quot;lucide-react&quot;;
 
 const formSchema = z.object({
   title: z.string().min(2, {
-    message: "Title is required and minimum 2 characters",
+    message: &quot;Title is required and minimum 2 characters&quot;,
   }),
   categoryId: z.string().min(1, {
-    message: "Category is required",
+    message: &quot;Category is required&quot;,
   }),
   subCategoryId: z.string().min(1, {
-    message: "Subcategory is required",
+    message: &quot;Subcategory is required&quot;,
   }),
 });
 
@@ -48,9 +48,9 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      categoryId: "",
-      subCategoryId: "",
+      title: &quot;",
+      categoryId: &quot;&quot;,
+      subCategoryId: &quot;&quot;,
     },
   });
 
@@ -59,21 +59,21 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/courses", values);
+      const response = await axios.post(&quot;/api/courses&quot;, values);
       router.push(`/instructor/courses/${response.data.id}/basic`);
-      toast.success("New Course Created");
+      toast.success(&quot;New Course Created&quot;);
     } catch (err) {
-      console.log("Failed to create new course", err);
-      toast.error("Something went wrong!");
+      console.log(&quot;Failed to create new course&quot;, err);
+      toast.error(&quot;Something went wrong!&quot;);
     }
   };
 
   return (
-    <div className="p-10 -mt-[-12%]">
-      <h1 className="text-xl font-bold">
+    <div className="p-10 -mt-[-12%]&quot;>
+      <h1 className=&quot;text-xl font-bold&quot;>
         Let give some basics for your course
       </h1>
-      <p className="text-sm mt-3">
+      <p className=&quot;text-sm mt-3&quot;>
         It is ok if you cannot think of a good title or correct category now.
         You can change them later.
       </p>
@@ -81,17 +81,17 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 mt-10"
+          className=&quot;space-y-8 mt-10&quot;
         >
           <FormField
             control={form.control}
-            name="title"
+            name=&quot;title&quot;
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Ex: Web Development for Beginners"
+                    placeholder=&quot;Ex: Web Development for Beginners&quot;
                     {...field}
                   />
                 </FormControl>
@@ -102,9 +102,9 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
 
           <FormField
             control={form.control}
-            name="categoryId"
+            name=&quot;categoryId&quot;
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className=&quot;flex flex-col&quot;>
                 <FormLabel>Category</FormLabel>
                 <FormControl>
                   <ComboBox options={categories} {...field} />
@@ -116,16 +116,16 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
 
           <FormField
             control={form.control}
-            name="subCategoryId"
+            name=&quot;subCategoryId&quot;
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className=&quot;flex flex-col&quot;>
                 <FormLabel>Subcategory</FormLabel>
                 <FormControl>
                   <ComboBox
                     options={
                       categories.find(
                         (category) =>
-                          category.value === form.watch("categoryId")
+                          category.value === form.watch(&quot;categoryId&quot;)
                       )?.subCategories || []
                     }
                     {...field}
@@ -136,11 +136,11 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
             )}
           />
 
-          <Button type="submit" disabled={!isValid || isSubmitting}>
+          <Button type=&quot;submit&quot; disabled={!isValid || isSubmitting}>
             {isSubmitting ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className=&quot;h-4 w-4 animate-spin&quot; />
             ) : (
-              "Create"
+              &quot;Create"
             )}
           </Button>
         </form>

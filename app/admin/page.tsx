@@ -1,14 +1,14 @@
-"use client";
+"use client&quot;;
 
-import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, BookOpen, Calendar, DollarSign } from "lucide-react";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect, useState } from &quot;react&quot;;
+import { useUser } from &quot;@clerk/nextjs&quot;;
+import { Button } from &quot;@/components/ui/button&quot;;
+import { Card, CardContent, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
+import { Users, BookOpen, Calendar, DollarSign } from &quot;lucide-react&quot;;
+import axios from &quot;axios&quot;;
+import { toast } from &quot;react-hot-toast&quot;;
+import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
+import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
 
 interface DashboardStats {
   totalUsers: number;
@@ -33,12 +33,12 @@ export default function AdminDashboard() {
 
   const fetchDashboardStats = async () => {
     try {
-      const response = await axios.get("/api/admin/dashboard");
-      console.log("Dashboard stats response:", response.data);
+      const response = await axios.get(&quot;/api/admin/dashboard&quot;);
+      console.log(&quot;Dashboard stats response:&quot;, response.data);
       setStats(response.data);
     } catch (error) {
-      console.error("Dashboard error:", error);
-      toast.error("Failed to fetch dashboard stats. Using default values.");
+      console.error(&quot;Dashboard error:&quot;, error);
+      toast.error(&quot;Failed to fetch dashboard stats. Using default values.&quot;);
       // Keep the default values
       setStats({
         totalUsers: 0,
@@ -53,19 +53,19 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="p-6 space-y-6">
-        <div className="flex justify-between items-center">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-4 w-32" />
+      <div className=&quot;p-6 space-y-6&quot;>
+        <div className=&quot;flex justify-between items-center&quot;>
+          <Skeleton className=&quot;h-8 w-48&quot; />
+          <Skeleton className=&quot;h-4 w-32&quot; />
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className=&quot;grid gap-4 md:grid-cols-2 lg:grid-cols-4&quot;>
           {[...Array(4)].map((_, i) => (
             <Card key={i}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <Skeleton className="h-4 w-24" />
+              <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
+                <Skeleton className=&quot;h-4 w-24&quot; />
               </CardHeader>
               <CardContent>
-                <Skeleton className="h-8 w-16" />
+                <Skeleton className=&quot;h-8 w-16&quot; />
               </CardContent>
             </Card>
           ))}
@@ -75,84 +75,84 @@ export default function AdminDashboard() {
   }
 
   return (
-    <ScrollArea className="h-full">
-      <div className="p-6 space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <div className="text-sm text-muted-foreground">
+    <ScrollArea className=&quot;h-full&quot;>
+      <div className=&quot;p-6 space-y-6&quot;>
+        <div className=&quot;flex justify-between items-center&quot;>
+          <h1 className=&quot;text-2xl font-bold&quot;>Dashboard</h1>
+          <div className=&quot;text-sm text-muted-foreground&quot;>
             Welcome back, {user?.firstName}
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className=&quot;grid gap-4 md:grid-cols-2 lg:grid-cols-4&quot;>
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
+              <CardTitle className=&quot;text-sm font-medium&quot;>Total Users</CardTitle>
+              <Users className=&quot;h-4 w-4 text-muted-foreground&quot; />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.totalUsers}</div>
+              <div className=&quot;text-2xl font-bold&quot;>{stats.totalUsers}</div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Live Classes</CardTitle>
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
+              <CardTitle className=&quot;text-sm font-medium&quot;>Live Classes</CardTitle>
+              <BookOpen className=&quot;h-4 w-4 text-muted-foreground&quot; />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.totalClasses}</div>
+              <div className=&quot;text-2xl font-bold&quot;>{stats.totalClasses}</div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Schedules</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
+              <CardTitle className=&quot;text-sm font-medium&quot;>Schedules</CardTitle>
+              <Calendar className=&quot;h-4 w-4 text-muted-foreground&quot; />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.totalSchedules}</div>
+              <div className=&quot;text-2xl font-bold&quot;>{stats.totalSchedules}</div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
+              <CardTitle className=&quot;text-sm font-medium&quot;>Total Revenue</CardTitle>
+              <DollarSign className=&quot;h-4 w-4 text-muted-foreground&quot; />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className=&quot;text-2xl font-bold&quot;>
                 ₦{stats.totalRevenue.toLocaleString()}
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Quick Actions</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className=&quot;space-y-4&quot;>
+          <h2 className=&quot;text-xl font-semibold&quot;>Quick Actions</h2>
+          <div className=&quot;grid gap-4 md:grid-cols-2 lg:grid-cols-3&quot;>
             <Button
-              variant="outline"
-              className="h-24 flex flex-col items-center justify-center gap-2"
-              onClick={() => window.location.href = "/admin/users/new"}
+              variant=&quot;outline&quot;
+              className=&quot;h-24 flex flex-col items-center justify-center gap-2&quot;
+              onClick={() => window.location.href = &quot;/admin/users/new&quot;}
             >
-              <Users className="h-6 w-6" />
+              <Users className=&quot;h-6 w-6&quot; />
               <span>Add New User</span>
             </Button>
             <Button
-              variant="outline"
-              className="h-24 flex flex-col items-center justify-center gap-2"
-              onClick={() => window.location.href = "/admin/live-classes/new"}
+              variant=&quot;outline&quot;
+              className=&quot;h-24 flex flex-col items-center justify-center gap-2&quot;
+              onClick={() => window.location.href = &quot;/admin/live-classes/new&quot;}
             >
-              <BookOpen className="h-6 w-6" />
+              <BookOpen className=&quot;h-6 w-6&quot; />
               <span>Create Live Class</span>
             </Button>
             <Button
-              variant="outline"
-              className="h-24 flex flex-col items-center justify-center gap-2"
-              onClick={() => window.location.href = "/admin/schedule/new"}
+              variant=&quot;outline&quot;
+              className=&quot;h-24 flex flex-col items-center justify-center gap-2&quot;
+              onClick={() => window.location.href = &quot;/admin/schedule/new&quot;}
             >
-              <Calendar className="h-6 w-6" />
+              <Calendar className=&quot;h-6 w-6" />
               <span>Add Schedule</span>
             </Button>
           </div>

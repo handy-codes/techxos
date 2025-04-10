@@ -1,8 +1,8 @@
-"use client";
+"use client&quot;;
 
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { usePathname } from &quot;next/navigation&quot;;
+import Link from &quot;next/link&quot;;
+import { cn } from &quot;@/lib/utils&quot;;
 import {
   Users,
   BookOpen,
@@ -11,9 +11,9 @@ import {
   LayoutDashboard,
   CreditCard,
   Video
-} from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
+} from &quot;lucide-react&quot;;
+import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
+import { Separator } from &quot;@/components/ui/separator&quot;;
 
 export default function AdminLayout({
   children,
@@ -24,71 +24,71 @@ export default function AdminLayout({
   
   const routes = [
     {
-      label: "Dashboard",
+      label: &quot;Dashboard&quot;,
       icon: LayoutDashboard,
-      href: "/admin",
-      active: pathname === "/admin",
+      href: &quot;/admin&quot;,
+      active: pathname === &quot;/admin&quot;,
     },
     {
-      label: "Users",
+      label: &quot;Users&quot;,
       icon: Users,
-      href: "/admin/users",
-      active: pathname === "/admin/users" || pathname?.startsWith("/admin/users/"),
+      href: &quot;/admin/users&quot;,
+      active: pathname === &quot;/admin/users&quot; || pathname?.startsWith(&quot;/admin/users/&quot;),
     },
     {
-      label: "Live Classes",
+      label: &quot;Live Classes&quot;,
       icon: BookOpen,
-      href: "/admin/live-classes",
-      active: pathname === "/admin/live-classes" || pathname?.startsWith("/admin/live-classes/"),
+      href: &quot;/admin/live-classes&quot;,
+      active: pathname === &quot;/admin/live-classes&quot; || pathname?.startsWith(&quot;/admin/live-classes/&quot;),
     },
     {
-      label: "Schedule",
+      label: &quot;Schedule&quot;,
       icon: Calendar,
-      href: "/admin/schedule",
-      active: pathname === "/admin/schedule" || pathname?.startsWith("/admin/schedule/"),
+      href: &quot;/admin/schedule&quot;,
+      active: pathname === &quot;/admin/schedule&quot; || pathname?.startsWith(&quot;/admin/schedule/&quot;),
     },
     {
-      label: "Zoom Meetings",
+      label: &quot;Zoom Meetings&quot;,
       icon: Video,
-      href: "/admin/zoom-meetings",
-      active: pathname === "/admin/zoom-meetings" || pathname?.startsWith("/admin/zoom-meetings/"),
+      href: &quot;/admin/zoom-meetings&quot;,
+      active: pathname === &quot;/admin/zoom-meetings&quot; || pathname?.startsWith(&quot;/admin/zoom-meetings/&quot;),
     },
     {
-      label: "Payments",
+      label: &quot;Payments&quot;,
       icon: CreditCard,
-      href: "/admin/pages/purchases",
-      active: pathname === "/admin/pages/purchases" || pathname?.startsWith("/admin/pages/purchases/"),
+      href: &quot;/admin/pages/purchases&quot;,
+      active: pathname === &quot;/admin/pages/purchases&quot; || pathname?.startsWith(&quot;/admin/pages/purchases/&quot;),
     },
     {
-      label: "Settings",
+      label: &quot;Settings&quot;,
       icon: Settings,
-      href: "/admin/settings",
-      active: pathname === "/admin/settings" || pathname?.startsWith("/admin/settings/"),
+      href: &quot;/admin/settings&quot;,
+      active: pathname === &quot;/admin/settings&quot; || pathname?.startsWith(&quot;/admin/settings/&quot;),
     },
   ];
 
   return (
-    <div className="flex h-screen">
+    <div className=&quot;flex h-screen&quot;>
       {/* Sidebar */}
-      <div className="w-64 border-r bg-background">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold">Admin Panel</h1>
+      <div className=&quot;w-64 border-r bg-background&quot;>
+        <div className=&quot;p-6&quot;>
+          <h1 className=&quot;text-2xl font-bold&quot;>Admin Panel</h1>
         </div>
         <Separator />
-        <ScrollArea className="h-[calc(100vh-5rem)]">
-          <nav className="space-y-1 p-3">
+        <ScrollArea className=&quot;h-[calc(100vh-5rem)]&quot;>
+          <nav className=&quot;space-y-1 p-3&quot;>
             {routes.map((route) => (
               <Link
                 key={route.href}
                 href={route.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                  &quot;flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground&quot;,
                   route.active
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground"
+                    ? &quot;bg-accent text-accent-foreground&quot;
+                    : &quot;text-muted-foreground&quot;
                 )}
               >
-                <route.icon className="h-5 w-5" />
+                <route.icon className=&quot;h-5 w-5&quot; />
                 {route.label}
               </Link>
             ))}
@@ -97,7 +97,7 @@ export default function AdminLayout({
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
+      <div className=&quot;flex-1 overflow-auto">
         {children}
       </div>
     </div>

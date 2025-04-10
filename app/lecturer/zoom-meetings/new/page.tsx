@@ -1,17 +1,17 @@
-"use client";
+"use client&quot;;
 
-import { useState, useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { z } from "zod";
-import { Calendar as CalendarIcon, Clock, AlertCircle } from "lucide-react";
-import { format } from "date-fns";
+import { useState, useEffect } from &quot;react&quot;;
+import { zodResolver } from &quot;@hookform/resolvers/zod&quot;;
+import { useForm } from &quot;react-hook-form&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import axios from &quot;axios&quot;;
+import { toast } from &quot;react-hot-toast&quot;;
+import { z } from &quot;zod&quot;;
+import { Calendar as CalendarIcon, Clock, AlertCircle } from &quot;lucide-react&quot;;
+import { format } from &quot;date-fns&quot;;
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from &quot;@/components/ui/button&quot;;
+import { Calendar } from &quot;@/components/ui/calendar&quot;;
 import {
   Form,
   FormControl,
@@ -20,48 +20,48 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+} from &quot;@/components/ui/form&quot;;
+import { Input } from &quot;@/components/ui/input&quot;;
+import { Textarea } from &quot;@/components/ui/textarea&quot;;
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from &quot;@/components/ui/popover&quot;;
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import Link from "next/link";
+} from &quot;@/components/ui/select&quot;;
+import { cn } from &quot;@/lib/utils&quot;;
+import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
+import { Alert, AlertDescription, AlertTitle } from &quot;@/components/ui/alert&quot;;
+import Link from &quot;next/link&quot;;
 
 const formSchema = z.object({
   topic: z.string().min(3, {
-    message: "Meeting topic must be at least 3 characters.",
+    message: &quot;Meeting topic must be at least 3 characters.&quot;,
   }),
   liveClassId: z.string({
-    required_error: "Please select a live class.",
+    required_error: &quot;Please select a live class.&quot;,
   }),
   date: z.date({
-    required_error: "Meeting date is required.",
+    required_error: &quot;Meeting date is required.&quot;,
   }),
   time: z.string({
-    required_error: "Meeting time is required.",
+    required_error: &quot;Meeting time is required.&quot;,
   }).regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
-    message: "Time must be in 24-hour format (HH:MM).",
+    message: &quot;Time must be in 24-hour format (HH:MM).&quot;,
   }),
   duration: z.number({
-    required_error: "Duration is required.",
-    invalid_type_error: "Duration must be a number.",
+    required_error: &quot;Duration is required.&quot;,
+    invalid_type_error: &quot;Duration must be a number.&quot;,
   }).min(10, {
-    message: "Meeting must be at least 10 minutes.",
+    message: &quot;Meeting must be at least 10 minutes.&quot;,
   }).max(300, {
-    message: "Meeting cannot exceed 5 hours (300 minutes).",
+    message: &quot;Meeting cannot exceed 5 hours (300 minutes).&quot;,
   }),
   password: z.string().optional(),
   agenda: z.string().optional(),
@@ -86,10 +86,10 @@ export default function NewZoomMeetingPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      topic: "",
+      topic: &quot;",
       duration: 60,
-      password: "",
-      agenda: ""
+      password: &quot;&quot;,
+      agenda: &quot;&quot;
     },
   });
   
@@ -102,7 +102,7 @@ export default function NewZoomMeetingPage() {
   const fetchLiveClasses = async () => {
     try {
       setIsLoadingClasses(true);
-      const response = await axios.get("/api/lecturer/classes");
+      const response = await axios.get(&quot;/api/lecturer/classes&quot;);
       setLiveClasses(response.data);
       
       // Check if there are no classes available
@@ -110,8 +110,8 @@ export default function NewZoomMeetingPage() {
         setHasNoClasses(true);
       }
     } catch (error) {
-      console.error("Error fetching classes:", error);
-      toast.error("Could not load your classes");
+      console.error(&quot;Error fetching classes:&quot;, error);
+      toast.error(&quot;Could not load your classes&quot;);
       setHasNoClasses(true);
     } finally {
       setIsLoadingClasses(false);
@@ -122,7 +122,7 @@ export default function NewZoomMeetingPage() {
     try {
       // Combine date and time into a single timestamp
       const dateTime = new Date(values.date);
-      const [hours, minutes] = values.time.split(':').map(Number);
+      const [hours, minutes] = values.time.split(&apos;:&apos;).map(Number);
       dateTime.setHours(hours, minutes, 0, 0);
 
       const meetingData = {
@@ -134,65 +134,65 @@ export default function NewZoomMeetingPage() {
         agenda: values.agenda || undefined,
       };
 
-      await axios.post("/api/lecturer/zoom-meetings", meetingData);
+      await axios.post(&quot;/api/lecturer/zoom-meetings&quot;, meetingData);
       
-      toast.success("Meeting scheduled successfully");
-      router.push("/lecturer/zoom-meetings");
+      toast.success(&quot;Meeting scheduled successfully&quot;);
+      router.push(&quot;/lecturer/zoom-meetings&quot;);
     } catch (error) {
-      console.error("Error scheduling meeting:", error);
-      toast.error("Failed to schedule meeting");
+      console.error(&quot;Error scheduling meeting:&quot;, error);
+      toast.error(&quot;Failed to schedule meeting&quot;);
     }
   };
 
   if (isLoadingClasses) {
     return (
-      <div className="space-y-8">
-        <Skeleton className="h-8 w-64" />
-        <div className="space-y-4">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-10 w-full" />
+      <div className="space-y-8&quot;>
+        <Skeleton className=&quot;h-8 w-64&quot; />
+        <div className=&quot;space-y-4&quot;>
+          <Skeleton className=&quot;h-4 w-32&quot; />
+          <Skeleton className=&quot;h-10 w-full&quot; />
+          <Skeleton className=&quot;h-4 w-32&quot; />
+          <Skeleton className=&quot;h-10 w-full&quot; />
+          <Skeleton className=&quot;h-4 w-32&quot; />
+          <Skeleton className=&quot;h-10 w-full&quot; />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className=&quot;space-y-6&quot;>
       <div>
-        <h1 className="text-2xl font-bold">Schedule New Zoom Meeting</h1>
-        <p className="text-muted-foreground">
+        <h1 className=&quot;text-2xl font-bold&quot;>Schedule New Zoom Meeting</h1>
+        <p className=&quot;text-muted-foreground&quot;>
           Create a new live meeting session for your class
         </p>
       </div>
 
       {hasNoClasses && (
-        <Alert variant="destructive" className="bg-red-50 border-red-200 text-red-800">
-          <AlertCircle className="h-4 w-4 text-red-600" />
+        <Alert variant=&quot;destructive&quot; className=&quot;bg-red-50 border-red-200 text-red-800&quot;>
+          <AlertCircle className=&quot;h-4 w-4 text-red-600&quot; />
           <AlertTitle>No classes assigned</AlertTitle>
-          <AlertDescription className="text-red-700">
-            You haven't been assigned to any classes yet. Please contact an administrator to be assigned as a lecturer to a class before you can schedule meetings.
+          <AlertDescription className=&quot;text-red-700&quot;>
+            You haven&apos;t been assigned to any classes yet. Please contact an administrator to be assigned as a lecturer to a class before you can schedule meetings.
           </AlertDescription>
         </Alert>
       )}
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
+        <form onSubmit={form.handleSubmit(onSubmit)} className=&quot;space-y-8&quot;>
+          <div className=&quot;space-y-4&quot;>
+            <div className=&quot;grid gap-4 md:grid-cols-2&quot;>
               {/* Meeting Topic */}
-              <div className="md:col-span-2">
+              <div className=&quot;md:col-span-2&quot;>
                 <FormField
                   control={form.control}
-                  name="topic"
+                  name=&quot;topic&quot;
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Meeting Topic</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter meeting topic" {...field} disabled={hasNoClasses} />
+                        <Input placeholder=&quot;Enter meeting topic&quot; {...field} disabled={hasNoClasses} />
                       </FormControl>
                       <FormDescription>
                         A descriptive name for your meeting
@@ -204,10 +204,10 @@ export default function NewZoomMeetingPage() {
               </div>
 
               {/* Live Class Selection */}
-              <div className="md:col-span-2">
+              <div className=&quot;md:col-span-2&quot;>
                 <FormField
                   control={form.control}
-                  name="liveClassId"
+                  name=&quot;liveClassId&quot;
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Live Class</FormLabel>
@@ -218,13 +218,13 @@ export default function NewZoomMeetingPage() {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder={hasNoClasses ? "No classes assigned" : "Select a live class"} />
+                            <SelectValue placeholder={hasNoClasses ? &quot;No classes assigned&quot; : &quot;Select a live class&quot;} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           {liveClasses.length === 0 ? (
-                            <div className="p-2 text-sm text-muted-foreground">
-                              You haven't been assigned to any classes yet.
+                            <div className=&quot;p-2 text-sm text-muted-foreground&quot;>
+                              You haven&apos;t been assigned to any classes yet.
                             </div>
                           ) : (
                             liveClasses.map((liveClass) => (
@@ -250,33 +250,33 @@ export default function NewZoomMeetingPage() {
               {/* Meeting Date */}
               <FormField
                 control={form.control}
-                name="date"
+                name=&quot;date&quot;
                 render={({ field }) => (
-                  <FormItem className="flex flex-col">
+                  <FormItem className=&quot;flex flex-col&quot;>
                     <FormLabel>Date</FormLabel>
                     <Popover open={dateCalendarOpen} onOpenChange={setDateCalendarOpen}>
                       <PopoverTrigger asChild disabled={hasNoClasses}>
                         <FormControl>
                           <Button
-                            variant={"outline"}
+                            variant={&quot;outline&quot;}
                             className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              &quot;w-full pl-3 text-left font-normal&quot;,
+                              !field.value && &quot;text-muted-foreground&quot;
                             )}
                             disabled={hasNoClasses}
                           >
                             {field.value ? (
-                              format(field.value, "PPP")
+                              format(field.value, &quot;PPP&quot;)
                             ) : (
                               <span>Pick a date</span>
                             )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            <CalendarIcon className=&quot;ml-auto h-4 w-4 opacity-50&quot; />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
+                      <PopoverContent className=&quot;w-auto p-0&quot; align=&quot;start&quot;>
                         <Calendar
-                          mode="single"
+                          mode=&quot;single&quot;
                           selected={field.value}
                           onSelect={(date) => {
                             field.onChange(date);
@@ -298,19 +298,19 @@ export default function NewZoomMeetingPage() {
               {/* Meeting Time */}
               <FormField
                 control={form.control}
-                name="time"
+                name=&quot;time&quot;
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Time</FormLabel>
-                    <div className="flex items-center">
+                    <div className=&quot;flex items-center&quot;>
                       <FormControl>
                         <Input
-                          placeholder="HH:MM"
+                          placeholder=&quot;HH:MM&quot;
                           {...field}
                           disabled={hasNoClasses}
                         />
                       </FormControl>
-                      <Clock className="ml-2 h-4 w-4 opacity-50" />
+                      <Clock className=&quot;ml-2 h-4 w-4 opacity-50&quot; />
                     </div>
                     <FormDescription>
                       The start time in 24-hour format (e.g., 14:30)
@@ -323,13 +323,13 @@ export default function NewZoomMeetingPage() {
               {/* Duration */}
               <FormField
                 control={form.control}
-                name="duration"
+                name=&quot;duration&quot;
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Duration (minutes)</FormLabel>
                     <FormControl>
                       <Input
-                        type="number"
+                        type=&quot;number&quot;
                         {...field}
                         onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                         disabled={hasNoClasses}
@@ -346,13 +346,13 @@ export default function NewZoomMeetingPage() {
               {/* Password */}
               <FormField
                 control={form.control}
-                name="password"
+                name=&quot;password&quot;
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password (Optional)</FormLabel>
                     <FormControl>
                       <Input 
-                        placeholder="Meeting password" 
+                        placeholder=&quot;Meeting password&quot; 
                         {...field} 
                         disabled={hasNoClasses}
                       />
@@ -366,17 +366,17 @@ export default function NewZoomMeetingPage() {
               />
 
               {/* Agenda */}
-              <div className="md:col-span-2">
+              <div className=&quot;md:col-span-2&quot;>
                 <FormField
                   control={form.control}
-                  name="agenda"
+                  name=&quot;agenda&quot;
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Agenda (Optional)</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Meeting agenda and details"
-                          className="min-h-[100px]"
+                          placeholder=&quot;Meeting agenda and details&quot;
+                          className=&quot;min-h-[100px]&quot;
                           {...field}
                           disabled={hasNoClasses}
                         />
@@ -389,24 +389,24 @@ export default function NewZoomMeetingPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className=&quot;flex items-center gap-4&quot;>
             <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/lecturer/zoom-meetings")}
+              type=&quot;button&quot;
+              variant=&quot;outline&quot;
+              onClick={() => router.push(&quot;/lecturer/zoom-meetings&quot;)}
               disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button 
-              type="submit" 
+              type=&quot;submit&quot; 
               disabled={isSubmitting || hasNoClasses}
             >
               {hasNoClasses 
-                ? "No classes available" 
+                ? &quot;No classes available&quot; 
                 : isSubmitting 
-                  ? "Scheduling..." 
-                  : "Schedule Meeting"
+                  ? &quot;Scheduling...&quot; 
+                  : &quot;Schedule Meeting"
               }
             </Button>
           </div>

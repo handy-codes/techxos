@@ -1,6 +1,6 @@
-import CreateCourseForm from "@/components/courses/CreateCourseForm"
-import { db } from "@/lib/db"
-import { Category, SubCategory } from "@prisma/client"
+import CreateCourseForm from &quot;@/components/courses/CreateCourseForm&quot;
+import { db } from &quot;@/lib/db&quot;
+import { Category, SubCategory } from &quot;@prisma/client&quot;
 
 interface CategoryWithSubCategories extends Category {
   subCategories: SubCategory[];
@@ -18,7 +18,7 @@ interface CategoryOption {
 const CreateCoursePage = async () => {
   const categories = await db.category.findMany({
     orderBy: {
-      name: "asc"
+      name: &quot;asc&quot;
     },
     include: {
       subCategories: true

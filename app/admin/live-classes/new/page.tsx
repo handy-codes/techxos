@@ -1,34 +1,34 @@
-"use client";
+"use client&quot;;
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "react-hot-toast";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import Link from "next/link";
-import axios from "axios";
+import { useState, useEffect } from &quot;react&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import { Button } from &quot;@/components/ui/button&quot;;
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
+import { Input } from &quot;@/components/ui/input&quot;;
+import { Label } from &quot;@/components/ui/label&quot;;
+import { toast } from &quot;react-hot-toast&quot;;
+import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
+import Link from &quot;next/link&quot;;
+import axios from &quot;axios&quot;;
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { format, addWeeks } from "date-fns";
+} from &quot;@/components/ui/select&quot;;
+import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
+import { format, addWeeks } from &quot;date-fns&quot;;
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+} from &quot;@/components/ui/popover&quot;;
+import { Calendar } from &quot;@/components/ui/calendar&quot;;
+import { cn } from &quot;@/lib/utils&quot;;
+import { CalendarIcon } from &quot;lucide-react&quot;;
+import { Alert, AlertDescription, AlertTitle } from &quot;@/components/ui/alert&quot;;
+import { AlertCircle } from &quot;lucide-react&quot;;
 
 interface Lecturer {
   id: string;
@@ -46,14 +46,14 @@ export default function NewLiveClassPage() {
   const [hasNoLecturers, setHasNoLecturers] = useState(false);
   
   // Form state
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [duration, setDuration] = useState("12");
-  const [maxStudents, setMaxStudents] = useState("");
-  const [batchNumber, setBatchNumber] = useState("1");
+  const [title, setTitle] = useState(&quot;");
+  const [description, setDescription] = useState(&quot;&quot;);
+  const [price, setPrice] = useState(&quot;&quot;);
+  const [duration, setDuration] = useState(&quot;12&quot;);
+  const [maxStudents, setMaxStudents] = useState(&quot;&quot;);
+  const [batchNumber, setBatchNumber] = useState(&quot;1&quot;);
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
-  const [lecturerId, setLecturerId] = useState("");
+  const [lecturerId, setLecturerId] = useState(&quot;&quot;);
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   // Fetch lecturers
@@ -61,20 +61,20 @@ export default function NewLiveClassPage() {
     const fetchLecturers = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get<Lecturer[]>("/api/admin/lecturers");
-        console.log("Fetched lecturers:", response.data);
+        const response = await axios.get<Lecturer[]>(&quot;/api/admin/lecturers&quot;);
+        console.log(&quot;Fetched lecturers:&quot;, response.data);
         
         // If we have lecturers, use them
         if (response.data.length > 0) {
           setLecturers(response.data);
           setHasNoLecturers(false);
         } else {
-          console.error("No lecturers found in response");
+          console.error(&quot;No lecturers found in response&quot;);
           setHasNoLecturers(true);
         }
       } catch (error) {
-        console.error("Error fetching lecturers:", error);
-        toast.error("Failed to load lecturers. Please check the console for details.");
+        console.error(&quot;Error fetching lecturers:&quot;, error);
+        toast.error(&quot;Failed to load lecturers. Please check the console for details.&quot;);
         setHasNoLecturers(true);
       } finally {
         setIsLoading(false);
@@ -88,12 +88,12 @@ export default function NewLiveClassPage() {
     e.preventDefault();
     
     if (!startDate) {
-      toast.error("Please select a start date");
+      toast.error(&quot;Please select a start date&quot;);
       return;
     }
 
     if (!lecturerId) {
-      toast.error("Please select a lecturer");
+      toast.error(&quot;Please select a lecturer&quot;);
       return;
     }
 
@@ -117,13 +117,13 @@ export default function NewLiveClassPage() {
       };
 
       // Create live class
-      await axios.post("/api/admin/live-classes", classData);
+      await axios.post(&quot;/api/admin/live-classes&quot;, classData);
       
-      toast.success("Live class created successfully!");
-      router.push("/admin/live-classes");
+      toast.success(&quot;Live class created successfully!&quot;);
+      router.push(&quot;/admin/live-classes&quot;);
     } catch (error: any) {
-      console.error("Error creating live class:", error);
-      toast.error(error.response?.data?.message || "Failed to create live class");
+      console.error(&quot;Error creating live class:&quot;, error);
+      toast.error(error.response?.data?.message || &quot;Failed to create live class&quot;);
     } finally {
       setIsSubmitting(false);
     }
@@ -131,35 +131,35 @@ export default function NewLiveClassPage() {
 
   if (isLoading) {
     return (
-      <ScrollArea className="h-full">
-        <div className="p-6 space-y-6">
-          <div className="flex items-center justify-between">
-            <Skeleton className="h-8 w-64" />
-            <Skeleton className="h-10 w-24" />
+      <ScrollArea className="h-full&quot;>
+        <div className=&quot;p-6 space-y-6&quot;>
+          <div className=&quot;flex items-center justify-between&quot;>
+            <Skeleton className=&quot;h-8 w-64&quot; />
+            <Skeleton className=&quot;h-10 w-24&quot; />
           </div>
-          <Skeleton className="h-[500px] w-full" />
+          <Skeleton className=&quot;h-[500px] w-full&quot; />
         </div>
       </ScrollArea>
     );
   }
 
   return (
-    <ScrollArea className="h-full">
-      <div className="p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Create New Live Class</h1>
-          <Button variant="outline" asChild>
-            <Link href="/admin/live-classes">Cancel</Link>
+    <ScrollArea className=&quot;h-full&quot;>
+      <div className=&quot;p-6 space-y-6&quot;>
+        <div className=&quot;flex items-center justify-between&quot;>
+          <h1 className=&quot;text-2xl font-bold&quot;>Create New Live Class</h1>
+          <Button variant=&quot;outline&quot; asChild>
+            <Link href=&quot;/admin/live-classes&quot;>Cancel</Link>
           </Button>
         </div>
 
         {hasNoLecturers && (
-          <Alert variant="destructive" className="bg-red-50 border-red-200 text-red-800">
-            <AlertCircle className="h-4 w-4 text-red-600" />
+          <Alert variant=&quot;destructive&quot; className=&quot;bg-red-50 border-red-200 text-red-800&quot;>
+            <AlertCircle className=&quot;h-4 w-4 text-red-600&quot; />
             <AlertTitle>No Lecturers Available</AlertTitle>
-            <AlertDescription className="text-red-700">
+            <AlertDescription className=&quot;text-red-700&quot;>
               You need to add a lecturer before creating a live class.
-              <Link href="/admin/lecturers/new" className="ml-2 underline font-medium">
+              <Link href=&quot;/admin/lecturers/new&quot; className=&quot;ml-2 underline font-medium&quot;>
                 Add a lecturer now
               </Link>
             </AlertDescription>
@@ -174,84 +174,84 @@ export default function NewLiveClassPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Class Title</Label>
+            <form onSubmit={handleSubmit} className=&quot;space-y-4&quot;>
+              <div className=&quot;grid grid-cols-1 md:grid-cols-2 gap-4&quot;>
+                <div className=&quot;space-y-2&quot;>
+                  <Label htmlFor=&quot;title&quot;>Class Title</Label>
                   <Input 
-                    id="title" 
-                    placeholder="e.g., Project Management" 
+                    id=&quot;title&quot; 
+                    placeholder=&quot;e.g., Project Management&quot; 
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     required 
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="price">Price (₦)</Label>
+                <div className=&quot;space-y-2&quot;>
+                  <Label htmlFor=&quot;price&quot;>Price (₦)</Label>
                   <Input 
-                    id="price" 
-                    type="number" 
-                    placeholder="e.g., 250000" 
+                    id=&quot;price&quot; 
+                    type=&quot;number&quot; 
+                    placeholder=&quot;e.g., 250000&quot; 
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     required 
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="duration">Duration (weeks)</Label>
+                <div className=&quot;space-y-2&quot;>
+                  <Label htmlFor=&quot;duration&quot;>Duration (weeks)</Label>
                   <Input 
-                    id="duration" 
-                    type="number" 
-                    placeholder="e.g., 12" 
+                    id=&quot;duration&quot; 
+                    type=&quot;number&quot; 
+                    placeholder=&quot;e.g., 12&quot; 
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
                     required 
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="maxStudents">Max Students (Optional)</Label>
+                <div className=&quot;space-y-2&quot;>
+                  <Label htmlFor=&quot;maxStudents&quot;>Max Students (Optional)</Label>
                   <Input 
-                    id="maxStudents" 
-                    type="number" 
-                    placeholder="e.g., 30" 
+                    id=&quot;maxStudents&quot; 
+                    type=&quot;number&quot; 
+                    placeholder=&quot;e.g., 30&quot; 
                     value={maxStudents}
                     onChange={(e) => setMaxStudents(e.target.value)}
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="batchNumber">Batch Number</Label>
+                <div className=&quot;space-y-2&quot;>
+                  <Label htmlFor=&quot;batchNumber&quot;>Batch Number</Label>
                   <Input 
-                    id="batchNumber" 
-                    type="number" 
-                    placeholder="e.g., 1" 
+                    id=&quot;batchNumber&quot; 
+                    type=&quot;number&quot; 
+                    placeholder=&quot;e.g., 1&quot; 
                     value={batchNumber}
                     onChange={(e) => setBatchNumber(e.target.value)}
                     required 
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className=&quot;space-y-2&quot;>
                   <Label>Start Date</Label>
                   <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                     <PopoverTrigger asChild>
                       <Button
-                        variant={"outline"}
+                        variant={&quot;outline&quot;}
                         className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !startDate && "text-muted-foreground"
+                          &quot;w-full justify-start text-left font-normal&quot;,
+                          !startDate && &quot;text-muted-foreground&quot;
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
+                        <CalendarIcon className=&quot;mr-2 h-4 w-4&quot; />
+                        {startDate ? format(startDate, &quot;PPP&quot;) : <span>Pick a date</span>}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
+                    <PopoverContent className=&quot;w-auto p-0&quot;>
                       <Calendar
-                        mode="single"
+                        mode=&quot;single&quot;
                         selected={startDate}
                         onSelect={(date) => {
                           setStartDate(date);
@@ -263,18 +263,18 @@ export default function NewLiveClassPage() {
                   </Popover>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="lecturer">Lecturer</Label>
+                <div className=&quot;space-y-2&quot;>
+                  <Label htmlFor=&quot;lecturer&quot;>Lecturer</Label>
                   <Select 
                     value={lecturerId} 
                     onValueChange={setLecturerId}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a lecturer" />
+                      <SelectValue placeholder=&quot;Select a lecturer&quot; />
                     </SelectTrigger>
                     <SelectContent>
                       {lecturers.length === 0 ? (
-                        <div className="p-2 text-sm text-muted-foreground">
+                        <div className=&quot;p-2 text-sm text-muted-foreground&quot;>
                           No lecturers available
                         </div>
                       ) : (
@@ -289,24 +289,24 @@ export default function NewLiveClassPage() {
                 </div>
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+              <div className=&quot;space-y-2&quot;>
+                <Label htmlFor=&quot;description&quot;>Description</Label>
                 <textarea
-                  id="description"
-                  className="w-full min-h-[100px] px-3 py-2 border rounded-md"
-                  placeholder="Describe the class content and objectives..."
+                  id=&quot;description&quot;
+                  className=&quot;w-full min-h-[100px] px-3 py-2 border rounded-md&quot;
+                  placeholder=&quot;Describe the class content and objectives...&quot;
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
 
-              <CardFooter className="px-0 pt-4">
+              <CardFooter className=&quot;px-0 pt-4&quot;>
                 <Button 
-                  type="submit" 
+                  type=&quot;submit&quot; 
                   disabled={isSubmitting || lecturers.length === 0}
-                  className="ml-auto"
+                  className=&quot;ml-auto&quot;
                 >
-                  {isSubmitting ? "Creating..." : "Create Live Class"}
+                  {isSubmitting ? &quot;Creating...&quot; : &quot;Create Live Class"}
                 </Button>
               </CardFooter>
             </form>

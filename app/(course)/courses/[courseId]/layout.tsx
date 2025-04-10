@@ -1,8 +1,8 @@
-import CourseSideBar from "@/components/layout/CourseSideBar";
-import Topbar from "@/components/layout/Topbar";
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import CourseSideBar from &quot;@/components/layout/CourseSideBar&quot;;
+import Topbar from &quot;@/components/layout/Topbar&quot;;
+import { db } from &quot;@/lib/db&quot;;
+import { auth } from &quot;@clerk/nextjs/server&quot;;
+import { redirect } from &quot;next/navigation&quot;;
 
 const CourseDetailsLayout = async ({
   children,
@@ -14,7 +14,7 @@ const CourseDetailsLayout = async ({
   const { userId } = auth();
 
   if (!userId) {
-    return redirect("/sign-in");
+    return redirect(&quot;/sign-in&quot;);
   }
 
   const course = await db.course.findUnique({
@@ -27,22 +27,22 @@ const CourseDetailsLayout = async ({
           isPublished: true,
         },
         orderBy: {
-          position: "asc",
+          position: &quot;asc&quot;,
         },
       },
     },
   });
 
   if (!course) {
-    return redirect("/");
+    return redirect(&quot;/&quot;);
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col&quot;>
       <Topbar />
-      <div className="flex-1 flex">
+      <div className=&quot;flex-1 flex&quot;>
         <CourseSideBar course={course} studentId={userId} />
-        <div className="flex-1">{children}</div>
+        <div className=&quot;flex-1">{children}</div>
       </div>
     </div>
   );

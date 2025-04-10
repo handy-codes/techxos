@@ -1,7 +1,7 @@
-import { db } from "@/lib/db";
-import { Course, Section } from "@prisma/client";
-import Link from "next/link";
-import { Progress } from "../ui/progress";
+import { db } from &quot;@/lib/db&quot;;
+import { Course, Section } from &quot;@prisma/client&quot;;
+import Link from &quot;next/link&quot;;
+import { Progress } from &quot;../ui/progress&quot;;
 
 interface CourseSideBarProps {
   course: Course & { sections: Section[] };
@@ -15,7 +15,7 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
       isPublished: true,
     },
     orderBy: {
-      position: "asc",
+      position: &quot;asc&quot;,
     },
   });
 
@@ -44,12 +44,12 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
     (completedSections / publishedSectionIds.length) * 100;
 
   return (
-    <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium">
-      <h1 className="text-lg font-bold text-center mb-4">{course.title}</h1>
+    <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium&quot;>
+      <h1 className=&quot;text-lg font-bold text-center mb-4&quot;>{course.title}</h1>
       {purchase && (
         <div>
-          <Progress value={progressPercentage} className="h-2" />
-          <p className="text-xs">{Math.round(progressPercentage)}% completed</p>
+          <Progress value={progressPercentage} className=&quot;h-2&quot; />
+          <p className=&quot;text-xs&quot;>{Math.round(progressPercentage)}% completed</p>
         </div>
       )}
       <Link
@@ -58,12 +58,12 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
       >
         Overview
       </Link>
-      <div className="overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold">
+      <div className=&quot;overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold&quot;>
         {publishedSections.map((section) => (
           <Link
             key={section.id}
             href={`/courses/${course.id}/sections/${section.id}`}
-            className="p-3 rounded-lg hover:bg-[#FFF8EB] mt-2"
+            className=&quot;p-3 rounded-lg hover:bg-[#FFF8EB] mt-2&quot;
           >
             {section.title}
           </Link>
@@ -77,12 +77,12 @@ export default CourseSideBar;
 
 
 
-// import { db } from "@/lib/db";
-// import { Course, Section } from "@prisma/client";
-// import Link from "next/link";
-// import { Progress } from "../ui/progress";
-// import { CheckCircle, Lock, PlayCircle } from "lucide-react";
-// import { usePathname } from "next/navigation";
+// import { db } from &quot;@/lib/db&quot;;
+// import { Course, Section } from &quot;@prisma/client&quot;;
+// import Link from &quot;next/link&quot;;
+// import { Progress } from &quot;../ui/progress&quot;;
+// import { CheckCircle, Lock, PlayCircle } from &quot;lucide-react&quot;;
+// import { usePathname } from &quot;next/navigation&quot;;
 
 
 // interface CourseSideBarProps {
@@ -97,12 +97,12 @@ export default CourseSideBar;
 //   (completedSections.length / publishedSections.length) * 100;
 
 //   return (
-//     <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium">
-//       <h1 className="text-lg font-bold text-center mb-4">{course.title}</h1>
+//     <div className=&quot;hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium&quot;>
+//       <h1 className=&quot;text-lg font-bold text-center mb-4&quot;>{course.title}</h1>
 //       {purchase && (
 //         <div>
-//           <Progress value={progressPercentage} className="h-2" />
-//           <p className="text-xs">{Math.round(progressPercentage)}% completed</p>
+//           <Progress value={progressPercentage} className=&quot;h-2&quot; />
+//           <p className=&quot;text-xs&quot;>{Math.round(progressPercentage)}% completed</p>
 //         </div>
 //       )}
 // <Link
@@ -111,7 +111,7 @@ export default CourseSideBar;
 // >
 //   Overview
 // </Link>
-// <div className="overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold">
+// <div className=&quot;overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold&quot;>
 //   {publishedSections.map((section) => {
 //     const isLocked = section.locked;
 //     const isCompleted = completedSections.includes(section.id);
@@ -122,9 +122,9 @@ export default CourseSideBar;
 //       <Link
 //         key={section.id} // Added key prop to fix the bug
 //         href={`/courses/${course.id}/sections/${section.id}`}
-//         className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3 ${isActive ? 'bg-[#FFF8EB]' : ''}`}
+//         className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3 ${isActive ? &apos;bg-[#FFF8EB]&apos; : &apos;&apos;}`}
 //       >
-//         <Icon className="mr-2" />
+//         <Icon className=&quot;mr-2&quot; />
 //         {section.title}
 //       </Link>
 //     );
@@ -141,7 +141,7 @@ export default CourseSideBar;
 //       isPublished: true,
 //     },
 //     orderBy: {
-//       position: "asc",
+//       position: &quot;asc",
 //     },
 //   });
 

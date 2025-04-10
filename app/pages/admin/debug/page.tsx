@@ -1,35 +1,35 @@
-"use client";
+"use client&quot;;
 
-import { useState } from "react";
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import { Loader2, Search, UserCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useState } from &quot;react&quot;;
+import { toast } from &quot;react-hot-toast&quot;;
+import axios from &quot;axios&quot;;
+import { Loader2, Search, UserCheck } from &quot;lucide-react&quot;;
+import { Button } from &quot;@/components/ui/button&quot;;
+import { Input } from &quot;@/components/ui/input&quot;;
+import { Label } from &quot;@/components/ui/label&quot;;
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from &quot;@/components/ui/select&quot;;
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
+import { Badge } from &quot;@/components/ui/badge&quot;;
 
 export default function DebugUserPage() {
-  const [email, setEmail] = useState("careers@techxos.com");
-  const [role, setRole] = useState("ADMIN");
+  const [email, setEmail] = useState(&quot;careers@techxos.com&quot;);
+  const [role, setRole] = useState(&quot;ADMIN&quot;);
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [users, setUsers] = useState<any[]>([]);
-  const [message, setMessage] = useState("");
-  const [clerkUserId, setClerkUserId] = useState("");
+  const [message, setMessage] = useState(&quot;");
+  const [clerkUserId, setClerkUserId] = useState(&quot;&quot;);
   
   // Handle search by email
   const handleSearch = async () => {
     if (!email) {
-      toast.error("Please enter an email to search");
+      toast.error(&quot;Please enter an email to search&quot;);
       return;
     }
     
     setSearchLoading(true);
     setUsers([]);
-    setMessage("");
+    setMessage(&quot;&quot;);
     
     try {
       const response = await axios.get(`/api/admin/debug-user?email=${encodeURIComponent(email)}`);
@@ -37,16 +37,16 @@ export default function DebugUserPage() {
         setUsers(response.data.users);
         setMessage(response.data.message);
         
-        // If there's a single user found, pre-fill their Clerk ID
+        // If there&apos;s a single user found, pre-fill their Clerk ID
         if (response.data.users.length === 1 && response.data.users[0].clerkUserId) {
           setClerkUserId(response.data.users[0].clerkUserId);
         }
       } else {
-        setMessage(response.data.message || "No users found");
+        setMessage(response.data.message || &quot;No users found&quot;);
       }
     } catch (error) {
-      console.error("Error searching for user:", error);
-      toast.error("Error searching for user");
+      console.error(&quot;Error searching for user:&quot;, error);
+      toast.error(&quot;Error searching for user&quot;);
     } finally {
       setSearchLoading(false);
     }
@@ -55,41 +55,41 @@ export default function DebugUserPage() {
   // Handle fix user role
   const handleFixRole = async () => {
     if (!email) {
-      toast.error("Please enter an email");
+      toast.error(&quot;Please enter an email&quot;);
       return;
     }
     
     if (!role) {
-      toast.error("Please select a role");
+      toast.error(&quot;Please select a role&quot;);
       return;
     }
     
     setLoading(true);
     
     try {
-      const response = await axios.post("/api/admin/debug-user", {
+      const response = await axios.post(&quot;/api/admin/debug-user&quot;, {
         email,
         role,
         clerkUserId: clerkUserId || undefined
       });
       
-      toast.success(response.data.message || "User updated successfully");
+      toast.success(response.data.message || &quot;User updated successfully&quot;);
       
       // Search again to refresh user data
       await handleSearch();
     } catch (error) {
-      console.error("Error fixing user role:", error);
-      toast.error("Error fixing user role");
+      console.error(&quot;Error fixing user role:&quot;, error);
+      toast.error(&quot;Error fixing user role&quot;);
     } finally {
       setLoading(false);
     }
   };
   
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">Debug User Role</h1>
+    <div className="container mx-auto py-8 px-4&quot;>
+      <h1 className=&quot;text-3xl font-bold mb-6&quot;>Debug User Role</h1>
       
-      <Card className="mb-6">
+      <Card className=&quot;mb-6&quot;>
         <CardHeader>
           <CardTitle>Search User</CardTitle>
           <CardDescription>
@@ -97,70 +97,70 @@ export default function DebugUserPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <div className="flex space-x-2">
+          <div className=&quot;space-y-4&quot;>
+            <div className=&quot;space-y-2&quot;>
+              <Label htmlFor=&quot;email&quot;>Email Address</Label>
+              <div className=&quot;flex space-x-2&quot;>
                 <Input
-                  id="email"
+                  id=&quot;email&quot;
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="user@example.com"
+                  placeholder=&quot;user@example.com&quot;
                 />
                 <Button 
                   onClick={handleSearch} 
                   disabled={searchLoading}
-                  variant="outline"
+                  variant=&quot;outline&quot;
                 >
                   {searchLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className=&quot;h-4 w-4 animate-spin&quot; />
                   ) : (
-                    <Search className="h-4 w-4" />
+                    <Search className=&quot;h-4 w-4&quot; />
                   )}
                 </Button>
               </div>
             </div>
             
             {message && (
-              <div className="p-4 bg-blue-50 rounded-md text-blue-800">
+              <div className=&quot;p-4 bg-blue-50 rounded-md text-blue-800&quot;>
                 {message}
               </div>
             )}
             
             {users.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Users Found:</h3>
+              <div className=&quot;space-y-4&quot;>
+                <h3 className=&quot;text-lg font-semibold&quot;>Users Found:</h3>
                 {users.map((user, index) => (
-                  <Card key={index} className="p-4">
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="font-semibold">ID:</div>
+                  <Card key={index} className=&quot;p-4&quot;>
+                    <div className=&quot;grid grid-cols-2 gap-2&quot;>
+                      <div className=&quot;font-semibold&quot;>ID:</div>
                       <div>{user.id}</div>
                       
-                      <div className="font-semibold">Name:</div>
-                      <div>{user.name || 'N/A'}</div>
+                      <div className=&quot;font-semibold&quot;>Name:</div>
+                      <div>{user.name || &apos;N/A&apos;}</div>
                       
-                      <div className="font-semibold">Email:</div>
+                      <div className=&quot;font-semibold&quot;>Email:</div>
                       <div>{user.email}</div>
                       
-                      <div className="font-semibold">Role:</div>
+                      <div className=&quot;font-semibold&quot;>Role:</div>
                       <div>
                         <Badge
                           variant={
-                            user.role === "HEAD_ADMIN" ? "destructive" : 
-                            user.role === "ADMIN" ? "default" : 
-                            user.role === "LECTURER" ? "secondary" : 
-                            "outline"
+                            user.role === &quot;HEAD_ADMIN&quot; ? &quot;destructive&quot; : 
+                            user.role === &quot;ADMIN&quot; ? &quot;default&quot; : 
+                            user.role === &quot;LECTURER&quot; ? &quot;secondary&quot; : 
+                            &quot;outline&quot;
                           }
                         >
                           {user.role}
                         </Badge>
                       </div>
                       
-                      <div className="font-semibold">Clerk User ID:</div>
-                      <div className="font-mono text-xs">{user.clerkUserId || 'None'}</div>
+                      <div className=&quot;font-semibold&quot;>Clerk User ID:</div>
+                      <div className=&quot;font-mono text-xs&quot;>{user.clerkUserId || &apos;None&apos;}</div>
                       
-                      <div className="font-semibold">Active:</div>
-                      <div>{user.isActive ? 'Yes' : 'No'}</div>
+                      <div className=&quot;font-semibold&quot;>Active:</div>
+                      <div>{user.isActive ? &apos;Yes&apos; : &apos;No&apos;}</div>
                     </div>
                   </Card>
                 ))}
@@ -174,35 +174,35 @@ export default function DebugUserPage() {
         <CardHeader>
           <CardTitle>Fix User Role</CardTitle>
           <CardDescription>
-            Update the user's role or create a new user with the specified email and role
+            Update the user&apos;s role or create a new user with the specified email and role
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
+          <div className=&quot;space-y-4&quot;>
+            <div className=&quot;space-y-2&quot;>
+              <Label htmlFor=&quot;role&quot;>Role</Label>
               <Select value={role} onValueChange={setRole}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select role" />
+                  <SelectValue placeholder=&quot;Select role&quot; />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="LEARNER">LEARNER</SelectItem>
-                  <SelectItem value="LECTURER">LECTURER</SelectItem>
-                  <SelectItem value="ADMIN">ADMIN</SelectItem>
-                  <SelectItem value="HEAD_ADMIN">HEAD_ADMIN</SelectItem>
+                  <SelectItem value=&quot;LEARNER&quot;>LEARNER</SelectItem>
+                  <SelectItem value=&quot;LECTURER&quot;>LECTURER</SelectItem>
+                  <SelectItem value=&quot;ADMIN&quot;>ADMIN</SelectItem>
+                  <SelectItem value=&quot;HEAD_ADMIN&quot;>HEAD_ADMIN</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="clerkUserId">Clerk User ID (Optional)</Label>
+            <div className=&quot;space-y-2&quot;>
+              <Label htmlFor=&quot;clerkUserId&quot;>Clerk User ID (Optional)</Label>
               <Input
-                id="clerkUserId"
+                id=&quot;clerkUserId&quot;
                 value={clerkUserId}
                 onChange={(e) => setClerkUserId(e.target.value)}
-                placeholder="user_..."
+                placeholder=&quot;user_...&quot;
               />
-              <p className="text-xs text-gray-500">
+              <p className=&quot;text-xs text-gray-500&quot;>
                 Leave empty to keep the existing Clerk ID or generate a new one
               </p>
             </div>
@@ -210,16 +210,16 @@ export default function DebugUserPage() {
             <Button 
               onClick={handleFixRole} 
               disabled={loading}
-              className="w-full"
+              className=&quot;w-full&quot;
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className=&quot;mr-2 h-4 w-4 animate-spin&quot; />
                   Processing...
                 </>
               ) : (
                 <>
-                  <UserCheck className="mr-2 h-4 w-4" />
+                  <UserCheck className=&quot;mr-2 h-4 w-4" />
                   Set User Role
                 </>
               )}

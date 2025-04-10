@@ -1,9 +1,9 @@
-import EditCourseForm from "@/components/courses/EditCourseForm";
-import AlertBanner from "@/components/custom/AlertBanner";
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import { Course, Section, Category, SubCategory, Level } from "@prisma/client";
+import EditCourseForm from &quot;@/components/courses/EditCourseForm&quot;;
+import AlertBanner from &quot;@/components/custom/AlertBanner&quot;;
+import { db } from &quot;@/lib/db&quot;;
+import { auth } from &quot;@clerk/nextjs/server&quot;;
+import { redirect } from &quot;next/navigation&quot;;
+import { Course, Section, Category, SubCategory, Level } from &quot;@prisma/client&quot;;
 
 interface CourseWithSections extends Course {
   sections: Section[];
@@ -17,7 +17,7 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
 
   if (!userId) {
-    return redirect("/sign-in");
+    return redirect(&quot;/sign-in&quot;);
   }
 
   const course = await db.course.findUnique({
@@ -31,12 +31,12 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
   }) as CourseWithSections | null;
 
   if (!course) {
-    return redirect("/instructor/courses");
+    return redirect(&quot;/instructor/courses&quot;);
   }
 
   const categories = await db.category.findMany({
     orderBy: {
-      name: "asc",
+      name: &quot;asc&quot;,
     },
     include: {
       subCategories: true,

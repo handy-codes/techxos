@@ -1,16 +1,16 @@
-"use client";
+"use client&quot;;
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useUser } from "@/hooks/use-user";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { format, isPast, isAfter, addMinutes } from "date-fns";
-import { ZoomMeeting } from "@/components/zoom/ZoomMeeting";
-import { Button } from "@/components/ui/button";
-import { AlertCircle, ArrowLeft, Clock } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useState, useEffect } from &quot;react&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+import { useUser } from &quot;@/hooks/use-user&quot;;
+import axios from &quot;axios&quot;;
+import { toast } from &quot;react-hot-toast&quot;;
+import { format, isPast, isAfter, addMinutes } from &quot;date-fns&quot;;
+import { ZoomMeeting } from &quot;@/components/zoom/ZoomMeeting&quot;;
+import { Button } from &quot;@/components/ui/button&quot;;
+import { AlertCircle, ArrowLeft, Clock } from &quot;lucide-react&quot;;
+import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
+import { Alert, AlertDescription, AlertTitle } from &quot;@/components/ui/alert&quot;;
 
 interface ZoomMeetingDetails {
   id: string;
@@ -35,14 +35,14 @@ export default function ClassroomPage({ params }: { params: { meetingId: string 
   const [meeting, setMeeting] = useState<ZoomMeetingDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [meetingStatus, setMeetingStatus] = useState<'not_started' | 'live' | 'ended' | null>(null);
+  const [meetingStatus, setMeetingStatus] = useState<&apos;not_started&apos; | &apos;live&apos; | &apos;ended&apos; | null>(null);
 
   useEffect(() => {
     if (isUserLoading) return;
     
     if (!user) {
-      toast.error("You must be signed in to join meetings");
-      router.push("/sign-in");
+      toast.error(&quot;You must be signed in to join meetings&quot;);
+      router.push(&quot;/sign-in&quot;);
       return;
     }
 
@@ -62,54 +62,54 @@ export default function ClassroomPage({ params }: { params: { meetingId: string 
       const endTime = addMinutes(startTime, meetingData.duration);
       
       if (isAfter(now, endTime)) {
-        setMeetingStatus('ended');
+        setMeetingStatus(&apos;ended&apos;);
       } else if (isAfter(now, startTime)) {
-        setMeetingStatus('live');
+        setMeetingStatus(&apos;live&apos;);
       } else {
-        setMeetingStatus('not_started');
+        setMeetingStatus(&apos;not_started&apos;);
       }
       
     } catch (error) {
-      console.error("Error fetching meeting details:", error);
-      setError("Failed to load meeting details. The meeting may not exist.");
+      console.error(&quot;Error fetching meeting details:&quot;, error);
+      setError(&quot;Failed to load meeting details. The meeting may not exist.&quot;);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleJoinSuccess = () => {
-    toast.success("Successfully joined the meeting");
+    toast.success(&quot;Successfully joined the meeting&quot;);
   };
 
   const handleJoinError = (error: any) => {
-    console.error("Error joining meeting:", error);
-    toast.error("Failed to join the meeting. Please try again.");
+    console.error(&quot;Error joining meeting:&quot;, error);
+    toast.error(&quot;Failed to join the meeting. Please try again.&quot;);
   };
 
   if (isUserLoading || isLoading) {
     return (
-      <div className="space-y-6 p-6">
-        <Skeleton className="h-10 w-1/2" />
-        <Skeleton className="h-4 w-1/3" />
-        <Skeleton className="h-[400px] w-full mt-6" />
+      <div className=&quot;space-y-6 p-6&quot;>
+        <Skeleton className=&quot;h-10 w-1/2&quot; />
+        <Skeleton className=&quot;h-4 w-1/3&quot; />
+        <Skeleton className=&quot;h-[400px] w-full mt-6&quot; />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6 space-y-6">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+      <div className=&quot;p-6 space-y-6&quot;>
+        <Alert variant=&quot;destructive&quot;>
+          <AlertCircle className=&quot;h-4 w-4&quot; />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
         <Button 
-          variant="outline" 
-          onClick={() => router.push("/courses")}
-          className="mt-4"
+          variant=&quot;outline&quot; 
+          onClick={() => router.push(&quot;/courses&quot;)}
+          className=&quot;mt-4&quot;
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Courses
+          <ArrowLeft className=&quot;mr-2 h-4 w-4&quot; /> Back to Courses
         </Button>
       </div>
     );
@@ -117,57 +117,57 @@ export default function ClassroomPage({ params }: { params: { meetingId: string 
 
   if (!meeting) {
     return (
-      <div className="p-6 space-y-6">
+      <div className=&quot;p-6 space-y-6&quot;>
         <Alert>
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircle className=&quot;h-4 w-4&quot; />
           <AlertTitle>Meeting Not Found</AlertTitle>
           <AlertDescription>
-            The meeting you're looking for could not be found. It may have been deleted or you don't have permission to access it.
+            The meeting you&apos;re looking for could not be found. It may have been deleted or you don&apos;t have permission to access it.
           </AlertDescription>
         </Alert>
         <Button 
-          variant="outline" 
-          onClick={() => router.push("/courses")}
-          className="mt-4"
+          variant=&quot;outline&quot; 
+          onClick={() => router.push(&quot;/courses&quot;)}
+          className=&quot;mt-4&quot;
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Courses
+          <ArrowLeft className=&quot;mr-2 h-4 w-4&quot; /> Back to Courses
         </Button>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className=&quot;p-6 space-y-6&quot;>
       <div>
-        <h1 className="text-2xl font-bold">{meeting.topic}</h1>
-        <p className="text-muted-foreground">
+        <h1 className=&quot;text-2xl font-bold&quot;>{meeting.topic}</h1>
+        <p className=&quot;text-muted-foreground&quot;>
           {meeting.liveClass.title} • {meeting.liveClass.lecturer.name}
         </p>
       </div>
 
-      {meetingStatus === 'not_started' && (
-        <Alert className="bg-blue-50 border-blue-200 text-blue-800">
-          <Clock className="h-4 w-4 text-blue-600" />
+      {meetingStatus === &apos;not_started&apos; && (
+        <Alert className=&quot;bg-blue-50 border-blue-200 text-blue-800&quot;>
+          <Clock className=&quot;h-4 w-4 text-blue-600&quot; />
           <AlertTitle>Meeting Not Started Yet</AlertTitle>
-          <AlertDescription className="text-blue-700">
-            This meeting is scheduled to start at {format(new Date(meeting.startTime), "PPP 'at' p")}. 
+          <AlertDescription className=&quot;text-blue-700&quot;>
+            This meeting is scheduled to start at {format(new Date(meeting.startTime), &quot;PPP &apos;at&apos; p&quot;)}. 
             You can wait on this page and it will automatically connect when the meeting begins.
           </AlertDescription>
         </Alert>
       )}
 
-      {meetingStatus === 'ended' && (
-        <Alert className="bg-amber-50 border-amber-200 text-amber-800">
-          <AlertCircle className="h-4 w-4 text-amber-600" />
+      {meetingStatus === &apos;ended&apos; && (
+        <Alert className=&quot;bg-amber-50 border-amber-200 text-amber-800&quot;>
+          <AlertCircle className=&quot;h-4 w-4 text-amber-600&quot; />
           <AlertTitle>Meeting Has Ended</AlertTitle>
-          <AlertDescription className="text-amber-700">
+          <AlertDescription className=&quot;text-amber-700&quot;>
             This meeting has already ended. Check your course page for recordings or future meetings.
           </AlertDescription>
         </Alert>
       )}
 
-      {meetingStatus !== 'ended' && (
-        <div className="mt-6 border rounded-lg overflow-hidden min-h-[500px] bg-gray-50">
+      {meetingStatus !== &apos;ended&apos; && (
+        <div className=&quot;mt-6 border rounded-lg overflow-hidden min-h-[500px] bg-gray-50&quot;>
           <ZoomMeeting
             meetingId={meeting.id}
             onJoinSuccess={handleJoinSuccess}
@@ -176,12 +176,12 @@ export default function ClassroomPage({ params }: { params: { meetingId: string 
         </div>
       )}
 
-      <div className="flex items-center justify-between mt-6">
+      <div className=&quot;flex items-center justify-between mt-6&quot;>
         <Button 
-          variant="outline" 
-          onClick={() => router.push("/courses")}
+          variant=&quot;outline&quot; 
+          onClick={() => router.push(&quot;/courses&quot;)}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Courses
+          <ArrowLeft className=&quot;mr-2 h-4 w-4" /> Back to Courses
         </Button>
       </div>
     </div>
