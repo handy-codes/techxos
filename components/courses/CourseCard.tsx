@@ -8,20 +8,23 @@ interface CourseCardProps {
   course: {
     id: string;
     title: string;
-    description: string;
-    imageUrl: string;
-    price: number;
+    description: string | null;
+    imageUrl: string | null;
+    price: number | null;
     isPublished: boolean;
     categoryId: string;
     subCategoryId: string;
     instructorId: string;
-    levelId?: string;
+    levelId?: string | null;
+    createdAt?: Date;
+    updatedAt?: Date;
+    subtitle?: string | null;
   };
-  instructor: {
+  instructor?: {
     imageUrl?: string;
     fullName?: string;
   } | null;
-  level: {
+  level?: {
     name: string;
   } | null;
 }
