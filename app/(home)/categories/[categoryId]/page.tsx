@@ -22,7 +22,12 @@ const CoursesByCategory = async ({
       <Categories categories={categories} selectedCategory={params.categoryId} />
       <div className="flex flex-wrap gap-7 justify-center">
         {courses.map((course: Course) => (
-          <CourseCard key={course.id} course={course} />
+          <CourseCard 
+            key={course.id} 
+            course={course} 
+            instructor={null} 
+            level={course.level || null} 
+          />
         ))}
       </div>
     </div>

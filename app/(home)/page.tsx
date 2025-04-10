@@ -53,7 +53,12 @@ export default async function Home() {
           <Categories categories={categories} selectedCategory={null} />
           <div className="flex flex-wrap gap-7 justify-center">
             {courses.map((course: Course) => (
-              <CourseCard key={course.id} course={course} />
+              <CourseCard 
+                key={course.id} 
+                course={course} 
+                instructor={null}
+                level={course.level || null}
+              />
             ))}
           </div>
         </div>

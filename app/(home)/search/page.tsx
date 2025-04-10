@@ -40,7 +40,12 @@ const SearchPage = async ({ searchParams }: { searchParams: { query: string }}) 
       <p className="text-lg md:text-2xl font-semibold mb-10">Recommended courses for {queryText}</p>
       <div className="flex gap-4 flex-wrap">
         {courses.map((course: CourseWithDetails) => (
-          <CourseCard key={course.id} course={course} />
+          <CourseCard 
+            key={course.id} 
+            course={course} 
+            instructor={null}
+            level={course.level || null}
+          />
         ))}
       </div>
     </div>
