@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 
 const ContactForm = () => {
     const [firstName, setFirstName] = useState('');
@@ -6,7 +6,7 @@ const ContactForm = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!firstName || !lastName || !email || !message) {
             alert('Please fill in all required fields.');
