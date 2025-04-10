@@ -144,16 +144,16 @@ const handleChange = (
               <p className=&quot;text-xl mb-8 &quot;>
                 Become the Digital Guardian of the Future with Cybersecurity! Be
                 up to speed with outsmarting hackers, shielding sensitive data,
-                and fortifying the backbone of the internet—that&apos;s
+                and fortifying the backbone of the internet—that's
                 cybersecurity. In a world where cyber threats evolve by the
-                second, you&apos;ll be the frontline defender, turning
+                second, you'll be the frontline defender, turning
                 vulnerabilities into vaults and chaos into control.
               </p>
               <p className=&quot;text-xl mb-8&quot;>
                 From stopping ransomware attacks that cripple Fortune 500
                 companies to securing smart homes and national infrastructure,
                 cybersecurity is the ultimate game of digital cat and mouse.
-                You&apos;ll master ethical hacking, penetration testing, firewall
+                You'll master ethical hacking, penetration testing, firewall
                 wizardry, and tools like Kali Linux, Wireshark, and
                 SIEM—transforming you into a cyber ninja who thwarts breaches
                 before they happen.
@@ -189,7 +189,7 @@ const handleChange = (
           <p className=&quot;text-justify font-semibold max-sm:mb-1&quot;>
             Techxos arms you for battle: Tackle real-world simulations (like
             defending a live network or cracking encrypted puzzles), learn from
-            industry pros who&apos;ve foiled cybercrime rings, and join a legion of
+            industry pros who've foiled cybercrime rings, and join a legion of
             ethical hackers obsessed with outsmarting the dark web. Dive into
             cryptography, incident response, and compliance frameworks, while
             earning certifications that scream &quot;hire me&quot; to top employers. Ready

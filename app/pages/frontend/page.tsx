@@ -141,7 +141,7 @@ export default function Page() {
               </h1>
               <p className=&quot;text-xl mb-8&quot;>
                 How about crafting stunning, interactive websites that millions
-                of users adore—that&apos;s Frontend Development. It&apos;s where
+                of users adore—that's Frontend Development. It's where
                 creativity meets code, letting you design sleek interfaces,
                 animate pixels into life, and turn ideas into immersive digital
                 experiences.
@@ -176,7 +176,7 @@ export default function Page() {
           <p className=&quot;text-justify font-semibold max-sm:mb-1&quot;>
             In 12 weeks, Techxos turbocharges your journey: Code real
             projects, collaborate with industry pros, and join a tribe of
-            creators obsessed with pixel perfection. Whether you&apos;re animating a
+            creators obsessed with pixel perfection. Whether you're animating a
             button or architecting a full-scale web app, every lesson sharpens
             your skills for a tech world hungry for design-savvy coders. Ready
             to paint the digital canvas? Enroll now and start turning

@@ -144,10 +144,10 @@ const handleChange = (
               <p className=&quot;text-xl mb-8&quot;>
                 Unlock the Future with Data Science & Analytics! Imagine turning
                 raw data into powerful stories that predict trends, solve global
-                challenges, and shape tomorrow&apos;s innovations—that&apos;s Data
+                challenges, and shape tomorrow's innovations—that's Data
                 Science. In a world drowning in information, this field equips
                 you to extract gold from chaos, blending coding, statistics, and
-                creativity to answer questions we haven&apos;t even asked yet.
+                creativity to answer questions we haven't even asked yet.
               </p>
             </div>
             <div className=&quot;relative h-96 rounded-2xl overflow-hidden shadow-xl&quot;>

@@ -144,7 +144,7 @@ const handleChange = (
               <p className=&quot;text-xl mb-8&quot;>
                 Dominate the Digital Age with Digital Marketing! Imagine turning
                 clicks into customers, data into dollars, and hashtags into
-                global movements—that&apos;s digital marketing. It&apos;s the art and
+                global movements—that's digital marketing. It's the art and
                 science of connecting brands with audiences in a hyper-connected
                 world, where every tweet, ad, and viral trend can spark a
                 revolution. 
@@ -153,7 +153,7 @@ const handleChange = (
                 From crafting Instagram campaigns that sell out
                 products overnight to optimizing Google Ads that dominate search
                 rankings, digital marketers are the growth hackers of the modern
-                economy. You&apos;ll master SEO, social media wizardry, content
+                economy. You'll master SEO, social media wizardry, content
                 creation, email magic, and analytics tools like Google Analytics
                 and Meta Ads—transforming vague ideas into revenue rockets.
               </p>
@@ -186,7 +186,7 @@ const handleChange = (
           </h1>
           <p className=&quot;text-justify font-semibold max-sm:mb-1&quot;>
             Techxos fuels your ascent: Run real campaigns, analyze live
-            metrics, and learn from mentors who&apos;ve scaled brands to millions.
+            metrics, and learn from mentors who've scaled brands to millions.
             Dive into influencer collaborations, SEO wars, and AI-powered ad
             targeting, while joining a tribe of marketers obsessed with ROI,
             engagement, and breaking the internet. Ready to turn pixels into

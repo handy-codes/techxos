@@ -1,79 +1,71 @@
-"use client&quot;;
-import React, { useState, useEffect, useCallback } from &quot;react&quot;;
-import Head from &quot;next/head&quot;;
-import Image from &quot;next/image&quot;;
-import Link from &quot;next/link&quot;;
-import { FaCheckCircle, FaRegClock } from &quot;react-icons/fa&quot;;
-import { AiFillSchedule } from &quot;react-icons/ai&quot;;
-import { HiLocationMarker } from &quot;react-icons/hi&quot;;
-import { IoMdOptions } from &quot;react-icons/io&quot;;
-import AIML from &quot;@/components/curriculum/Ai-Ml&quot;;
-import ScrollToTopButton from &quot;@/components/layout/ScrollToTopButton&quot;;
-import { useAuth } from &quot;@clerk/nextjs&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
-import JoinLiveClassButton from &quot;@/components/course/JoinLiveClassButton&quot;;
-import CoursePurchaseButton from &quot;@/components/course/CoursePurchaseButton&quot;;
-
+"use client";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { FaCheckCircle, FaRegClock } from "react-icons/fa";
+import { AiFillSchedule } from "react-icons/ai";
+import { HiLocationMarker } from "react-icons/hi";
+import { IoMdOptions } from "react-icons/io";
+import AIML from "@/components/curriculum/Ai-Ml";
+import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: &quot;AI & Machine Learning&quot;,
-    name: &quot;",
-    surname: &quot;&quot;,
-    email: &quot;&quot;,
-    subject: &quot;&quot;,
-    message: &quot;&quot;,
+    courseTitle: "AI & Machine Learning",
+    name: "",
+    surname: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
-  
   const { isSignedIn, userId } = useAuth();
   const { user } = useUser();
-  const [hasAccess, setHasAccess] = useState<boolean>(false);
-  const [userRoleState, setUserRoleState] = useState<string | null>(null);
-const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
-    &quot;idle&quot; | &quot;success&quot; | &quot;error&quot;
-  >(&quot;idle&quot;);
+    "idle" | "success" | "error"
+  >("idle");
 
-  
   // Function to determine if the current user is an admin based on their email
-  const checkIfUserIsAdmin = useCallback(async () => {
+  const checkIfUserIsAdmin = async () => {
     if (!isSignedIn || !userId) return false;
     
     try {
       const userEmail = user?.primaryEmailAddress?.emailAddress;
-      console.log(&quot;Current user email:&quot;, userEmail);
+      console.log("Current user email:", userEmail);
       
       if (!userEmail) return false;
       
       // Known admin emails - add any admin emails here
       const adminEmails = [
-        &quot;paxymekventures@gmail.com&quot;,
-        &quot;admin@techxos.com&quot;,
-        &quot;emeka@techxos.com&quot;
+        "paxymekventures@gmail.com",
+        "admin@techxos.com",
+        "emeka@techxos.com"
       ];
       
       // Direct check for known admin emails
       if (adminEmails.includes(userEmail.toLowerCase())) {
-        console.log(&quot;User is admin based on email match!&quot;);
-        setUserRoleState(&quot;HEAD_ADMIN&quot;);
-        setHasAccess(true);
+        console.log("User is admin based on email match!");
         return true;
       }
       
       return false;
     } catch (error) {
-      console.error(&quot;Error in admin check:&quot;, error);
+      console.error("Error in admin check:", error);
       return false;
     }
-  }, [isSignedIn, userId, user]);
+  };
 
   useEffect(() => {
     if (isSignedIn && userId) {
       checkIfUserIsAdmin();
     }
-  }, [isSignedIn, userId, checkIfUserIsAdmin]);
-const handleChange = (
+  }, [isSignedIn, userId, user]);
+
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
@@ -85,40 +77,40 @@ const handleChange = (
   ): Promise<void> => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus(&quot;idle&quot;);
+    setSubmitStatus("idle");
 
     const formDataToSend = new FormData();
-    formDataToSend.append(&quot;courseTitle&quot;, formData.courseTitle);
-    formDataToSend.append(&quot;name&quot;, formData.name);
-    formDataToSend.append(&quot;surname&quot;, formData.surname);
-    formDataToSend.append(&quot;email&quot;, formData.email);
-    formDataToSend.append(&quot;subject&quot;, formData.subject);
-    formDataToSend.append(&quot;message&quot;, formData.message);
+    formDataToSend.append("courseTitle", formData.courseTitle);
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("surname", formData.surname);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("subject", formData.subject);
+    formDataToSend.append("message", formData.message);
 
     try {
-      const response = await fetch(&quot;/api/nofilesubmit-form&quot;, {
-        method: &quot;POST&quot;,
+      const response = await fetch("/api/nofilesubmit-form", {
+        method: "POST",
         body: formDataToSend,
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || &quot;Submission failed&quot;);
+        throw new Error(data.error || "Submission failed");
       }
 
-      setSubmitStatus(&quot;success&quot;);
+      setSubmitStatus("success");
       setFormData({
-        courseTitle: &quot;AI & Machine Learning&quot;,
-        name: &quot;&quot;,
-        surname: &quot;&quot;,
-        email: &quot;&quot;,
-        subject: &quot;&quot;,
-        message: &quot;&quot;,
+        courseTitle: "AI & Machine Learning",
+        name: "",
+        surname: "",
+        email: "",
+        subject: "",
+        message: "",
       });
     } catch (error) {
-      console.error(&quot;Submission error:&quot;, error);
-      setSubmitStatus(&quot;error&quot;);
+      console.error("Submission error:", error);
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
@@ -126,89 +118,81 @@ const handleChange = (
 
   return (
     <div>
-      <Head>
-        <title>Course Page</title>
-        <meta
-          name=&quot;description&quot;
-          content=&quot;Welcome to the AI & Machine Learning Course&quot;
-        />
-      </Head>
-
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700&quot;>
-        <div className=&quot;max-w-7xl mx-auto&quot;>
-          <div className=&quot;grid lg:grid-cols-2 gap-12 items-center&quot;>
-            <div className=&quot;text-white&quot;>
-              <h1 className=&quot;text-4xl sm:text-5xl font-bold mb-6&quot;>
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <h1 className="text-4xl sm:text-5xl font-bold mb-6">
                 AI on top of Machine Learning
               </h1>
-              <p className=&quot;text-xl mb-8&quot;>
-                Build Tomorrow&apos;s Intelligence with Artificial Intelligence &
+              <p className="text-xl mb-8">
+                Build Future Intelligence with Artificial Intelligence &
                 Machine Learning! Teach machines to learn, adapt, and make
                 decisions—transforming code into cognitive power. AI and ML are
                 rewriting the rules of possibility, from self-driving cars
                 navigating streets to algorithms predicting diseases before
-                symptoms appear. This isn&apos;t just coding—it&apos;s creating digital
+                symptoms appear. This is not just coding—it is creating digital
                 minds that evolve.
               </p>
             </div>
-            <div className=&quot;relative h-96 rounded-2xl overflow-hidden shadow-xl&quot;>
+            <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src=&quot;https://media.istockphoto.com/id/1202641105/photo/abbreviation-is-artificial-intelligence-on-a-digital-globe-background-machine-learning.jpg?b=1&s=612x612&w=0&k=20&c=jnPhkSgdxWINdD8TMkxPkVhjotH24dGG-ZqRK7vFv_4=&quot;
-                alt=&quot;Team Collaboration&quot;
+                src="https://media.istockphoto.com/id/1202641105/photo/abbreviation-is-artificial-intelligence-on-a-digital-globe-background-machine-learning.jpg?b=1&s=612x612&w=0&k=20&c=jnPhkSgdxWINdD8TMkxPkVhjotH24dGG-ZqRK7vFv_4="
+                alt="Team Collaboration"
                 fill
-                className=&quot;object-cover&quot;
+                className="object-cover"
                 priority
-                sizes=&quot;(max-width: 768px) 100vw, 50vw&quot;
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>
         </div>
       </section>
 
-      <section className=&quot;container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8&quot;>
+      <section className="container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8">
         {/* Left Column - Course Details */}
-        <div className=&quot;flex-1 text-black&quot;>
-          <div className=&quot;mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6&quot;>
-            <h1 className=&quot;text-2xl lg:text-4xl font-bold mb-[4px]&quot;>
+        <div className="flex-1 text-black">
+          <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
+            <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
               AI & Machine Learning
             </h1>
-            <div className=&quot;h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]&quot;></div>
+            <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
-          <h1 className=&quot;text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6&quot;>
+          <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
             450,000 NGN
           </h1>
-          <p className=&quot;text-justify font-semibold max-sm:mb-1&quot;>
+          <p className="text-justify font-semibold max-sm:mb-1">
             Techxos accelerates your genius: Build real AI projects—like
             emotion-detecting apps or stock-predicting bots—learn from experts
-            pushing AI&apos;s boundaries, and join innovators obsessed with machines
+            pushing boundaries of AI, and join innovators obsessed with machines
             that think. Every line of code you write trains the next leap in
             smart tech. Ready to pioneer the AI revolution? Enroll now and start
             teaching machines to think—one algorithm at a time. 🤖🧠✨
           </p>
-          <div className=&quot;p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid&quot;>
+          <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
-              href=&quot;https://wa.me/2348167715107&quot;
-              target=&quot;_blank&quot;
-              rel=&quot;noopener noreferrer&quot;
+              href="https://wa.me/2348167715107"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Contact an Advisor
             </a>
           </div>
-          <div className=&quot;font-semibold&quot;>
-            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
-              <FaRegClock className=&quot;text-black text-[22px]&quot; />
+          <div className="font-semibold">
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <FaRegClock className="text-black text-[22px]" />
               <span>Duration: 16 weeks</span>
             </div>
-            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
-              <AiFillSchedule className=&quot;text-black text-[24px]&quot; />
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <AiFillSchedule className="text-black text-[24px]" />
               <span>Schedule: 9 hours/week</span>
             </div>
-            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
-              <HiLocationMarker className=&quot;text-black text-[27px]&quot; />
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <HiLocationMarker className="text-black text-[27px]" />
               <span>Location: In-person or online</span>
             </div>
-            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
-              <IoMdOptions className=&quot;text-black text-[24px]&quot; />
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <IoMdOptions className="text-black text-[24px]" />
               <span>Options: Evening Class, Executive (one-to-one) class</span>
             </div>
           </div>
@@ -216,95 +200,95 @@ const handleChange = (
 
         {/* Right Column - Contact Form */}
         <div
-          id=&quot;contact&quot;
-          className=&quot;flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md&quot;
+          id="contact"
+          className="flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md"
         >
-          <h1 className=&quot;text-2xl font-bold mb-4&quot;>
+          <h1 className="text-2xl font-bold mb-4">
             Contact Us for More Enquiry
           </h1>
           <form onSubmit={handleSubmit}>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">
                 Course Title:
               </label>
               <input
-                type=&quot;text&quot;
-                name=&quot;courseTitle&quot;
+                type="text"
+                name="courseTitle"
                 value={formData.courseTitle}
                 readOnly
-                className=&quot;w-full p-2 border font-bold text-2xl rounded bg-gray-200&quot;
+                className="w-full p-2 border font-bold text-2xl rounded bg-gray-200"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Name*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Name*</label>
               <input
-                type=&quot;text&quot;
-                name=&quot;name&quot;
+                type="text"
+                name="name"
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Surname*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Surname*</label>
               <input
-                type=&quot;text&quot;
-                name=&quot;surname&quot;
+                type="text"
+                name="surname"
                 required
                 value={formData.surname}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Email*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Email*</label>
               <input
-                type=&quot;email&quot;
-                name=&quot;email&quot;
+                type="email"
+                name="email"
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Subject*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Subject*</label>
               <input
-                type=&quot;text&quot;
-                name=&quot;subject&quot;
+                type="text"
+                name="subject"
                 required
                 value={formData.subject}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Message*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Message*</label>
               <textarea
-                name=&quot;message&quot;
+                name="message"
                 required
                 value={formData.message}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
                 rows={4}
               ></textarea>
             </div>
             <button
-              type=&quot;submit&quot;
+              type="submit"
               disabled={isSubmitting}
-              className=&quot;w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-blue-300&quot;
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-blue-300"
             >
-              {isSubmitting ? &quot;Submitting...&quot; : &quot;Submit&quot;}
+              {isSubmitting ? "Submitting..." : "Submit"}
             </button>
-            {submitStatus === &quot;success&quot; && (
-              <div className=&quot;mt-4 flex items-center text-green-600&quot;>
-                <FaCheckCircle className=&quot;mr-2&quot; size={24} />
-                <p className=&quot;font-bold&quot;>Form submitted successfully!</p>
+            {submitStatus === "success" && (
+              <div className="mt-4 flex items-center text-green-600">
+                <FaCheckCircle className="mr-2" size={24} />
+                <p className="font-bold">Form submitted successfully!</p>
               </div>
             )}
-            {submitStatus === &quot;error&quot; && (
-              <p className=&quot;mt-4 text-red-600">
+            {submitStatus === "error" && (
+              <p className="mt-4 text-red-600">
                 Failed to submit the form. Please try again.
               </p>
             )}
@@ -313,7 +297,6 @@ const handleChange = (
       </section>
       <AIML />
       <ScrollToTopButton />
-      
     </div>
   );
 }

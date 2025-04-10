@@ -146,7 +146,7 @@ const handleChange = (
                 users love.
               </p>
               <p className=&quot;text-xl mb-8&quot;>
-                You&apos;ll master tools like Figma, Adobe XD, and Sketch,
+                You'll master tools like Figma, Adobe XD, and Sketch,
                 wireframing prototypes, conducting user research, and perfecting
                 pixel-perfect layouts that balance form and function. Build
                 real-world projects—from e-commerce apps to fintech
