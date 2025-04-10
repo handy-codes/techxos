@@ -1,9 +1,9 @@
-"use client&quot;;
+"use client";
 
-import { useState } from &quot;react&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
-import { FiTrash2 } from &quot;react-icons/fi&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FiTrash2 } from "react-icons/fi";
+import { toast } from "react-hot-toast";
 
 interface UserRoleUpdateProps {
   user: {
@@ -22,23 +22,23 @@ export function UserRoleUpdate({ user }: UserRoleUpdateProps) {
   const updateRole = async (newRole: string) => {
     try {
       setIsLoading(true);
-      const response = await fetch(&quot;/api/live-courses/project-mgt/user/role&quot;, {
-        method: &quot;PUT&quot;,
+      const response = await fetch("/api/live-courses/project-mgt/user/role", {
+        method: "PUT",
         headers: {
-          &quot;Content-Type&quot;: &quot;application/json&quot;,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ role: newRole }),
       });
 
       if (!response.ok) {
-        throw new Error(&quot;Failed to update role&quot;);
+        throw new Error("Failed to update role");
       }
 
-      toast.success(&quot;User role updated&quot;);
+      toast.success("User role updated");
       router.refresh();
     } catch (error) {
-      console.error(&quot;Error updating role:&quot;, error);
-      toast.error(&quot;Failed to update role&quot;);
+      console.error("Error updating role:", error);
+      toast.error("Failed to update role");
     } finally {
       setIsLoading(false);
     }
@@ -53,51 +53,51 @@ export function UserRoleUpdate({ user }: UserRoleUpdateProps) {
     try {
       setIsDeleting(true);
       const response = await fetch(`/api/admin/users/${user.id}`, {
-        method: &quot;DELETE&quot;,
+        method: "DELETE",
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || &quot;Failed to delete user&quot;);
+        throw new Error(errorData.message || "Failed to delete user");
       }
 
-      toast.success(&quot;User deleted successfully&quot;);
+      toast.success("User deleted successfully");
       
       // Force reload the page to reflect the changes
       window.location.reload();
     } catch (error: any) {
-      console.error(&quot;Error deleting user:&quot;, error);
-      toast.error(error.message || &quot;Failed to delete user&quot;);
+      console.error("Error deleting user:", error);
+      toast.error(error.message || "Failed to delete user");
     } finally {
       setIsDeleting(false);
     }
   };
 
   return (
-    <div className=&quot;flex items-center space-x-2&quot;>
+    <div className="flex items-center space-x-2">
       <select
         value={user.role}
         onChange={(e) => updateRole(e.target.value)}
         disabled={isLoading || isDeleting}
-        className=&quot;border rounded px-2 py-1&quot;
+        className="border rounded px-2 py-1"
       >
-        <option value=&quot;LEARNER&quot;>Learner</option>
-        <option value=&quot;LECTURER&quot;>Lecturer</option>
-        <option value=&quot;ADMIN&quot;>Admin</option>
-        <option value=&quot;HEAD_ADMIN&quot;>Head Admin</option>
+        <option value="LEARNER">Learner</option>
+        <option value="LECTURER">Lecturer</option>
+        <option value="ADMIN">Admin</option>
+        <option value="HEAD_ADMIN">Head Admin</option>
       </select>
       
       <button
         onClick={deleteUser}
         disabled={isLoading || isDeleting}
-        className=&quot;p-1 text-red-500 hover:bg-red-100 rounded&quot;
-        title=&quot;Delete user&quot;
+        className="p-1 text-red-500 hover:bg-red-100 rounded"
+        title="Delete user"
       >
         <FiTrash2 size={18} />
       </button>
       
-      {isLoading && <span className=&quot;text-sm text-gray-500&quot;>Updating...</span>}
-      {isDeleting && <span className=&quot;text-sm text-gray-500">Deleting...</span>}
+      {isLoading && <span className="text-sm text-gray-500">Updating...</span>}
+      {isDeleting && <span className="text-sm text-gray-500">Deleting...</span>}
     </div>
   );
 } 

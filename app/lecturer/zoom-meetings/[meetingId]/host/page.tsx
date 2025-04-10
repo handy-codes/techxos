@@ -1,19 +1,19 @@
-"use client&quot;;
+"use client";
 
-import { useState, useEffect } from &quot;react&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
-import axios from &quot;axios&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import { format } from &quot;date-fns&quot;;
-import { ZoomMeeting } from &quot;@/components/zoom/ZoomMeeting&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
-import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
-import { Badge } from &quot;@/components/ui/badge&quot;;
-import { Tabs, TabsContent, TabsList, TabsTrigger } from &quot;@/components/ui/tabs&quot;;
-import { Calendar, Users, Clock, ChevronLeft, Square } from &quot;lucide-react&quot;;
-import Link from &quot;next/link&quot;;
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { format } from "date-fns";
+import { ZoomMeeting } from "@/components/zoom/ZoomMeeting";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar, Users, Clock, ChevronLeft, Square } from "lucide-react";
+import Link from "next/link";
 
 interface ZoomMeetingDetails {
   id: string;
@@ -21,7 +21,7 @@ interface ZoomMeetingDetails {
   topic: string;
   startTime: string;
   duration: number;
-  status: &quot;SCHEDULED&quot; | &quot;STARTED&quot; | &quot;ENDED&quot; | &quot;COMPLETED&quot;;
+  status: "SCHEDULED" | "STARTED" | "ENDED" | "COMPLETED";
   password: string | null;
   agenda: string | null;
   liveClass: {
@@ -61,9 +61,9 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
       const response = await axios.get(`/api/zoom/meetings/${params.meetingId}`);
       setMeeting(response.data);
     } catch (error) {
-      console.error(&quot;Error fetching meeting:&quot;, error);
-      setError(&quot;Could not load meeting details&quot;);
-      toast.error(&quot;Failed to load meeting details&quot;);
+      console.error("Error fetching meeting:", error);
+      setError("Could not load meeting details");
+      toast.error("Failed to load meeting details");
     } finally {
       setLoading(false);
     }
@@ -72,53 +72,53 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
   const endMeeting = async () => {
     try {
       await axios.post(`/api/zoom/meetings/${params.meetingId}/end`);
-      toast.success(&quot;Meeting ended&quot;);
-      router.push(&quot;/lecturer/zoom-meetings&quot;);
+      toast.success("Meeting ended");
+      router.push("/lecturer/zoom-meetings");
     } catch (error) {
-      console.error(&quot;Error ending meeting:&quot;, error);
-      toast.error(&quot;Failed to end meeting&quot;);
+      console.error("Error ending meeting:", error);
+      toast.error("Failed to end meeting");
     }
   };
 
   const handleJoinSuccess = () => {
-    toast.success(&quot;Successfully joined the meeting&quot;);
+    toast.success("Successfully joined the meeting");
   };
 
   const handleJoinError = (error: any) => {
-    console.error(&quot;Join error:&quot;, error);
-    toast.error(&quot;Failed to join the meeting&quot;);
+    console.error("Join error:", error);
+    toast.error("Failed to join the meeting");
   };
 
   if (loading) {
     return (
-      <div className=&quot;space-y-6&quot;>
-        <div className=&quot;flex items-center space-x-4&quot;>
-          <Skeleton className=&quot;h-10 w-10 rounded-full&quot; />
-          <div className=&quot;space-y-2&quot;>
-            <Skeleton className=&quot;h-4 w-[250px]&quot; />
-            <Skeleton className=&quot;h-4 w-[200px]&quot; />
+      <div className="space-y-6">
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-10 w-10 rounded-full" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-[250px]" />
+            <Skeleton className="h-4 w-[200px]" />
           </div>
         </div>
-        <Skeleton className=&quot;h-[400px] w-full rounded-xl&quot; />
+        <Skeleton className="h-[400px] w-full rounded-xl" />
       </div>
     );
   }
 
   if (error || !meeting) {
     return (
-      <div className=&quot;space-y-6&quot;>
-        <Link href=&quot;/lecturer/zoom-meetings&quot;>
-          <Button variant=&quot;ghost&quot; size=&quot;sm&quot;>
-            <ChevronLeft className=&quot;mr-2 h-4 w-4&quot; /> Back to meetings
+      <div className="space-y-6">
+        <Link href="/lecturer/zoom-meetings">
+          <Button variant="ghost" size="sm">
+            <ChevronLeft className="mr-2 h-4 w-4" /> Back to meetings
           </Button>
         </Link>
         <Card>
-          <CardContent className=&quot;pt-6 text-center&quot;>
-            <p className=&quot;text-muted-foreground&quot;>{error || &quot;Meeting not found&quot;}</p>
+          <CardContent className="pt-6 text-center">
+            <p className="text-muted-foreground">{error || "Meeting not found"}</p>
             <Button 
-              variant=&quot;outline&quot; 
-              className=&quot;mt-4&quot;
-              onClick={() => router.push(&quot;/lecturer/zoom-meetings&quot;)}
+              variant="outline" 
+              className="mt-4"
+              onClick={() => router.push("/lecturer/zoom-meetings")}
             >
               Return to Meetings List
             </Button>
@@ -129,36 +129,36 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
   }
 
   return (
-    <div className=&quot;space-y-6&quot;>
-      <div className=&quot;flex justify-between items-center&quot;>
-        <Link href=&quot;/lecturer/zoom-meetings&quot;>
-          <Button variant=&quot;ghost&quot; size=&quot;sm&quot;>
-            <ChevronLeft className=&quot;mr-2 h-4 w-4&quot; /> Back to meetings
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <Link href="/lecturer/zoom-meetings">
+          <Button variant="ghost" size="sm">
+            <ChevronLeft className="mr-2 h-4 w-4" /> Back to meetings
           </Button>
         </Link>
         <Button 
-          variant=&quot;destructive&quot; 
-          size=&quot;sm&quot;
+          variant="destructive" 
+          size="sm"
           onClick={endMeeting}
         >
-          <Square className=&quot;mr-2 h-4 w-4&quot; /> End Meeting
+          <Square className="mr-2 h-4 w-4" /> End Meeting
         </Button>
       </div>
 
-      <div className=&quot;grid gap-6 md:grid-cols-3&quot;>
-        <div className=&quot;md:col-span-2&quot;>
-          <Card className=&quot;overflow-hidden&quot;>
+      <div className="grid gap-6 md:grid-cols-3">
+        <div className="md:col-span-2">
+          <Card className="overflow-hidden">
             <CardHeader>
-              <div className=&quot;flex items-center justify-between&quot;>
+              <div className="flex items-center justify-between">
                 <div>
-                  <Badge className=&quot;bg-green-100 text-green-800 mb-2&quot;>LIVE</Badge>
+                  <Badge className="bg-green-100 text-green-800 mb-2">LIVE</Badge>
                   <CardTitle>{meeting.topic}</CardTitle>
                   <CardDescription>{meeting.liveClass.title}</CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className=&quot;p-0&quot;>
-              <div className=&quot;h-[500px] bg-black relative&quot;>
+            <CardContent className="p-0">
+              <div className="h-[500px] bg-black relative">
                 <ZoomMeeting 
                   meetingId={meeting.id} 
                   onJoinSuccess={handleJoinSuccess}
@@ -166,20 +166,20 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
                 />
               </div>
             </CardContent>
-            <CardFooter className=&quot;bg-slate-50 flex justify-between items-center p-4&quot;>
-              <div className=&quot;flex items-center space-x-4&quot;>
-                <div className=&quot;flex items-center&quot;>
-                  <Calendar className=&quot;h-4 w-4 mr-2 text-muted-foreground&quot; />
-                  <span className=&quot;text-sm&quot;>{format(new Date(meeting.startTime), &quot;MMM d, yyyy • h:mm a&quot;)}</span>
+            <CardFooter className="bg-slate-50 flex justify-between items-center p-4">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span className="text-sm">{format(new Date(meeting.startTime), "MMM d, yyyy • h:mm a")}</span>
                 </div>
-                <div className=&quot;flex items-center&quot;>
-                  <Clock className=&quot;h-4 w-4 mr-2 text-muted-foreground&quot; />
-                  <span className=&quot;text-sm&quot;>{meeting.duration} minutes</span>
+                <div className="flex items-center">
+                  <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span className="text-sm">{meeting.duration} minutes</span>
                 </div>
               </div>
               <Button
-                variant=&quot;outline&quot;
-                size=&quot;sm&quot;
+                variant="outline"
+                size="sm"
                 onClick={endMeeting}
               >
                 End Meeting
@@ -193,52 +193,52 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
             <CardHeader>
               <CardTitle>Meeting Information</CardTitle>
             </CardHeader>
-            <CardContent className=&quot;space-y-4&quot;>
+            <CardContent className="space-y-4">
               <div>
-                <h3 className=&quot;text-sm font-medium mb-1&quot;>Zoom Meeting ID</h3>
-                <p className=&quot;text-sm&quot;>{meeting.zoomMeetingId || &quot;Not available&quot;}</p>
+                <h3 className="text-sm font-medium mb-1">Zoom Meeting ID</h3>
+                <p className="text-sm">{meeting.zoomMeetingId || "Not available"}</p>
               </div>
 
               <div>
-                <h3 className=&quot;text-sm font-medium mb-1&quot;>Password</h3>
-                <p className=&quot;text-sm&quot;>{meeting.password || &quot;No password set&quot;}</p>
+                <h3 className="text-sm font-medium mb-1">Password</h3>
+                <p className="text-sm">{meeting.password || "No password set"}</p>
               </div>
 
               {meeting.agenda && (
                 <div>
-                  <h3 className=&quot;text-sm font-medium mb-1&quot;>Agenda</h3>
-                  <p className=&quot;text-sm whitespace-pre-line&quot;>{meeting.agenda}</p>
+                  <h3 className="text-sm font-medium mb-1">Agenda</h3>
+                  <p className="text-sm whitespace-pre-line">{meeting.agenda}</p>
                 </div>
               )}
 
               <div>
-                <h3 className=&quot;text-sm font-medium mb-1&quot;>Host</h3>
-                <p className=&quot;text-sm&quot;>{meeting.liveClass.lecturer.name || meeting.liveClass.lecturer.email}</p>
+                <h3 className="text-sm font-medium mb-1">Host</h3>
+                <p className="text-sm">{meeting.liveClass.lecturer.name || meeting.liveClass.lecturer.email}</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className=&quot;mt-4&quot;>
+          <Card className="mt-4">
             <CardHeader>
-              <CardTitle className=&quot;flex items-center&quot;>
-                <Users className=&quot;h-4 w-4 mr-2&quot; />
+              <CardTitle className="flex items-center">
+                <Users className="h-4 w-4 mr-2" />
                 Participants
               </CardTitle>
             </CardHeader>
             <CardContent>
               {meeting.attendance && meeting.attendance.length > 0 ? (
-                <ul className=&quot;space-y-2&quot;>
+                <ul className="space-y-2">
                   {meeting.attendance.map((attendee) => (
-                    <li key={attendee.id} className=&quot;flex justify-between items-center text-sm&quot;>
+                    <li key={attendee.id} className="flex justify-between items-center text-sm">
                       <span>{attendee.user.name || attendee.user.email}</span>
-                      <span className=&quot;text-xs text-muted-foreground&quot;>
-                        {format(new Date(attendee.joinTime), &quot;h:mm a&quot;)}
+                      <span className="text-xs text-muted-foreground">
+                        {format(new Date(attendee.joinTime), "h:mm a")}
                       </span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className=&quot;text-sm text-muted-foreground">No participants have joined yet.</p>
+                <p className="text-sm text-muted-foreground">No participants have joined yet.</p>
               )}
             </CardContent>
           </Card>

@@ -1,6 +1,6 @@
-import CourseCard from &quot;@/components/courses/CourseCard&quot;;
-import { db } from &quot;@/lib/db&quot;
-import { Course, Category, SubCategory, Section, Level } from &quot;@prisma/client&quot;
+import CourseCard from "@/components/courses/CourseCard";
+import { db } from "@/lib/db"
+import { Course, Category, SubCategory, Section, Level } from "@prisma/client"
 
 interface CourseWithDetails extends Course {
   category: Category;
@@ -10,7 +10,7 @@ interface CourseWithDetails extends Course {
 }
 
 const SearchPage = async ({ searchParams }: { searchParams: { query: string }}) => {
-  const queryText = searchParams.query || &apos;&apos;
+  const queryText = searchParams.query || ''
   const courses = await db.course.findMany({
     where: {
       isPublished: true,
@@ -31,14 +31,14 @@ const SearchPage = async ({ searchParams }: { searchParams: { query: string }}) 
       }
     },
     orderBy: {
-      createdAt: &apos;desc&apos;
+      createdAt: 'desc'
     }
   }) as CourseWithDetails[];
 
   return (
-    <div className="px-4 py-6 md:px-10 xl:px-16&quot;>
-      <p className=&quot;text-lg md:text-2xl font-semibold mb-10&quot;>Recommended courses for {queryText}</p>
-      <div className=&quot;flex gap-4 flex-wrap">
+    <div className="px-4 py-6 md:px-10 xl:px-16">
+      <p className="text-lg md:text-2xl font-semibold mb-10">Recommended courses for {queryText}</p>
+      <div className="flex gap-4 flex-wrap">
         {courses.map((course: CourseWithDetails) => (
           <CourseCard key={course.id} course={course} />
         ))}

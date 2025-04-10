@@ -1,77 +1,77 @@
-"use client&quot;;
+"use client";
 
-import { Course } from &quot;@prisma/client&quot;;
-import { ColumnDef } from &quot;@tanstack/react-table&quot;;
-import { Pencil } from &quot;lucide-react&quot;;
-import Link from &quot;next/link&quot;;
-import { ArrowUpDown } from &quot;lucide-react&quot;;
+import { Course } from "@prisma/client";
+import { ColumnDef } from "@tanstack/react-table";
+import { Pencil } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpDown } from "lucide-react";
 
-import { Badge } from &quot;../ui/badge&quot;;
-import { Button } from &quot;../ui/button&quot;;
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 
 export const columns: ColumnDef<Course>[] = [
   {
-    accessorKey: &quot;title&quot;, // course.title
+    accessorKey: "title", // course.title
     header: ({ column }) => {
       return (
         <Button
-          variant=&quot;ghost&quot;
-          onClick={() => column.toggleSorting(column.getIsSorted() === &quot;asc&quot;)}
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Title
-          <ArrowUpDown className=&quot;ml-2 h-4 w-4&quot; />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: &quot;price&quot;,
+    accessorKey: "price",
     header: ({ column }) => {
       return (
         <Button
-          variant=&quot;ghost&quot;
-          onClick={() => column.toggleSorting(column.getIsSorted() === &quot;asc&quot;)}
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Price
-          <ArrowUpDown className=&quot;ml-2 h-4 w-4&quot; />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const price = parseFloat(row.getValue(&quot;price&quot;));
-      const formatted = new Intl.NumberFormat(&quot;en-US&quot;, {
-        style: &quot;currency&quot;,
-        currency: &quot;NGN&quot;,
+      const price = parseFloat(row.getValue("price"));
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "NGN",
       }).format(price);
 
       return <div>{formatted}</div>;
     },
   },
   {
-    accessorKey: &quot;isPublished&quot;,
-    header: &quot;Status&quot;,
+    accessorKey: "isPublished",
+    header: "Status",
     cell: ({ row }) => {
-      const isPublished = row.getValue(&quot;isPublished&quot;) || false;
+      const isPublished = row.getValue("isPublished") || false;
 
       return (
         <Badge
           className={`${
-            isPublished && &quot;bg-[#FDAB04] text-black hover:bg-[#FDAB04]&quot;
+            isPublished && "bg-[#FDAB04] text-black hover:bg-[#FDAB04]"
           }`}
         >
-          {isPublished ? &quot;Published&quot; : &quot;Draft&quot;}
+          {isPublished ? "Published" : "Draft"}
         </Badge>
       );
     },
   },
   {
-    id: &quot;actions&quot;,
+    id: "actions",
     cell: ({ row }) => (
       <Link
         href={`/instructor/courses/${row.original.id}/basic`}
-        className=&quot;flex gap-2 items-center hover:text-[#FDAB04]&quot;
+        className="flex gap-2 items-center hover:text-[#FDAB04]"
       >
-        <Pencil className=&quot;h-4 w-4" /> Edit
+        <Pencil className="h-4 w-4" /> Edit
       </Link>
     ),
   },

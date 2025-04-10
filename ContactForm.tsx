@@ -1,15 +1,15 @@
-import React, { useState } from &apos;react&apos;;
+import React, { useState } from 'react';
 
 const ContactForm = () => {
-    const [firstName, setFirstName] = useState(&apos;&apos;);
-    const [lastName, setLastName] = useState(&apos;&apos;);
-    const [email, setEmail] = useState(&apos;&apos;);
-    const [message, setMessage] = useState(&apos;&apos;);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if (!firstName || !lastName || !email) {
-            alert(&apos;Please fill in all required fields.&apos;);
+        if (!firstName || !lastName || !email || !message) {
+            alert('Please fill in all required fields.');
             return;
         }
 
@@ -24,15 +24,15 @@ const ContactForm = () => {
             <form onSubmit={handleSubmit}>
                 <label>
                     First name*
-                    <input type=&quot;text&quot; value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
                 </label>
                 <label>
                     Last name*
-                    <input type=&quot;text&quot; value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
                 </label>
                 <label>
                     Email*
-                    <input type=&quot;email&quot; value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </label>
                 <label>
                     Message

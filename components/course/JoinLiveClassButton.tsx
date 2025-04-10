@@ -1,21 +1,19 @@
-"use client&quot;;
+"use client";
 
-import { useState } from &quot;react&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { useAuth } from &quot;@clerk/nextjs&quot;;
-import axios from &quot;axios&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import { Loader2 } from &quot;lucide-react&quot;;
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@clerk/nextjs";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 interface JoinLiveClassButtonProps {
   courseId: string;
-  courseName: string;
   className?: string;
 }
 
 export default function JoinLiveClassButton({
   courseId,
-  courseName,
   className,
 }: JoinLiveClassButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +21,7 @@ export default function JoinLiveClassButton({
 
   const handleJoinClass = async () => {
     if (!isSignedIn) {
-      toast.error(&quot;Please sign in to join the class&quot;);
+      toast.error("Please sign in to join the class");
       return;
     }
 
@@ -40,23 +38,23 @@ export default function JoinLiveClassButton({
 
       if (response.data.zoomLink) {
         // Open the Zoom link in a new tab
-        window.open(response.data.zoomLink, &quot;_blank&quot;);
-        toast.success(&quot;Joining live class...&quot;);
+        window.open(response.data.zoomLink, "_blank");
+        toast.success("Joining live class...");
       } else {
-        toast.error(&quot;No active class link available. Please contact support.&quot;);
+        toast.error("No active class link available. Please contact support.");
       }
     } catch (error: any) {
-      console.error(&quot;Error joining live class:&quot;, error);
+      console.error("Error joining live class:", error);
       
       // Handle specific error cases
       if (error.response?.status === 401) {
-        toast.error(&quot;Please sign in to join the class&quot;);
+        toast.error("Please sign in to join the class");
       } else if (error.response?.status === 403) {
-        toast.error(&quot;You need to purchase this course to join the live class&quot;);
+        toast.error("You need to purchase this course to join the live class");
       } else if (error.response?.status === 404) {
-        toast.error(&quot;No active class found for this course&quot;);
+        toast.error("No active class found for this course");
       } else {
-        toast.error(&quot;Failed to join the class. Please try again.&quot;);
+        toast.error("Failed to join the class. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -71,11 +69,11 @@ export default function JoinLiveClassButton({
     >
       {isLoading ? (
         <>
-          <Loader2 className=&quot;mr-2 h-4 w-4 animate-spin&quot; />
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Joining...
         </>
       ) : (
-        &quot;Join Live Class"
+        "Join Live Class"
       )}
     </Button>
   );

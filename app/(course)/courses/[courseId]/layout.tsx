@@ -1,8 +1,7 @@
-import CourseSideBar from &quot;@/components/layout/CourseSideBar&quot;;
-import Topbar from &quot;@/components/layout/Topbar&quot;;
-import { db } from &quot;@/lib/db&quot;;
-import { auth } from &quot;@clerk/nextjs/server&quot;;
-import { redirect } from &quot;next/navigation&quot;;
+import { prisma } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import CourseLayoutClient from "./CourseLayoutClient";
 
 const CourseDetailsLayout = async ({
   children,
@@ -14,10 +13,10 @@ const CourseDetailsLayout = async ({
   const { userId } = auth();
 
   if (!userId) {
-    return redirect(&quot;/sign-in&quot;);
+    return redirect("/sign-in");
   }
 
-  const course = await db.course.findUnique({
+  const course = await prisma.course.findUnique({
     where: {
       id: params.courseId,
     },
@@ -27,25 +26,17 @@ const CourseDetailsLayout = async ({
           isPublished: true,
         },
         orderBy: {
-          position: &quot;asc&quot;,
+          position: "asc",
         },
       },
     },
   });
 
   if (!course) {
-    return redirect(&quot;/&quot;);
+    return redirect("/");
   }
 
-  return (
-    <div className="h-full flex flex-col&quot;>
-      <Topbar />
-      <div className=&quot;flex-1 flex&quot;>
-        <CourseSideBar course={course} studentId={userId} />
-        <div className=&quot;flex-1">{children}</div>
-      </div>
-    </div>
-  );
+  return <CourseLayoutClient course={course} userId={userId}>{children}</CourseLayoutClient>;
 };
 
 export default CourseDetailsLayout;

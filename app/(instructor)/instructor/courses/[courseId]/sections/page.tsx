@@ -1,14 +1,14 @@
-import { auth } from &quot;@clerk/nextjs/server&quot;;
-import { redirect } from &quot;next/navigation&quot;;
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-import CreateSectionForm from &quot;@/components/sections/CreateSectionForm&quot;;
-import { db } from &quot;@/lib/db&quot;;
+import CreateSectionForm from "@/components/sections/CreateSectionForm";
+import { db } from "@/lib/db";
 
 const CourseCurriculumPage = async ({ params }: { params: { courseId: string }}) => {
   const { userId } = auth()
 
   if (!userId) {
-    return redirect(&quot;/sign-in&quot;)
+    return redirect("/sign-in")
   }
 
   const course = await db.course.findUnique({
@@ -19,14 +19,14 @@ const CourseCurriculumPage = async ({ params }: { params: { courseId: string }})
     include: {
       sections: {
         orderBy: {
-          position: &quot;asc&quot;,
+          position: "asc",
         },
       },
     },
   });
 
   if (!course) {
-    return redirect(&quot;/instructor/courses&quot;)
+    return redirect("/instructor/courses")
   }
 
   return (

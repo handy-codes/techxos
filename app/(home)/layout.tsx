@@ -1,5 +1,5 @@
-import FooterPage from &quot;@/components/layout/Footer&quot;
-// import Topbar from &quot;@/components/layout/Topbar&quot;
+import FooterPage from "@/components/layout/Footer"
+// import Topbar from "@/components/layout/Topbar"
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (

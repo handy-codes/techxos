@@ -1,18 +1,18 @@
-"use client&quot;;
+"use client";
 
-import { useState } from &quot;react&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import axios from &quot;axios&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Input } from &quot;@/components/ui/input&quot;;
-import { Label } from &quot;@/components/ui/label&quot;;
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from &quot;@/components/ui/select&quot;;
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function FixUserPage() {
-  const [email, setEmail] = useState(&quot;princeowo73@gmail.com&quot;);
-  const [clerkUserId, setClerkUserId] = useState(&quot;user_2pJFEDGaiczCxjyKK5zRvlcjCko&quot;);
-  const [role, setRole] = useState(&quot;ADMIN&quot;);
+  const [email, setEmail] = useState("princeowo73@gmail.com");
+  const [clerkUserId, setClerkUserId] = useState("user_2pJFEDGaiczCxjyKK5zRvlcjCko");
+  const [role, setRole] = useState("ADMIN");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
 
@@ -22,74 +22,74 @@ export default function FixUserPage() {
     setResult(null);
 
     try {
-      const response = await axios.post(&quot;/api/admin/fix-user&quot;, {
+      const response = await axios.post("/api/admin/fix-user", {
         email,
         clerkUserId,
         role
       });
 
       setResult(response.data);
-      toast.success(&quot;User updated successfully!&quot;);
+      toast.success("User updated successfully!");
     } catch (error: any) {
-      console.error(&quot;Error fixing user:&quot;, error);
-      toast.error(error.response?.data?.error || &quot;Failed to update user&quot;);
+      console.error("Error fixing user:", error);
+      toast.error(error.response?.data?.error || "Failed to update user");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className=&quot;container mx-auto p-8&quot;>
-      <h1 className=&quot;text-2xl font-bold mb-6&quot;>Fix User Account</h1>
+    <div className="container mx-auto p-8">
+      <h1 className="text-2xl font-bold mb-6">Fix User Account</h1>
       
-      <Card className=&quot;mb-6&quot;>
+      <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Fix Prince Owo&apos;s Account</CardTitle>
+          <CardTitle>Fix Prince Owo's Account</CardTitle>
           <CardDescription>
             Connect the correct Clerk ID to the database user record
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className=&quot;space-y-4&quot;>
-            <div className=&quot;space-y-2&quot;>
-              <Label htmlFor=&quot;email&quot;>Email</Label>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
               <Input 
-                id=&quot;email&quot; 
+                id="email" 
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)} 
-                placeholder=&quot;user@example.com&quot;
+                placeholder="user@example.com"
                 required
               />
             </div>
             
-            <div className=&quot;space-y-2&quot;>
-              <Label htmlFor=&quot;clerkUserId&quot;>Clerk User ID</Label>
+            <div className="space-y-2">
+              <Label htmlFor="clerkUserId">Clerk User ID</Label>
               <Input 
-                id=&quot;clerkUserId&quot; 
+                id="clerkUserId" 
                 value={clerkUserId} 
                 onChange={(e) => setClerkUserId(e.target.value)} 
-                placeholder=&quot;user_...&quot;
+                placeholder="user_..."
                 required
               />
             </div>
             
-            <div className=&quot;space-y-2&quot;>
-              <Label htmlFor=&quot;role&quot;>Role</Label>
+            <div className="space-y-2">
+              <Label htmlFor="role">Role</Label>
               <Select value={role} onValueChange={setRole}>
                 <SelectTrigger>
-                  <SelectValue placeholder=&quot;Select role&quot; />
+                  <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value=&quot;LEARNER&quot;>LEARNER</SelectItem>
-                  <SelectItem value=&quot;LECTURER&quot;>LECTURER</SelectItem>
-                  <SelectItem value=&quot;ADMIN&quot;>ADMIN</SelectItem>
-                  <SelectItem value=&quot;HEAD_ADMIN&quot;>HEAD_ADMIN</SelectItem>
+                  <SelectItem value="LEARNER">LEARNER</SelectItem>
+                  <SelectItem value="LECTURER">LECTURER</SelectItem>
+                  <SelectItem value="ADMIN">ADMIN</SelectItem>
+                  <SelectItem value="HEAD_ADMIN">HEAD_ADMIN</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
-            <Button type=&quot;submit&quot; disabled={loading}>
-              {loading ? &quot;Processing...&quot; : &quot;Fix User Account&quot;}
+            <Button type="submit" disabled={loading}>
+              {loading ? "Processing..." : "Fix User Account"}
             </Button>
           </form>
         </CardContent>
@@ -101,7 +101,7 @@ export default function FixUserPage() {
             <CardTitle>Result</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className=&quot;bg-gray-100 p-4 rounded overflow-auto">
+            <pre className="bg-gray-100 p-4 rounded overflow-auto">
               {JSON.stringify(result, null, 2)}
             </pre>
           </CardContent>

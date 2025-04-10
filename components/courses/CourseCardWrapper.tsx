@@ -1,6 +1,6 @@
-import { clerkClient } from &quot;@clerk/nextjs/server&quot;;
-import { db } from &quot;@/lib/db&quot;;
-import CourseCard from &quot;./CourseCard&quot;;
+import { clerkClient } from "@clerk/nextjs/server";
+import { db } from "@/lib/db";
+import CourseCard from "./CourseCard";
 
 interface CourseCardWrapperProps {
   course: {

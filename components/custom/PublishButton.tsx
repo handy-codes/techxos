@@ -1,12 +1,12 @@
-"use client&quot;;
+"use client";
 
-import { Button } from &quot;@/components/ui/button&quot;;
-import axios from &quot;axios&quot;;
-import { Loader2 } from &quot;lucide-react&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
-import { useState } from &quot;react&quot;;
-import toast from &quot;react-hot-toast&quot;;
-import confetti from &quot;canvas-confetti&quot;;
+import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import confetti from "canvas-confetti";
 
 interface PublishButtonProps {
   disabled: boolean;
@@ -28,7 +28,7 @@ const PublishButton = ({
 
   const onClick = async () => {
     let url = `/api/courses/${courseId}`;
-    if (page === &quot;Section&quot;) {
+    if (page === "Section") {
       url += `/sections/${sectionId}`;
     }
 
@@ -38,17 +38,17 @@ const PublishButton = ({
         ? await axios.post(`${url}/unpublish`)
         : await axios.post(`${url}/publish`);
 
-      toast.success(`${page} ${isPublished ? &quot;unpublished&quot; : &quot;published&quot;}`);
+      toast.success(`${page} ${isPublished ? "unpublished" : "published"}`);
       router.refresh();
     } catch (err) {
-      toast.error(&quot;Something went wrong!&quot;);
+      toast.error("Something went wrong!");
       console.log(
-        `Failed to ${isPublished ? &quot;unpublish&quot; : &quot;publish&quot;} ${page}`,
+        `Failed to ${isPublished ? "unpublish" : "publish"} ${page}`,
         err
       );
     } finally {
       setIsLoading(false);
-      // if (!isPublished && page === &quot;Section&quot;) {
+      // if (!isPublished && page === "Section") {
       //   // Assuming `pageType` is a variable that determines if the page is a course or chapter
       //   confetti();
       // }
@@ -57,11 +57,11 @@ const PublishButton = ({
 
   return (
     <Button
-      variant=&quot;outline&quot;
+      variant="outline"
       disabled={disabled || isLoading}
       onClick={onClick}
     >
-      {isLoading ? <Loader2 className=&quot;h-4 w-4 bg-[#FBB11C] animate-spin&quot; /> : isPublished ? &quot;Unpublish&quot; : &quot;Publish"}
+      {isLoading ? <Loader2 className="h-4 w-4 bg-[#FBB11C] animate-spin" /> : isPublished ? "Unpublish" : "Publish"}
     </Button>
   );
 };

@@ -1,4 +1,4 @@
-"use client&quot;
+"use client"
 
 import {
   ResponsiveContainer,
@@ -7,30 +7,30 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-} from &quot;recharts&quot;;
-import { Card } from &quot;@/components/ui/card&quot;;
+} from "recharts";
+import { Card } from "@/components/ui/card";
 
 const Chart = ({ data }: { data: { name: string; total: number }[] }) => {
   return (
     <Card>
-      <ResponsiveContainer width=&quot;100%&quot; height={400}>
+      <ResponsiveContainer width="100%" height={400}>
         <BarChart data={data}>
           <XAxis
-            dataKey=&quot;name&quot;
-            stroke=&quot;888888&quot;
+            dataKey="name"
+            stroke="888888"
             fontSize={12}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            stroke=&quot;888888&quot;
+            stroke="888888"
             fontSize={12}
             axisLine={false}
             tickLine={false}
             tickFormatter={(value) => `NGN${value}`}
           />
           <Tooltip />
-          <Bar dataKey=&quot;total&quot; fill=&quot;#8884d8" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="total" fill="#8884d8" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </Card>

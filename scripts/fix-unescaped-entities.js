@@ -34,7 +34,7 @@ function fixUnescapedEntities(filePath) {
     if (before === '&' && after === ';') return match;
     
     modified = true;
-    return `${before}&apos;${text}&apos;${after}`;
+    return `${before}'${text}'${after}`;
   });
   
   // Fix quotes
@@ -44,7 +44,7 @@ function fixUnescapedEntities(filePath) {
     if (before === '&' && after === ';') return match;
     
     modified = true;
-    return `${before}&quot;${text}&quot;${after}`;
+    return `${before}"${text}"${after}`;
   });
   
   if (modified) {

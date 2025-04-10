@@ -1,27 +1,27 @@
-"use client&quot;;
+"use client";
 
-import { useState } from &quot;react&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
-import { Input } from &quot;@/components/ui/input&quot;;
-import { Label } from &quot;@/components/ui/label&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
-import Link from &quot;next/link&quot;;
-import axios from &quot;axios&quot;;
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "react-hot-toast";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Link from "next/link";
+import axios from "axios";
 
 export default function NewLecturerPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [name, setName] = useState(&quot;");
-  const [email, setEmail] = useState(&quot;&quot;);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email) {
-      toast.error(&quot;Email is required&quot;);
+      toast.error("Email is required");
       return;
     }
 
@@ -35,25 +35,25 @@ export default function NewLecturerPage() {
       };
 
       // Create lecturer
-      await axios.post(&quot;/api/admin/lecturers&quot;, lecturerData);
+      await axios.post("/api/admin/lecturers", lecturerData);
       
-      toast.success(&quot;Lecturer added successfully!&quot;);
-      router.push(&quot;/admin/live-classes/new&quot;);
+      toast.success("Lecturer added successfully!");
+      router.push("/admin/live-classes/new");
     } catch (error: any) {
-      console.error(&quot;Error adding lecturer:&quot;, error);
-      toast.error(error.response?.data || &quot;Failed to add lecturer&quot;);
+      console.error("Error adding lecturer:", error);
+      toast.error(error.response?.data || "Failed to add lecturer");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <ScrollArea className="h-full&quot;>
-      <div className=&quot;p-6 space-y-6&quot;>
-        <div className=&quot;flex items-center justify-between&quot;>
-          <h1 className=&quot;text-2xl font-bold&quot;>Add New Lecturer</h1>
-          <Button variant=&quot;outline&quot; asChild>
-            <Link href=&quot;/admin/live-classes/new&quot;>Cancel</Link>
+    <ScrollArea className="h-full">
+      <div className="p-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Add New Lecturer</h1>
+          <Button variant="outline" asChild>
+            <Link href="/admin/live-classes/new">Cancel</Link>
           </Button>
         </div>
 
@@ -65,24 +65,24 @@ export default function NewLecturerPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className=&quot;space-y-4&quot;>
-              <div className=&quot;space-y-4&quot;>
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;name&quot;>Lecturer Name (Optional)</Label>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Lecturer Name (Optional)</Label>
                   <Input 
-                    id=&quot;name&quot; 
-                    placeholder=&quot;e.g., John Doe&quot; 
+                    id="name" 
+                    placeholder="e.g., John Doe" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
                 
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;email&quot;>Email Address</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
                   <Input 
-                    id=&quot;email&quot; 
-                    type=&quot;email&quot; 
-                    placeholder=&quot;e.g., lecturer@example.com&quot; 
+                    id="email" 
+                    type="email" 
+                    placeholder="e.g., lecturer@example.com" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required 
@@ -90,13 +90,13 @@ export default function NewLecturerPage() {
                 </div>
               </div>
 
-              <CardFooter className=&quot;px-0 pt-4&quot;>
+              <CardFooter className="px-0 pt-4">
                 <Button 
-                  type=&quot;submit&quot; 
+                  type="submit" 
                   disabled={isSubmitting}
-                  className=&quot;ml-auto&quot;
+                  className="ml-auto"
                 >
-                  {isSubmitting ? &quot;Adding...&quot; : &quot;Add Lecturer"}
+                  {isSubmitting ? "Adding..." : "Add Lecturer"}
                 </Button>
               </CardFooter>
             </form>

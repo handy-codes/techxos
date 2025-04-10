@@ -1,12 +1,12 @@
-"use client&quot;;
+"use client";
 
-import axios from &quot;axios&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
-import { useState } from &quot;react&quot;;
-import toast from &quot;react-hot-toast&quot;;
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-import { Button } from &quot;@/components/ui/button&quot;;
-import { CheckCircle, Loader2 } from &quot;lucide-react&quot;;
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Loader2 } from "lucide-react";
 
 interface ProgressButtonProps {
   courseId: string;
@@ -28,11 +28,11 @@ const ProgressButton = ({
       await axios.post(`/api/courses/${courseId}/sections/${sectionId}/progress`, {
         isCompleted: !isCompleted,
       });
-      toast.success(&quot;Progress updated!&quot;);
+      toast.success("Progress updated!");
       router.refresh();
     } catch (err) {
-      console.log(&quot;Failed to update progress&quot;, err);
-      toast.error(&quot;Something went wrong!&quot;);
+      console.log("Failed to update progress", err);
+      toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
     }
@@ -40,19 +40,19 @@ const ProgressButton = ({
 
   return (
     <Button 
-      variant={isCompleted ? &quot;default&quot; : &quot;outline&quot;} 
+      variant={isCompleted ? "default" : "outline"} 
       onClick={onClick}
-      className={isCompleted ? &quot;bg-green-500 hover:bg-green-600 text-white&quot; : &quot;"}
+      className={isCompleted ? "bg-green-500 hover:bg-green-600 text-white" : ""}
     >
       {isLoading ? (
-        <Loader2 className=&quot;h-4 w-4 animate-spin&quot; />
+        <Loader2 className="h-4 w-4 animate-spin" />
       ) : isCompleted ? (
-        <div className="flex items-center&quot;>
-          <CheckCircle className=&quot;h-4 w-4 mr-2&quot; />
+        <div className="flex items-center">
+          <CheckCircle className="h-4 w-4 mr-2" />
           <span>Completed</span>
         </div>
       ) : (
-        &quot;Mark as complete"
+        "Mark as complete"
       )}
     </Button>
   );

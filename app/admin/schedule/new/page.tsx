@@ -1,20 +1,20 @@
-"use client&quot;;
+"use client";
 
-import { useState } from &quot;react&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
-import { Input } from &quot;@/components/ui/input&quot;;
-import { Label } from &quot;@/components/ui/label&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
-import Link from &quot;next/link&quot;;
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from &quot;@/components/ui/form&quot;;
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from &quot;@/components/ui/select&quot;;
-import { Calendar as CalendarIcon } from &quot;lucide-react&quot;;
-import { Calendar } from &quot;@/components/ui/calendar&quot;;
-import { Popover, PopoverContent, PopoverTrigger } from &quot;@/components/ui/popover&quot;;
-import { format } from &quot;date-fns&quot;;
-import { cn } from &quot;@/lib/utils&quot;;
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "react-hot-toast";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Link from "next/link";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 export default function NewSchedulePage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -26,18 +26,18 @@ export default function NewSchedulePage() {
     setIsSubmitting(true);
     
     setTimeout(() => {
-      toast.success(&quot;Schedule creation coming soon!&quot;);
+      toast.success("Schedule creation coming soon!");
       setIsSubmitting(false);
     }, 1500);
   };
 
   return (
-    <ScrollArea className=&quot;h-full&quot;>
-      <div className=&quot;p-6 space-y-6&quot;>
-        <div className=&quot;flex items-center justify-between&quot;>
-          <h1 className=&quot;text-2xl font-bold&quot;>Create New Schedule</h1>
-          <Button variant=&quot;outline&quot; asChild>
-            <Link href=&quot;/admin/schedule&quot;>Cancel</Link>
+    <ScrollArea className="h-full">
+      <div className="p-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Create New Schedule</h1>
+          <Button variant="outline" asChild>
+            <Link href="/admin/schedule">Cancel</Link>
           </Button>
         </div>
 
@@ -49,45 +49,45 @@ export default function NewSchedulePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className=&quot;space-y-4&quot;>
-              <div className=&quot;grid grid-cols-1 md:grid-cols-2 gap-4&quot;>
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;title&quot;>Schedule Title</Label>
-                  <Input id=&quot;title&quot; placeholder=&quot;e.g., Week 1: Introduction&quot; required />
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Schedule Title</Label>
+                  <Input id="title" placeholder="e.g., Week 1: Introduction" required />
                 </div>
                 
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;class&quot;>Live Class</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="class">Live Class</Label>
                   <Select>
-                    <SelectTrigger id=&quot;class&quot;>
-                      <SelectValue placeholder=&quot;Select a class&quot; />
+                    <SelectTrigger id="class">
+                      <SelectValue placeholder="Select a class" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value=&quot;pm&quot;>Project Management</SelectItem>
-                      <SelectItem value=&quot;webdev&quot;>Web Development</SelectItem>
-                      <SelectItem value=&quot;uiux&quot;>UI/UX Design</SelectItem>
+                      <SelectItem value="pm">Project Management</SelectItem>
+                      <SelectItem value="webdev">Web Development</SelectItem>
+                      <SelectItem value="uiux">UI/UX Design</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
-                <div className=&quot;space-y-2&quot;>
+                <div className="space-y-2">
                   <Label>Date</Label>
                   <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                     <PopoverTrigger asChild>
                       <Button
-                        variant=&quot;outline&quot;
+                        variant="outline"
                         className={cn(
-                          &quot;w-full justify-start text-left font-normal&quot;,
-                          !date && &quot;text-muted-foreground&quot;
+                          "w-full justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className=&quot;mr-2 h-4 w-4&quot; />
-                        {date ? format(date, &quot;PPP&quot;) : &quot;Pick a date&quot;}
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : "Pick a date"}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className=&quot;w-auto p-0&quot;>
+                    <PopoverContent className="w-auto p-0">
                       <Calendar
-                        mode=&quot;single&quot;
+                        mode="single"
                         selected={date}
                         onSelect={(date) => {
                           setDate(date);
@@ -99,42 +99,42 @@ export default function NewSchedulePage() {
                   </Popover>
                 </div>
                 
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;lecturer&quot;>Lecturer</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="lecturer">Lecturer</Label>
                   <Select>
-                    <SelectTrigger id=&quot;lecturer&quot;>
-                      <SelectValue placeholder=&quot;Select a lecturer&quot; />
+                    <SelectTrigger id="lecturer">
+                      <SelectValue placeholder="Select a lecturer" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value=&quot;lecturer1&quot;>John Doe</SelectItem>
-                      <SelectItem value=&quot;lecturer2&quot;>Jane Smith</SelectItem>
+                      <SelectItem value="lecturer1">John Doe</SelectItem>
+                      <SelectItem value="lecturer2">Jane Smith</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;start-time&quot;>Start Time</Label>
-                  <Input id=&quot;start-time&quot; type=&quot;time&quot; required />
+                <div className="space-y-2">
+                  <Label htmlFor="start-time">Start Time</Label>
+                  <Input id="start-time" type="time" required />
                 </div>
                 
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;end-time&quot;>End Time</Label>
-                  <Input id=&quot;end-time&quot; type=&quot;time&quot; required />
+                <div className="space-y-2">
+                  <Label htmlFor="end-time">End Time</Label>
+                  <Input id="end-time" type="time" required />
                 </div>
               </div>
               
-              <div className=&quot;space-y-2&quot;>
-                <Label htmlFor=&quot;notes&quot;>Notes</Label>
+              <div className="space-y-2">
+                <Label htmlFor="notes">Notes</Label>
                 <textarea
-                  id=&quot;notes&quot;
-                  className=&quot;w-full min-h-[100px] px-3 py-2 border rounded-md&quot;
-                  placeholder=&quot;Additional details about this schedule...&quot;
+                  id="notes"
+                  className="w-full min-h-[100px] px-3 py-2 border rounded-md"
+                  placeholder="Additional details about this schedule..."
                 />
               </div>
 
-              <CardFooter className=&quot;px-0 pt-4&quot;>
-                <Button type=&quot;submit&quot; disabled={isSubmitting} className=&quot;ml-auto&quot;>
-                  {isSubmitting ? &quot;Creating...&quot; : &quot;Create Schedule"}
+              <CardFooter className="px-0 pt-4">
+                <Button type="submit" disabled={isSubmitting} className="ml-auto">
+                  {isSubmitting ? "Creating..." : "Create Schedule"}
                 </Button>
               </CardFooter>
             </form>

@@ -1,16 +1,16 @@
-"use client&quot;;
+"use client";
 
-import { useEffect, useState } from &quot;react&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
-import { Input } from &quot;@/components/ui/input&quot;;
-import { Label } from &quot;@/components/ui/label&quot;;
-import { Switch } from &quot;@/components/ui/switch&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import { Tabs, TabsContent, TabsList, TabsTrigger } from &quot;@/components/ui/tabs&quot;;
-import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
-import { Settings, Mail, BellRing, Shield, Loader2 } from &quot;lucide-react&quot;;
-import axios from &quot;axios&quot;;
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "react-hot-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Settings, Mail, BellRing, Shield, Loader2 } from "lucide-react";
+import axios from "axios";
 
 interface SystemSettings {
   id: string;
@@ -29,9 +29,9 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [settings, setSettings] = useState<SystemSettings>({
-    id: &quot;",
-    siteName: &quot;TechXOS Academy&quot;,
-    siteUrl: &quot;https://techxos.com&quot;,
+    id: "",
+    siteName: "TechXOS Academy",
+    siteUrl: "https://techxos.com",
     maintenanceMode: false,
     emailNotifications: true,
     studentEnrollmentNotifications: true,
@@ -40,18 +40,18 @@ export default function SettingsPage() {
     sessionTimeout: true,
     sessionTimeoutMinutes: 60
   });
-  const [password, setPassword] = useState(&quot;&quot;);
+  const [password, setPassword] = useState("");
 
   // Fetch settings on page load
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await axios.get(&quot;/api/admin/settings&quot;);
+        const response = await axios.get("/api/admin/settings");
         setSettings(response.data);
-        console.log(&quot;Fetched settings:&quot;, response.data);
+        console.log("Fetched settings:", response.data);
       } catch (error) {
-        console.error(&quot;Error fetching settings:&quot;, error);
-        toast.error(&quot;Failed to load settings. Using defaults.&quot;);
+        console.error("Error fetching settings:", error);
+        toast.error("Failed to load settings. Using defaults.");
       } finally {
         setIsInitialLoading(false);
       }
@@ -66,12 +66,12 @@ export default function SettingsPage() {
       // Remove the password field from settings update
       const { id, ...settingsToUpdate } = settings;
       
-      const response = await axios.put(&quot;/api/admin/settings&quot;, settingsToUpdate);
+      const response = await axios.put("/api/admin/settings", settingsToUpdate);
       setSettings(response.data);
-      toast.success(&quot;Settings updated successfully!&quot;);
+      toast.success("Settings updated successfully!");
     } catch (error) {
-      console.error(&quot;Error saving settings:&quot;, error);
-      toast.error(&quot;Failed to save settings. Please try again.&quot;);
+      console.error("Error saving settings:", error);
+      toast.error("Failed to save settings. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -82,24 +82,24 @@ export default function SettingsPage() {
   };
 
   const handleInputChange = (field: keyof SystemSettings) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.type === &apos;number&apos; ? parseInt(e.target.value, 10) : e.target.value;
+    const value = e.target.type === 'number' ? parseInt(e.target.value, 10) : e.target.value;
     setSettings(prev => ({ ...prev, [field]: value }));
   };
 
   const handlePasswordChange = async () => {
     if (!password) {
-      toast.error(&quot;Please enter a new password&quot;);
+      toast.error("Please enter a new password");
       return;
     }
 
     setIsLoading(true);
     try {
-      await axios.put(&quot;/api/admin/settings/password&quot;, { password });
-      toast.success(&quot;Password updated successfully!&quot;);
-      setPassword(&quot;&quot;);
+      await axios.put("/api/admin/settings/password", { password });
+      toast.success("Password updated successfully!");
+      setPassword("");
     } catch (error) {
-      console.error(&quot;Error updating password:&quot;, error);
-      toast.error(&quot;Failed to update password. Please try again.&quot;);
+      console.error("Error updating password:", error);
+      toast.error("Failed to update password. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -107,161 +107,161 @@ export default function SettingsPage() {
 
   if (isInitialLoading) {
     return (
-      <div className="flex justify-center items-center h-full&quot;>
-        <Loader2 className=&quot;h-8 w-8 animate-spin text-primary&quot; />
+      <div className="flex justify-center items-center h-full">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <ScrollArea className=&quot;h-full&quot;>
-      <div className=&quot;p-6 space-y-6&quot;>
-        <div className=&quot;flex justify-between items-center&quot;>
-          <h1 className=&quot;text-2xl font-bold&quot;>Settings</h1>
+    <ScrollArea className="h-full">
+      <div className="p-6 space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Settings</h1>
           <Button onClick={handleSave} disabled={isLoading}>
-            {isLoading ? &quot;Saving...&quot; : &quot;Save Changes&quot;}
+            {isLoading ? "Saving..." : "Save Changes"}
           </Button>
         </div>
 
-        <Tabs defaultValue=&quot;general&quot;>
-          <TabsList className=&quot;mb-4&quot;>
-            <TabsTrigger value=&quot;general&quot;>General</TabsTrigger>
-            <TabsTrigger value=&quot;notifications&quot;>Notifications</TabsTrigger>
-            <TabsTrigger value=&quot;security&quot;>Security</TabsTrigger>
+        <Tabs defaultValue="general">
+          <TabsList className="mb-4">
+            <TabsTrigger value="general">General</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
           </TabsList>
 
-          <TabsContent value=&quot;general&quot;>
+          <TabsContent value="general">
             <Card>
               <CardHeader>
-                <CardTitle className=&quot;flex items-center gap-2&quot;>
-                  <Settings className=&quot;h-5 w-5&quot; />
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5" />
                   General Settings
                 </CardTitle>
                 <CardDescription>
                   Manage your system preferences and site settings
                 </CardDescription>
               </CardHeader>
-              <CardContent className=&quot;space-y-4&quot;>
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;site-name&quot;>Site Name</Label>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="site-name">Site Name</Label>
                   <Input 
-                    id=&quot;site-name&quot; 
+                    id="site-name" 
                     value={settings.siteName}
-                    onChange={handleInputChange(&apos;siteName&apos;)}
+                    onChange={handleInputChange('siteName')}
                   />
                 </div>
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;site-url&quot;>Site URL</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="site-url">Site URL</Label>
                   <Input 
-                    id=&quot;site-url&quot; 
+                    id="site-url" 
                     value={settings.siteUrl}
-                    onChange={handleInputChange(&apos;siteUrl&apos;)}
+                    onChange={handleInputChange('siteUrl')}
                   />
                 </div>
-                <div className=&quot;flex items-center justify-between&quot;>
+                <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor=&quot;maintenance-mode&quot;>Maintenance Mode</Label>
-                    <p className=&quot;text-sm text-muted-foreground&quot;>
+                    <Label htmlFor="maintenance-mode">Maintenance Mode</Label>
+                    <p className="text-sm text-muted-foreground">
                       Put the site in maintenance mode
                     </p>
                   </div>
                   <Switch 
-                    id=&quot;maintenance-mode&quot;
+                    id="maintenance-mode"
                     checked={settings.maintenanceMode}
-                    onCheckedChange={handleToggleChange(&apos;maintenanceMode&apos;)}
+                    onCheckedChange={handleToggleChange('maintenanceMode')}
                   />
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value=&quot;notifications&quot;>
+          <TabsContent value="notifications">
             <Card>
               <CardHeader>
-                <CardTitle className=&quot;flex items-center gap-2&quot;>
-                  <BellRing className=&quot;h-5 w-5&quot; />
+                <CardTitle className="flex items-center gap-2">
+                  <BellRing className="h-5 w-5" />
                   Notification Settings
                 </CardTitle>
                 <CardDescription>
                   Configure how and when you receive notifications
                 </CardDescription>
               </CardHeader>
-              <CardContent className=&quot;space-y-4&quot;>
-                <div className=&quot;flex items-center justify-between&quot;>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor=&quot;email-notifications&quot;>Email Notifications</Label>
-                    <p className=&quot;text-sm text-muted-foreground&quot;>
+                    <Label htmlFor="email-notifications">Email Notifications</Label>
+                    <p className="text-sm text-muted-foreground">
                       Receive email notifications for important events
                     </p>
                   </div>
                   <Switch 
-                    id=&quot;email-notifications&quot; 
+                    id="email-notifications" 
                     checked={settings.emailNotifications}
-                    onCheckedChange={handleToggleChange(&apos;emailNotifications&apos;)}
+                    onCheckedChange={handleToggleChange('emailNotifications')}
                   />
                 </div>
-                <div className=&quot;flex items-center justify-between&quot;>
+                <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor=&quot;student-enrollment&quot;>Student Enrollment</Label>
-                    <p className=&quot;text-sm text-muted-foreground&quot;>
+                    <Label htmlFor="student-enrollment">Student Enrollment</Label>
+                    <p className="text-sm text-muted-foreground">
                       Notify when new students enroll in a course
                     </p>
                   </div>
                   <Switch 
-                    id=&quot;student-enrollment&quot; 
+                    id="student-enrollment" 
                     checked={settings.studentEnrollmentNotifications}
-                    onCheckedChange={handleToggleChange(&apos;studentEnrollmentNotifications&apos;)}
+                    onCheckedChange={handleToggleChange('studentEnrollmentNotifications')}
                   />
                 </div>
-                <div className=&quot;flex items-center justify-between&quot;>
+                <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor=&quot;payment-notifications&quot;>Payment Notifications</Label>
-                    <p className=&quot;text-sm text-muted-foreground&quot;>
+                    <Label htmlFor="payment-notifications">Payment Notifications</Label>
+                    <p className="text-sm text-muted-foreground">
                       Notify when payments are received
                     </p>
                   </div>
                   <Switch 
-                    id=&quot;payment-notifications&quot; 
+                    id="payment-notifications" 
                     checked={settings.paymentNotifications}
-                    onCheckedChange={handleToggleChange(&apos;paymentNotifications&apos;)}
+                    onCheckedChange={handleToggleChange('paymentNotifications')}
                   />
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value=&quot;security&quot;>
+          <TabsContent value="security">
             <Card>
               <CardHeader>
-                <CardTitle className=&quot;flex items-center gap-2&quot;>
-                  <Shield className=&quot;h-5 w-5&quot; />
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
                   Security Settings
                 </CardTitle>
                 <CardDescription>
                   Configure your account security preferences
                 </CardDescription>
               </CardHeader>
-              <CardContent className=&quot;space-y-4&quot;>
-                <div className=&quot;flex items-center justify-between&quot;>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor=&quot;two-factor&quot;>Two-Factor Authentication</Label>
-                    <p className=&quot;text-sm text-muted-foreground&quot;>
+                    <Label htmlFor="two-factor">Two-Factor Authentication</Label>
+                    <p className="text-sm text-muted-foreground">
                       Add an extra layer of security to your account
                     </p>
                   </div>
                   <Switch 
-                    id=&quot;two-factor&quot; 
+                    id="two-factor" 
                     checked={settings.twoFactorAuth}
-                    onCheckedChange={handleToggleChange(&apos;twoFactorAuth&apos;)}
+                    onCheckedChange={handleToggleChange('twoFactorAuth')}
                   />
                 </div>
-                <div className=&quot;space-y-2&quot;>
-                  <Label htmlFor=&quot;password&quot;>Change Password</Label>
-                  <div className=&quot;flex gap-2&quot;>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Change Password</Label>
+                  <div className="flex gap-2">
                     <Input 
-                      id=&quot;password&quot; 
-                      type=&quot;password&quot; 
-                      placeholder=&quot;Enter new password&quot; 
+                      id="password" 
+                      type="password" 
+                      placeholder="Enter new password" 
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
@@ -270,27 +270,27 @@ export default function SettingsPage() {
                     </Button>
                   </div>
                 </div>
-                <div className=&quot;flex items-center justify-between&quot;>
+                <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor=&quot;session-timeout&quot;>Session Timeout</Label>
-                    <p className=&quot;text-sm text-muted-foreground&quot;>
+                    <Label htmlFor="session-timeout">Session Timeout</Label>
+                    <p className="text-sm text-muted-foreground">
                       Automatically log out after period of inactivity
                     </p>
                   </div>
                   <Switch 
-                    id=&quot;session-timeout&quot; 
+                    id="session-timeout" 
                     checked={settings.sessionTimeout}
-                    onCheckedChange={handleToggleChange(&apos;sessionTimeout&apos;)}
+                    onCheckedChange={handleToggleChange('sessionTimeout')}
                   />
                 </div>
                 {settings.sessionTimeout && (
-                  <div className=&quot;space-y-2&quot;>
-                    <Label htmlFor=&quot;timeout-minutes&quot;>Timeout Period (minutes)</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="timeout-minutes">Timeout Period (minutes)</Label>
                     <Input 
-                      id=&quot;timeout-minutes&quot; 
-                      type=&quot;number" 
+                      id="timeout-minutes" 
+                      type="number" 
                       value={settings.sessionTimeoutMinutes}
-                      onChange={handleInputChange(&apos;sessionTimeoutMinutes&apos;)}
+                      onChange={handleInputChange('sessionTimeoutMinutes')}
                       min={1}
                       max={1440}
                     />

@@ -1,13 +1,13 @@
-"use client&quot;;
+"use client";
 
-import { Course, Section } from &quot;@prisma/client&quot;;
-import Link from &quot;next/link&quot;;
-import { usePathname, useRouter } from &quot;next/navigation&quot;;
-import { z } from &quot;zod&quot;;
-import { zodResolver } from &quot;@hookform/resolvers/zod&quot;;
-import { useForm } from &quot;react-hook-form&quot;;
+import { Course, Section } from "@prisma/client";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { Button } from &quot;@/components/ui/button&quot;;
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,16 +15,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from &quot;@/components/ui/form&quot;;
-import { Input } from &quot;@/components/ui/input&quot;;
-import toast from &quot;react-hot-toast&quot;;
-import axios from &quot;axios&quot;;
-import SectionList from &quot;@/components/sections/SectionList&quot;;
-import { Loader2 } from &quot;lucide-react&quot;;
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import toast from "react-hot-toast";
+import axios from "axios";
+import SectionList from "@/components/sections/SectionList";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
-    message: &quot;Title is required and must be at least 2 characters long&quot;,
+    message: "Title is required and must be at least 2 characters long",
   }),
 });
 
@@ -43,17 +43,17 @@ const CreateSectionForm = ({
 
   const routes: Route[] = [
     {
-      label: &quot;Basic Information&quot;,
+      label: "Basic Information",
       path: `/instructor/courses/${course.id}/basic`,
     },
-    { label: &quot;Chapters&quot;, path: `/instructor/courses/${course.id}/sections` },
+    { label: "Chapters", path: `/instructor/courses/${course.id}/sections` },
   ];
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: &quot;",
+      title: "",
     },
   });
 
@@ -69,10 +69,10 @@ const CreateSectionForm = ({
       router.push(
         `/instructor/courses/${course.id}/sections/${response.data.id}`
       );
-      toast.success(&quot;New Chapter created!&quot;);
+      toast.success("New Chapter created!");
     } catch (error: unknown) {
-      console.error(&quot;Failed to create a new section:&quot;, error);
-      toast.error(&quot;Something went wrong!&quot;);
+      console.error("Failed to create a new section:", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -81,19 +81,19 @@ const CreateSectionForm = ({
       await axios.put(`/api/courses/${course.id}/sections/reorder`, {
         list: updateData,
       });
-      toast.success(&quot;Chapters reordered successfully&quot;);
+      toast.success("Chapters reordered successfully");
     } catch (error: unknown) {
-      console.error(&quot;Failed to reorder sections:&quot;, error);
-      toast.error(&quot;Something went wrong!&quot;);
+      console.error("Failed to reorder sections:", error);
+      toast.error("Something went wrong!");
     }
   };
 
   return (
-    <div className="px-10 py-6&quot;>
-      <div className=&quot;flex gap-5&quot;>
+    <div className="px-10 py-6">
+      <div className="flex gap-5">
         {routes.map((route: Route) => (
           <Link key={route.path} href={route.path}>
-            <Button variant={pathname === route.path ? &quot;default&quot; : &quot;outline&quot;}>
+            <Button variant={pathname === route.path ? "default" : "outline"}>
               {route.label}
             </Button>
           </Link>
@@ -108,35 +108,35 @@ const CreateSectionForm = ({
         }
       />
 
-      <h1 className=&quot;text-xl font-bold mt-5&quot;>Add New Chapter</h1>
+      <h1 className="text-xl font-bold mt-5">Add New Chapter</h1>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className=&quot;space-y-8 mt-5&quot;>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-5">
           <FormField
             control={form.control}
-            name=&quot;title&quot;
+            name="title"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder=&quot;Ex: Introduction&quot; {...field} />
+                  <Input placeholder="Ex: Introduction" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <div className=&quot;flex gap-5&quot;>
+          <div className="flex gap-5">
             <Link href={`/instructor/courses/${course.id}/basic`}>
-              <Button variant=&quot;outline&quot; type=&quot;button&quot;>
+              <Button variant="outline" type="button">
                 Cancel
               </Button>
             </Link>
-            <Button type=&quot;submit&quot; disabled={!isValid || isSubmitting}>
+            <Button type="submit" disabled={!isValid || isSubmitting}>
               {isSubmitting ? (
-                <Loader2 className=&quot;h-4 w-4 animate-spin&quot; />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                &quot;Create"
+                "Create"
               )}
             </Button>
           </div>

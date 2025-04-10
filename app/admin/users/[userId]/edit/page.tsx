@@ -1,8 +1,8 @@
-"use client&quot;;
+"use client";
 
-import { useState, useEffect } from &quot;react&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 import {
   Form,
@@ -11,30 +11,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from &quot;@/components/ui/form&quot;;
+} from "@/components/ui/form";
 
-import { Input } from &quot;@/components/ui/input&quot;;
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from &quot;@/components/ui/select&quot;;
+} from "@/components/ui/select";
 
-import { toast } from &quot;react-hot-toast&quot;;
-import axios from &quot;axios&quot;;
-import { zodResolver } from &quot;@hookform/resolvers/zod&quot;;
-import { useForm } from &quot;react-hook-form&quot;;
-import * as z from &quot;zod&quot;;
-import { ArrowLeft, Loader2 } from &quot;lucide-react&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 const formSchema = z.object({
-  name: z.string().min(2, &quot;Name must be at least 2 characters&quot;),
-  email: z.string().email(&quot;Invalid email address&quot;),
-  role: z.enum([&quot;ADMIN&quot;, &quot;LECTURER&quot;], {
-    required_error: &quot;Please select a role&quot;,
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  role: z.enum(["ADMIN", "LECTURER"], {
+    required_error: "Please select a role",
   }),
   isActive: z.boolean(),
 });
@@ -43,7 +43,7 @@ interface User {
   id: string;
   email: string;
   name: string;
-  role: &quot;HEAD_ADMIN&quot; | &quot;ADMIN&quot; | &quot;LECTURER&quot;;
+  role: "HEAD_ADMIN" | "ADMIN" | "LECTURER";
   isActive: boolean;
 }
 
@@ -57,8 +57,8 @@ export default function EditUserPage({ params }: { params: { userId: string } })
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: &quot;",
-      email: &quot;&quot;,
+      name: "",
+      email: "",
       isActive: true,
     },
   });
@@ -75,7 +75,7 @@ export default function EditUserPage({ params }: { params: { userId: string } })
           isActive: response.data.isActive,
         });
       } catch (error) {
-        toast.error(&quot;Failed to fetch user data&quot;);
+        toast.error("Failed to fetch user data");
         console.error(error);
       } finally {
         setIsLoading(false);
@@ -89,11 +89,11 @@ export default function EditUserPage({ params }: { params: { userId: string } })
     try {
       setLoading(true);
       await axios.patch(`/api/admin/users/${params.userId}`, values);
-      toast.success(&quot;User updated successfully&quot;);
-      router.push(&quot;/admin/users&quot;);
+      toast.success("User updated successfully");
+      router.push("/admin/users");
       router.refresh();
     } catch (error) {
-      toast.error(&quot;Failed to update user&quot;);
+      toast.error("Failed to update user");
       console.error(error);
     } finally {
       setLoading(false);
@@ -102,8 +102,8 @@ export default function EditUserPage({ params }: { params: { userId: string } })
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen&quot;>
-        <Loader2 className=&quot;w-8 h-8 animate-spin&quot; />
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin" />
       </div>
     );
   }
@@ -113,20 +113,20 @@ export default function EditUserPage({ params }: { params: { userId: string } })
   }
 
   // Prevent editing HEAD_ADMIN users
-  if (userData.role === &quot;HEAD_ADMIN&quot;) {
+  if (userData.role === "HEAD_ADMIN") {
     return (
-      <div className=&quot;p-6&quot;>
-        <div className=&quot;flex items-center gap-4 mb-6&quot;>
+      <div className="p-6">
+        <div className="flex items-center gap-4 mb-6">
           <Button
-            variant=&quot;ghost&quot;
-            size=&quot;sm&quot;
-            onClick={() => router.push(&quot;/admin/users&quot;)}
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/admin/users")}
           >
-            <ArrowLeft className=&quot;w-4 h-4 mr-2&quot; />
+            <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Users
           </Button>
         </div>
-        <div className=&quot;text-red-500&quot;>
+        <div className="text-red-500">
           Head Admin users cannot be edited.
         </div>
       </div>
@@ -134,30 +134,30 @@ export default function EditUserPage({ params }: { params: { userId: string } })
   }
 
   return (
-    <div className=&quot;p-6&quot;>
-      <div className=&quot;flex items-center gap-4 mb-6&quot;>
+    <div className="p-6">
+      <div className="flex items-center gap-4 mb-6">
         <Button
-          variant=&quot;ghost&quot;
-          size=&quot;sm&quot;
-          onClick={() => router.push(&quot;/admin/users&quot;)}
+          variant="ghost"
+          size="sm"
+          onClick={() => router.push("/admin/users")}
         >
-          <ArrowLeft className=&quot;w-4 h-4 mr-2&quot; />
+          <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Users
         </Button>
-        <h1 className=&quot;text-2xl font-bold&quot;>Edit User</h1>
+        <h1 className="text-2xl font-bold">Edit User</h1>
       </div>
 
-      <div className=&quot;max-w-2xl&quot;>
+      <div className="max-w-2xl">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className=&quot;space-y-6&quot;>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name=&quot;name&quot;
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder=&quot;Enter user&apos;s name&quot; {...field} />
+                    <Input placeholder="Enter user's name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -166,12 +166,12 @@ export default function EditUserPage({ params }: { params: { userId: string } })
 
             <FormField
               control={form.control}
-              name=&quot;email&quot;
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder=&quot;Enter user&apos;s email&quot; {...field} />
+                    <Input placeholder="Enter user's email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -180,7 +180,7 @@ export default function EditUserPage({ params }: { params: { userId: string } })
 
             <FormField
               control={form.control}
-              name=&quot;role&quot;
+              name="role"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
@@ -190,12 +190,12 @@ export default function EditUserPage({ params }: { params: { userId: string } })
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder=&quot;Select a role&quot; />
+                        <SelectValue placeholder="Select a role" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value=&quot;ADMIN&quot;>Admin</SelectItem>
-                      <SelectItem value=&quot;LECTURER&quot;>Lecturer</SelectItem>
+                      <SelectItem value="ADMIN">Admin</SelectItem>
+                      <SelectItem value="LECTURER">Lecturer</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -205,30 +205,30 @@ export default function EditUserPage({ params }: { params: { userId: string } })
 
             <FormField
               control={form.control}
-              name=&quot;isActive&quot;
+              name="isActive"
               render={({ field }) => (
-                <FormItem className=&quot;flex items-center gap-2&quot;>
+                <FormItem className="flex items-center gap-2">
                   <FormLabel>Active Status</FormLabel>
                   <FormControl>
                     <input
-                      type=&quot;checkbox&quot;
+                      type="checkbox"
                       checked={field.value}
                       onChange={(e) => field.onChange(e.target.checked)}
-                      className=&quot;h-4 w-4 rounded border-gray-300&quot;
+                      className="h-4 w-4 rounded border-gray-300"
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
 
-            <div className=&quot;flex gap-4&quot;>
-              <Button type=&quot;submit&quot; disabled={loading}>
-                {loading ? &quot;Updating...&quot; : &quot;Update User&quot;}
+            <div className="flex gap-4">
+              <Button type="submit" disabled={loading}>
+                {loading ? "Updating..." : "Update User"}
               </Button>
               <Button
-                type=&quot;button&quot;
-                variant=&quot;outline&quot;
-                onClick={() => router.push(&quot;/admin/users")}
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/admin/users")}
               >
                 Cancel
               </Button>

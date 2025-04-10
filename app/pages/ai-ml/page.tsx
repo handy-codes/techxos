@@ -1,16 +1,34 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
-import AIML from "@/components/curriculum/Ai-Ml";
+import AIMachineLearning from "@/components/curriculum/Ai-Ml";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import { useAuth } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
-import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
+import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+
+interface LiveLecture {
+  id: string;
+  date: Date;
+  recordingUrl: string | null;
+  title: string | null;
+  isRecorded: boolean;
+}
+
+interface LiveCourseWithLectures {
+  id: string;
+  zoomLink: string | null;
+  lectures: LiveLecture[];
+  hasAccess: boolean;
+}
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -22,48 +40,49 @@ export default function Page() {
     message: "",
   });
 
-  const { isSignedIn, userId } = useAuth();
-  const { user } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
 
-  // Function to determine if the current user is an admin based on their email
-  const checkIfUserIsAdmin = async () => {
-    if (!isSignedIn || !userId) return false;
-    
+  const { isSignedIn } = useAuth();
+  const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
+
+  const fetchLectureDetails = useCallback(async () => {
     try {
-      const userEmail = user?.primaryEmailAddress?.emailAddress;
-      console.log("Current user email:", userEmail);
-      
-      if (!userEmail) return false;
-      
-      // Known admin emails - add any admin emails here
-      const adminEmails = [
-        "paxymekventures@gmail.com",
-        "admin@techxos.com",
-        "emeka@techxos.com"
-      ];
-      
-      // Direct check for known admin emails
-      if (adminEmails.includes(userEmail.toLowerCase())) {
-        console.log("User is admin based on email match!");
-        return true;
+      console.log("Fetching lecture details...");
+      const response = await axios.get("/api/live-courses/ai-ml/lecture");
+      console.log("Lecture details response:", response.data);
+
+      setLecture(response.data.lecture);
+
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { status?: number; statusText?: string; data?: any };
+        message?: string;
+      };
+      console.error("Detailed fetch error:", {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message,
+      });
+
+      if (err.response?.status === 401) {
+        toast.error("Please sign in to access this course");
+      } else if (err.response?.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error("Failed to load lecture details");
       }
-      
-      return false;
-    } catch (error) {
-      console.error("Error in admin check:", error);
-      return false;
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (isSignedIn && userId) {
-      checkIfUserIsAdmin();
+    if (isSignedIn) {
+      fetchLectureDetails();
     }
-  }, [isSignedIn, userId, user]);
+  }, [isSignedIn, fetchLectureDetails]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -116,29 +135,86 @@ export default function Page() {
     }
   };
 
+  // Function to render lecture information if available
+  const renderLectureInfo = () => {
+    if (!lecture) return null;
+    
+    return (
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
+        <h3 className="text-xl font-semibold mb-2">Current Class Information</h3>
+        {lecture.lectures && lecture.lectures.length > 0 ? (
+          <div>
+            <p className="mb-2">
+              <span className="font-medium">Latest lecture:</span>{" "}
+              {lecture.lectures[0].title || "Upcoming Session"}
+            </p>
+            <p className="mb-2">
+              <span className="font-medium">Date:</span>{" "}
+              {new Date(lecture.lectures[0].date).toLocaleString()}
+            </p>
+            {lecture.lectures[0].isRecorded && lecture.lectures[0].recordingUrl && (
+              <div className="mt-2">
+                <a 
+                  href={lecture.lectures[0].recordingUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  View Recording
+                </a>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p>No scheduled lectures at this time. Please check back later.</p>
+        )}
+        <div className="mt-4">
+          {lecture.hasAccess ? (
+            <JoinLiveClassButton 
+              courseId="ai-ml" 
+              courseName="AI & Machine Learning" 
+            />
+          ) : (
+            <CoursePurchaseButton 
+              courseId="ai-ml" 
+              courseName="AI & Machine Learning" 
+            />
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
+      <Head>
+        <title>Course Page</title>
+        <meta
+          name="description"
+          content="Welcome to the AI & Machine Learning Course"
+        />
+      </Head>
+
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                AI on top of Machine Learning
+                AI & Machine Learning
               </h1>
               <p className="text-xl mb-8">
-                Build Future Intelligence with Artificial Intelligence &
-                Machine Learning! Teach machines to learn, adapt, and make
-                decisions—transforming code into cognitive power. AI and ML are
-                rewriting the rules of possibility, from self-driving cars
-                navigating streets to algorithms predicting diseases before
-                symptoms appear. This is not just coding—it is creating digital
-                minds that evolve.
+                Unlock the Power of AI & Machine Learning! Imagine building
+                intelligent systems that can learn, adapt, and make decisions
+                like humans—but faster and more accurately. From neural networks
+                to natural language processing, you will master the tools and
+                techniques that are reshaping industries and creating
+                unprecedented opportunities.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://media.istockphoto.com/id/1202641105/photo/abbreviation-is-artificial-intelligence-on-a-digital-globe-background-machine-learning.jpg?b=1&s=612x612&w=0&k=20&c=jnPhkSgdxWINdD8TMkxPkVhjotH24dGG-ZqRK7vFv_4="
-                alt="Team Collaboration"
+                src="https://i.ibb.co/4nDmr2nb/Gemini-Generated-Image-72ww6w72ww6w72ww.jpg"
+                alt="AI & Machine Learning"
                 fill
                 className="object-cover"
                 priority
@@ -150,7 +226,6 @@ export default function Page() {
       </section>
 
       <section className="container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8">
-        {/* Left Column - Course Details */}
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
@@ -159,15 +234,17 @@ export default function Page() {
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            450,000 NGN
+            250,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            Techxos accelerates your genius: Build real AI projects—like
-            emotion-detecting apps or stock-predicting bots—learn from experts
-            pushing boundaries of AI, and join innovators obsessed with machines
-            that think. Every line of code you write trains the next leap in
-            smart tech. Ready to pioneer the AI revolution? Enroll now and start
-            teaching machines to think—one algorithm at a time. 🤖🧠✨
+            Techxos powers your rise: Build real-world AI applications (think
+            chatbots, recommendation systems, or computer vision), learn from
+            industry pros who have foiled cybercrime rings, and join a network of
+            innovators obsessed with pushing the boundaries of what is possible.
+            Dive into deep learning, natural language processing, and computer
+            vision, while earning certifications that scream, hire me. Ready to
+            shape the future? Enroll now and start building the next generation
+            of AI—one algorithm at a time. 🤖🧠🚀
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
@@ -181,7 +258,7 @@ export default function Page() {
           <div className="font-semibold">
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <FaRegClock className="text-black text-[22px]" />
-              <span>Duration: 16 weeks</span>
+              <span>Duration: 12 weeks</span>
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <AiFillSchedule className="text-black text-[24px]" />
@@ -195,10 +272,31 @@ export default function Page() {
               <IoMdOptions className="text-black text-[24px]" />
               <span>Options: Evening Class, Executive (one-to-one) class</span>
             </div>
+            <h2 className="text-2xl font-bold mb-2 mt-6">
+              AI & Machine Learning Virtual
+            </h2>
+            
+            {/* Display lecture information if available */}
+            {renderLectureInfo()}
+            
+            <div className=" p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
+              {!isSignedIn ? (
+                <Link
+                  href="/sign-in"
+                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
+                >
+                  Enroll Now
+                </Link>
+              ) : (
+                <CoursePurchaseButton 
+                  courseId="ai-ml" 
+                  courseName="AI & Machine Learning" 
+                />
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Right Column - Contact Form */}
         <div
           id="contact"
           className="flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md"
@@ -295,7 +393,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <AIML />
+      <AIMachineLearning />
       <ScrollToTopButton />
     </div>
   );

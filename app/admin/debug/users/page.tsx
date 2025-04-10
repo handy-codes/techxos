@@ -1,15 +1,15 @@
-"use client&quot;;
+"use client";
 
-import { useState, useEffect } from &quot;react&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Card, CardContent, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
-import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
-import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
-import axios from &quot;axios&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import Link from &quot;next/link&quot;;
-import { useAuth } from &quot;@clerk/nextjs&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 export default function DebugUsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -21,12 +21,12 @@ export default function DebugUsersPage() {
       try {
         setIsLoading(true);
         // Create a debug endpoint if needed, or use an existing one
-        const response = await axios.get(&quot;/api/admin/debug/users&quot;);
+        const response = await axios.get("/api/admin/debug/users");
         setUsers(response.data);
       } catch (error: any) {
-        console.error(&quot;Error fetching users:&quot;, error);
-        setError(error.response?.data || &quot;Failed to load users&quot;);
-        toast.error(&quot;Error fetching users&quot;);
+        console.error("Error fetching users:", error);
+        setError(error.response?.data || "Failed to load users");
+        toast.error("Error fetching users");
       } finally {
         setIsLoading(false);
       }
@@ -38,39 +38,39 @@ export default function DebugUsersPage() {
   // Function to create a lecturer from an existing user
   const convertToLecturer = async (userId: string) => {
     try {
-      await axios.post(&quot;/api/admin/debug/convert-to-lecturer&quot;, { userId });
-      toast.success(&quot;User converted to lecturer successfully&quot;);
+      await axios.post("/api/admin/debug/convert-to-lecturer", { userId });
+      toast.success("User converted to lecturer successfully");
       // Refresh user list
       window.location.reload();
     } catch (error: any) {
-      console.error(&quot;Error converting user:&quot;, error);
-      toast.error(error.response?.data || &quot;Failed to convert user&quot;);
+      console.error("Error converting user:", error);
+      toast.error(error.response?.data || "Failed to convert user");
     }
   };
 
   if (isLoading) {
     return (
-      <div className=&quot;p-6 space-y-6&quot;>
-        <div className=&quot;flex justify-between items-center mb-6&quot;>
-          <Skeleton className=&quot;h-8 w-48&quot; />
+      <div className="p-6 space-y-6">
+        <div className="flex justify-between items-center mb-6">
+          <Skeleton className="h-8 w-48" />
         </div>
-        <Skeleton className=&quot;h-60 w-full&quot; />
+        <Skeleton className="h-60 w-full" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className=&quot;p-6&quot;>
-        <Card className=&quot;bg-red-50 border-red-200&quot;>
+      <div className="p-6">
+        <Card className="bg-red-50 border-red-200">
           <CardHeader>
-            <CardTitle className=&quot;text-red-700&quot;>Error Loading Users</CardTitle>
+            <CardTitle className="text-red-700">Error Loading Users</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className=&quot;text-red-700&quot;>{error}</p>
-            <div className=&quot;mt-4&quot;>
-              <Button variant=&quot;outline&quot; asChild>
-                <Link href=&quot;/admin&quot;>Back to Dashboard</Link>
+            <p className="text-red-700">{error}</p>
+            <div className="mt-4">
+              <Button variant="outline" asChild>
+                <Link href="/admin">Back to Dashboard</Link>
               </Button>
             </div>
           </CardContent>
@@ -80,12 +80,12 @@ export default function DebugUsersPage() {
   }
 
   return (
-    <ScrollArea className=&quot;h-full&quot;>
-      <div className=&quot;p-6 space-y-6&quot;>
-        <div className=&quot;flex items-center justify-between&quot;>
-          <h1 className=&quot;text-2xl font-bold&quot;>Debug: User Management</h1>
-          <Button variant=&quot;outline&quot; asChild>
-            <Link href=&quot;/admin&quot;>Back to Dashboard</Link>
+    <ScrollArea className="h-full">
+      <div className="p-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Debug: User Management</h1>
+          <Button variant="outline" asChild>
+            <Link href="/admin">Back to Dashboard</Link>
           </Button>
         </div>
 
@@ -94,36 +94,36 @@ export default function DebugUsersPage() {
             <CardTitle>All Users in Database</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className=&quot;space-y-6&quot;>
+            <div className="space-y-6">
               {users.length === 0 ? (
-                <p className=&quot;text-muted-foreground&quot;>No users found in the database.</p>
+                <p className="text-muted-foreground">No users found in the database.</p>
               ) : (
                 users.map((user) => (
-                  <Card key={user.id} className=&quot;p-4 relative&quot;>
-                    <div className=&quot;flex flex-col gap-2&quot;>
-                      <div className=&quot;flex items-center justify-between&quot;>
-                        <h3 className=&quot;text-lg font-medium&quot;>
-                          {user.name || &quot;No Name&quot;} ({user.email})
+                  <Card key={user.id} className="p-4 relative">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-medium">
+                          {user.name || "No Name"} ({user.email})
                         </h3>
                         <span className={`px-2 py-1 rounded-full text-xs ${
-                          user.role === &quot;LECTURER&quot; 
-                            ? &quot;bg-green-100 text-green-800&quot; 
-                            : &quot;bg-blue-100 text-blue-800&quot;
+                          user.role === "LECTURER" 
+                            ? "bg-green-100 text-green-800" 
+                            : "bg-blue-100 text-blue-800"
                         }`}>
                           {user.role}
                         </span>
                       </div>
-                      <div className=&quot;grid grid-cols-2 gap-2 text-sm&quot;>
+                      <div className="grid grid-cols-2 gap-2 text-sm">
                         <div><strong>ID:</strong> {user.id}</div>
-                        <div><strong>Clerk ID:</strong> {user.clerkUserId || &quot;N/A&quot;}</div>
-                        <div><strong>Status:</strong> {user.isActive ? &quot;Active&quot; : &quot;Inactive&quot;}</div>
+                        <div><strong>Clerk ID:</strong> {user.clerkUserId || "N/A"}</div>
+                        <div><strong>Status:</strong> {user.isActive ? "Active" : "Inactive"}</div>
                         <div><strong>Created:</strong> {new Date(user.createdAt).toLocaleString()}</div>
                       </div>
-                      {user.role !== &quot;LECTURER&quot; && (
+                      {user.role !== "LECTURER" && (
                         <Button 
-                          variant=&quot;outline&quot;
-                          size=&quot;sm&quot;
-                          className=&quot;mt-2"
+                          variant="outline"
+                          size="sm"
+                          className="mt-2"
                           onClick={() => convertToLecturer(user.id)}
                         >
                           Convert to Lecturer

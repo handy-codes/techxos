@@ -1,14 +1,14 @@
-"use client&quot;;
+"use client";
 
-import { useState, useEffect } from &quot;react&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
-import axios from &quot;axios&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import { format, subDays, eachDayOfInterval, isSameDay } from &quot;date-fns&quot;;
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
-import { Tabs, TabsContent, TabsList, TabsTrigger } from &quot;@/components/ui/tabs&quot;;
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { format, subDays, eachDayOfInterval, isSameDay } from "date-fns";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   BarChart as BarChartComponent,
   Bar,
@@ -21,8 +21,8 @@ import {
   PieChart,
   Pie,
   Cell,
-} from &quot;recharts&quot;;
-import { CalendarIcon, Users, Clock, Activity, Calendar } from &quot;lucide-react&quot;;
+} from "recharts";
+import { CalendarIcon, Users, Clock, Activity, Calendar } from "lucide-react";
 
 interface AnalyticsData {
   teachingHoursByDay: {
@@ -48,7 +48,7 @@ interface AnalyticsData {
   };
 }
 
-const COLORS = [&apos;#0088FE&apos;, &apos;#00C49F&apos;, &apos;#FFBB28&apos;, &apos;#FF8042&apos;, &apos;#8884D8&apos;, &apos;#82ca9d&apos;];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82ca9d'];
 
 export default function LecturerAnalyticsPage() {
   const { user } = useUser();
@@ -62,11 +62,11 @@ export default function LecturerAnalyticsPage() {
   const fetchAnalyticsData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(&quot;/api/lecturer/analytics&quot;);
+      const response = await axios.get("/api/lecturer/analytics");
       setData(response.data);
     } catch (error) {
-      console.error(&quot;Analytics data error:&quot;, error);
-      toast.error(&quot;Could not load analytics data&quot;);
+      console.error("Analytics data error:", error);
+      toast.error("Could not load analytics data");
     } finally {
       setLoading(false);
     }
@@ -74,21 +74,21 @@ export default function LecturerAnalyticsPage() {
 
   if (loading) {
     return (
-      <div className=&quot;space-y-6&quot;>
-        <Skeleton className=&quot;h-8 w-48&quot; />
-        <div className=&quot;grid gap-4 md:grid-cols-4&quot;>
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <div className="grid gap-4 md:grid-cols-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i}>
               <CardHeader>
-                <Skeleton className=&quot;h-4 w-32&quot; />
+                <Skeleton className="h-4 w-32" />
               </CardHeader>
               <CardContent>
-                <Skeleton className=&quot;h-8 w-16&quot; />
+                <Skeleton className="h-8 w-16" />
               </CardContent>
             </Card>
           ))}
         </div>
-        <Skeleton className=&quot;h-[300px] w-full&quot; />
+        <Skeleton className="h-[300px] w-full" />
       </div>
     );
   }
@@ -96,12 +96,12 @@ export default function LecturerAnalyticsPage() {
   // If no data is available yet
   if (!data) {
     return (
-      <div className=&quot;space-y-6&quot;>
-        <h1 className=&quot;text-2xl font-bold&quot;>Analytics</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold">Analytics</h1>
         <Card>
-          <CardContent className=&quot;pt-6 text-center&quot;>
-            <p className=&quot;text-muted-foreground&quot;>No analytics data available yet</p>
-            <p className=&quot;text-muted-foreground mt-1&quot;>
+          <CardContent className="pt-6 text-center">
+            <p className="text-muted-foreground">No analytics data available yet</p>
+            <p className="text-muted-foreground mt-1">
               Start hosting meetings to generate analytics
             </p>
           </CardContent>
@@ -133,66 +133,66 @@ export default function LecturerAnalyticsPage() {
     );
     
     return {
-      name: format(date, &apos;dd MMM&apos;),
+      name: format(date, 'dd MMM'),
       hours: matchingDay ? matchingDay.hours : 0
     };
   });
 
   return (
-    <div className=&quot;space-y-6&quot;>
-      <h1 className=&quot;text-2xl font-bold&quot;>Analytics</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Analytics</h1>
       
       {/* Stats Cards */}
-      <div className=&quot;grid gap-4 md:grid-cols-2 lg:grid-cols-4&quot;>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
-            <CardTitle className=&quot;text-sm font-medium&quot;>Total Classes</CardTitle>
-            <Calendar className=&quot;h-4 w-4 text-muted-foreground&quot; />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Classes</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className=&quot;text-2xl font-bold&quot;>{data.totalStats.totalClasses}</div>
+            <div className="text-2xl font-bold">{data.totalStats.totalClasses}</div>
           </CardContent>
         </Card>
         
         <Card>
-          <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
-            <CardTitle className=&quot;text-sm font-medium&quot;>Total Students</CardTitle>
-            <Users className=&quot;h-4 w-4 text-muted-foreground&quot; />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Students</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className=&quot;text-2xl font-bold&quot;>{data.totalStats.totalStudents}</div>
+            <div className="text-2xl font-bold">{data.totalStats.totalStudents}</div>
           </CardContent>
         </Card>
         
         <Card>
-          <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
-            <CardTitle className=&quot;text-sm font-medium&quot;>Teaching Hours</CardTitle>
-            <Clock className=&quot;h-4 w-4 text-muted-foreground&quot; />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Teaching Hours</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className=&quot;text-2xl font-bold&quot;>{data.totalStats.totalHours}</div>
+            <div className="text-2xl font-bold">{data.totalStats.totalHours}</div>
           </CardContent>
         </Card>
         
         <Card>
-          <CardHeader className=&quot;flex flex-row items-center justify-between space-y-0 pb-2&quot;>
-            <CardTitle className=&quot;text-sm font-medium&quot;>Avg. Attendance</CardTitle>
-            <Activity className=&quot;h-4 w-4 text-muted-foreground&quot; />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Avg. Attendance</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className=&quot;text-2xl font-bold&quot;>{data.totalStats.avgAttendance}%</div>
+            <div className="text-2xl font-bold">{data.totalStats.avgAttendance}%</div>
           </CardContent>
         </Card>
       </div>
       
-      <Tabs defaultValue=&quot;hours&quot;>
-        <TabsList className=&quot;grid w-full grid-cols-3&quot;>
-          <TabsTrigger value=&quot;hours&quot;>Teaching Hours</TabsTrigger>
-          <TabsTrigger value=&quot;attendance&quot;>Attendance</TabsTrigger>
-          <TabsTrigger value=&quot;classes&quot;>Classes</TabsTrigger>
+      <Tabs defaultValue="hours">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="hours">Teaching Hours</TabsTrigger>
+          <TabsTrigger value="attendance">Attendance</TabsTrigger>
+          <TabsTrigger value="classes">Classes</TabsTrigger>
         </TabsList>
         
-        <TabsContent value=&quot;hours&quot;>
+        <TabsContent value="hours">
           <Card>
             <CardHeader>
               <CardTitle>Teaching Hours (Last 7 Days)</CardTitle>
@@ -201,8 +201,8 @@ export default function LecturerAnalyticsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className=&quot;h-[300px]&quot;>
-                <ResponsiveContainer width=&quot;100%&quot; height=&quot;100%&quot;>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
                   <BarChartComponent
                     data={last7Days}
                     margin={{
@@ -212,12 +212,12 @@ export default function LecturerAnalyticsPage() {
                       bottom: 5,
                     }}
                   >
-                    <CartesianGrid strokeDasharray=&quot;3 3&quot; />
-                    <XAxis dataKey=&quot;name&quot; />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey=&quot;hours&quot; fill=&quot;#8884d8&quot; name=&quot;Hours&quot; />
+                    <Bar dataKey="hours" fill="#8884d8" name="Hours" />
                   </BarChartComponent>
                 </ResponsiveContainer>
               </div>
@@ -225,7 +225,7 @@ export default function LecturerAnalyticsPage() {
           </Card>
         </TabsContent>
         
-        <TabsContent value=&quot;attendance&quot;>
+        <TabsContent value="attendance">
           <Card>
             <CardHeader>
               <CardTitle>Student Attendance by Meeting</CardTitle>
@@ -234,8 +234,8 @@ export default function LecturerAnalyticsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className=&quot;h-[300px]&quot;>
-                <ResponsiveContainer width=&quot;100%&quot; height=&quot;100%&quot;>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
                   <BarChartComponent
                     data={formatAttendanceData()}
                     margin={{
@@ -245,12 +245,12 @@ export default function LecturerAnalyticsPage() {
                       bottom: 5,
                     }}
                   >
-                    <CartesianGrid strokeDasharray=&quot;3 3&quot; />
-                    <XAxis dataKey=&quot;name&quot; />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey=&quot;attendance&quot; fill=&quot;#82ca9d&quot; name=&quot;Attendance %&quot; />
+                    <Bar dataKey="attendance" fill="#82ca9d" name="Attendance %" />
                   </BarChartComponent>
                 </ResponsiveContainer>
               </div>
@@ -258,7 +258,7 @@ export default function LecturerAnalyticsPage() {
           </Card>
         </TabsContent>
         
-        <TabsContent value=&quot;classes&quot;>
+        <TabsContent value="classes">
           <Card>
             <CardHeader>
               <CardTitle>Students by Class</CardTitle>
@@ -266,20 +266,20 @@ export default function LecturerAnalyticsPage() {
                 Distribution of students across your classes
               </CardDescription>
             </CardHeader>
-            <CardContent className=&quot;flex justify-center&quot;>
-              <div className=&quot;h-[300px] w-[300px]&quot;>
-                <ResponsiveContainer width=&quot;100%&quot; height=&quot;100%&quot;>
+            <CardContent className="flex justify-center">
+              <div className="h-[300px] w-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={formatClassData()}
-                      cx=&quot;50%&quot;
-                      cy=&quot;50%&quot;
+                      cx="50%"
+                      cy="50%"
                       labelLine={false}
                       label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                       outerRadius={80}
-                      fill=&quot;#8884d8&quot;
-                      dataKey=&quot;count&quot;
-                      nameKey=&quot;title&quot;
+                      fill="#8884d8"
+                      dataKey="count"
+                      nameKey="title"
                     >
                       {formatClassData().map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -304,16 +304,16 @@ export default function LecturerAnalyticsPage() {
         </CardHeader>
         <CardContent>
           {data.upcomingMeetingDates.length > 0 ? (
-            <div className=&quot;space-y-2&quot;>
+            <div className="space-y-2">
               {data.upcomingMeetingDates.map((date, index) => (
-                <div key={index} className=&quot;flex items-center p-2 rounded-md hover:bg-slate-50&quot;>
-                  <CalendarIcon className=&quot;h-4 w-4 mr-2 text-muted-foreground&quot; />
-                  <span>{format(new Date(date), &quot;EEEE, MMMM d, yyyy &apos;at&apos; h:mm a&quot;)}</span>
+                <div key={index} className="flex items-center p-2 rounded-md hover:bg-slate-50">
+                  <CalendarIcon className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span>{format(new Date(date), "EEEE, MMMM d, yyyy 'at' h:mm a")}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className=&quot;text-muted-foreground">No upcoming meetings scheduled</p>
+            <p className="text-muted-foreground">No upcoming meetings scheduled</p>
           )}
         </CardContent>
       </Card>

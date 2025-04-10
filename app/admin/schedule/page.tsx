@@ -1,9 +1,9 @@
-"use client&quot;;
+"use client";
 
-import { useEffect, useState } from &quot;react&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import Link from &quot;next/link&quot;;
+import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -11,11 +11,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from &quot;@/components/ui/table&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import axios from &quot;axios&quot;;
-import { ScrollArea } from &quot;@/components/ui/scroll-area&quot;;
-import { Calendar, Clock, UserCheck } from &quot;lucide-react&quot;;
+} from "@/components/ui/table";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Calendar, Clock, UserCheck } from "lucide-react";
 
 interface Schedule {
   id: string;
@@ -43,12 +43,12 @@ export default function SchedulePage() {
 
   const fetchSchedules = async () => {
     try {
-      // This endpoint doesn&apos;t exist yet, so we&apos;ll handle the error
-      const response = await axios.get<Schedule[]>(&quot;/api/admin/schedules&quot;);
+      // This endpoint doesn't exist yet, so we'll handle the error
+      const response = await axios.get<Schedule[]>("/api/admin/schedules");
       setSchedules(response.data);
     } catch (error: unknown) {
-      console.error(&quot;Error fetching schedules:&quot;, error);
-      toast.error(&quot;Schedule system coming soon!&quot;);
+      console.error("Error fetching schedules:", error);
+      toast.error("Schedule system coming soon!");
       setSchedules([]);
     } finally {
       setIsLoading(false);
@@ -56,28 +56,28 @@ export default function SchedulePage() {
   };
 
   if (isLoading) {
-    return <div className=&quot;p-6&quot;>Loading...</div>;
+    return <div className="p-6">Loading...</div>;
   }
 
   return (
-    <ScrollArea className=&quot;h-full&quot;>
-      <div className=&quot;p-6&quot;>
-        <div className=&quot;flex justify-between items-center mb-6&quot;>
-          <h1 className=&quot;text-2xl font-bold&quot;>Class Schedules</h1>
+    <ScrollArea className="h-full">
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Class Schedules</h1>
           <Button asChild>
-            <Link href=&quot;/admin/schedule/new&quot;>Create New Schedule</Link>
+            <Link href="/admin/schedule/new">Create New Schedule</Link>
           </Button>
         </div>
 
         {schedules.length === 0 ? (
-          <div className=&quot;flex flex-col items-center justify-center h-64 gap-4&quot;>
-            <Calendar className=&quot;h-12 w-12 text-gray-400&quot; />
-            <h3 className=&quot;text-xl font-medium&quot;>No Schedules Found</h3>
-            <p className=&quot;text-muted-foreground text-center max-w-md&quot;>
+          <div className="flex flex-col items-center justify-center h-64 gap-4">
+            <Calendar className="h-12 w-12 text-gray-400" />
+            <h3 className="text-xl font-medium">No Schedules Found</h3>
+            <p className="text-muted-foreground text-center max-w-md">
               This feature is coming soon. You'll be able to create and manage class schedules here.
             </p>
             <Button asChild>
-              <Link href=&quot;/admin&quot;>Return to Dashboard</Link>
+              <Link href="/admin">Return to Dashboard</Link>
             </Button>
           </div>
         ) : (
@@ -107,16 +107,16 @@ export default function SchedulePage() {
                     <span
                       className={`px-2 py-1 rounded-full text-sm ${
                         schedule.isActive
-                          ? &quot;bg-green-100 text-green-800&quot;
-                          : &quot;bg-red-100 text-red-800&quot;
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {schedule.isActive ? &quot;Active&quot; : &quot;Inactive&quot;}
+                      {schedule.isActive ? "Active" : "Inactive"}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <div className=&quot;flex gap-2&quot;>
-                      <Button variant=&quot;outline&quot; size=&quot;sm" asChild>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" asChild>
                         <Link href={`/admin/schedule/${schedule.id}`}>
                           Edit
                         </Link>

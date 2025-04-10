@@ -1,14 +1,14 @@
-"use client&quot;;
+"use client";
 
-import { useState, useEffect } from &quot;react&quot;;
-import { useParams, useRouter } from &quot;next/navigation&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Input } from &quot;@/components/ui/input&quot;;
-import { Label } from &quot;@/components/ui/label&quot;;
-import { Switch } from &quot;@/components/ui/switch&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import axios from &quot;axios&quot;;
-import { Loader2, Plus, Trash2 } from &quot;lucide-react&quot;;
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import { Loader2, Plus, Trash2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -16,7 +16,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from &quot;@/components/ui/card&quot;;
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -24,8 +24,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from &quot;@/components/ui/table&quot;;
-import { format } from &quot;date-fns&quot;;
+} from "@/components/ui/table";
+import { format } from "date-fns";
 
 interface ZoomMeeting {
   id: string;
@@ -39,11 +39,11 @@ export default function CourseZoomMeetingsPage() {
   const params = useParams();
   const router = useRouter();
   const courseId = params.courseId as string;
-  const [courseName, setCourseName] = useState(&quot;");
+  const [courseName, setCourseName] = useState("");
   const [zoomMeetings, setZoomMeetings] = useState<ZoomMeeting[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [newZoomLink, setNewZoomLink] = useState(&quot;&quot;);
+  const [newZoomLink, setNewZoomLink] = useState("");
 
   useEffect(() => {
     const fetchCourseAndZoomMeetings = async () => {
@@ -52,14 +52,14 @@ export default function CourseZoomMeetingsPage() {
         
         // Fetch course details
         const courseResponse = await axios.get(`/api/admin/courses/${courseId}`);
-        setCourseName(courseResponse.data.title || &quot;Course&quot;);
+        setCourseName(courseResponse.data.title || "Course");
         
         // Fetch zoom meetings
         const zoomResponse = await axios.get(`/api/admin/courses/${courseId}/zoom-meetings`);
         setZoomMeetings(zoomResponse.data);
       } catch (error) {
-        console.error(&quot;Error fetching data:&quot;, error);
-        toast.error(&quot;Failed to load course data&quot;);
+        console.error("Error fetching data:", error);
+        toast.error("Failed to load course data");
       } finally {
         setIsLoading(false);
       }
@@ -72,7 +72,7 @@ export default function CourseZoomMeetingsPage() {
 
   const handleAddZoomMeeting = async () => {
     if (!newZoomLink.trim()) {
-      toast.error(&quot;Please enter a Zoom meeting link&quot;);
+      toast.error("Please enter a Zoom meeting link");
       return;
     }
 
@@ -83,11 +83,11 @@ export default function CourseZoomMeetingsPage() {
       });
       
       setZoomMeetings([...zoomMeetings, response.data]);
-      setNewZoomLink(&quot;&quot;);
-      toast.success(&quot;Zoom meeting link added successfully&quot;);
+      setNewZoomLink("");
+      toast.success("Zoom meeting link added successfully");
     } catch (error) {
-      console.error(&quot;Error adding zoom meeting:&quot;, error);
-      toast.error(&quot;Failed to add zoom meeting link&quot;);
+      console.error("Error adding zoom meeting:", error);
+      toast.error("Failed to add zoom meeting link");
     } finally {
       setIsSubmitting(false);
     }
@@ -106,17 +106,17 @@ export default function CourseZoomMeetingsPage() {
           : meeting
       ));
       
-      toast.success(`Zoom meeting ${!isActive ? &apos;activated&apos; : &apos;deactivated&apos;} successfully`);
+      toast.success(`Zoom meeting ${!isActive ? 'activated' : 'deactivated'} successfully`);
     } catch (error) {
-      console.error(&quot;Error updating zoom meeting:&quot;, error);
-      toast.error(&quot;Failed to update zoom meeting&quot;);
+      console.error("Error updating zoom meeting:", error);
+      toast.error("Failed to update zoom meeting");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDeleteMeeting = async (meetingId: string) => {
-    if (!confirm(&quot;Are you sure you want to delete this zoom meeting link?&quot;)) {
+    if (!confirm("Are you sure you want to delete this zoom meeting link?")) {
       return;
     }
 
@@ -125,10 +125,10 @@ export default function CourseZoomMeetingsPage() {
       await axios.delete(`/api/admin/courses/${courseId}/zoom-meetings/${meetingId}`);
       
       setZoomMeetings(zoomMeetings.filter(meeting => meeting.id !== meetingId));
-      toast.success(&quot;Zoom meeting link deleted successfully&quot;);
+      toast.success("Zoom meeting link deleted successfully");
     } catch (error) {
-      console.error(&quot;Error deleting zoom meeting:&quot;, error);
-      toast.error(&quot;Failed to delete zoom meeting link&quot;);
+      console.error("Error deleting zoom meeting:", error);
+      toast.error("Failed to delete zoom meeting link");
     } finally {
       setIsSubmitting(false);
     }
@@ -136,17 +136,17 @@ export default function CourseZoomMeetingsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full&quot;>
-        <Loader2 className=&quot;h-8 w-8 animate-spin text-primary&quot; />
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className=&quot;p-6 space-y-6&quot;>
-      <div className=&quot;flex items-center justify-between&quot;>
-        <h1 className=&quot;text-2xl font-bold&quot;>Zoom Meeting Links for {courseName}</h1>
-        <Button variant=&quot;outline&quot; onClick={() => router.back()}>
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Zoom Meeting Links for {courseName}</h1>
+        <Button variant="outline" onClick={() => router.back()}>
           Back
         </Button>
       </div>
@@ -159,12 +159,12 @@ export default function CourseZoomMeetingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className=&quot;grid gap-4&quot;>
-            <div className=&quot;grid gap-2&quot;>
-              <Label htmlFor=&quot;zoomLink&quot;>Zoom Meeting Link</Label>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="zoomLink">Zoom Meeting Link</Label>
               <Input
-                id=&quot;zoomLink&quot;
-                placeholder=&quot;https://zoom.us/j/123456789&quot;
+                id="zoomLink"
+                placeholder="https://zoom.us/j/123456789"
                 value={newZoomLink}
                 onChange={(e) => setNewZoomLink(e.target.value)}
                 disabled={isSubmitting}
@@ -179,12 +179,12 @@ export default function CourseZoomMeetingsPage() {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className=&quot;mr-2 h-4 w-4 animate-spin&quot; />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Adding...
               </>
             ) : (
               <>
-                <Plus className=&quot;mr-2 h-4 w-4&quot; />
+                <Plus className="mr-2 h-4 w-4" />
                 Add Zoom Meeting Link
               </>
             )}
@@ -201,7 +201,7 @@ export default function CourseZoomMeetingsPage() {
         </CardHeader>
         <CardContent>
           {zoomMeetings.length === 0 ? (
-            <p className=&quot;text-center text-muted-foreground py-4&quot;>
+            <p className="text-center text-muted-foreground py-4">
               No Zoom meeting links added yet.
             </p>
           ) : (
@@ -217,30 +217,30 @@ export default function CourseZoomMeetingsPage() {
               <TableBody>
                 {zoomMeetings.map((meeting) => (
                   <TableRow key={meeting.id}>
-                    <TableCell className=&quot;max-w-md truncate&quot;>
+                    <TableCell className="max-w-md truncate">
                       {meeting.zoomLink}
                     </TableCell>
                     <TableCell>
-                      <div className=&quot;flex items-center space-x-2&quot;>
+                      <div className="flex items-center space-x-2">
                         <Switch
                           checked={meeting.isActive}
                           onCheckedChange={() => handleToggleActive(meeting.id, meeting.isActive)}
                           disabled={isSubmitting}
                         />
-                        <span>{meeting.isActive ? &quot;Active&quot; : &quot;Inactive&quot;}</span>
+                        <span>{meeting.isActive ? "Active" : "Inactive"}</span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      {format(new Date(meeting.createdAt), &quot;MMM d, yyyy&quot;)}
+                      {format(new Date(meeting.createdAt), "MMM d, yyyy")}
                     </TableCell>
                     <TableCell>
                       <Button
-                        variant=&quot;destructive&quot;
-                        size=&quot;sm&quot;
+                        variant="destructive"
+                        size="sm"
                         onClick={() => handleDeleteMeeting(meeting.id)}
                         disabled={isSubmitting}
                       >
-                        <Trash2 className=&quot;h-4 w-4" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </TableCell>
                   </TableRow>

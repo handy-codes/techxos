@@ -1,79 +1,90 @@
-"use client&quot;;
-import React, { useState, useEffect, useCallback } from &quot;react&quot;;
-import Head from &quot;next/head&quot;;
-import Image from &quot;next/image&quot;;
-import Link from &quot;next/link&quot;;
-import { FaCheckCircle, FaRegClock } from &quot;react-icons/fa&quot;;
-import { AiFillSchedule } from &quot;react-icons/ai&quot;;
-import { HiLocationMarker } from &quot;react-icons/hi&quot;;
-import { IoMdOptions } from &quot;react-icons/io&quot;;
-import UIUX from &quot;@/components/curriculum/Ui-Ux&quot;;
-import ScrollToTopButton from &quot;@/components/layout/ScrollToTopButton&quot;;
-import { useAuth } from &quot;@clerk/nextjs&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
-import JoinLiveClassButton from &quot;@/components/course/JoinLiveClassButton&quot;;
-import CoursePurchaseButton from &quot;@/components/course/CoursePurchaseButton&quot;;
+"use client";
+import React, { useState, useEffect, useCallback } from "react";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import { FaCheckCircle, FaRegClock } from "react-icons/fa";
+import { AiFillSchedule } from "react-icons/ai";
+import { HiLocationMarker } from "react-icons/hi";
+import { IoMdOptions } from "react-icons/io";
+import UiUx from "@/components/curriculum/Ui-Ux";
+import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
+import { useAuth } from "@clerk/nextjs";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
+import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
 
+interface LiveLecture {
+  id: string;
+  date: Date;
+  recordingUrl: string | null;
+  title: string | null;
+  isRecorded: boolean;
+}
+
+interface LiveCourseWithLectures {
+  id: string;
+  zoomLink: string | null;
+  lectures: LiveLecture[];
+  hasAccess: boolean;
+}
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: &quot;UI-UX Design&quot;,
-    name: &quot;",
-    surname: &quot;&quot;,
-    email: &quot;&quot;,
-    subject: &quot;&quot;,
-    message: &quot;&quot;,
+    courseTitle: "UI/UX Design",
+    name: "",
+    surname: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
-  
-  const { isSignedIn, userId } = useAuth();
-  const { user } = useUser();
-  const [hasAccess, setHasAccess] = useState<boolean>(false);
-  const [userRoleState, setUserRoleState] = useState<string | null>(null);
-const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
-    &quot;idle&quot; | &quot;success&quot; | &quot;error&quot;
-  >(&quot;idle&quot;);
+    "idle" | "success" | "error"
+  >("idle");
 
-  
-  // Function to determine if the current user is an admin based on their email
-  const checkIfUserIsAdmin = useCallback(async () => {
-    if (!isSignedIn || !userId) return false;
-    
+  const { isSignedIn } = useAuth();
+  const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
+
+  const fetchLectureDetails = useCallback(async () => {
     try {
-      const userEmail = user?.primaryEmailAddress?.emailAddress;
-      console.log(&quot;Current user email:&quot;, userEmail);
-      
-      if (!userEmail) return false;
-      
-      // Known admin emails - add any admin emails here
-      const adminEmails = [
-        &quot;paxymekventures@gmail.com&quot;,
-        &quot;admin@techxos.com&quot;,
-        &quot;emeka@techxos.com&quot;
-      ];
-      
-      // Direct check for known admin emails
-      if (adminEmails.includes(userEmail.toLowerCase())) {
-        console.log(&quot;User is admin based on email match!&quot;);
-        setUserRoleState(&quot;HEAD_ADMIN&quot;);
-        setHasAccess(true);
-        return true;
+      console.log("Fetching lecture details...");
+      const response = await axios.get("/api/live-courses/ui-ux/lecture");
+      console.log("Lecture details response:", response.data);
+
+      setLecture(response.data.lecture);
+
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { status?: number; statusText?: string; data?: any };
+        message?: string;
+      };
+      console.error("Detailed fetch error:", {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message,
+      });
+
+      if (err.response?.status === 401) {
+        toast.error("Please sign in to access this course");
+      } else if (err.response?.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error("Failed to load lecture details");
       }
-      
-      return false;
-    } catch (error) {
-      console.error(&quot;Error in admin check:&quot;, error);
-      return false;
     }
-  }, [isSignedIn, userId, user]);
+  }, []);
 
   useEffect(() => {
-    if (isSignedIn && userId) {
-      checkIfUserIsAdmin();
+    if (isSignedIn) {
+      fetchLectureDetails();
     }
-  }, [isSignedIn, userId, checkIfUserIsAdmin]);
-const handleChange = (
+  }, [isSignedIn, fetchLectureDetails]);
+
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
@@ -85,235 +96,304 @@ const handleChange = (
   ): Promise<void> => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus(&quot;idle&quot;);
+    setSubmitStatus("idle");
 
     const formDataToSend = new FormData();
-    formDataToSend.append(&quot;courseTitle&quot;, formData.courseTitle);
-    formDataToSend.append(&quot;name&quot;, formData.name);
-    formDataToSend.append(&quot;surname&quot;, formData.surname);
-    formDataToSend.append(&quot;email&quot;, formData.email);
-    formDataToSend.append(&quot;subject&quot;, formData.subject);
-    formDataToSend.append(&quot;message&quot;, formData.message);
+    formDataToSend.append("courseTitle", formData.courseTitle);
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("surname", formData.surname);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("subject", formData.subject);
+    formDataToSend.append("message", formData.message);
 
     try {
-      const response = await fetch(&quot;/api/nofilesubmit-form&quot;, {
-        method: &quot;POST&quot;,
+      const response = await fetch("/api/nofilesubmit-form", {
+        method: "POST",
         body: formDataToSend,
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || &quot;Submission failed&quot;);
+        throw new Error(data.error || "Submission failed");
       }
 
-      setSubmitStatus(&quot;success&quot;);
+      setSubmitStatus("success");
       setFormData({
-        courseTitle: &quot;UI-UX Design&quot;,
-        name: &quot;&quot;,
-        surname: &quot;&quot;,
-        email: &quot;&quot;,
-        subject: &quot;&quot;,
-        message: &quot;&quot;,
+        courseTitle: "UI/UX Design",
+        name: "",
+        surname: "",
+        email: "",
+        subject: "",
+        message: "",
       });
     } catch (error) {
-      console.error(&quot;Submission error:&quot;, error);
-      setSubmitStatus(&quot;error&quot;);
+      console.error("Submission error:", error);
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Function to render lecture information if available
+  const renderLectureInfo = () => {
+    if (!lecture) return null;
+    
+    return (
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
+        <h3 className="text-xl font-semibold mb-2">Current Class Information</h3>
+        {lecture.lectures && lecture.lectures.length > 0 ? (
+          <div>
+            <p className="mb-2">
+              <span className="font-medium">Latest lecture:</span>{" "}
+              {lecture.lectures[0].title || "Upcoming Session"}
+            </p>
+            <p className="mb-2">
+              <span className="font-medium">Date:</span>{" "}
+              {new Date(lecture.lectures[0].date).toLocaleString()}
+            </p>
+            {lecture.lectures[0].isRecorded && lecture.lectures[0].recordingUrl && (
+              <div className="mt-2">
+                <a 
+                  href={lecture.lectures[0].recordingUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  View Recording
+                </a>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p>No scheduled lectures at this time. Please check back later.</p>
+        )}
+        <div className="mt-4">
+          {lecture.hasAccess ? (
+            <JoinLiveClassButton 
+              courseId="ui-ux" 
+              courseName="UI/UX Design" 
+            />
+          ) : (
+            <CoursePurchaseButton 
+              courseId="ui-ux" 
+              courseName="UI/UX Design" 
+            />
+          )}
+        </div>
+      </div>
+    );
   };
 
   return (
     <div>
       <Head>
         <title>Course Page</title>
-        <meta name=&quot;description&quot; content=&quot;Welcome to the UI-UX Design Course&quot; />
+        <meta
+          name="description"
+          content="Welcome to the UI/UX Design Course"
+        />
       </Head>
 
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700&quot;>
-        <div className=&quot;max-w-7xl mx-auto&quot;>
-          <div className=&quot;grid lg:grid-cols-2 gap-12 items-center&quot;>
-            <div className=&quot;text-white&quot;>
-              <h1 className=&quot;text-4xl sm:text-5xl font-bold mb-6&quot;>
-                UI-UX Design
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+                UI/UX Design
               </h1>
-              <p className=&quot;text-xl mb-8&quot;>
-                Craft interfaces so intuitive, they feel like second
-                nature—where every click, swipe, and scroll sparks joy. UI/UX
-                Design is the alchemy of blending aesthetics with empathy,
-                turning complex problems into seamless digital experiences that
-                users love.
-              </p>
-              <p className=&quot;text-xl mb-8&quot;>
-                You'll master tools like Figma, Adobe XD, and Sketch,
-                wireframing prototypes, conducting user research, and perfecting
-                pixel-perfect layouts that balance form and function. Build
-                real-world projects—from e-commerce apps to fintech
-                dashboards—get feedback from design pros.
+              <p className="text-xl mb-8">
+                Master the Art of User Interface and Experience Design! Learn to
+                create beautiful, intuitive interfaces that users love to interact
+                with. From wireframing to prototyping, user research to interaction
+                design, you will develop the skills to craft digital experiences that
+                delight users and drive business success.
               </p>
             </div>
-            <div className=&quot;relative h-96 rounded-2xl overflow-hidden shadow-xl&quot;>
+            <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src=&quot;https://i.ibb.co/xqN3xy1J/Gemini-Generated-Image-v5ipemv5ipemv5ip.jpg&quot;
-                alt=&quot;Team Collaboration&quot;
+                src="https://i.ibb.co/4nDmr2nb/Gemini-Generated-Image-72ww6w72ww6w72ww.jpg"
+                alt="UI/UX Design"
                 fill
-                className=&quot;object-cover&quot;
+                className="object-cover"
                 priority
-                sizes=&quot;(max-width: 768px) 100vw, 50vw&quot;
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>
         </div>
       </section>
 
-      <section className=&quot;container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8&quot;>
-        {/* Left Column - Course Details */}
-        <div className=&quot;flex-1 text-black&quot;>
-          <div className=&quot;mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6&quot;>
-            <h1 className=&quot;text-2xl lg:text-4xl font-bold mb-[4px]&quot;>
-              UI-UX Design
+      <section className="container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8">
+        <div className="flex-1 text-black">
+          <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
+            <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
+              UI/UX Design
             </h1>
-            <div className=&quot;h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]&quot;></div>
+            <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
-          <h1 className=&quot;text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6&quot;>
-            150,000 NGN
+          <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
+            250,000 NGN
           </h1>
-          <p className=&quot;text-justify font-semibold max-sm:mb-1&quot;>
-            In 12 weeks, master the art of building websites and apps that run
-            on the internet. Explore the flexibility of Nextjs as a third-party
-            library for Reactjs. With Tailwindcss, a better knowledge of the
-            color theory and other modern tools, you will be able to create
-            responsive and visually appealing websites.
+          <p className="text-justify font-semibold max-sm:mb-1">
+            Techxos powers your design journey: Master UI/UX design from concept
+            to implementation. Learn from industry experts who have designed
+            interfaces for global brands. Join a community of designers passionate
+            about creating user-centered experiences. Through hands-on projects,
+            design critiques, and real-world applications, develop the skills to
+            create beautiful, functional interfaces. Ready to become a professional
+            UI/UX designer? Enroll now and start designing—one pixel at a time.
+            🎨✨💻
           </p>
-          <div className=&quot;p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid&quot;>
+          <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
-              href=&quot;https://wa.me/2348167715107&quot;
-              target=&quot;_blank&quot;
-              rel=&quot;noopener noreferrer&quot;
+              href="https://wa.me/2348167715107"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Contact an Advisor
             </a>
           </div>
-          <div className=&quot;font-semibold&quot;>
-            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
-              <FaRegClock className=&quot;text-black text-[22px]&quot; />
+          <div className="font-semibold">
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <FaRegClock className="text-black text-[22px]" />
               <span>Duration: 12 weeks</span>
             </div>
-            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
-              <AiFillSchedule className=&quot;text-black text-[24px]&quot; />
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <AiFillSchedule className="text-black text-[24px]" />
               <span>Schedule: 9 hours/week</span>
             </div>
-            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
-              <HiLocationMarker className=&quot;text-black text-[27px]&quot; />
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <HiLocationMarker className="text-black text-[27px]" />
               <span>Location: In-person or online</span>
             </div>
-            <div className=&quot;flex items-center gap-3 mt-3 md:mt-4&quot;>
-              <IoMdOptions className=&quot;text-black text-[24px]&quot; />
+            <div className="flex items-center gap-3 mt-3 md:mt-4">
+              <IoMdOptions className="text-black text-[24px]" />
               <span>Options: Evening Class, Executive (one-to-one) class</span>
+            </div>
+            <h2 className="text-2xl font-bold mb-2 mt-6">
+              UI/UX Design Virtual
+            </h2>
+            
+            {/* Display lecture information if available */}
+            {renderLectureInfo()}
+            
+            <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
+              {!isSignedIn ? (
+                <Link
+                  href="/sign-in"
+                  className="inline-block text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
+                >
+                  Enroll Now
+                </Link>
+              ) : (
+                <CoursePurchaseButton 
+                  courseId="ui-ux" 
+                  courseName="UI/UX Design" 
+                />
+              )}
             </div>
           </div>
         </div>
 
-        {/* Right Column - Contact Form */}
         <div
-          id=&quot;contact&quot;
-          className=&quot;flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md&quot;
+          id="contact"
+          className="flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md"
         >
-          <h1 className=&quot;text-2xl font-bold mb-4&quot;>
+          <h1 className="text-2xl font-bold mb-4">
             Contact Us for More Enquiry
           </h1>
           <form onSubmit={handleSubmit}>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">
                 Course Title:
               </label>
               <input
-                type=&quot;text&quot;
-                name=&quot;courseTitle&quot;
+                type="text"
+                name="courseTitle"
                 value={formData.courseTitle}
                 readOnly
-                className=&quot;w-full p-2 border font-bold text-2xl rounded bg-gray-200&quot;
+                className="w-full p-2 border font-bold text-2xl rounded bg-gray-200"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Name*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Name*</label>
               <input
-                type=&quot;text&quot;
-                name=&quot;name&quot;
+                type="text"
+                name="name"
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Surname*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Surname*</label>
               <input
-                type=&quot;text&quot;
-                name=&quot;surname&quot;
+                type="text"
+                name="surname"
                 required
                 value={formData.surname}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Email*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Email*</label>
               <input
-                type=&quot;email&quot;
-                name=&quot;email&quot;
+                type="email"
+                name="email"
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Subject*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Subject*</label>
               <input
-                type=&quot;text&quot;
-                name=&quot;subject&quot;
+                type="text"
+                name="subject"
                 required
                 value={formData.subject}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
               />
             </div>
-            <div className=&quot;mb-4&quot;>
-              <label className=&quot;block text-sm font-medium mb-1&quot;>Message*</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Message*</label>
               <textarea
-                name=&quot;message&quot;
+                name="message"
                 required
                 value={formData.message}
                 onChange={handleChange}
-                className=&quot;w-full p-2 border rounded&quot;
+                className="w-full p-2 border rounded"
                 rows={4}
               ></textarea>
             </div>
             <button
-              type=&quot;submit&quot;
+              type="submit"
               disabled={isSubmitting}
-              className=&quot;w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-blue-300&quot;
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-blue-300"
             >
-              {isSubmitting ? &quot;Submitting...&quot; : &quot;Submit&quot;}
+              {isSubmitting ? "Submitting..." : "Submit"}
             </button>
-            {submitStatus === &quot;success&quot; && (
-              <div className=&quot;mt-4 flex items-center text-green-600&quot;>
-                <FaCheckCircle className=&quot;mr-2&quot; size={24} />
-                <p className=&quot;font-bold&quot;>Form submitted successfully!</p>
+            {submitStatus === "success" && (
+              <div className="mt-4 flex items-center text-green-600">
+                <FaCheckCircle className="mr-2" size={24} />
+                <p className="font-bold">Form submitted successfully!</p>
               </div>
             )}
-            {submitStatus === &quot;error&quot; && (
-              <p className=&quot;mt-4 text-red-600">
+            {submitStatus === "error" && (
+              <p className="mt-4 text-red-600">
                 Failed to submit the form. Please try again.
               </p>
             )}
           </form>
         </div>
       </section>
-      <UIUX />
-      <ScrollToTopButton />      
+      <UiUx />
+      <ScrollToTopButton />
     </div>
   );
 }

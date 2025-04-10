@@ -1,8 +1,8 @@
-import getCoursesByCategory from &quot;@/app/actions/getCourses&quot;;
-import CourseCard from &quot;@/components/courses/CourseCard&quot;;
-import Categories from &quot;@/components/custom/Categories&quot;;
-import { db } from &quot;@/lib/db&quot;;
-import { Category, Course } from &quot;@prisma/client&quot;;
+import getCoursesByCategory from "@/app/actions/getCourses";
+import CourseCard from "@/components/courses/CourseCard";
+import Categories from "@/components/custom/Categories";
+import { db } from "@/lib/db";
+import { Category, Course } from "@prisma/client";
 
 const CoursesByCategory = async ({
   params,
@@ -11,16 +11,16 @@ const CoursesByCategory = async ({
 }) => {
   const categories = await db.category.findMany({
     orderBy: {
-      name: &quot;asc&quot;,
+      name: "asc",
     },
   }) as Category[];
 
   const courses = await getCoursesByCategory(params.categoryId) as Course[];
 
   return (
-    <div className="md:mt-5 md:px-10 xl:px-16 pb-16&quot;>
+    <div className="md:mt-5 md:px-10 xl:px-16 pb-16">
       <Categories categories={categories} selectedCategory={params.categoryId} />
-      <div className=&quot;flex flex-wrap gap-7 justify-center">
+      <div className="flex flex-wrap gap-7 justify-center">
         {courses.map((course: Course) => (
           <CourseCard key={course.id} course={course} />
         ))}

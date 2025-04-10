@@ -1,25 +1,25 @@
-"use client&quot;;
+"use client";
 
-import { useState } from &quot;react&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import axios from &quot;axios&quot;;
-import { Loader2 } from &quot;lucide-react&quot;;
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 interface PurchaseButtonProps {
-  courseType: &quot;project-mgt&quot; | &quot;web-dev&quot; | &quot;ui-ux&quot;;
+  courseType: "project-mgt" | "web-dev" | "ui-ux";
   buttonText?: string;
-  variant?: &quot;default&quot; | &quot;outline&quot; | &quot;destructive&quot; | &quot;ghost&quot; | &quot;link&quot; | &quot;secondary&quot;;
+  variant?: "default" | "outline" | "destructive" | "ghost" | "link" | "secondary";
   className?: string;
   onSuccess?: () => void;
 }
 
 export const PurchaseButton = ({
   courseType,
-  buttonText = &quot;Enroll Now&quot;,
-  variant = &quot;default&quot;,
-  className = &quot;",
+  buttonText = "Enroll Now",
+  variant = "default",
+  className = "",
   onSuccess
 }: PurchaseButtonProps) => {
   const router = useRouter();
@@ -36,7 +36,7 @@ export const PurchaseButton = ({
       
       // Handle response based on course type
       if (response.data) {
-        toast.success(`Successfully enrolled in ${response.data.classTitle || &apos;the course&apos;}!`);
+        toast.success(`Successfully enrolled in ${response.data.classTitle || 'the course'}!`);
         
         // Redirect or call success callback
         if (onSuccess) {
@@ -50,20 +50,20 @@ export const PurchaseButton = ({
         router.refresh();
       }
     } catch (error: any) {
-      console.error(&quot;Purchase initialization error:&quot;, error);
+      console.error("Purchase initialization error:", error);
       
       // Handle different error scenarios
       if (error.response?.status === 401) {
-        toast.error(&quot;Please sign in to enroll in this course&quot;);
-        router.push(&quot;/sign-in&quot;);
+        toast.error("Please sign in to enroll in this course");
+        router.push("/sign-in");
       } else if (error.response?.status === 404) {
-        toast.error(&quot;Please complete your profile first&quot;);
-        router.push(&quot;/profile&quot;);
-      } else if (error.response?.status === 400 && error.response?.data === &quot;Already purchased&quot;) {
-        toast.success(&quot;You're already enrolled in this course!&quot;);
+        toast.error("Please complete your profile first");
+        router.push("/profile");
+      } else if (error.response?.status === 400 && error.response?.data === "Already purchased") {
+        toast.success("You're already enrolled in this course!");
         router.push(`/live-courses/${courseType}`);
       } else {
-        toast.error(&quot;Failed to enroll in the course. Please try again later.&quot;);
+        toast.error("Failed to enroll in the course. Please try again later.");
       }
     } finally {
       setIsLoading(false);
@@ -79,7 +79,7 @@ export const PurchaseButton = ({
     >
       {isLoading ? (
         <>
-          <Loader2 className=&quot;h-4 w-4 mr-2 animate-spin&quot; />
+          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
           Processing...
         </>
       ) : (

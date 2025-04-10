@@ -1,14 +1,14 @@
-import { auth } from &quot;@clerk/nextjs/server&quot;;
-import { redirect } from &quot;next/navigation&quot;;
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const { userId } = auth();
 
   // If user is authenticated, redirect to dashboard
   if (userId) {
-    redirect(&quot;/dashboard&quot;);
+    redirect("/dashboard");
   }
 
   // If user is not authenticated, redirect to the home page in (home) group
-  redirect(&quot;/(home)&quot;);
+  redirect("/(home)");
 } 

@@ -1,28 +1,28 @@
-"use client&quot;;
+"use client";
 
-import { useState, useEffect } from &quot;react&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import axios from &quot;axios&quot;;
-import { Loader2, Play } from &quot;lucide-react&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import { Loader2, Play } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 interface CourseActionButtonProps {
-  courseType: &quot;project-mgt&quot; | &quot;web-dev&quot; | &quot;ui-ux&quot;;
+  courseType: "project-mgt" | "web-dev" | "ui-ux";
   purchaseButtonText?: string;
   joinButtonText?: string;
-  variant?: &quot;default&quot; | &quot;outline&quot; | &quot;destructive&quot; | &quot;ghost&quot; | &quot;link&quot; | &quot;secondary&quot;;
+  variant?: "default" | "outline" | "destructive" | "ghost" | "link" | "secondary";
   className?: string;
   onSuccess?: () => void;
 }
 
 export const CourseActionButton = ({
   courseType,
-  purchaseButtonText = &quot;Enroll Now&quot;,
-  joinButtonText = &quot;Join Live Class&quot;,
-  variant = &quot;default&quot;,
-  className = &quot;",
+  purchaseButtonText = "Enroll Now",
+  joinButtonText = "Join Live Class",
+  variant = "default",
+  className = "",
   onSuccess
 }: CourseActionButtonProps) => {
   const router = useRouter();
@@ -44,58 +44,58 @@ export const CourseActionButton = ({
       try {
         // Try the role API first (normal flow)
         try {
-          const roleResponse = await axios.get(&apos;/api/user/role&apos;);
+          const roleResponse = await axios.get('/api/user/role');
           const role = roleResponse.data.role;
           setUserRole(role);
           
           // Check if user is admin or lecturer
           const isAdminOrLecturer = 
-            role === &apos;HEAD_ADMIN&apos; || 
-            role === &apos;ADMIN&apos; || 
-            role === &apos;LECTURER&apos;;
+            role === 'HEAD_ADMIN' || 
+            role === 'ADMIN' || 
+            role === 'LECTURER';
           
           setIsAdmin(isAdminOrLecturer);
           
-          // If admin, we&apos;re done
+          // If admin, we're done
           if (isAdminOrLecturer) {
             setIsChecking(false);
             return;
           }
         } catch (error) {
-          console.error(&quot;Error fetching user role from API:&quot;, error);
+          console.error("Error fetching user role from API:", error);
           
           // If API fails, check if user email matches HEAD_ADMIN email in sync file
           try {
             // User is signed in but role API failed - try fallback method
-            const syncResponse = await fetch(&apos;/role-sync.json&apos;);
+            const syncResponse = await fetch('/role-sync.json');
             if (syncResponse.ok) {
               const syncData = await syncResponse.json();
               
-              // Check if current user&apos;s email matches the admin email
+              // Check if current user's email matches the admin email
               if (user?.primaryEmailAddress?.emailAddress === syncData.adminEmail) {
-                console.log(&quot;User email matches admin email in sync file&quot;);
+                console.log("User email matches admin email in sync file");
                 setIsAdmin(true);
-                setUserRole(&apos;HEAD_ADMIN&apos;);
+                setUserRole('HEAD_ADMIN');
                 setIsChecking(false);
                 return;
               }
             }
           } catch (syncError) {
-            console.error(&quot;Error checking role sync file:&quot;, syncError);
+            console.error("Error checking role sync file:", syncError);
           }
         }
 
-        // If not admin or can&apos;t determine role, check if course is purchased
+        // If not admin or can't determine role, check if course is purchased
         try {
           // Try to get lecture info - will throw error if not purchased
           const lectureResponse = await axios.get(`/api/live-courses/${courseType}/lecture`);
           setIsPurchased(true);
         } catch (error) {
-          console.log(&quot;User has not purchased this course&quot;);
+          console.log("User has not purchased this course");
           setIsPurchased(false);
         }
       } catch (error) {
-        console.error(&quot;Error checking user access:&quot;, error);
+        console.error("Error checking user access:", error);
       } finally {
         setIsChecking(false);
       }
@@ -115,7 +115,7 @@ export const CourseActionButton = ({
       
       // Handle response based on course type
       if (response.data) {
-        toast.success(`Successfully enrolled in ${response.data.classTitle || &apos;the course&apos;}!`);
+        toast.success(`Successfully enrolled in ${response.data.classTitle || 'the course'}!`);
         setIsPurchased(true);
         
         // Redirect or call success callback
@@ -130,21 +130,21 @@ export const CourseActionButton = ({
         router.refresh();
       }
     } catch (error: any) {
-      console.error(&quot;Purchase initialization error:&quot;, error);
+      console.error("Purchase initialization error:", error);
       
       // Handle different error scenarios
       if (error.response?.status === 401) {
-        toast.error(&quot;Please sign in to enroll in this course&quot;);
-        router.push(&quot;/sign-in&quot;);
+        toast.error("Please sign in to enroll in this course");
+        router.push("/sign-in");
       } else if (error.response?.status === 404) {
-        toast.error(&quot;Please complete your profile first&quot;);
-        router.push(&quot;/profile&quot;);
-      } else if (error.response?.status === 400 && error.response?.data === &quot;Already purchased&quot;) {
-        toast.success(&quot;You&apos;re already enrolled in this course!&quot;);
+        toast.error("Please complete your profile first");
+        router.push("/profile");
+      } else if (error.response?.status === 400 && error.response?.data === "Already purchased") {
+        toast.success("You're already enrolled in this course!");
         setIsPurchased(true);
         router.push(`/live-courses/${courseType}`);
       } else {
-        toast.error(&quot;Failed to enroll in the course. Please try again later.&quot;);
+        toast.error("Failed to enroll in the course. Please try again later.");
       }
     } finally {
       setIsLoading(false);
@@ -158,7 +158,7 @@ export const CourseActionButton = ({
   if (isChecking) {
     return (
       <Button disabled className={className}>
-        <Loader2 className=&quot;h-4 w-4 mr-2 animate-spin&quot; />
+        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
         Checking access...
       </Button>
     );
@@ -172,7 +172,7 @@ export const CourseActionButton = ({
         variant={variant}
         className={className}
       >
-        <Play className=&quot;h-4 w-4 mr-2&quot; />
+        <Play className="h-4 w-4 mr-2" />
         {joinButtonText}
       </Button>
     );
@@ -188,7 +188,7 @@ export const CourseActionButton = ({
     >
       {isLoading ? (
         <>
-          <Loader2 className=&quot;h-4 w-4 mr-2 animate-spin&quot; />
+          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
           Processing...
         </>
       ) : (

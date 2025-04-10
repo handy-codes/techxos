@@ -1,13 +1,13 @@
-"use client&quot;;
+"use client";
 
-import { useState, useEffect } from &quot;react&quot;;
-import { useUser } from &quot;@clerk/nextjs&quot;;
-import axios from &quot;axios&quot;;
-import { toast } from &quot;react-hot-toast&quot;;
-import { format, isToday, isTomorrow, isYesterday, formatDistance } from &quot;date-fns&quot;;
-import { Button } from &quot;@/components/ui/button&quot;;
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;;
-import { Tabs, TabsContent, TabsList, TabsTrigger } from &quot;@/components/ui/tabs&quot;;
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { format, isToday, isTomorrow, isYesterday, formatDistance } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -15,12 +15,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from &quot;@/components/ui/table&quot;;
-import { Skeleton } from &quot;@/components/ui/skeleton&quot;;
-import { Badge } from &quot;@/components/ui/badge&quot;;
-import { Clock, Calendar, Video, Edit, Trash2, Play, Square } from &quot;lucide-react&quot;;
-import Link from &quot;next/link&quot;;
-import { useRouter } from &quot;next/navigation&quot;;
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Clock, Calendar, Video, Edit, Trash2, Play, Square } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface ZoomMeeting {
   id: string;
@@ -28,7 +28,7 @@ interface ZoomMeeting {
   topic: string;
   startTime: string;
   duration: number;
-  status: &quot;SCHEDULED&quot; | &quot;STARTED&quot; | &quot;ENDED&quot; | &quot;COMPLETED&quot;;
+  status: "SCHEDULED" | "STARTED" | "ENDED" | "COMPLETED";
   liveClass: {
     id: string;
     title: string;
@@ -40,7 +40,7 @@ export default function LecturerZoomMeetingsPage() {
   const router = useRouter();
   const [meetings, setMeetings] = useState<ZoomMeeting[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(&quot;upcoming&quot;);
+  const [activeTab, setActiveTab] = useState("upcoming");
 
   useEffect(() => {
     fetchMeetings();
@@ -49,11 +49,11 @@ export default function LecturerZoomMeetingsPage() {
   const fetchMeetings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(&quot;/api/lecturer/zoom-meetings&quot;);
+      const response = await axios.get("/api/lecturer/zoom-meetings");
       setMeetings(response.data);
     } catch (error) {
-      console.error(&quot;Error fetching meetings:&quot;, error);
-      toast.error(&quot;Could not load meetings&quot;);
+      console.error("Error fetching meetings:", error);
+      toast.error("Could not load meetings");
     } finally {
       setLoading(false);
     }
@@ -62,35 +62,35 @@ export default function LecturerZoomMeetingsPage() {
   const startMeeting = async (meetingId: string) => {
     try {
       await axios.post(`/api/zoom/meetings/${meetingId}/start`);
-      toast.success(&quot;Meeting started&quot;);
+      toast.success("Meeting started");
       router.push(`/lecturer/zoom-meetings/${meetingId}/host`);
     } catch (error) {
-      console.error(&quot;Error starting meeting:&quot;, error);
-      toast.error(&quot;Failed to start meeting&quot;);
+      console.error("Error starting meeting:", error);
+      toast.error("Failed to start meeting");
     }
   };
 
   const endMeeting = async (meetingId: string) => {
     try {
       await axios.post(`/api/zoom/meetings/${meetingId}/end`);
-      toast.success(&quot;Meeting ended&quot;);
+      toast.success("Meeting ended");
       fetchMeetings(); // Refresh the list
     } catch (error) {
-      console.error(&quot;Error ending meeting:&quot;, error);
-      toast.error(&quot;Failed to end meeting&quot;);
+      console.error("Error ending meeting:", error);
+      toast.error("Failed to end meeting");
     }
   };
 
   const deleteMeeting = async (meetingId: string) => {
-    if (!confirm(&quot;Are you sure you want to delete this meeting?&quot;)) return;
+    if (!confirm("Are you sure you want to delete this meeting?")) return;
     
     try {
       await axios.delete(`/api/zoom/meetings/${meetingId}`);
-      toast.success(&quot;Meeting deleted&quot;);
+      toast.success("Meeting deleted");
       fetchMeetings(); // Refresh the list
     } catch (error) {
-      console.error(&quot;Error deleting meeting:&quot;, error);
-      toast.error(&quot;Failed to delete meeting&quot;);
+      console.error("Error deleting meeting:", error);
+      toast.error("Failed to delete meeting");
     }
   };
 
@@ -98,13 +98,13 @@ export default function LecturerZoomMeetingsPage() {
     const date = new Date(dateString);
     
     if (isToday(date)) {
-      return `Today at ${format(date, &apos;h:mm a&apos;)}`;
+      return `Today at ${format(date, 'h:mm a')}`;
     } else if (isTomorrow(date)) {
-      return `Tomorrow at ${format(date, &apos;h:mm a&apos;)}`;
+      return `Tomorrow at ${format(date, 'h:mm a')}`;
     } else if (isYesterday(date)) {
-      return `Yesterday at ${format(date, &apos;h:mm a&apos;)}`;
+      return `Yesterday at ${format(date, 'h:mm a')}`;
     } else {
-      return format(date, &apos;MMM d, yyyy • h:mm a&apos;);
+      return format(date, 'MMM d, yyyy • h:mm a');
     }
   };
 
@@ -121,47 +121,47 @@ export default function LecturerZoomMeetingsPage() {
 
   const getMeetingStatusColor = (status: string) => {
     switch (status) {
-      case &quot;SCHEDULED&quot;:
-        return &quot;bg-blue-100 text-blue-800&quot;;
-      case &quot;STARTED&quot;:
-        return &quot;bg-green-100 text-green-800&quot;;
-      case &quot;ENDED&quot;:
-      case &quot;COMPLETED&quot;:
-        return &quot;bg-gray-100 text-gray-800&quot;;
+      case "SCHEDULED":
+        return "bg-blue-100 text-blue-800";
+      case "STARTED":
+        return "bg-green-100 text-green-800";
+      case "ENDED":
+      case "COMPLETED":
+        return "bg-gray-100 text-gray-800";
       default:
-        return &quot;bg-gray-100 text-gray-800&quot;;
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const upcomingMeetings = meetings.filter(meeting => 
-    meeting.status === &quot;SCHEDULED&quot;
+    meeting.status === "SCHEDULED"
   );
   
   const liveMeetings = meetings.filter(meeting => 
-    meeting.status === &quot;STARTED&quot;
+    meeting.status === "STARTED"
   );
   
   const pastMeetings = meetings.filter(meeting => 
-    meeting.status === &quot;ENDED&quot; || meeting.status === &quot;COMPLETED&quot;
+    meeting.status === "ENDED" || meeting.status === "COMPLETED"
   );
 
   if (loading) {
     return (
-      <div className=&quot;space-y-6&quot;>
-        <div className=&quot;flex justify-between items-center&quot;>
-          <Skeleton className=&quot;h-8 w-64&quot; />
-          <Skeleton className=&quot;h-10 w-40&quot; />
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-10 w-40" />
         </div>
         
-        <div className=&quot;space-y-4&quot;>
+        <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
             <Card key={i}>
               <CardHeader>
-                <Skeleton className=&quot;h-6 w-64&quot; />
-                <Skeleton className=&quot;h-4 w-32&quot; />
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-4 w-32" />
               </CardHeader>
               <CardContent>
-                <Skeleton className=&quot;h-20 w-full&quot; />
+                <Skeleton className="h-20 w-full" />
               </CardContent>
             </Card>
           ))}
@@ -171,37 +171,37 @@ export default function LecturerZoomMeetingsPage() {
   }
 
   return (
-    <div className=&quot;space-y-6&quot;>
-      <div className=&quot;flex justify-between items-center&quot;>
-        <h1 className=&quot;text-2xl font-bold&quot;>Zoom Meetings</h1>
-        <Link href=&quot;/lecturer/zoom-meetings/new&quot;>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Zoom Meetings</h1>
+        <Link href="/lecturer/zoom-meetings/new">
           <Button>
-            <Video className=&quot;mr-2 h-4 w-4&quot; />
+            <Video className="mr-2 h-4 w-4" />
             Schedule New Meeting
           </Button>
         </Link>
       </div>
       
-      <Tabs defaultValue=&quot;upcoming&quot; value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className=&quot;grid w-full grid-cols-3&quot;>
-          <TabsTrigger value=&quot;upcoming&quot;>
+      <Tabs defaultValue="upcoming" value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="upcoming">
             Upcoming ({upcomingMeetings.length})
           </TabsTrigger>
-          <TabsTrigger value=&quot;live&quot;>
+          <TabsTrigger value="live">
             Live Now ({liveMeetings.length})
           </TabsTrigger>
-          <TabsTrigger value=&quot;past&quot;>
+          <TabsTrigger value="past">
             Past ({pastMeetings.length})
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value=&quot;upcoming&quot; className=&quot;space-y-4&quot;>
+        <TabsContent value="upcoming" className="space-y-4">
           {upcomingMeetings.length === 0 ? (
             <Card>
-              <CardContent className=&quot;pt-6 text-center&quot;>
-                <p className=&quot;text-muted-foreground&quot;>No upcoming meetings scheduled</p>
-                <Link href=&quot;/lecturer/zoom-meetings/new&quot;>
-                  <Button variant=&quot;outline&quot; className=&quot;mt-4&quot;>
+              <CardContent className="pt-6 text-center">
+                <p className="text-muted-foreground">No upcoming meetings scheduled</p>
+                <Link href="/lecturer/zoom-meetings/new">
+                  <Button variant="outline" className="mt-4">
                     Schedule a Meeting
                   </Button>
                 </Link>
@@ -221,40 +221,40 @@ export default function LecturerZoomMeetingsPage() {
               <TableBody>
                 {upcomingMeetings.map((meeting) => (
                   <TableRow key={meeting.id}>
-                    <TableCell className=&quot;font-medium&quot;>{meeting.topic}</TableCell>
+                    <TableCell className="font-medium">{meeting.topic}</TableCell>
                     <TableCell>{meeting.liveClass.title}</TableCell>
                     <TableCell>
-                      <div className=&quot;flex flex-col&quot;>
+                      <div className="flex flex-col">
                         <span>{formatMeetingDate(meeting.startTime)}</span>
-                        <span className=&quot;text-xs text-muted-foreground&quot;>
+                        <span className="text-xs text-muted-foreground">
                           {formatRelativeTime(meeting.startTime)}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell>{meeting.duration} min</TableCell>
                     <TableCell>
-                      <div className=&quot;flex space-x-2&quot;>
+                      <div className="flex space-x-2">
                         <Button 
-                          size=&quot;sm&quot; 
-                          variant=&quot;default&quot;
+                          size="sm" 
+                          variant="default"
                           onClick={() => startMeeting(meeting.id)}
                         >
-                          <Play className=&quot;h-4 w-4 mr-1&quot; />
+                          <Play className="h-4 w-4 mr-1" />
                           Start
                         </Button>
                         <Button 
-                          size=&quot;sm&quot; 
-                          variant=&quot;outline&quot;
+                          size="sm" 
+                          variant="outline"
                           onClick={() => router.push(`/lecturer/zoom-meetings/${meeting.id}/edit`)}
                         >
-                          <Edit className=&quot;h-4 w-4&quot; />
+                          <Edit className="h-4 w-4" />
                         </Button>
                         <Button 
-                          size=&quot;sm&quot; 
-                          variant=&quot;outline&quot;
+                          size="sm" 
+                          variant="outline"
                           onClick={() => deleteMeeting(meeting.id)}
                         >
-                          <Trash2 className=&quot;h-4 w-4&quot; />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>
@@ -265,51 +265,51 @@ export default function LecturerZoomMeetingsPage() {
           )}
         </TabsContent>
         
-        <TabsContent value=&quot;live&quot; className=&quot;space-y-4&quot;>
+        <TabsContent value="live" className="space-y-4">
           {liveMeetings.length === 0 ? (
             <Card>
-              <CardContent className=&quot;pt-6 text-center&quot;>
-                <p className=&quot;text-muted-foreground&quot;>No meetings are currently live</p>
+              <CardContent className="pt-6 text-center">
+                <p className="text-muted-foreground">No meetings are currently live</p>
               </CardContent>
             </Card>
           ) : (
-            <div className=&quot;grid gap-4 md:grid-cols-2&quot;>
+            <div className="grid gap-4 md:grid-cols-2">
               {liveMeetings.map((meeting) => (
                 <Card key={meeting.id}>
                   <CardHeader>
-                    <div className=&quot;flex justify-between items-start&quot;>
+                    <div className="flex justify-between items-start">
                       <div>
                         <Badge className={getMeetingStatusColor(meeting.status)}>
                           LIVE NOW
                         </Badge>
-                        <CardTitle className=&quot;mt-2&quot;>{meeting.topic}</CardTitle>
+                        <CardTitle className="mt-2">{meeting.topic}</CardTitle>
                         <CardDescription>{meeting.liveClass.title}</CardDescription>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className=&quot;flex justify-between items-center mb-4&quot;>
-                      <div className=&quot;flex items-center text-sm&quot;>
-                        <Calendar className=&quot;h-4 w-4 mr-2&quot; />
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex items-center text-sm">
+                        <Calendar className="h-4 w-4 mr-2" />
                         {formatMeetingDate(meeting.startTime)}
                       </div>
-                      <div className=&quot;flex items-center text-sm&quot;>
-                        <Clock className=&quot;h-4 w-4 mr-2&quot; />
+                      <div className="flex items-center text-sm">
+                        <Clock className="h-4 w-4 mr-2" />
                         {meeting.duration} minutes
                       </div>
                     </div>
-                    <div className=&quot;flex space-x-2&quot;>
+                    <div className="flex space-x-2">
                       <Button 
-                        className=&quot;flex-1&quot;
+                        className="flex-1"
                         onClick={() => router.push(`/lecturer/zoom-meetings/${meeting.id}/host`)}
                       >
                         Join Now
                       </Button>
                       <Button 
-                        variant=&quot;outline&quot;
+                        variant="outline"
                         onClick={() => endMeeting(meeting.id)}
                       >
-                        <Square className=&quot;h-4 w-4&quot; />
+                        <Square className="h-4 w-4" />
                         End
                       </Button>
                     </div>
@@ -320,11 +320,11 @@ export default function LecturerZoomMeetingsPage() {
           )}
         </TabsContent>
         
-        <TabsContent value=&quot;past&quot; className=&quot;space-y-4&quot;>
+        <TabsContent value="past" className="space-y-4">
           {pastMeetings.length === 0 ? (
             <Card>
-              <CardContent className=&quot;pt-6 text-center&quot;>
-                <p className=&quot;text-muted-foreground&quot;>No past meetings found</p>
+              <CardContent className="pt-6 text-center">
+                <p className="text-muted-foreground">No past meetings found</p>
               </CardContent>
             </Card>
           ) : (
@@ -341,7 +341,7 @@ export default function LecturerZoomMeetingsPage() {
               <TableBody>
                 {pastMeetings.map((meeting) => (
                   <TableRow key={meeting.id}>
-                    <TableCell className=&quot;font-medium&quot;>{meeting.topic}</TableCell>
+                    <TableCell className="font-medium">{meeting.topic}</TableCell>
                     <TableCell>{meeting.liveClass.title}</TableCell>
                     <TableCell>{formatMeetingDate(meeting.startTime)}</TableCell>
                     <TableCell>
@@ -350,18 +350,18 @@ export default function LecturerZoomMeetingsPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className=&quot;flex space-x-2&quot;>
+                      <div className="flex space-x-2">
                         <Link href={`/lecturer/zoom-meetings/${meeting.id}/recordings`}>
-                          <Button size=&quot;sm&quot; variant=&quot;outline&quot;>
+                          <Button size="sm" variant="outline">
                             Recordings
                           </Button>
                         </Link>
                         <Button 
-                          size=&quot;sm&quot; 
-                          variant=&quot;outline&quot;
+                          size="sm" 
+                          variant="outline"
                           onClick={() => deleteMeeting(meeting.id)}
                         >
-                          <Trash2 className=&quot;h-4 w-4" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>

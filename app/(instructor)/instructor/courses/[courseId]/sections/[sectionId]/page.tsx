@@ -1,8 +1,8 @@
-import AlertBanner from &quot;@/components/custom/AlertBanner&quot;;
-import EditSectionForm from &quot;@/components/sections/EditSectionForm&quot;;
-import { db } from &quot;@/lib/db&quot;;
-import { auth } from &quot;@clerk/nextjs/server&quot;;
-import { redirect } from &quot;next/navigation&quot;;
+import AlertBanner from "@/components/custom/AlertBanner";
+import EditSectionForm from "@/components/sections/EditSectionForm";
+import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 const SectionDetailsPage = async ({
   params,
@@ -12,7 +12,7 @@ const SectionDetailsPage = async ({
   const { userId } = auth();
 
   if (!userId) {
-    return redirect(&quot;/sign-in&quot;);
+    return redirect("/sign-in");
   }
 
   const course = await db.course.findUnique({
@@ -23,7 +23,7 @@ const SectionDetailsPage = async ({
   });
 
   if (!course) {
-    return redirect(&quot;/instructor/courses&quot;);
+    return redirect("/instructor/courses");
   }
 
   const section = await db.section.findUnique({
@@ -43,7 +43,7 @@ const SectionDetailsPage = async ({
 
   const requiredFields = [section.title, section.description, section.videoUrl];
   const requiredFieldsCount = requiredFields.length;
-  const missingFields = requiredFields.filter((field) => !Boolean(field)); // Return falsy values: undefined, null, 0, false, NaN, &apos;&apos;
+  const missingFields = requiredFields.filter((field) => !Boolean(field)); // Return falsy values: undefined, null, 0, false, NaN, ''
   const missingFieldsCount = missingFields.length;
   const isCompleted = requiredFields.every(Boolean);
 

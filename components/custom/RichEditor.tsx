@@ -1,8 +1,8 @@
-"use client&quot;
+"use client"
 
-import &quot;react-quill/dist/quill.snow.css&quot;;
-import dynamic from &quot;next/dynamic&quot;;
-import { useMemo } from &quot;react&quot;;
+import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
 
 interface RichEditorProps {
   placeholder: string;
@@ -12,13 +12,13 @@ interface RichEditorProps {
 
 const RichEditor = ({ placeholder, onChange, value }: RichEditorProps) => {
   const ReactQuill = useMemo(
-    () => dynamic(() => import(&quot;react-quill&quot;), { ssr: false }),
+    () => dynamic(() => import("react-quill"), { ssr: false }),
     []
   );
 
   return (
     <ReactQuill
-      theme=&quot;snow"
+      theme="snow"
       placeholder={placeholder}
       value={value}
       onChange={onChange}

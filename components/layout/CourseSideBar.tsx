@@ -1,7 +1,7 @@
-import { db } from &quot;@/lib/db&quot;;
-import { Course, Section } from &quot;@prisma/client&quot;;
-import Link from &quot;next/link&quot;;
-import { Progress } from &quot;../ui/progress&quot;;
+import { prisma } from "@/lib/db";
+import { Course, Section } from "@prisma/client";
+import Link from "next/link";
+import { Progress } from "../ui/progress";
 
 interface CourseSideBarProps {
   course: Course & { sections: Section[] };
@@ -9,19 +9,19 @@ interface CourseSideBarProps {
 }
 
 const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
-  const publishedSections = await db.section.findMany({
+  const publishedSections = await prisma.section.findMany({
     where: {
       courseId: course.id,
       isPublished: true,
     },
     orderBy: {
-      position: &quot;asc&quot;,
+      position: "asc",
     },
   });
 
   const publishedSectionIds = publishedSections.map((section) => section.id);
 
-  const purchase = await db.purchase.findUnique({
+  const purchase = await prisma.purchase.findUnique({
     where: {
       customerId_courseId: {
         customerId: studentId,
@@ -30,7 +30,7 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
     },
   });
 
-  const completedSections = await db.progress.count({
+  const completedSections = await prisma.progress.count({
     where: {
       studentId,
       sectionId: {
@@ -44,12 +44,12 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
     (completedSections / publishedSectionIds.length) * 100;
 
   return (
-    <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium&quot;>
-      <h1 className=&quot;text-lg font-bold text-center mb-4&quot;>{course.title}</h1>
+    <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium">
+      <h1 className="text-lg font-bold text-center mb-4">{course.title}</h1>
       {purchase && (
         <div>
-          <Progress value={progressPercentage} className=&quot;h-2&quot; />
-          <p className=&quot;text-xs&quot;>{Math.round(progressPercentage)}% completed</p>
+          <Progress value={progressPercentage} className="h-2" />
+          <p className="text-xs">{Math.round(progressPercentage)}% completed</p>
         </div>
       )}
       <Link
@@ -58,12 +58,12 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
       >
         Overview
       </Link>
-      <div className=&quot;overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold&quot;>
+      <div className="overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold">
         {publishedSections.map((section) => (
           <Link
             key={section.id}
             href={`/courses/${course.id}/sections/${section.id}`}
-            className=&quot;p-3 rounded-lg hover:bg-[#FFF8EB] mt-2&quot;
+            className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3 ${isActive ? 'bg-[#FFF8EB]' : ''}`}
           >
             {section.title}
           </Link>
@@ -77,12 +77,12 @@ export default CourseSideBar;
 
 
 
-// import { db } from &quot;@/lib/db&quot;;
-// import { Course, Section } from &quot;@prisma/client&quot;;
-// import Link from &quot;next/link&quot;;
-// import { Progress } from &quot;../ui/progress&quot;;
-// import { CheckCircle, Lock, PlayCircle } from &quot;lucide-react&quot;;
-// import { usePathname } from &quot;next/navigation&quot;;
+// import { db } from "@/lib/db";
+// import { Course, Section } from "@prisma/client";
+// import Link from "next/link";
+// import { Progress } from "../ui/progress";
+// import { CheckCircle, Lock, PlayCircle } from "lucide-react";
+// import { usePathname } from "next/navigation";
 
 
 // interface CourseSideBarProps {
@@ -97,12 +97,12 @@ export default CourseSideBar;
 //   (completedSections.length / publishedSections.length) * 100;
 
 //   return (
-//     <div className=&quot;hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium&quot;>
-//       <h1 className=&quot;text-lg font-bold text-center mb-4&quot;>{course.title}</h1>
+//     <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 my-3 text-sm font-medium">
+//       <h1 className="text-lg font-bold text-center mb-4">{course.title}</h1>
 //       {purchase && (
 //         <div>
-//           <Progress value={progressPercentage} className=&quot;h-2&quot; />
-//           <p className=&quot;text-xs&quot;>{Math.round(progressPercentage)}% completed</p>
+//           <Progress value={progressPercentage} className="h-2" />
+//           <p className="text-xs">{Math.round(progressPercentage)}% completed</p>
 //         </div>
 //       )}
 // <Link
@@ -111,7 +111,7 @@ export default CourseSideBar;
 // >
 //   Overview
 // </Link>
-// <div className=&quot;overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold&quot;>
+// <div className="overflow-y-auto max-h-screen flex flex-col text-[16px] font-semibold">
 //   {publishedSections.map((section) => {
 //     const isLocked = section.locked;
 //     const isCompleted = completedSections.includes(section.id);
@@ -122,9 +122,9 @@ export default CourseSideBar;
 //       <Link
 //         key={section.id} // Added key prop to fix the bug
 //         href={`/courses/${course.id}/sections/${section.id}`}
-//         className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3 ${isActive ? &apos;bg-[#FFF8EB]&apos; : &apos;&apos;}`}
+//         className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3 ${isActive ? 'bg-[#FFF8EB]' : ''}`}
 //       >
-//         <Icon className=&quot;mr-2&quot; />
+//         <Icon className="mr-2" />
 //         {section.title}
 //       </Link>
 //     );
@@ -141,7 +141,7 @@ export default CourseSideBar;
 //       isPublished: true,
 //     },
 //     orderBy: {
-//       position: &quot;asc",
+//       position: "asc",
 //     },
 //   });
 

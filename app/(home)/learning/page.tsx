@@ -1,7 +1,7 @@
-import CourseCardWrapper from &quot;@/components/courses/CourseCardWrapper&quot;
-import { db } from &quot;@/lib/db&quot;
-import { auth } from &quot;@clerk/nextjs/server&quot;
-import { redirect } from &quot;next/navigation&quot;
+import CourseCardWrapper from "@/components/courses/CourseCardWrapper"
+import { db } from "@/lib/db"
+import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
 
 type Course = {
   id: string;
@@ -49,7 +49,7 @@ export default async function LearningPage() {
   const { userId } = auth()
 
   if (!userId) {
-    return redirect(&apos;/sign-in&apos;)
+    return redirect('/sign-in')
   }
 
   const purchasedCourses = await db.purchase.findMany({
@@ -72,11 +72,11 @@ export default async function LearningPage() {
   }) as PurchaseWithCourse[]
 
   return (
-    <div className="px-4 py-6 md:mt-5 md:px-10 xl:px-16&quot;>
-      <h1 className=&quot;text-2xl font-bold&quot;>
+    <div className="px-4 py-6 md:mt-5 md:px-10 xl:px-16">
+      <h1 className="text-2xl font-bold">
         Your courses
       </h1>
-      <div className=&quot;flex flex-wrap gap-7 mt-7">
+      <div className="flex flex-wrap gap-7 mt-7">
         {purchasedCourses.map((purchase) => (
           <CourseCardWrapper key={purchase.course.id} course={purchase.course} />
         ))}

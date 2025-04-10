@@ -1,10 +1,10 @@
-"use client&quot;;
+"use client";
 
-import React, { useEffect, useState, useRef } from &apos;react&apos;;
-import axios from &apos;axios&apos;;
-import { toast } from &apos;react-hot-toast&apos;;
-import { Loader2 } from &apos;lucide-react&apos;;
-import { useUser } from &apos;@clerk/nextjs&apos;;
+import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { Loader2 } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
 
 interface ZoomMeetingProps {
   meetingId: string;
@@ -29,7 +29,7 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
     const loadZoomSDK = async () => {
       try {
         // Load Zoom Meeting SDK
-        const ZoomMtgEmbedded = (await import(&apos;@zoom/meetingsdk/embedded&apos;)).default;
+        const ZoomMtgEmbedded = (await import('@zoom/meetingsdk/embedded')).default;
         
         // Initialize Zoom client
         const client = ZoomMtgEmbedded.createClient();
@@ -38,7 +38,7 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
           // Prepare the container for embedding
           client.init({ 
             zoomAppRoot: zoomContainerRef.current,
-            language: &apos;en-US&apos;,
+            language: 'en-US',
             customize: {
               video: {
                 isResizable: true,
@@ -65,8 +65,8 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
               password: meetingDetails.password,
               userName: meetingDetails.userName,
               userEmail: meetingDetails.userEmail,
-              tk: &apos;&apos;,
-              zak: &apos;&apos;
+              tk: '',
+              zak: ''
             });
             
             if (onJoinSuccess && isMounted) {
@@ -75,16 +75,16 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
           }
         }
       } catch (err: any) {
-        console.error(&apos;Failed to join Zoom meeting:&apos;, err);
+        console.error('Failed to join Zoom meeting:', err);
         
         if (isMounted) {
-          setError(err.message || &apos;Failed to join the meeting&apos;);
+          setError(err.message || 'Failed to join the meeting');
           
           if (onJoinError) {
             onJoinError(err);
           }
           
-          toast.error(&apos;Failed to join the meeting. Please try again.&apos;);
+          toast.error('Failed to join the meeting. Please try again.');
         }
       } finally {
         if (isMounted) {
@@ -108,9 +108,9 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
         const response = await axios.get(`/api/zoom-meetings/${meetingId}`);
         setMeetingDetails(response.data);
       } catch (err: any) {
-        console.error(&apos;Failed to fetch meeting details:&apos;, err);
-        setError(err.message || &apos;Failed to fetch meeting details&apos;);
-        toast.error(&apos;Failed to fetch meeting details. Please try again.&apos;);
+        console.error('Failed to fetch meeting details:', err);
+        setError(err.message || 'Failed to fetch meeting details');
+        toast.error('Failed to fetch meeting details. Please try again.');
       }
     };
 
@@ -121,25 +121,25 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
 
   const handleJoinViaUrl = () => {
     if (meetingDetails?.joinUrl) {
-      window.open(meetingDetails.joinUrl, &apos;_blank&apos;);
+      window.open(meetingDetails.joinUrl, '_blank');
     }
   };
 
   if (loading) {
     return (
-      <div className=&quot;flex items-center justify-center min-h-[400px]&quot;>
-        <Loader2 className=&quot;w-8 h-8 animate-spin&quot; />
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className=&quot;flex flex-col items-center justify-center min-h-[400px] space-y-4&quot;>
-        <p className=&quot;text-red-500&quot;>{error}</p>
+      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <p className="text-red-500">{error}</p>
         <button
           onClick={handleJoinViaUrl}
-          className=&quot;px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+          className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
           Join via Browser
         </button>

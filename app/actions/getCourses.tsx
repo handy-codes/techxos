@@ -1,11 +1,11 @@
-import { db } from &quot;@/lib/db&quot;
-import { Course } from &quot;@prisma/client&quot;
+import { prisma } from "@/lib/db"
+import { Course } from "@prisma/client"
 
 const getCoursesByCategory = async (categoryId: string | null): Promise<Course[]> => {
   const whereClause: any = {
     ...(categoryId ? { categoryId, isPublished: true } : { isPublished: true }),
   }
-  const courses = await db.course.findMany({
+  const courses = await prisma.course.findMany({
     where: whereClause,
     include: {
       category: true,
@@ -18,7 +18,7 @@ const getCoursesByCategory = async (categoryId: string | null): Promise<Course[]
       },
     },
     orderBy: {
-      createdAt: &quot;desc&quot;,
+      createdAt: "desc",
     },
   })
 

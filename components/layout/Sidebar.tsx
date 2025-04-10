@@ -1,8 +1,8 @@
-"use client&quot;;
+"use client";
 
-import { BarChart4, MonitorPlay } from &quot;lucide-react&quot;;
-import Link from &quot;next/link&quot;;
-import { usePathname } from &quot;next/navigation&quot;;
+import { BarChart4, MonitorPlay } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface SidebarRoute {
   icon: JSX.Element;
@@ -14,22 +14,22 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   const sidebarRoutes: SidebarRoute[] = [
-    { icon: <MonitorPlay />, label: &quot;Courses&quot;, path: &quot;/instructor/courses&quot; },
+    { icon: <MonitorPlay />, label: "Courses", path: "/instructor/courses" },
     {
       icon: <BarChart4 />,
-      label: &quot;Performance&quot;,
-      path: &quot;/instructor/performance&quot;,
+      label: "Performance",
+      path: "/instructor/performance",
     },
   ];
 
   return (
-    <div className=&quot;max-sm:hidden flex flex-col w-64 border-r shadow-md px-3 my-4 gap-4 text-sm font-medium&quot;>
+    <div className="max-sm:hidden flex flex-col w-64 border-r shadow-md px-3 my-4 gap-4 text-sm font-medium">
       {sidebarRoutes.map((route: SidebarRoute) => (
         <Link
           href={route.path}
           key={route.path}
           className={`flex items-center gap-4 p-3 rounded-lg hover:bg-[#FFF8EB]
-          ${pathname?.startsWith(route.path) && &quot;bg-[#FDAB04] hover:bg-[#FDAB04]/80"}
+          ${pathname?.startsWith(route.path) && "bg-[#FDAB04] hover:bg-[#FDAB04]/80"}
           `}
         >
           {route.icon} {route.label}

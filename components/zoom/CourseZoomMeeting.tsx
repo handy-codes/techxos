@@ -1,14 +1,14 @@
-"use client&quot;;
+"use client";
 
-import React, { useState, useEffect } from &apos;react&apos;;
-import axios from &apos;axios&apos;;
-import { toast } from &apos;react-hot-toast&apos;;
-import { Loader2, Calendar, Clock, Users, Video, ExternalLink } from &apos;lucide-react&apos;;
-import { Button } from &apos;@/components/ui/button&apos;;
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from &apos;@/components/ui/card&apos;;
-import { formatDistanceToNow, format } from &apos;date-fns&apos;;
-import Link from &apos;next/link&apos;;
-import { useAuth } from &apos;@clerk/nextjs&apos;;
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { Loader2, Calendar, Clock, Users, Video, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatDistanceToNow, format } from 'date-fns';
+import Link from 'next/link';
+import { useAuth } from '@clerk/nextjs';
 
 interface ZoomMeeting {
   id: string;
@@ -25,7 +25,7 @@ interface CourseZoomMeetingProps {
 
 export default function CourseZoomMeeting({ 
   liveClassId,
-  className = &apos;&apos;
+  className = ''
 }: CourseZoomMeetingProps) {
   const [meetings, setMeetings] = useState<ZoomMeeting[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,8 +48,8 @@ export default function CourseZoomMeeting({
         
         setMeetings(sortedMeetings);
       } catch (err: any) {
-        console.error(&apos;Error fetching meetings:&apos;, err);
-        setError(err.response?.data || err.message || &apos;Failed to fetch meetings&apos;);
+        console.error('Error fetching meetings:', err);
+        setError(err.response?.data || err.message || 'Failed to fetch meetings');
       } finally {
         setLoading(false);
       }
@@ -63,21 +63,21 @@ export default function CourseZoomMeeting({
       const response = await axios.post(`/api/zoom/meetings/${meetingId}/join`);
       
       if (response.data.joinUrl) {
-        window.open(response.data.joinUrl, &apos;_blank&apos;);
+        window.open(response.data.joinUrl, '_blank');
       } else {
         // For embedded version, redirect to the join page
         window.location.href = `/courses/live-classroom/${meetingId}`;
       }
     } catch (err: any) {
-      console.error(&apos;Error joining meeting:&apos;, err);
-      toast.error(err.response?.data || &apos;Failed to join meeting&apos;);
+      console.error('Error joining meeting:', err);
+      toast.error(err.response?.data || 'Failed to join meeting');
     }
   };
   
   const formatMeetingDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return format(date, &apos;PPP&apos;);
+      return format(date, 'PPP');
     } catch (error) {
       return dateString;
     }
@@ -86,7 +86,7 @@ export default function CourseZoomMeeting({
   const formatMeetingTime = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return format(date, &apos;p&apos;);
+      return format(date, 'p');
     } catch (error) {
       return dateString;
     }
@@ -100,26 +100,26 @@ export default function CourseZoomMeeting({
     const now = new Date();
     const start = new Date(meeting.startTime);
     const end = new Date(start.getTime() + meeting.duration * 60000);
-    return now >= start && now <= end && meeting.status === &apos;STARTED&apos;;
+    return now >= start && now <= end && meeting.status === 'STARTED';
   };
   
   const getStatusText = (meeting: ZoomMeeting) => {
     if (isLive(meeting)) {
-      return &apos;LIVE NOW&apos;;
+      return 'LIVE NOW';
     } else if (isUpcoming(meeting)) {
       return `Starts ${formatDistanceToNow(new Date(meeting.startTime), { addSuffix: true })}`;
     } else {
-      return &apos;Ended&apos;;
+      return 'Ended';
     }
   };
   
   const getStatusColor = (meeting: ZoomMeeting) => {
     if (isLive(meeting)) {
-      return &apos;text-red-500 animate-pulse&apos;;
+      return 'text-red-500 animate-pulse';
     } else if (isUpcoming(meeting)) {
-      return &apos;text-blue-500&apos;;
+      return 'text-blue-500';
     } else {
-      return &apos;text-gray-500&apos;;
+      return 'text-gray-500';
     }
   };
   
@@ -129,8 +129,8 @@ export default function CourseZoomMeeting({
         <CardHeader>
           <CardTitle>Live Classes</CardTitle>
         </CardHeader>
-        <CardContent className=&quot;flex justify-center py-8&quot;>
-          <Loader2 className=&quot;h-8 w-8 animate-spin text-primary&quot; />
+        <CardContent className="flex justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </CardContent>
       </Card>
     );
@@ -143,7 +143,7 @@ export default function CourseZoomMeeting({
           <CardTitle>Live Classes</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className=&quot;text-red-500&quot;>Failed to load meetings</p>
+          <p className="text-red-500">Failed to load meetings</p>
         </CardContent>
       </Card>
     );
@@ -156,7 +156,7 @@ export default function CourseZoomMeeting({
           <CardTitle>Live Classes</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className=&quot;text-muted-foreground&quot;>No upcoming meetings scheduled</p>
+          <p className="text-muted-foreground">No upcoming meetings scheduled</p>
         </CardContent>
       </Card>
     );
@@ -165,52 +165,52 @@ export default function CourseZoomMeeting({
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle className=&quot;flex items-center&quot;>
-          <Video className=&quot;h-5 w-5 mr-2&quot; />
+        <CardTitle className="flex items-center">
+          <Video className="h-5 w-5 mr-2" />
           Live Classes
         </CardTitle>
       </CardHeader>
-      <CardContent className=&quot;space-y-4&quot;>
+      <CardContent className="space-y-4">
         {meetings.map((meeting) => (
-          <Card key={meeting.id} className=&quot;overflow-hidden&quot;>
-            <CardHeader className=&quot;bg-muted/50 p-4&quot;>
-              <CardTitle className=&quot;text-base flex justify-between items-center&quot;>
+          <Card key={meeting.id} className="overflow-hidden">
+            <CardHeader className="bg-muted/50 p-4">
+              <CardTitle className="text-base flex justify-between items-center">
                 <span>{meeting.topic}</span>
                 <span className={`text-sm font-normal ${getStatusColor(meeting)}`}>
                   {getStatusText(meeting)}
                 </span>
               </CardTitle>
             </CardHeader>
-            <CardContent className=&quot;p-4 pt-3&quot;>
-              <div className=&quot;grid grid-cols-2 gap-2 text-sm&quot;>
-                <div className=&quot;flex items-center&quot;>
-                  <Calendar className=&quot;h-4 w-4 mr-2 text-muted-foreground&quot; />
+            <CardContent className="p-4 pt-3">
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
                   {formatMeetingDate(meeting.startTime)}
                 </div>
-                <div className=&quot;flex items-center&quot;>
-                  <Clock className=&quot;h-4 w-4 mr-2 text-muted-foreground&quot; />
+                <div className="flex items-center">
+                  <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
                   {formatMeetingTime(meeting.startTime)}
                 </div>
-                <div className=&quot;flex items-center col-span-2&quot;>
-                  <Users className=&quot;h-4 w-4 mr-2 text-muted-foreground&quot; />
+                <div className="flex items-center col-span-2">
+                  <Users className="h-4 w-4 mr-2 text-muted-foreground" />
                   Duration: {meeting.duration} minutes
                 </div>
               </div>
             </CardContent>
-            <CardFooter className=&quot;p-4 pt-0 flex justify-end&quot;>
+            <CardFooter className="p-4 pt-0 flex justify-end">
               {isLive(meeting) ? (
                 <Button 
                   onClick={() => joinMeeting(meeting.id)}
-                  className=&quot;bg-red-500 hover:bg-red-600 text-white&quot;
+                  className="bg-red-500 hover:bg-red-600 text-white"
                 >
                   Join Live Class
                 </Button>
               ) : isUpcoming(meeting) ? (
-                <Button variant=&quot;outline&quot; disabled>
+                <Button variant="outline" disabled>
                   Not Started Yet
                 </Button>
               ) : (
-                <Button variant=&quot;outline&quot; disabled>
+                <Button variant="outline" disabled>
                   Class Ended
                 </Button>
               )}
@@ -218,16 +218,16 @@ export default function CourseZoomMeeting({
           </Card>
         ))}
       </CardContent>
-      <CardFooter className=&quot;flex justify-center&quot;>
+      <CardFooter className="flex justify-center">
         <Link href={meetings.length > 0 && isLive(meetings[0]) 
           ? `/courses/live-classroom/${meetings[0].id}` 
-          : &apos;#&apos;}>
+          : '#'}>
           <Button 
-            variant=&quot;ghost&quot; 
-            className=&quot;text-sm&quot;
+            variant="ghost" 
+            className="text-sm"
             disabled={meetings.length === 0 || !isLive(meetings[0])}
           >
-            <ExternalLink className=&quot;h-4 w-4 mr-2" />
+            <ExternalLink className="h-4 w-4 mr-2" />
             Enter Classroom
           </Button>
         </Link>

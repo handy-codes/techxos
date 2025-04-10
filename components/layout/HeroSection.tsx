@@ -1,8 +1,8 @@
-"use client&quot;;
+"use client";
 
-import { useEffect, useState, useRef } from &quot;react&quot;;
-import { motion } from &quot;framer-motion&quot;;
-import { useInView } from &quot;react-intersection-observer&quot;;
+import { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const Counter = ({ end, showPlus = true }: { end: number; showPlus?: boolean }) => {
   const [count, setCount] = useState(0);
@@ -45,14 +45,14 @@ const Counter = ({ end, showPlus = true }: { end: number; showPlus?: boolean }) 
   return (
     <motion.span
       ref={ref}
-      className=&quot;text-[#FCB80B] font-extrabold text-5xl sm:text-7xl font-mono inline-block min-h-[1.2em]&quot;
+      className="text-[#FCB80B] font-extrabold text-5xl sm:text-7xl font-mono inline-block min-h-[1.2em]"
       initial={{ opacity: 0 }}
       animate={{ opacity: inView ? 1 : 0 }}
       transition={{ duration: 0.5 }}
-      style={{ fontVariantNumeric: &quot;tabular-nums&quot; }}
+      style={{ fontVariantNumeric: "tabular-nums" }}
     >
       {count}
-      {showPlus && &quot;+"}
+      {showPlus && "+"}
     </motion.span>
   );
 };
@@ -60,38 +60,38 @@ const Counter = ({ end, showPlus = true }: { end: number; showPlus?: boolean }) 
 export default function HeroSection() {
   return (
     <div
-      className=&quot;relative w-full h-screen flex flex-col items-center justify-center text-center bg-fixed bg-cover bg-center&quot;
+      className="relative w-full h-screen flex flex-col items-center justify-center text-center bg-fixed bg-cover bg-center"
       style={{
         backgroundImage:
-          &quot;url(&apos;https://images.pexels.com/photos/5198239/pexels-photo-5198239.jpeg?auto=compress&cs=tinysrgb&w=600&apos;)&quot;,
+          "url('https://images.pexels.com/photos/5198239/pexels-photo-5198239.jpeg?auto=compress&cs=tinysrgb&w=600')",
       }}
     >
-      <div className=&quot;absolute inset-0 bg-black bg-opacity-50&quot; />
+      <div className="absolute inset-0 bg-black bg-opacity-50" />
 
-      <div className="relative z-10 px-6 flex flex-col items-center justify-center w-full&quot;>
+      <div className="relative z-10 px-6 flex flex-col items-center justify-center w-full">
         <motion.div 
-          className=&quot;flex flex-col items-center&quot;
+          className="flex flex-col items-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className=&quot;text-white text-4xl md:text-5xl font-bold mb-6 leading-tight&quot;>
+          <h1 className="text-white text-4xl md:text-5xl font-bold mb-6 leading-tight">
             Empowering Many with Life Skills!
           </h1>
-          <hr className=&quot;border-t-4 border-[#F89928] w-full max-w-2xl mx-auto mb-8 md:mb-12&quot; />
+          <hr className="border-t-4 border-[#F89928] w-full max-w-2xl mx-auto mb-8 md:mb-12" />
         </motion.div>
 
-        <div className=&quot;text-white text-lg flex flex-col sm:flex-row justify-between items-baseline gap-8 md:text-2xl&quot;>
+        <div className="text-white text-lg flex flex-col sm:flex-row justify-between items-baseline gap-8 md:text-2xl">
           {[
-            { end: 400, label: &quot;Happy Students&quot; },
-            { end: 350, label: &quot;Women in Tech&quot; },
-            { end: 300, label: &quot;Graduates&quot;, showPlus: false },
+            { end: 400, label: "Happy Students" },
+            { end: 350, label: "Women in Tech" },
+            { end: 300, label: "Graduates", showPlus: false },
           ].map((item, index) => (
-            <div key={index} className=&quot;flex flex-col items-center flex-1 py-4 min-w-[150px]&quot;>
-              <div className=&quot;h-[72px] flex items-center justify-center&quot;>
+            <div key={index} className="flex flex-col items-center flex-1 py-4 min-w-[150px]">
+              <div className="h-[72px] flex items-center justify-center">
                 <Counter end={item.end} showPlus={item.showPlus} />
               </div>
-              <p className=&quot;mt-2 text-balance text-center">{item.label}</p>
+              <p className="mt-2 text-balance text-center">{item.label}</p>
             </div>
           ))}
         </div>

@@ -1,7 +1,7 @@
-'use client&apos;;
+'use client';
 
-import React from &apos;react&apos;;
-import { RecoilRoot } from &apos;recoil';
+import React from 'react';
+import { RecoilRoot } from 'recoil';
 
 export default function SessionWrapper({ children }) {
   return (
