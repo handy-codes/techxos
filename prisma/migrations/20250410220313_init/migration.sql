@@ -135,7 +135,7 @@ CREATE TABLE `LiveClassUser` (
     `id` VARCHAR(191) NOT NULL,
     `clerkUserId` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
-    `role` ENUM('HEAD_ADMIN', 'ADMIN', 'LECTURER', 'LEARNER') NOT NULL DEFAULT 'LEARNER',
+    `role` ENUM('HEAD_ADMIN', 'ADMIN', 'LECTURER', 'LEARNER', 'VISITOR') NOT NULL DEFAULT 'LEARNER',
     `name` VARCHAR(191) NULL,
     `isActive` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -185,19 +185,39 @@ CREATE TABLE `LiveClassPurchase` (
     `status` ENUM('PENDING', 'COMPLETED', 'FAILED', 'REFUNDED') NOT NULL DEFAULT 'PENDING',
     `amount` DOUBLE NOT NULL,
     `transactionId` VARCHAR(191) NULL,
+    `flwRef` VARCHAR(191) NULL,
+    `txRef` VARCHAR(191) NULL,
     `isActive` BOOLEAN NOT NULL DEFAULT true,
     `startDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `endDate` DATETIME(3) NOT NULL,
+    `studentName` VARCHAR(191) NOT NULL,
+    `studentEmail` VARCHAR(191) NOT NULL,
+    `courseName` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
     INDEX `LiveClassPurchase_liveClassId_idx`(`liveClassId`),
     INDEX `LiveClassPurchase_studentId_idx`(`studentId`),
     INDEX `LiveClassPurchase_status_idx`(`status`),
-    INDEX `LiveClassPurchase_isActive_idx`(`isActive`),
-    INDEX `LiveClassPurchase_startDate_idx`(`startDate`),
-    INDEX `LiveClassPurchase_endDate_idx`(`endDate`),
     UNIQUE INDEX `LiveClassPurchase_studentId_liveClassId_key`(`studentId`, `liveClassId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `SystemSettings` (
+    `id` VARCHAR(191) NOT NULL,
+    `siteName` VARCHAR(191) NOT NULL DEFAULT 'TechXOS Academy',
+    `siteUrl` VARCHAR(191) NOT NULL DEFAULT 'https://techxos.com',
+    `maintenanceMode` BOOLEAN NOT NULL DEFAULT false,
+    `emailNotifications` BOOLEAN NOT NULL DEFAULT true,
+    `studentEnrollmentNotifications` BOOLEAN NOT NULL DEFAULT true,
+    `paymentNotifications` BOOLEAN NOT NULL DEFAULT true,
+    `twoFactorAuth` BOOLEAN NOT NULL DEFAULT false,
+    `sessionTimeout` BOOLEAN NOT NULL DEFAULT true,
+    `sessionTimeoutMinutes` INTEGER NOT NULL DEFAULT 60,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -250,5 +270,84 @@ CREATE TABLE `LiveClassAttendance` (
     INDEX `LiveClassAttendance_studentId_idx`(`studentId`),
     INDEX `LiveClassAttendance_joinTime_idx`(`joinTime`),
     INDEX `LiveClassAttendance_status_idx`(`status`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ZoomMeeting` (
+    `id` VARCHAR(191) NOT NULL,
+    `zoomMeetingId` VARCHAR(191) NULL,
+    `topic` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NULL,
+    `startTime` DATETIME(3) NOT NULL,
+    `duration` INTEGER NOT NULL,
+    `agenda` VARCHAR(191) NULL,
+    `status` ENUM('SCHEDULED', 'STARTED', 'ENDED', 'CANCELLED') NOT NULL DEFAULT 'SCHEDULED',
+    `joinUrl` VARCHAR(191) NULL,
+    `startUrl` VARCHAR(191) NULL,
+    `hostEmail` VARCHAR(191) NULL,
+    `liveClassId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `ZoomMeeting_zoomMeetingId_key`(`zoomMeetingId`),
+    INDEX `ZoomMeeting_liveClassId_idx`(`liveClassId`),
+    INDEX `ZoomMeeting_status_idx`(`status`),
+    INDEX `ZoomMeeting_startTime_idx`(`startTime`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ZoomRecording` (
+    `id` VARCHAR(191) NOT NULL,
+    `zoomRecordingId` VARCHAR(191) NULL,
+    `meetingId` VARCHAR(191) NOT NULL,
+    `recordingType` VARCHAR(191) NOT NULL,
+    `recordingStart` DATETIME(3) NOT NULL,
+    `recordingEnd` DATETIME(3) NULL,
+    `fileType` VARCHAR(191) NOT NULL,
+    `fileSize` INTEGER NULL,
+    `playUrl` VARCHAR(191) NULL,
+    `downloadUrl` VARCHAR(191) NULL,
+    `status` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `ZoomRecording_zoomRecordingId_key`(`zoomRecordingId`),
+    INDEX `ZoomRecording_meetingId_idx`(`meetingId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ZoomAttendance` (
+    `id` VARCHAR(191) NOT NULL,
+    `meetingId` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `userName` VARCHAR(191) NOT NULL,
+    `userEmail` VARCHAR(191) NOT NULL,
+    `userRole` ENUM('HEAD_ADMIN', 'ADMIN', 'LECTURER', 'LEARNER', 'VISITOR') NOT NULL,
+    `joinTime` DATETIME(3) NOT NULL,
+    `leaveTime` DATETIME(3) NULL,
+    `duration` INTEGER NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    INDEX `ZoomAttendance_meetingId_idx`(`meetingId`),
+    INDEX `ZoomAttendance_userId_idx`(`userId`),
+    INDEX `ZoomAttendance_joinTime_idx`(`joinTime`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `CourseZoomMeeting` (
+    `id` VARCHAR(191) NOT NULL,
+    `courseId` VARCHAR(191) NOT NULL,
+    `zoomLink` TEXT NOT NULL,
+    `isActive` BOOLEAN NOT NULL DEFAULT true,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    INDEX `CourseZoomMeeting_courseId_idx`(`courseId`),
+    INDEX `CourseZoomMeeting_isActive_idx`(`isActive`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

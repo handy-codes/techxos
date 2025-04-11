@@ -60,10 +60,16 @@ const Counter = ({ end, showPlus = true }: { end: number; showPlus?: boolean }) 
 export default function HeroSection() {
   return (
     <div
-      className="relative w-full h-screen flex flex-col items-center justify-center text-center bg-fixed bg-cover bg-center"
+      className="relative w-full h-screen flex flex-col items-center justify-center text-center bg-cover bg-center"
       style={{
-        backgroundImage:
-          "url('https://images.pexels.com/photos/5198239/pexels-photo-5198239.jpeg?auto=compress&cs=tinysrgb&w=600')",
+        backgroundImage: "url('https://images.pexels.com/photos/5198239/pexels-photo-5198239.jpeg?auto=compress&cs=tinysrgb&w=600')",
+        backgroundAttachment: "fixed",
+        WebkitBackgroundSize: "cover",
+        WebkitTransform: "translateZ(0)",
+        transform: "translateZ(0)",
+        backfaceVisibility: "hidden",
+        perspective: 1000,
+        willChange: "transform",
       }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-50" />
@@ -78,7 +84,7 @@ export default function HeroSection() {
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-6 leading-tight">
             Empowering Many with Life Skills!
           </h1>
-          <hr className="border-t-4 border-[#F89928] w-full max-w-2xl mx-auto mb-8 md:mb-12" />
+          <div className="w-full max-w-2xl mx-auto mb-8 md:mb-12 h-1 bg-[#F89928] rounded-full shadow-[0_0_15px_rgba(248,153,40,0.8)]"></div>
         </motion.div>
 
         <div className="text-white text-lg flex flex-col sm:flex-row justify-between items-baseline gap-8 md:text-2xl">

@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { syncUserRole } from "./user-sync";
 
 export async function requireAdmin() {
   const { userId } = auth();
@@ -13,7 +14,11 @@ export async function requireAdmin() {
   }
   
   try {
-    const user = await db.liveClassUser.findUnique({
+    // First try to sync the user role
+    const syncedUser = await syncUserRole();
+    
+    // If sync failed, try direct database lookup
+    const user = syncedUser || await db.liveClassUser.findUnique({
       where: { clerkUserId: userId }
     });
     

@@ -72,19 +72,39 @@ export async function GET(req: Request) {
         if (adminEmails.includes(userEmail.toLowerCase())) {
           console.log("[LECTURE_GET] Creating admin record for known admin email:", userEmail);
           try {
-            user = await db.liveClassUser.create({
-              data: {
-                clerkUserId,
-                email: userEmail,
-                name: userName,
-                role: LiveClassUserRole.HEAD_ADMIN,
-                isActive: true
-              }
+            // First check if user already exists with this email
+            const existingAdmin = await db.liveClassUser.findUnique({
+              where: { email: userEmail.toLowerCase() }
             });
-            console.log("[LECTURE_GET] Created new admin user:", user.id);
+
+            if (existingAdmin) {
+              // Update existing admin with new Clerk ID
+              user = await db.liveClassUser.update({
+                where: { id: existingAdmin.id },
+                data: {
+                  clerkUserId,
+                  name: userName || existingAdmin.name,
+                  role: LiveClassUserRole.HEAD_ADMIN,
+                  isActive: true
+                }
+              });
+              console.log("[LECTURE_GET] Updated existing admin user:", user.id);
+            } else {
+              // Create new admin user
+              user = await db.liveClassUser.create({
+                data: {
+                  clerkUserId,
+                  email: userEmail.toLowerCase(),
+                  name: userName,
+                  role: LiveClassUserRole.HEAD_ADMIN,
+                  isActive: true
+                }
+              });
+              console.log("[LECTURE_GET] Created new admin user:", user.id);
+            }
           } catch (userCreateError) {
-            console.error("[LECTURE_GET] Error creating admin user:", userCreateError);
-            return new NextResponse("Could not create user record", { status: 500 });
+            console.error("[LECTURE_GET] Error creating/updating admin user:", userCreateError);
+            return new NextResponse("Could not create/update user record", { status: 500 });
           }
         } else {
           // For regular visitors, we won't create a database entry
@@ -183,23 +203,23 @@ export async function GET(req: Request) {
 
     if (user) {
       // For users with database records, check purchases and roles
-    const isPurchased = await db.liveClassPurchase.findFirst({
-      where: {
-        studentId: user.id,
-        liveClassId: liveClass.id,
-        isActive: true,
-        endDate: { gt: new Date() }
-      },
-    });
+      const isPurchased = await db.liveClassPurchase.findFirst({
+        where: {
+          studentId: user.id,
+          liveClassId: liveClass.id,
+          isActive: true,
+          endDate: { gt: new Date() }
+        },
+      });
 
       // Add an explicit check for admin/lecturer roles
       const isAdminOrHigher = user.role === LiveClassUserRole.LECTURER || 
-      user.role === LiveClassUserRole.ADMIN || 
-      user.role === LiveClassUserRole.HEAD_ADMIN;
+                             user.role === LiveClassUserRole.ADMIN || 
+                             user.role === LiveClassUserRole.HEAD_ADMIN;
       
       userRole = user.role;
       hasAccess = isPurchased || isAdminOrHigher;
-      console.log(`User role: ${userRole}, isAdminOrHigher: ${isAdminOrHigher}`);
+      console.log(`User role: ${userRole}, isAdminOrHigher: ${isAdminOrHigher}, hasAccess: ${hasAccess}`);
     } else {
       // For visitors without database records, check if their email is a known admin
       const adminEmails = [
@@ -210,7 +230,7 @@ export async function GET(req: Request) {
       
       if (adminEmails.includes(userEmail.toLowerCase())) {
         hasAccess = true;
-        userRole = "HEAD_ADMIN";
+        userRole = LiveClassUserRole.HEAD_ADMIN;
         console.log(`Email admin detected: ${userEmail}, granting access`);
       } else {
         hasAccess = false;

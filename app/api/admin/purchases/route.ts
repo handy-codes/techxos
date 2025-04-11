@@ -1,80 +1,77 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth-utils";
-import { clerkClient } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const authCheck = await requireAdmin();
-    if (!authCheck.success) {
-      return authCheck.response;
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get all purchases with related user and course details
-    const purchases = await db.liveClassPurchase.findMany({
+    // Get the user's role
+    const user = await prisma.liveClassUser.findUnique({
+      where: { clerkUserId: userId },
+      select: { role: true }
+    });
+
+    if (!user || !["HEAD_ADMIN", "ADMIN"].includes(user.role)) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    // Fetch all purchases with related data
+    const purchases = await prisma.liveClassPurchase.findMany({
       include: {
         liveClass: {
           select: {
-            id: true,
             title: true,
-            price: true
           }
         }
       },
-      orderBy: { createdAt: "desc" }
+      orderBy: {
+        createdAt: 'desc'
+      }
     });
 
-    // Get all users to match with purchases
-    const users = await db.liveClassUser.findMany({
+    // Get all student IDs from purchases
+    const studentIds = purchases.map(purchase => purchase.studentId);
+    
+    // Fetch all students in one query
+    const students = await prisma.liveClassUser.findMany({
+      where: {
+        id: {
+          in: studentIds
+        }
+      },
       select: {
         id: true,
-        clerkUserId: true,
         name: true,
         email: true
       }
     });
 
-    // Create a map of user IDs to user details
-    const userMap = new Map();
-    users.forEach(user => {
-      userMap.set(user.id, user);
-      if (user.clerkUserId) {
-        userMap.set(user.clerkUserId, user);
-      }
+    // Create a map of student IDs to student details
+    const studentMap = new Map();
+    students.forEach(student => {
+      studentMap.set(student.id, student);
     });
 
-    // Enhance purchase records with user details
-    const enhancedPurchases = await Promise.all(purchases.map(async (purchase) => {
-      // Try to find user in our map
-      let userDetails = userMap.get(purchase.studentId);
-      
-      // If no user found and studentId looks like a Clerk ID
-      if (!userDetails && purchase.studentId.startsWith("user_")) {
-        try {
-          // Try to get user details from Clerk
-          const clerkUser = await clerkClient.users.getUser(purchase.studentId);
-          userDetails = {
-            clerkUserId: purchase.studentId,
-            name: clerkUser.firstName && clerkUser.lastName 
-              ? `${clerkUser.firstName} ${clerkUser.lastName}`
-              : clerkUser.firstName || "Unknown",
-            email: clerkUser.emailAddresses[0]?.emailAddress || "No email"
-          };
-        } catch (error) {
-          console.error("Error fetching Clerk user:", error);
-          userDetails = { name: "Unknown User", email: "Unknown Email" };
-        }
-      }
-
+    // Enhance purchases with student details
+    const enhancedPurchases = purchases.map(purchase => {
+      const student = studentMap.get(purchase.studentId) || { name: "Unknown", email: "Unknown" };
       return {
         ...purchase,
-        student: userDetails || { name: "Unknown User", email: "Unknown Email" }
+        student: {
+          name: student.name || "Unknown",
+          email: student.email || "Unknown"
+        }
       };
-    }));
+    });
 
     return NextResponse.json(enhancedPurchases);
   } catch (error) {
-    console.error("[PURCHASES_GET]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    console.error("[ADMIN_PURCHASES_GET]", error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 } 

@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import Image from "next/image";
@@ -7,15 +6,11 @@ import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
-import ProjectManagement from "@/components/curriculum/Project-Mgt";
-import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
-import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
-import FlutterwavePayment from "@/components/payment/FlutterwavePayment";
-import { useRouter } from "next/navigation";
+import CoursePayment from "@/components/course/CoursePayment";
+import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 
 interface LiveLecture {
   id: string;
@@ -32,9 +27,33 @@ interface LiveCourseWithLectures {
   hasAccess: boolean;
 }
 
-export default function Page() {
+interface CoursePageTemplateProps {
+  courseId: string;
+  courseName: string;
+  courseDescription: string;
+  coursePrice: number;
+  courseImage: string;
+  courseDuration: string;
+  courseSchedule: string;
+  courseLocation: string;
+  courseOptions: string;
+  curriculumComponent: React.ReactNode;
+}
+
+export default function CoursePageTemplate({
+  courseId,
+  courseName,
+  courseDescription,
+  coursePrice,
+  courseImage,
+  courseDuration,
+  courseSchedule,
+  courseLocation,
+  courseOptions,
+  curriculumComponent
+}: CoursePageTemplateProps) {
   const [formData, setFormData] = useState({
-    courseTitle: "Project Management",
+    courseTitle: courseName,
     name: "",
     surname: "",
     email: "",
@@ -47,17 +66,18 @@ export default function Page() {
     "idle" | "success" | "error"
   >("idle");
 
-  const { isSignedIn, userId } = useAuth();
+  const { isSignedIn } = useAuth();
   const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
-  const router = useRouter();
+  const [hasAccess, setHasAccess] = useState(false);
 
   const fetchLectureDetails = useCallback(async () => {
     try {
       console.log("Fetching lecture details...");
-      const response = await axios.get("/api/live-courses/project-mgt/lecture");
+      const response = await axios.get(`/api/live-courses/${courseId}/lecture`);
       console.log("Lecture details response:", response.data);
 
       setLecture(response.data.lecture);
+      setHasAccess(response.data.lecture?.hasAccess || false);
 
     } catch (error: unknown) {
       const err = error as {
@@ -79,7 +99,7 @@ export default function Page() {
         toast.error("Failed to load lecture details");
       }
     }
-  }, []);
+  }, [courseId]);
 
   useEffect(() => {
     if (isSignedIn) {
@@ -123,7 +143,7 @@ export default function Page() {
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Project Management",
+        courseTitle: courseName,
         name: "",
         surname: "",
         email: "",
@@ -172,28 +192,13 @@ export default function Page() {
           <p>No scheduled lectures at this time. Please check back later.</p>
         )}
         <div className="mt-4">
-          {lecture.hasAccess ? (
-            <JoinLiveClassButton 
-              courseId="project-mgt" 
-              courseName="Project Management" 
-            />
-          ) : (
-            <FlutterwavePayment 
-              courseId="project-mgt"
-              courseName="Project Management"
-              amount={250000}
-              email={formData.email}
-              name={`${formData.name} ${formData.surname}`}
-              onSuccess={() => {
-                toast.success("Payment successful! Redirecting to course...");
-                router.push("/courses/project-mgt/success");
-              }}
-              onError={(error) => {
-                console.error("Payment error:", error);
-                toast.error("Payment failed. Please try again.");
-              }}
-            />
-          )}
+          <CoursePayment 
+            courseId={courseId}
+            courseName={courseName}
+            amount={coursePrice}
+            hasAccess={hasAccess}
+            onAccessChange={setHasAccess}
+          />
         </div>
       </div>
     );
@@ -202,10 +207,10 @@ export default function Page() {
   return (
     <div>
       <Head>
-        <title>Course Page</title>
+        <title>{courseName} | Techxos</title>
         <meta
           name="description"
-          content="Welcome to the Project Management Course"
+          content={`Welcome to the ${courseName} Course`}
         />
       </Head>
 
@@ -214,21 +219,16 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Project Management
+                {courseName}
               </h1>
               <p className="text-xl mb-8">
-                Lead the Charge to Success with Project Management! Imagine
-                steering high-stakes projects from chaos to triumph—turning
-                blueprints into reality on time, under budget, and beyond
-                expectations. Project Management is the art of orchestrating
-                teams, resources, and strategy to deliver results that move
-                industries, spark innovation, and define careers.
+                {courseDescription}
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://i.ibb.co/4nDmr2nb/Gemini-Generated-Image-72ww6w72ww6w72ww.jpg"
-                alt="Team Collaboration"
+                src={courseImage}
+                alt={courseName}
                 fill
                 className="object-cover"
                 priority
@@ -243,22 +243,15 @@ export default function Page() {
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
-              Project Management
+              {courseName}
             </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            250,000 NGN
+            {coursePrice.toLocaleString()} NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            Techxos powers your rise: Simulate real-world projects (think
-            software launches or event megaprojects), learn from PMs who have
-            delivered billion-dollar portfolios, and join a network of leaders
-            obsessed with efficiency and impact. Dive into stakeholder mapping,
-            risk mitigation, and Lean practices, while earning certifications
-            that scream &quot;promote me.&quot; Ready to transform ideas into
-            legacy? Enroll now and start delivering success—one milestone at a
-            time. 🚀📅🎯
+            {courseDescription}
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
@@ -272,41 +265,35 @@ export default function Page() {
           <div className="font-semibold">
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <FaRegClock className="text-black text-[22px]" />
-              <span>Duration: 12 weeks</span>
+              <span>Duration: {courseDuration}</span>
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <AiFillSchedule className="text-black text-[24px]" />
-              <span>Schedule: 9 hours/week</span>
+              <span>Schedule: {courseSchedule}</span>
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <HiLocationMarker className="text-black text-[27px]" />
-              <span>Location: In-person or online</span>
+              <span>Location: {courseLocation}</span>
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <IoMdOptions className="text-black text-[24px]" />
-              <span>Options: Evening Class, Executive (one-to-one) class</span>
+              <span>Options: {courseOptions}</span>
             </div>
             <h2 className="text-2xl font-bold mb-2 mt-6">
-              Project Management Virtual
+              {courseName} Virtual
             </h2>
             
             {/* Display lecture information if available */}
             {renderLectureInfo()}
             
-            <div className=" p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
-              {!isSignedIn ? (
-                <Link
-                  href="/sign-in"
-                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
-                >
-                  Enroll Now
-                </Link>
-              ) : (
-                <CoursePurchaseButton 
-                  courseId="project-mgt" 
-                  courseName="Project Management" 
-                />
-              )}
+            <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
+              <CoursePayment 
+                courseId={courseId}
+                courseName={courseName}
+                amount={coursePrice}
+                hasAccess={hasAccess}
+                onAccessChange={setHasAccess}
+              />
             </div>
           </div>
         </div>
@@ -407,8 +394,8 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <ProjectManagement />
+      {curriculumComponent}
       <ScrollToTopButton />
     </div>
   );
-}
+} 

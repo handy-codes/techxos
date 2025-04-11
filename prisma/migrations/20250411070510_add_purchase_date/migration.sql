@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `LiveClassPurchase` ADD COLUMN `purchaseDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

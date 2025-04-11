@@ -195,10 +195,9 @@ const Topbar = () => {
                       <div className="w-[42vw] h-full relative">
                         <Image
                           src="https://images.pexels.com/photos/7971355/pexels-photo-7971355.jpeg"
-                          layout="fill"
+                          fill
                           className="object-cover pt-1"
                           alt="Course Preview"
-                          priority
                         />
                       </div>
                       <div className="w-[40vw] bg-[#FEE2E2] text-[black] mt-1 grid grid-cols-2 font-bold gap-3 p-6 overflow-y-auto">

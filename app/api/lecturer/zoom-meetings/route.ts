@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { LiveClassUserRole } from "@prisma/client";
+import { createZoomMeeting } from "@/lib/zoom-api";
 
 export async function GET(req: Request) {
   try {
@@ -117,10 +118,46 @@ export async function POST(req: Request) {
       }
     });
 
-    // In a real implementation, we would also create the meeting in Zoom API
-    // using the zoom-api.ts utility
+    // Create the meeting in Zoom API
+    try {
+      const zoomMeetingParams = {
+        topic,
+        agenda,
+        start_time: startTime,
+        duration,
+        password,
+        settings: {
+          host_video: true,
+          participant_video: false,
+          join_before_host: false,
+          mute_upon_entry: true,
+          waiting_room: true,
+          auto_recording: "cloud",
+          alternative_hosts: user.email
+        }
+      };
 
-    return NextResponse.json(meeting);
+      const zoomResponse = await createZoomMeeting(zoomMeetingParams);
+
+      // Update the meeting with Zoom details
+      const updatedMeeting = await db.zoomMeeting.update({
+        where: { id: meeting.id },
+        data: {
+          zoomMeetingId: zoomResponse.id.toString(),
+          joinUrl: zoomResponse.join_url,
+          startUrl: zoomResponse.start_url
+        }
+      });
+
+      return NextResponse.json(updatedMeeting);
+    } catch (zoomError) {
+      // If Zoom API fails, delete the meeting from our database
+      await db.zoomMeeting.delete({
+        where: { id: meeting.id }
+      });
+      console.error("[LECTURER_ZOOM_MEETINGS_POST] Zoom API Error:", zoomError);
+      return new NextResponse("Failed to create Zoom meeting", { status: 500 });
+    }
   } catch (error) {
     console.error("[LECTURER_ZOOM_MEETINGS_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });

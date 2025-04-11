@@ -130,12 +130,13 @@ export default function UsersPage() {
       setTotalPages(Math.ceil(filteredUsers.length / itemsPerPage));
       setUsers(paginatedUsers);
       setIsUnauthorized(false);
-    } catch (error: unknown) {
+    } catch (error: any) {
       const err = error as ApiError;
       console.error("Error fetching users:", err);
       if (err.response?.status === 401 || err.response?.status === 403) {
         setIsUnauthorized(true);
         toast.error("You don't have permission to view users");
+        router.push("/");
       } else {
         toast.error("Failed to fetch users");
       }
@@ -143,7 +144,7 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  }, [searchQuery, roleFilter, statusFilter, page, itemsPerPage]);
+  }, [searchQuery, roleFilter, statusFilter, page, itemsPerPage, router]);
 
   useEffect(() => {
     if (isLoaded && !user) {
@@ -227,87 +228,65 @@ export default function UsersPage() {
 
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search users..."
-              className="pl-10"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8"
             />
           </div>
-
-          <div className="flex gap-2">
-            {isMounted && (
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" className="w-full sm:w-auto hidden">
-                    <Filter className="w-4 h-4 mr-2" />
-                    Filters
-                  </Button>
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <SheetTitle>Filter Users</SheetTitle>
-                  </SheetHeader>
-                  <div className="space-y-4 mt-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Role</label>
-                      <Select value={roleFilter} onValueChange={setRoleFilter}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Roles</SelectItem>
-                          <SelectItem value="HEAD_ADMIN">Head Admin</SelectItem>
-                          <SelectItem value="ADMIN">Admin</SelectItem>
-                          <SelectItem value="LECTURER">Lecturer</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Status</label>
-                      <Select value={statusFilter} onValueChange={setStatusFilter}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Status</SelectItem>
-                          <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="inactive">Inactive</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+          {isMounted && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="w-full sm:w-auto">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filter
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Filter Users</SheetTitle>
+                </SheetHeader>
+                <div className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Role</label>
+                    <Select value={roleFilter} onValueChange={setRoleFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Roles</SelectItem>
+                        <SelectItem value="HEAD_ADMIN">Head Admin</SelectItem>
+                        <SelectItem value="ADMIN">Admin</SelectItem>
+                        <SelectItem value="LECTURER">Lecturer</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                </SheetContent>
-              </Sheet>
-            )}
-          </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Status</label>
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Status</SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="inactive">Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
         </div>
 
         {loading ? (
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {[...Array(5)].map((_: unknown, i: number) => (
-                    <TableHead key={i}>
-                      <Skeleton className="h-4 w-[250px]" />
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {[...Array(5)].map((_: unknown, i: number) => (
-                  <TableRow key={i}>
-                    {[...Array(5)].map((_: unknown, j: number) => (
-                      <TableCell key={j}>
-                        <Skeleton className="h-4 w-[250px]" />
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          <div className="space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
           </div>
         ) : (
           <div className="rounded-md border overflow-x-auto">

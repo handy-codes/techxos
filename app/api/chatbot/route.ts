@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import * as cheerio from "cheerio";
+import { createClerkClient } from "@clerk/backend";
 
 interface GroqResponse {
   choices: Array<{
@@ -123,7 +124,7 @@ async function crawlWebsite(url: string): Promise<WebsiteCache['structuredData']
     const courses: Course[] = [];
     
     // Try multiple selectors to find course information
-    $('.course-card, .course-item, .course, [data-course]').each((index: number, element: cheerio.Cheerio<cheerio.AnyNode>) => {
+    $('.course-card, .course-item, .course, [data-course]').each((index, element) => {
       const course: Course = {
         name: $(element).find('.course-title, .title, h2, h3').first().text().trim(),
         price: $(element).find('.course-price, .price, [data-price]').first().text().trim(),

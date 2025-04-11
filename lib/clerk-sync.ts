@@ -1,10 +1,47 @@
-import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { LiveClassUserRole } from "@prisma/client";
 
-export async function syncUserRole(userId?: string) {
+/**
+ * Syncs a user's role from the database to Clerk's public metadata
+ * This should be called from API routes, not middleware
+ */
+export async function syncUserRoleToClerk(userId: string) {
   try {
-    console.log("Syncing user role for userId:", userId);
+    console.log("Syncing user role to Clerk for userId:", userId);
+    
+    // Find user in database
+    const user = await db.liveClassUser.findUnique({
+      where: { clerkUserId: userId }
+    });
+    
+    if (!user) {
+      console.error("User not found in database");
+      return false;
+    }
+    
+    // Update Clerk user metadata
+    await clerkClient.users.updateUser(userId, {
+      publicMetadata: {
+        role: user.role
+      }
+    });
+    
+    console.log("Successfully synced role to Clerk:", user.role);
+    return true;
+  } catch (error) {
+    console.error("Error syncing role to Clerk:", error);
+    return false;
+  }
+}
+
+/**
+ * Syncs a user from Clerk to the database
+ * This should be called from API routes, not middleware
+ */
+export async function syncUserFromClerk(userId: string) {
+  try {
+    console.log("Syncing user from Clerk for userId:", userId);
     
     if (!userId) {
       console.error("No userId provided for sync");
@@ -19,8 +56,7 @@ export async function syncUserRole(userId?: string) {
     // If not found by clerk ID, try to find by email from Clerk
     if (!user) {
       try {
-        // Use the function call syntax to avoid deprecation warning
-        const clerkUser = await clerkClient().users.getUser(userId);
+        const clerkUser = await clerkClient.users.getUser(userId);
         const userEmail = clerkUser.emailAddresses[0]?.emailAddress;
         
         if (userEmail) {
@@ -48,8 +84,7 @@ export async function syncUserRole(userId?: string) {
     // If still not found, create a new user
     if (!user) {
       try {
-        // Use the function call syntax to avoid deprecation warning
-        const clerkUser = await clerkClient().users.getUser(userId);
+        const clerkUser = await clerkClient.users.getUser(userId);
         const userEmail = clerkUser.emailAddresses[0]?.emailAddress;
         const userName = clerkUser.firstName && clerkUser.lastName 
           ? `${clerkUser.firstName} ${clerkUser.lastName}`
@@ -74,10 +109,13 @@ export async function syncUserRole(userId?: string) {
       }
     }
     
+    // Sync the role back to Clerk
+    await syncUserRoleToClerk(userId);
+    
     console.log("User sync successful:", { userId: user.id, role: user.role });
     return user;
   } catch (error) {
-    console.error("Error in syncUserRole:", error);
+    console.error("Error in syncUserFromClerk:", error);
     return null;
   }
 } 

@@ -8,36 +8,27 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-async function main() {
-  // Get command line arguments
-  const email = process.argv[2];
-  const role = process.argv[3]; // Should be ADMIN, LECTURER, HEAD_ADMIN, or LEARNER
-  
-  if (!email || !email.includes('@')) {
-    console.error('Please provide a valid email address as the first argument');
-    process.exit(1);
-  }
-  
-  if (!role || !['ADMIN', 'LECTURER', 'HEAD_ADMIN', 'LEARNER'].includes(role)) {
-    console.error('Please provide a valid role (ADMIN, LECTURER, HEAD_ADMIN, or LEARNER) as the second argument');
-    process.exit(1);
-  }
-  
-  console.log(`\n=== Creating/Updating user with email: ${email} and role: ${role} ===\n`);
-  
+async function createAdminUser(email, role) {
   try {
+    // Validate role
+    const validRoles = ['HEAD_ADMIN', 'ADMIN', 'LECTURER'];
+    if (!validRoles.includes(role)) {
+      console.error('Invalid role. Must be one of:', validRoles.join(', '));
+      process.exit(1);
+    }
+
     // Check if user already exists
-    const existingUser = await db.liveClassUser.findUnique({
+    const existingUser = await prisma.liveClassUser.findUnique({
       where: { email }
     });
-    
+
     if (existingUser) {
       console.log('User already exists with ID:', existingUser.id);
       console.log('Current role:', existingUser.role);
       console.log('Current Clerk User ID:', existingUser.clerkUserId || 'None');
       
       // Update user role
-      const updatedUser = await db.liveClassUser.update({
+      const updatedUser = await prisma.liveClassUser.update({
         where: { id: existingUser.id },
         data: { 
           role,
@@ -45,17 +36,16 @@ async function main() {
           clerkUserId: existingUser.clerkUserId || `pending_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
         }
       });
-      
+
       console.log('\n✅ User successfully updated:');
       console.log('ID:', updatedUser.id);
       console.log('Email:', updatedUser.email);
-      console.log('Name:', updatedUser.name);
       console.log('Role:', updatedUser.role);
       console.log('Clerk User ID:', updatedUser.clerkUserId);
       console.log('\n✅ User will now have', role, 'permissions and see "Join Live Class" instead of "Purchase Course"');
     } else {
       // Create new user
-      const newUser = await db.liveClassUser.create({
+      const newUser = await prisma.liveClassUser.create({
         data: {
           email,
           name: email.split('@')[0],
@@ -64,7 +54,7 @@ async function main() {
           clerkUserId: `pending_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
         }
       });
-      
+
       console.log('\n✅ New user successfully created:');
       console.log('ID:', newUser.id);
       console.log('Email:', newUser.email);
@@ -79,12 +69,27 @@ async function main() {
     console.log('1. The user must sign in with the exact email:', email);
     console.log('2. After first sign-in, their Clerk ID will be properly linked to this record');
     console.log('3. Make sure no duplicate records exist for this email in the database\n');
-    
+
   } catch (error) {
     console.error('Error:', error);
   } finally {
-    await db.$disconnect();
+    await prisma.$disconnect();
   }
 }
 
-main(); 
+// Get command line arguments
+const [,, email, role] = process.argv;
+
+if (!email || !email.includes('@')) {
+  console.error('Please provide a valid email address as the first argument');
+  process.exit(1);
+}
+
+if (!role || !['ADMIN', 'LECTURER', 'HEAD_ADMIN'].includes(role)) {
+  console.error('Please provide a valid role (ADMIN, LECTURER, or HEAD_ADMIN) as the second argument');
+  process.exit(1);
+}
+
+console.log(`\n=== Creating/Updating user with email: ${email} and role: ${role} ===\n`);
+
+createAdminUser(email, role); 
