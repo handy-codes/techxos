@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { LiveClassUserRole } from "@prisma/client";
 
 export async function GET(
   req: Request,
@@ -84,7 +85,12 @@ export async function GET(
       }
     }
 
-    // Check if the user has purchased the course
+    // Check if the user is an admin or lecturer
+    const isAdminOrLecturer = user.role === LiveClassUserRole.ADMIN || 
+                             user.role === LiveClassUserRole.HEAD_ADMIN || 
+                             user.role === LiveClassUserRole.LECTURER;
+
+    // Check if the user has purchased the course in the regular purchase table
     const purchase = await db.purchase.findFirst({
       where: {
         customerId: userId,
@@ -92,7 +98,33 @@ export async function GET(
       }
     });
 
-    if (!purchase) {
+    // Check if the user has purchased the course in the liveClassPurchase table
+    // For Project Management course, we need to find the liveClass first
+    let liveClassPurchase = null;
+    
+    if (courseId === "project-mgt") {
+      // Find the Project Management live class
+      const liveClass = await db.liveClass.findFirst({
+        where: {
+          title: "Project Management",
+          isActive: true,
+        }
+      });
+      
+      if (liveClass) {
+        liveClassPurchase = await db.liveClassPurchase.findFirst({
+          where: {
+            studentId: user.id,
+            liveClassId: liveClass.id,
+            isActive: true,
+            endDate: { gt: new Date() }
+          }
+        });
+      }
+    }
+
+    // Grant access if user is admin/lecturer or has purchased the course
+    if (!isAdminOrLecturer && !purchase && !liveClassPurchase) {
       return new NextResponse("You need to purchase this course to join the live class", { status: 403 });
     }
 

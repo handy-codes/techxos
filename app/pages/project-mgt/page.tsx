@@ -59,7 +59,10 @@ export default function Page() {
       const response = await axios.get("/api/live-courses/project-mgt/lecture");
       console.log("Lecture details response:", response.data);
 
-      setLecture(response.data.lecture);
+      setLecture({
+        ...response.data.lecture,
+        hasAccess: response.data.hasAccess
+      });
 
     } catch (error: unknown) {
       const err = error as {

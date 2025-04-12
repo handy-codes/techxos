@@ -55,6 +55,12 @@ export default function AdminLayout({
       active: pathname === "/admin/zoom-meetings" || pathname?.startsWith("/admin/zoom-meetings/"),
     },
     {
+      label: "Setup Zoom",
+      icon: Video,
+      href: "/admin/pages/setup-zoom",
+      active: pathname === "/admin/pages/setup-zoom" || pathname?.startsWith("/admin/pages/setup-zoom/"),
+    },
+    {
       label: "Payments",
       icon: CreditCard,
       href: "/admin/pages/purchases",
@@ -86,8 +92,8 @@ export default function AdminLayout({
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
                     route.active
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground"
+                      ? "bg-[#FFA500] text-white font-bold"
+                      : "text-black"
                   )}
                 >
                   <route.icon className="h-5 w-5" />
