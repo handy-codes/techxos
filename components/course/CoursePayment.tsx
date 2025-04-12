@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { toast } from 'react-hot-toast';
 import FlutterwavePayment from '@/components/payment/FlutterwavePayment';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,8 @@ export default function CoursePayment({
   hasAccess,
   onAccessChange
 }: CoursePaymentProps) {
-  const { isSignedIn, isLoaded, user } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
+  const { user } = useUser();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
