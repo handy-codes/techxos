@@ -15,6 +15,8 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import AdminCheck from "@/components/admin/AdminCheck";
+import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 
 export default function AdminLayout({
   children,
@@ -22,6 +24,14 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { user, isLoaded } = useUser();
+  const [userName, setUserName] = useState<string>("Admin");
+  
+  useEffect(() => {
+    if (isLoaded && user) {
+      setUserName(user.firstName || "Admin");
+    }
+  }, [isLoaded, user]);
   
   const routes = [
     {
@@ -78,7 +88,7 @@ export default function AdminLayout({
     <AdminCheck>
       <div className="flex h-screen">
         {/* Sidebar */}
-        <div className="w-64 border-r bg-background">
+        <div className="w-64 border-r bg-background fixed h-full">
           <div className="p-6">
             <h1 className="text-2xl font-bold">Admin Panel</h1>
           </div>
@@ -105,7 +115,15 @@ export default function AdminLayout({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto ml-64">
+          {/* Welcome Message */}
+          <div className="bg-white border-b p-4 flex justify-end">
+            <div className="text-right">
+              <p className="font-medium text-black">
+                Welcome back, <span className="font-bold">{userName}</span>
+              </p>
+            </div>
+          </div>
           {children}
         </div>
       </div>
