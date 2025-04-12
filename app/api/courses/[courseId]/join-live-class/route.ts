@@ -134,7 +134,7 @@ export async function GET(
     // Log the attendance
     await db.liveClassAttendance.create({
       data: {
-        userId: user.id,
+        studentId: user.id,
         liveClassId: courseId, // Using courseId as liveClassId for simplicity
         status: "PRESENT",
         joinTime: new Date(),
