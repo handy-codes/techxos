@@ -40,9 +40,9 @@ export const columns: ColumnDef<PurchaseColumn>[] = [
     header: "Amount",
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
+      const formatted = new Intl.NumberFormat("en-NG", {
         style: "currency",
-        currency: "USD",
+        currency: "NGN",
       }).format(amount);
       return <div>{formatted}</div>;
     },

@@ -1,31 +1,31 @@
 import { NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@/lib/db";
+import { LiveClassUserRole } from "@prisma/client";
 
 export async function GET(req: Request) {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get the user's role
-    const user = await prisma.liveClassUser.findUnique({
-      where: { clerkUserId: userId },
-      select: { role: true }
+    // Check if user is an admin
+    const user = await db.liveClassUser.findUnique({
+      where: { clerkUserId: userId }
     });
 
-    if (!user || !["HEAD_ADMIN", "ADMIN"].includes(user.role)) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!user || (user.role !== LiveClassUserRole.ADMIN && user.role !== LiveClassUserRole.HEAD_ADMIN)) {
+      return new NextResponse("Unauthorized - Admin access required", { status: 403 });
     }
 
     // Fetch all purchases with related data
-    const purchases = await prisma.liveClassPurchase.findMany({
+    const purchases = await db.liveClassPurchase.findMany({
       include: {
         liveClass: {
           select: {
-            title: true,
+            title: true
           }
         }
       },
@@ -34,44 +34,21 @@ export async function GET(req: Request) {
       }
     });
 
-    // Get all student IDs from purchases
-    const studentIds = purchases.map(purchase => purchase.studentId);
-    
-    // Fetch all students in one query
-    const students = await prisma.liveClassUser.findMany({
-      where: {
-        id: {
-          in: studentIds
-        }
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true
+    // Map the purchases to include student data
+    const purchasesWithStudentData = purchases.map(purchase => ({
+      ...purchase,
+      student: {
+        name: purchase.studentName || "Unknown",
+        email: purchase.studentEmail || "No email"
       }
-    });
+    }));
 
-    // Create a map of student IDs to student details
-    const studentMap = new Map();
-    students.forEach(student => {
-      studentMap.set(student.id, student);
+    return NextResponse.json({
+      success: true,
+      purchases: purchasesWithStudentData
     });
-
-    // Enhance purchases with student details
-    const enhancedPurchases = purchases.map(purchase => {
-      const student = studentMap.get(purchase.studentId) || { name: "Unknown", email: "Unknown" };
-      return {
-        ...purchase,
-        student: {
-          name: student.name || "Unknown",
-          email: student.email || "Unknown"
-        }
-      };
-    });
-
-    return NextResponse.json(enhancedPurchases);
   } catch (error) {
-    console.error("[ADMIN_PURCHASES_GET]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    console.error("[FETCH_PURCHASES]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 } 

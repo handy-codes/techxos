@@ -9,10 +9,9 @@ import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
 import ProjectManagement from "@/components/curriculum/Project-Mgt";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
 import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
 import FlutterwavePayment from "@/components/payment/FlutterwavePayment";
 import { useRouter } from "next/navigation";
@@ -30,6 +29,8 @@ interface LiveCourseWithLectures {
   zoomLink: string | null;
   lectures: LiveLecture[];
   hasAccess: boolean;
+  studentEmail?: string;
+  studentName?: string;
 }
 
 export default function Page() {
@@ -47,7 +48,8 @@ export default function Page() {
     "idle" | "success" | "error"
   >("idle");
 
-  const { isSignedIn, userId } = useAuth();
+  const { isSignedIn } = useAuth();
+  const { user } = useUser();
   const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
   const router = useRouter();
 
@@ -140,6 +142,19 @@ export default function Page() {
 
   // Function to render lecture information if available
   const renderLectureInfo = () => {
+    if (!isSignedIn) {
+      return (
+        <div className="mt-6">
+          <Link
+            href="/sign-in"
+            className="inline-block text-white bg-green-700 px-6 py-3 rounded-md hover:bg-green-600 transition-colors"
+          >
+            Enroll Now
+          </Link>
+        </div>
+      );
+    }
+
     if (!lecture) return null;
     
     return (
@@ -178,21 +193,23 @@ export default function Page() {
               courseName="Project Management" 
             />
           ) : (
-            <FlutterwavePayment 
-              courseId="project-mgt"
-              courseName="Project Management"
-              amount={250000}
-              email={formData.email}
-              name={`${formData.name} ${formData.surname}`}
-              onSuccess={() => {
-                toast.success("Payment successful! Redirecting to course...");
-                router.push("/courses/project-mgt/success");
-              }}
-              onError={(error) => {
-                console.error("Payment error:", error);
-                toast.error("Payment failed. Please try again.");
-              }}
-            />
+            <div className="inline-block">
+              <FlutterwavePayment 
+                courseId="project-mgt"
+                courseName="Project Management"
+                amount={250000}
+                email={user?.primaryEmailAddress?.emailAddress || ""}
+                name={`${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Student"}
+                onSuccess={() => {
+                  toast.success("Payment successful! Redirecting to course...");
+                  router.push("/project-mgt/success");
+                }}
+                onError={(error) => {
+                  console.error("Payment error:", error);
+                  toast.error("Payment failed. Please try again.");
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -257,8 +274,8 @@ export default function Page() {
             obsessed with efficiency and impact. Dive into stakeholder mapping,
             risk mitigation, and Lean practices, while earning certifications
             that scream &quot;promote me.&quot; Ready to transform ideas into
-            legacy? Enroll now and start delivering success—one milestone at a
-            time. 🚀📅🎯
+            legacy? Enroll now and start delivering success—one milestone at
+            a time. 🚀📅🎯
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
@@ -292,22 +309,6 @@ export default function Page() {
             
             {/* Display lecture information if available */}
             {renderLectureInfo()}
-            
-            <div className=" p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
-              {!isSignedIn ? (
-                <Link
-                  href="/sign-in"
-                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
-                >
-                  Enroll Now
-                </Link>
-              ) : (
-                <CoursePurchaseButton 
-                  courseId="project-mgt" 
-                  courseName="Project Management" 
-                />
-              )}
-            </div>
           </div>
         </div>
 

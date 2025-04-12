@@ -9,11 +9,13 @@ import { Loader2 } from "lucide-react";
 
 interface JoinLiveClassButtonProps {
   courseId: string;
+  courseName?: string;
   className?: string;
 }
 
 export default function JoinLiveClassButton({
   courseId,
+  courseName,
   className,
 }: JoinLiveClassButtonProps) {
   const [isLoading, setIsLoading] = useState(false);

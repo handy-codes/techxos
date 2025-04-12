@@ -15,7 +15,8 @@ export default authMiddleware({
     "/api/live-courses/project-mgt/lecture",
     "/api/live-courses/project-mgt/checkout",
     "/api/test-clerk-admin",
-    "/api/auth/check-admin"
+    "/api/auth/check-admin",
+    "/checkout/project-mgt"
   ],
   async afterAuth(auth, req) {
     // Handle public routes

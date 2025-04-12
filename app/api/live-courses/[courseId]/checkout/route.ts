@@ -22,6 +22,12 @@ export async function POST(
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
+    // Ensure amount is a valid number
+    const formattedAmount = Number(amount);
+    if (isNaN(formattedAmount) || formattedAmount <= 0) {
+      return new NextResponse("Invalid amount", { status: 400 });
+    }
+
     // Check if user already purchased this course
     const existingPurchase = await db.liveClassPurchase.findFirst({
       where: {
@@ -44,20 +50,24 @@ export async function POST(
       data: {
         studentId: userId,
         liveClassId: courseId,
-        amount: amount,
+        amount: formattedAmount,
         status: "PENDING",
         txRef: tx_ref,
         isActive: false,
         startDate: new Date(),
         endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
+        courseName: courseName,
+        studentEmail: email,
+        studentName: name,
       },
     });
 
     // Return Flutterwave payment details
     return NextResponse.json({
       tx_ref,
-      amount,
+      amount: formattedAmount,
       redirect_url: `${process.env.NEXT_PUBLIC_APP_URL}/courses/${courseId}/success`,
+      userId: userId,
     });
   } catch (error) {
     console.error("[COURSE_CHECKOUT] Error:", error);

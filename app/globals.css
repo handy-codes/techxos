@@ -263,3 +263,14 @@ html, body, #__next {
 }
 
 @import "@uploadthing/react/styles.css";
+
+/* Custom Slick overrides */
+.slick-dots li.slick-active div {
+  background-color: #facc15 !important;
+  transform: scale(1.2);
+  transition: all 0.3s ease;
+}
+
+.slick-dots li div {
+  transition: all 0.3s ease;
+}

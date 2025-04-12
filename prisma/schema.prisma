@@ -235,6 +235,9 @@ model LiveClassPurchase {
   isActive    Boolean  @default(true)
   startDate   DateTime @default(now())
   endDate     DateTime
+  courseName  String?
+  studentEmail String?
+  studentName  String?
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

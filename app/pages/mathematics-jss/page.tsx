@@ -203,17 +203,17 @@ export default function Page() {
                 Mathematics JSS
               </h1>
               <p className="text-xl mb-8">
-                Master Junior Secondary School Mathematics! Our comprehensive
-                course covers all essential topics from the JSS curriculum,
+                Our comprehensive
+                maths lessons cover all essential topics from the JSS curriculum,
                 helping students build a strong foundation in mathematics.
                 Through interactive lessons, practice exercises, and real-world
-                applications, students will develop problem-solving skills and
+                applications, students will develop problem-solving skills and build
                 mathematical confidence.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://i.ibb.co/4nDmr2nb/Gemini-Generated-Image-72ww6w72ww6w72ww.jpg"
+                src="https://media.istockphoto.com/id/636332456/photo/online-education-concept.jpg?b=1&s=612x612&w=0&k=20&c=B3Qb1fWVWdKcibGsE_ikxdpKjWkwKrIFtWzL7vJyq5c="
                 alt="Mathematics JSS"
                 fill
                 className="object-cover"
@@ -234,7 +234,7 @@ export default function Page() {
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            150,000 NGN
+            3,000 NGN PER MONTH
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
             Techxos powers your academic success: Master junior secondary school
@@ -244,7 +244,7 @@ export default function Page() {
             Through interactive lessons, practice exercises, and real-world
             applications, develop problem-solving skills and mathematical
             confidence. Ready to excel in mathematics? Enroll now and start
-            mastering—one concept at a time. 📐✏️📚
+            solving—with one formular at a time. 📐✏️📚
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a

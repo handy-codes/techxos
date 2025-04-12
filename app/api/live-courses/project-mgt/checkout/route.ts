@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { LiveClassUserRole } from "@prisma/client";
+import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request) {
   try {
@@ -91,10 +92,37 @@ export async function POST(req: Request) {
       return new NextResponse("No active class found", { status: 404 });
     }
     
+    // Check if user already has a purchase for this course
+    const existingPurchase = await db.liveClassPurchase.findFirst({
+      where: {
+        studentId: user.id,
+        liveClassId: liveClass.id,
+        isActive: true,
+        endDate: {
+          gt: new Date()
+        }
+      }
+    });
+
+    if (existingPurchase) {
+      // If purchase exists and is active, return success with existing tx_ref
+      return NextResponse.json({
+        success: true,
+        price: existingPurchase.amount,
+        courseTitle: liveClass.title,
+        studentId: user.id,
+        studentEmail: userEmail,
+        studentName: userName || "Student",
+        tx_ref: existingPurchase.txRef,
+        redirect_url: `${process.env.NEXT_PUBLIC_APP_URL}/project-mgt/success`,
+        message: "You already have an active purchase for this course"
+      });
+    }
+    
     // Debug the price value from the database
     console.log("Raw price from database:", liveClass.price, typeof liveClass.price);
     
-    // Always ensure we have a fixed price of 250000 for Project Management
+    // Use the original price of 250000
     const price = 250000;
     
     // Update the course price in database if needed
@@ -110,12 +138,48 @@ export async function POST(req: Request) {
       }
     }
     
+    // Generate a unique transaction reference
+    const tx_ref = `${liveClass.id}-${uuidv4()}`;
+    
+    try {
+      // Create a pending purchase record
+      await db.liveClassPurchase.create({
+        data: {
+          studentId: user.id,
+          liveClassId: liveClass.id,
+          amount: price,
+          status: "PENDING",
+          txRef: tx_ref,
+          isActive: false,
+          startDate: new Date(),
+          endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
+          courseName: liveClass.title,
+          studentEmail: userEmail,
+          studentName: userName || "Student",
+        },
+      });
+    } catch (createError: any) {
+      // Handle unique constraint error
+      if (createError.code === 'P2002') {
+        console.log("Purchase record already exists, proceeding with checkout");
+        // Continue with the checkout process
+      } else {
+        console.error("Failed to create purchase record:", createError);
+        return new NextResponse("Could not create purchase record", { status: 500 });
+      }
+    }
+    
+    // Construct the correct redirect URL - using a relative path
+    const redirectUrl = "/project-mgt/success";
+    
     console.log("Payment checkout data:", {
       price, 
       courseTitle: liveClass.title,
       studentId: user.id,
       studentEmail: userEmail,
-      studentName: userName
+      studentName: userName,
+      tx_ref,
+      redirect_url: redirectUrl
     });
     
     // Return the checkout information
@@ -125,7 +189,9 @@ export async function POST(req: Request) {
       courseTitle: liveClass.title,
       studentId: user.id,
       studentEmail: userEmail,
-      studentName: userName || "Student"
+      studentName: userName || "Student",
+      tx_ref,
+      redirect_url: redirectUrl
     });
   } catch (error) {
     console.error("[CHECKOUT_POST]", error);

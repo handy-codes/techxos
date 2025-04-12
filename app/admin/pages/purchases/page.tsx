@@ -22,7 +22,7 @@ export default function PurchasesPage() {
           throw new Error(`Failed to fetch purchases: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        setPurchases(data);
+        setPurchases(data.purchases || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         console.error("Error fetching purchases:", err);
@@ -59,6 +59,13 @@ export default function PurchasesPage() {
       }, purchases[0])
     : null;
 
+  // Calculate total revenue
+  const totalRevenue = purchases.reduce((total, purchase) => total + (purchase.amount || 0), 0);
+  const formattedTotalRevenue = new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+  }).format(totalRevenue);
+
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
@@ -81,7 +88,7 @@ export default function PurchasesPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${purchases.reduce((total, purchase) => total + (purchase.amount || 0), 0).toFixed(2)}
+                {formattedTotalRevenue}
               </div>
             </CardContent>
           </Card>

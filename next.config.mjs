@@ -44,6 +44,11 @@ const nextConfig = {
         hostname: 'media.licdn.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
     domains: ['www.techxos.com'], // Add your production domain
   },
