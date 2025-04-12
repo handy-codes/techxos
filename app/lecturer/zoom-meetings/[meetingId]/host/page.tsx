@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -51,11 +51,7 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
   const router = useRouter();
   const { user } = useUser();
 
-  useEffect(() => {
-    fetchMeetingDetails();
-  }, []);
-
-  const fetchMeetingDetails = async () => {
+  const fetchMeetingDetails = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get(`/api/zoom/meetings/${params.meetingId}`);
@@ -63,11 +59,14 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
     } catch (error) {
       console.error("Error fetching meeting:", error);
       setError("Could not load meeting details");
-      toast.error("Failed to load meeting details");
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.meetingId]);
+
+  useEffect(() => {
+    fetchMeetingDetails();
+  }, [fetchMeetingDetails]);
 
   const endMeeting = async () => {
     try {

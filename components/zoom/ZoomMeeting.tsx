@@ -97,10 +97,71 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
   }, [meetingDetails, onJoinSuccess, onJoinError]);
 
   useEffect(() => {
+    let isMounted = true;
+
+    const initializeZoom = async () => {
+      if (!meetingDetails?.joinUrl) return;
+
+      try {
+        await loadZoomSDK();
+        if (!isMounted) return;
+
+        const client = await window.ZoomMtgEmbed.createClient();
+        await client.init({
+          debug: false,
+          zoomAppRoot: document.getElementById('zoom-root'),
+          language: 'en-US',
+          customize: {
+            meetingInfo: ['topic', 'host', 'mn', 'pwd', 'telPwd', 'invite', 'participant', 'dc', 'enctype'],
+            toolbar: {
+              buttons: [
+                {
+                  text: 'Custom Button',
+                  className: 'CustomButton',
+                  onClick: () => {
+                    console.log('custom button');
+                  }
+                }
+              ]
+            }
+          }
+        });
+
+        client.on('meeting-joined', () => {
+          if (onJoinSuccess) onJoinSuccess();
+        });
+
+        client.on('meeting-error', (error: any) => {
+          console.error('Zoom meeting error:', error);
+          if (onJoinError) onJoinError(error);
+        });
+
+        await client.join({
+          sdkKey: process.env.NEXT_PUBLIC_ZOOM_SDK_KEY,
+          signature: '', // This will be generated on the server
+          meetingNumber: meetingDetails.zoomMeetingId,
+          userName: 'Student',
+          userEmail: '',
+          passWord: meetingDetails.password || '',
+        });
+      } catch (error) {
+        console.error('Error initializing Zoom:', error);
+        if (onJoinError) onJoinError(error);
+      }
+    };
+
+    initializeZoom();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [meetingDetails, onJoinSuccess, onJoinError, loadZoomSDK]);
+
+  useEffect(() => {
     if (meetingDetails) {
       loadZoomSDK();
     }
-  }, [loadZoomSDK]);
+  }, [meetingDetails, loadZoomSDK]);
 
   const fetchMeetingDetails = useCallback(async () => {
     try {
@@ -117,7 +178,7 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
     if (meetingId) {
       fetchMeetingDetails();
     }
-  }, [fetchMeetingDetails]);
+  }, [meetingId, fetchMeetingDetails]);
 
   const handleJoinViaUrl = useCallback(() => {
     if (meetingDetails?.joinUrl) {

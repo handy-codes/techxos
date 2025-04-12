@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -28,46 +28,10 @@ export default function AdminPurchasesPage() {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
   const [userDetails, setUserDetails] = useState<UserDetails>({});
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchPurchases = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get("/api/admin/purchases");
-        setPurchases(response.data);
-        
-        // Extract user details from the enhanced purchases
-        const userMap: UserDetails = {};
-        response.data.forEach((purchase: Purchase) => {
-          if (purchase.student) {
-            userMap[purchase.studentId] = purchase.student;
-          }
-        });
-        
-        setUserDetails(userMap);
-        
-        // For any missing user details, fetch from Clerk
-        const clerkUserIds = response.data
-          .filter((p: Purchase) => !p.student || p.student.name === "Unknown User")
-          .map((p: Purchase) => p.studentId)
-          .filter((id: string) => id.startsWith("user_"));
-          
-        if (clerkUserIds.length > 0) {
-          fetchClerkUsers(clerkUserIds);
-        }
-      } catch (error) {
-        console.error("Error fetching purchases:", error);
-        toast.error("Failed to load payment records");
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchPurchases();
-  }, []);
-  
-  const fetchClerkUsers = async (clerkUserIds: string[]) => {
+  const fetchClerkUsers = useCallback(async (clerkUserIds: string[]) => {
     try {
       const response = await axios.post("/api/admin/clerk-users", { userIds: clerkUserIds });
       const newUserDetails = { ...userDetails };
@@ -82,9 +46,36 @@ export default function AdminPurchasesPage() {
       
       setUserDetails(newUserDetails);
     } catch (error) {
-      console.error("Error fetching Clerk users:", error);
+      console.error("Error fetching user details:", error);
+      toast.error("Failed to load user details");
     }
-  };
+  }, [userDetails]);
+
+  useEffect(() => {
+    const fetchPurchases = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get("/api/admin/purchases");
+        setPurchases(response.data);
+        
+        // Extract unique clerk user IDs
+        const clerkUserIds = [...new Set(response.data
+          .map((purchase: Purchase) => purchase.student?.clerkUserId)
+          .filter(Boolean))];
+        
+        if (clerkUserIds.length > 0) {
+          await fetchClerkUsers(clerkUserIds);
+        }
+      } catch (error) {
+        console.error("Error fetching purchases:", error);
+        toast.error("Failed to load payment records");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchPurchases();
+  }, [fetchClerkUsers]);
 
   if (loading) {
     return <div className="p-6">Loading payment records...</div>;

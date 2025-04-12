@@ -11,11 +11,14 @@ import {
   Video, 
   Settings, 
   Home,
-  Clock
+  Clock,
+  LogOut,
+  Menu
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 export default function LecturerLayout({
   children,
@@ -122,10 +125,12 @@ export default function LecturerLayout({
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
               {user?.imageUrl && (
-                <img 
+                <Image 
                   src={user.imageUrl} 
                   alt={user.firstName || "User"} 
-                  className="w-full h-full object-cover"
+                  width={32}
+                  height={32}
+                  className="object-cover"
                 />
               )}
             </div>

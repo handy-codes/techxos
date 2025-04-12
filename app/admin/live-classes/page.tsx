@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,12 +35,30 @@ interface LiveClass {
 
 export default function LiveClassesPage() {
   const { user, isLoaded: isUserLoaded } = useUser();
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [liveClasses, setLiveClasses] = useState<LiveClass[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const fetchLiveClasses = useCallback(async () => {
+    try {
+      const response = await axios.get<LiveClass[]>("/api/admin/live-classes", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setLiveClasses(response.data);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching live classes:", err);
+      setError("Failed to load live classes");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    // Only fetch data if user is loaded
     if (isUserLoaded) {
       if (!user) {
         // If no user, redirect to sign-in
@@ -50,33 +68,7 @@ export default function LiveClassesPage() {
       
       fetchLiveClasses();
     }
-  }, [isUserLoaded, user, router]);
-
-  const fetchLiveClasses = async () => {
-    try {
-      const response = await axios.get<LiveClass[]>("/api/admin/live-classes", {
-        headers: {
-          "Content-Type": "application/json",
-          // Clerk will automatically add the auth token in cookies,
-          // but we can use withCredentials to ensure cookies are sent
-          withCredentials: true
-        }
-      });
-      console.log("Live classes response:", response.data);
-      setLiveClasses(response.data);
-    } catch (error: unknown) {
-      console.error("Error fetching live classes:", error);
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        toast.error("You are not authorized to view this page. Please log in as an admin.");
-        router.push("/sign-in");
-      } else {
-        toast.error("Failed to fetch live classes. Showing empty state.");
-        setLiveClasses([]);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [isUserLoaded, user, router, fetchLiveClasses]);
 
   const toggleClassStatus = async (classId: string, currentStatus: boolean) => {
     try {
@@ -113,7 +105,7 @@ export default function LiveClassesPage() {
     return null;
   }
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="p-6 space-y-6">
         <div className="flex justify-between items-center mb-6">
