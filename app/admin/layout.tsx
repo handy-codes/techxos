@@ -88,7 +88,7 @@ export default function AdminLayout({
     <AdminCheck>
       <div className="flex h-screen">
         {/* Sidebar */}
-        <div className="w-64 border-r bg-background fixed h-full">
+        <div className="w-64 border-r-2 border-gray-300 bg-background fixed h-full">
           <div className="p-6">
             <h1 className="text-2xl font-bold">Admin Panel</h1>
           </div>
@@ -100,7 +100,7 @@ export default function AdminLayout({
                   key={route.href}
                   href={route.href}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-fit",
                     route.active
                       ? "bg-[#FFA500] text-white font-bold"
                       : "text-black"

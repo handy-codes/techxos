@@ -4,7 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Topbar from "@/components/layout/Topbar";
-import FooterPage from "@/components/layout/Footer";
+import FooterWrapper from "@/components/layout/FooterWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,7 +33,7 @@ export default function RootLayout({
             <main className="flex-grow mt-[120px]">
               {children}
             </main>
-            <FooterPage />
+            <FooterWrapper />
           </div>
           <Toaster />
         </ClerkProvider>
