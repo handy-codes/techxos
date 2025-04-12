@@ -47,7 +47,6 @@ interface ZoomMeetingDetails {
 export default function HostMeetingPage({ params }: { params: { meetingId: string } }) {
   const [meeting, setMeeting] = useState<ZoomMeetingDetails | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { user } = useUser();
 
@@ -58,7 +57,7 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
       setMeeting(response.data);
     } catch (error) {
       console.error("Error fetching meeting:", error);
-      setError("Could not load meeting details");
+      toast.error("Could not load meeting details");
     } finally {
       setLoading(false);
     }
@@ -103,7 +102,7 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
     );
   }
 
-  if (error || !meeting) {
+  if (!meeting) {
     return (
       <div className="space-y-6">
         <Link href="/lecturer/zoom-meetings">
@@ -113,7 +112,7 @@ export default function HostMeetingPage({ params }: { params: { meetingId: strin
         </Link>
         <Card>
           <CardContent className="pt-6 text-center">
-            <p className="text-muted-foreground">{error || "Meeting not found"}</p>
+            <p className="text-muted-foreground">Meeting not found</p>
             <Button 
               variant="outline" 
               className="mt-4"

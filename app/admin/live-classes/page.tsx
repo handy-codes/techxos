@@ -35,7 +35,6 @@ interface LiveClass {
 
 export default function LiveClassesPage() {
   const { user, isLoaded: isUserLoaded } = useUser();
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [liveClasses, setLiveClasses] = useState<LiveClass[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

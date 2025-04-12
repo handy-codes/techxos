@@ -45,7 +45,7 @@ export default function CourseCurriculum({
             </div>
 
             <div className="mt-4">
-              <h4 className="font-medium text-gray-700 mb-2">What you'll learn:</h4>
+              <h4 className="font-medium text-gray-700 mb-2">What you&apos;ll learn:</h4>
               <ul className="space-y-2">
                 {item.topics.map((topic, topicIndex) => (
                   <li key={topicIndex} className="flex items-start">

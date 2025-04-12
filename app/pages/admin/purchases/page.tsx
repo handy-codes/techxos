@@ -13,6 +13,7 @@ type Purchase = LiveClassPurchase & {
   student?: {
     name: string;
     email: string;
+    clerkUserId?: string;
   };
 };
 
@@ -28,7 +29,6 @@ export default function AdminPurchasesPage() {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
   const [userDetails, setUserDetails] = useState<UserDetails>({});
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const fetchClerkUsers = useCallback(async (clerkUserIds: string[]) => {
@@ -61,7 +61,7 @@ export default function AdminPurchasesPage() {
         // Extract unique clerk user IDs
         const clerkUserIds = [...new Set(response.data
           .map((purchase: Purchase) => purchase.student?.clerkUserId)
-          .filter(Boolean))];
+          .filter(Boolean))] as string[];
         
         if (clerkUserIds.length > 0) {
           await fetchClerkUsers(clerkUserIds);
