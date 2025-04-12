@@ -63,7 +63,7 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
           <Link
             key={section.id}
             href={`/courses/${course.id}/sections/${section.id}`}
-            className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3 ${isActive ? 'bg-[#FFF8EB]' : ''}`}
+            className={`p-3 rounded-lg hover:bg-[#FFF8EB] text-[16px] mt-3`}
           >
             {section.title}
           </Link>

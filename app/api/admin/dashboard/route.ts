@@ -33,7 +33,7 @@ export async function GET() {
     ] = await Promise.all([
       db.liveClassUser.count(),
       db.liveClass.count(),
-      db.liveClassSchedule.count({ where: { isActive: true } }),
+      db.liveClassSchedule.count({ where: { isRecurring: true } }),
       db.liveClassPurchase.aggregate({
         _sum: {
           amount: true,

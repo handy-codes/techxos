@@ -18,7 +18,13 @@ interface CourseCardWrapperProps {
 }
 
 export default async function CourseCardWrapper({ course }: CourseCardWrapperProps) {
-  const instructor = await clerkClient.users.getUser(course.instructorId);
+  const clerkUser = await clerkClient.users.getUser(course.instructorId);
+  
+  // Transform Clerk user to match the expected instructor type
+  const instructor = {
+    imageUrl: clerkUser.imageUrl,
+    fullName: clerkUser.fullName || undefined
+  };
   
   let level;
   if (course.levelId) {

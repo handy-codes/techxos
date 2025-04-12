@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     }
 
     // Only HEAD_ADMIN can create ADMIN users
-    if (authCheck.user.role !== "HEAD_ADMIN") {
+    if (authCheck.success && (authCheck.user as { role: string }).role !== "HEAD_ADMIN") {
       return new NextResponse("Only HEAD_ADMIN can create users", { status: 403 });
     }
 

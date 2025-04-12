@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { LiveClassUserRole } from "@prisma/client";
 
 export async function POST(req: Request) {
   try {
@@ -70,7 +71,7 @@ export async function POST(req: Request) {
         }
 
         // Get role from metadata or default to LEARNER
-        const role = public_metadata?.systemRole || "LEARNER";
+        const role = (public_metadata?.systemRole as LiveClassUserRole) || "LEARNER";
 
         await db.liveClassUser.upsert({
           where: { clerkUserId: id },

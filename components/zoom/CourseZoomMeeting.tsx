@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Loader2, Calendar, Clock, Users, Video, ExternalLink } from 'lucide-react';
@@ -32,96 +32,72 @@ export default function CourseZoomMeeting({
   const [error, setError] = useState<string | null>(null);
   const { isSignedIn } = useAuth();
 
-  // Fetch upcoming meetings for this course
-  useEffect(() => {
-    const fetchMeetings = async () => {
-      if (!isSignedIn) return;
-      
-      try {
-        setLoading(true);
-        const response = await axios.get(`/api/zoom/meetings?liveClassId=${liveClassId}`);
-        
-        // Sort meetings by startTime
-        const sortedMeetings = response.data.sort((a: ZoomMeeting, b: ZoomMeeting) => 
-          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
-        );
-        
-        setMeetings(sortedMeetings);
-      } catch (err: any) {
-        console.error('Error fetching meetings:', err);
-        setError(err.response?.data || err.message || 'Failed to fetch meetings');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchMeetings = useCallback(async () => {
+    if (!isSignedIn) return;
     
-    fetchMeetings();
+    try {
+      setLoading(true);
+      const response = await axios.get(`/api/zoom/meetings?liveClassId=${liveClassId}`);
+      
+      // Sort meetings by startTime
+      const sortedMeetings = response.data.sort((a: ZoomMeeting, b: ZoomMeeting) => 
+        new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+      );
+      
+      setMeetings(sortedMeetings);
+    } catch (err: any) {
+      console.error('Error fetching meetings:', err);
+      setError(err.response?.data || err.message || 'Failed to fetch meetings');
+    } finally {
+      setLoading(false);
+    }
   }, [liveClassId, isSignedIn]);
 
-  const joinMeeting = async (meetingId: string) => {
+  // Fetch upcoming meetings for this course
+  useEffect(() => {
+    fetchMeetings();
+  }, [fetchMeetings]);
+
+  const joinMeeting = useCallback(async (meetingId: string) => {
     try {
       const response = await axios.post(`/api/zoom/meetings/${meetingId}/join`);
-      
-      if (response.data.joinUrl) {
-        window.open(response.data.joinUrl, '_blank');
-      } else {
-        // For embedded version, redirect to the join page
-        window.location.href = `/courses/live-classroom/${meetingId}`;
-      }
+      window.open(response.data.joinUrl, '_blank');
     } catch (err: any) {
       console.error('Error joining meeting:', err);
-      toast.error(err.response?.data || 'Failed to join meeting');
+      toast.error(err.response?.data || err.message || 'Failed to join meeting');
     }
-  };
-  
-  const formatMeetingDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString);
-      return format(date, 'PPP');
-    } catch (error) {
-      return dateString;
-    }
-  };
-  
-  const formatMeetingTime = (dateString: string) => {
-    try {
-      const date = new Date(dateString);
-      return format(date, 'p');
-    } catch (error) {
-      return dateString;
-    }
-  };
-  
-  const isUpcoming = (meeting: ZoomMeeting) => {
-    return new Date(meeting.startTime) > new Date();
-  };
-  
-  const isLive = (meeting: ZoomMeeting) => {
+  }, []);
+
+  const formatMeetingDate = useCallback((date: string) => {
+    return format(new Date(date), 'EEEE, MMMM d, yyyy');
+  }, []);
+
+  const formatMeetingTime = useCallback((date: string) => {
+    return format(new Date(date), 'h:mm a');
+  }, []);
+
+  const isUpcoming = useCallback((startTime: string) => {
+    return new Date(startTime) > new Date();
+  }, []);
+
+  const isLive = useCallback((startTime: string, duration: number) => {
     const now = new Date();
-    const start = new Date(meeting.startTime);
-    const end = new Date(start.getTime() + meeting.duration * 60000);
-    return now >= start && now <= end && meeting.status === 'STARTED';
-  };
-  
-  const getStatusText = (meeting: ZoomMeeting) => {
-    if (isLive(meeting)) {
-      return 'LIVE NOW';
-    } else if (isUpcoming(meeting)) {
-      return `Starts ${formatDistanceToNow(new Date(meeting.startTime), { addSuffix: true })}`;
-    } else {
-      return 'Ended';
-    }
-  };
-  
-  const getStatusColor = (meeting: ZoomMeeting) => {
-    if (isLive(meeting)) {
-      return 'text-red-500 animate-pulse';
-    } else if (isUpcoming(meeting)) {
-      return 'text-blue-500';
-    } else {
-      return 'text-gray-500';
-    }
-  };
+    const start = new Date(startTime);
+    const end = new Date(start.getTime() + duration * 60000);
+    return now >= start && now <= end;
+  }, []);
+
+  const getStatusText = useCallback((startTime: string, duration: number) => {
+    if (isLive(startTime, duration)) return 'Live Now';
+    if (isUpcoming(startTime)) return 'Upcoming';
+    return 'Past';
+  }, [isLive, isUpcoming]);
+
+  const getStatusColor = useCallback((startTime: string, duration: number) => {
+    if (isLive(startTime, duration)) return 'text-green-500';
+    if (isUpcoming(startTime)) return 'text-blue-500';
+    return 'text-gray-500';
+  }, [isLive, isUpcoming]);
   
   if (loading) {
     return (
@@ -176,8 +152,8 @@ export default function CourseZoomMeeting({
             <CardHeader className="bg-muted/50 p-4">
               <CardTitle className="text-base flex justify-between items-center">
                 <span>{meeting.topic}</span>
-                <span className={`text-sm font-normal ${getStatusColor(meeting)}`}>
-                  {getStatusText(meeting)}
+                <span className={`text-sm font-normal ${getStatusColor(meeting.startTime, meeting.duration)}`}>
+                  {getStatusText(meeting.startTime, meeting.duration)}
                 </span>
               </CardTitle>
             </CardHeader>
@@ -198,14 +174,14 @@ export default function CourseZoomMeeting({
               </div>
             </CardContent>
             <CardFooter className="p-4 pt-0 flex justify-end">
-              {isLive(meeting) ? (
+              {isLive(meeting.startTime, meeting.duration) ? (
                 <Button 
                   onClick={() => joinMeeting(meeting.id)}
                   className="bg-red-500 hover:bg-red-600 text-white"
                 >
                   Join Live Class
                 </Button>
-              ) : isUpcoming(meeting) ? (
+              ) : isUpcoming(meeting.startTime) ? (
                 <Button variant="outline" disabled>
                   Not Started Yet
                 </Button>
@@ -219,13 +195,13 @@ export default function CourseZoomMeeting({
         ))}
       </CardContent>
       <CardFooter className="flex justify-center">
-        <Link href={meetings.length > 0 && isLive(meetings[0]) 
+        <Link href={meetings.length > 0 && isLive(meetings[0].startTime, meetings[0].duration) 
           ? `/courses/live-classroom/${meetings[0].id}` 
           : '#'}>
           <Button 
             variant="ghost" 
             className="text-sm"
-            disabled={meetings.length === 0 || !isLive(meetings[0])}
+            disabled={meetings.length === 0 || !isLive(meetings[0].startTime, meetings[0].duration)}
           >
             <ExternalLink className="h-4 w-4 mr-2" />
             Enter Classroom

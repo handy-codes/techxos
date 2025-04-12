@@ -65,18 +65,17 @@ export async function POST(req: Request) {
         status: "COMPLETED",
         isActive: true,
         transactionId: transaction_id,
-        paymentDate: new Date(),
       },
     });
     
     // Update user's access to the course
     if (purchase.studentId) {
-      await db.user.update({
+      await db.liveClassUser.update({
         where: {
           id: purchase.studentId,
         },
         data: {
-          hasAccess: true,
+          isActive: true,
         },
       });
     }

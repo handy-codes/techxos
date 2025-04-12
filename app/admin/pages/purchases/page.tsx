@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { columns, PurchaseColumn } from "./columns";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
@@ -14,25 +14,25 @@ export default function PurchasesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchPurchases() {
-      try {
-        const response = await fetch("/api/admin/purchases");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch purchases: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.json();
-        setPurchases(data.purchases || []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error("Error fetching purchases:", err);
-      } finally {
-        setLoading(false);
+  const fetchPurchases = useCallback(async () => {
+    try {
+      const response = await fetch("/api/admin/purchases");
+      if (!response.ok) {
+        throw new Error(`Failed to fetch purchases: ${response.status} ${response.statusText}`);
       }
+      const data = await response.json();
+      setPurchases(data.purchases || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error("Error fetching purchases:", err);
+    } finally {
+      setLoading(false);
     }
-
-    fetchPurchases();
   }, []);
+
+  useEffect(() => {
+    fetchPurchases();
+  }, [fetchPurchases]);
 
   if (loading) {
     return (

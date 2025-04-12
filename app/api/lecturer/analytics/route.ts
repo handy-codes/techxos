@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { LiveClassUserRole } from "@prisma/client";
+import { LiveClassUserRole, LiveClass, LiveClassPurchase, ZoomMeeting } from "@prisma/client";
 import { addDays, startOfYear } from "date-fns";
 
 export async function GET() {
@@ -36,31 +36,38 @@ export async function GET() {
       },
       include: {
         purchases: true,
-        zoomMeetings: {
-          include: {
-            attendance: true
-          }
-        }
+        zoomMeetings: true
       }
     });
 
     // Calculate total students (unique students who purchased any classes)
-    const uniqueStudentIds = new Set();
-    liveClasses.forEach(liveClass => {
-      liveClass.purchases.forEach(purchase => {
+    const uniqueStudentIds = new Set<string>();
+    liveClasses.forEach((liveClass: LiveClass & { 
+      purchases: LiveClassPurchase[],
+      zoomMeetings: ZoomMeeting[]
+    }) => {
+      liveClass.purchases.forEach((purchase: LiveClassPurchase) => {
         uniqueStudentIds.add(purchase.studentId);
       });
     });
 
     // Get all meetings
-    const allMeetings = liveClasses.flatMap(liveClass => liveClass.zoomMeetings);
+    const allMeetings = liveClasses.flatMap((liveClass: LiveClass & { 
+      purchases: LiveClassPurchase[],
+      zoomMeetings: ZoomMeeting[]
+    }) => liveClass.zoomMeetings);
     
     // Calculate teaching hours by day
-    const teachingHoursByDay = [];
-    const meetingsByDay = {};
+    interface DayHours {
+      date: string;
+      hours: number;
+    }
+    
+    const teachingHoursByDay: DayHours[] = [];
+    const meetingsByDay: Record<string, number> = {};
 
-    allMeetings.forEach(meeting => {
-      if (meeting.status === "ENDED" || meeting.status === "COMPLETED") {
+    allMeetings.forEach((meeting: ZoomMeeting) => {
+      if (meeting.status === "ENDED") {
         const dateString = meeting.startTime.toISOString().split('T')[0];
         
         if (!meetingsByDay[dateString]) {
@@ -81,12 +88,23 @@ export async function GET() {
     });
 
     // Calculate student attendance
-    const studentAttendance = allMeetings
-      .filter(meeting => meeting.status === "ENDED" || meeting.status === "COMPLETED")
-      .map(meeting => {
-        const liveClass = liveClasses.find(lc => lc.id === meeting.liveClassId);
+    interface AttendanceData {
+      meetingId: string;
+      meetingTopic: string;
+      attendeeCount: number;
+      totalStudents: number;
+    }
+    
+    const studentAttendance: AttendanceData[] = allMeetings
+      .filter((meeting: ZoomMeeting) => meeting.status === "ENDED")
+      .map((meeting: ZoomMeeting) => {
+        const liveClass = liveClasses.find(lc => lc.id === meeting.liveClassId) as LiveClass & { 
+          purchases: LiveClassPurchase[],
+          zoomMeetings: ZoomMeeting[]
+        };
         const totalStudents = liveClass ? liveClass.purchases.length : 0;
-        const attendeeCount = meeting.attendance.length;
+        // Since attendance is not in the schema, we'll use a default value
+        const attendeeCount = 0; // This should be updated when attendance tracking is implemented
 
         return {
           meetingId: meeting.id,
@@ -97,18 +115,26 @@ export async function GET() {
       });
 
     // Calculate class counts (students per class)
-    const classCounts = liveClasses.map(liveClass => ({
+    interface ClassCount {
+      title: string;
+      count: number;
+    }
+    
+    const classCounts: ClassCount[] = liveClasses.map((liveClass: LiveClass & { 
+      purchases: LiveClassPurchase[],
+      zoomMeetings: ZoomMeeting[]
+    }) => ({
       title: liveClass.title,
       count: liveClass.purchases.length
     }));
 
     // Get upcoming meeting dates
     const upcomingMeetingDates = allMeetings
-      .filter(meeting => {
+      .filter((meeting: ZoomMeeting) => {
         const meetingDate = new Date(meeting.startTime);
         return meetingDate > now && meetingDate < nextWeek && meeting.status === "SCHEDULED";
       })
-      .map(meeting => meeting.startTime.toISOString())
+      .map((meeting: ZoomMeeting) => meeting.startTime.toISOString())
       .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
     // Calculate average attendance percentage

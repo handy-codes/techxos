@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { PurchaseStatus } from "@prisma/client";
 
 export async function POST(req: Request) {
   try {
@@ -86,7 +87,7 @@ export async function POST(req: Request) {
 
     // Prepare purchase data
     const purchaseData = {
-      status: "COMPLETED",
+      status: PurchaseStatus.COMPLETED,
       amount: liveClass.price,
       transactionId: transactionId.toString(),
       flwRef: flwRef?.toString() || null,

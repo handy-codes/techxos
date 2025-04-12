@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/use-user";
 import axios from "axios";
@@ -31,25 +31,13 @@ interface ZoomMeetingDetails {
 
 export default function ClassroomPage({ params }: { params: { meetingId: string } }) {
   const router = useRouter();
-  const { user, isLoading: isUserLoading } = useUser();
+  const { user, isLoaded: isUserLoaded } = useUser();
   const [meeting, setMeeting] = useState<ZoomMeetingDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [meetingStatus, setMeetingStatus] = useState<'not_started' | 'live' | 'ended' | null>(null);
 
-  useEffect(() => {
-    if (isUserLoading) return;
-    
-    if (!user) {
-      toast.error("You must be signed in to join meetings");
-      router.push("/sign-in");
-      return;
-    }
-
-    fetchMeetingDetails();
-  }, [user, isUserLoading, params.meetingId, router]);
-
-  const fetchMeetingDetails = async () => {
+  const fetchMeetingDetails = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(`/api/zoom/meetings/${params.meetingId}`);
@@ -75,7 +63,19 @@ export default function ClassroomPage({ params }: { params: { meetingId: string 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [params.meetingId]);
+
+  useEffect(() => {
+    if (!isUserLoaded) return;
+    
+    if (!user) {
+      toast.error("You must be signed in to join meetings");
+      router.push("/sign-in");
+      return;
+    }
+
+    fetchMeetingDetails();
+  }, [user, isUserLoaded, fetchMeetingDetails, router]);
 
   const handleJoinSuccess = () => {
     toast.success("Successfully joined the meeting");
@@ -86,7 +86,7 @@ export default function ClassroomPage({ params }: { params: { meetingId: string 
     toast.error("Failed to join the meeting. Please try again.");
   };
 
-  if (isUserLoading || isLoading) {
+  if (!isUserLoaded || isLoading) {
     return (
       <div className="space-y-6 p-6">
         <Skeleton className="h-10 w-1/2" />

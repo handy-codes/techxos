@@ -58,11 +58,9 @@ export async function POST(
       data: {
         status: "COMPLETED",
         isActive: true,
-        paymentDetails: {
-          transactionId: transaction_id,
-          paymentMethod: data.payment_type,
-          paidAt: new Date(data.paid_at),
-        },
+        transactionId: transaction_id,
+        flwRef: data.payment_type,
+        txRef: tx_ref
       },
     });
 

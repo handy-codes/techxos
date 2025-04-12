@@ -13,8 +13,8 @@ export async function GET(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const user = await db.user.findUnique({
-      where: { clerkId: userId }
+    const user = await db.liveClassUser.findUnique({
+      where: { clerkUserId: userId }
     });
 
     if (!user || (user.role !== "ADMIN" && user.role !== "HEAD_ADMIN")) {
@@ -25,11 +25,7 @@ export async function GET(
       where: { id: params.classId },
       include: {
         lecturer: true,
-        purchases: {
-          include: {
-            student: true
-          }
-        },
+        purchases: true,
         materials: true,
         schedules: true
       }

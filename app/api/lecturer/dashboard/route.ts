@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { LiveClassUserRole } from "@prisma/client";
+import { LiveClassUserRole, LiveClass, LiveClassPurchase, ZoomMeeting } from "@prisma/client";
 
 export async function GET() {
   try {
@@ -37,27 +37,29 @@ export async function GET() {
       },
       include: {
         purchases: true,
-        zoomMeetings: {
-          include: {
-            attendance: true
-          }
-        }
+        zoomMeetings: true
       }
     });
 
     // Calculate total students (unique students who purchased any of the lecturer's classes)
-    const uniqueStudentIds = new Set();
+    const uniqueStudentIds = new Set<string>();
     let totalEarnings = 0;
 
-    liveClasses.forEach(liveClass => {
-      liveClass.purchases.forEach(purchase => {
+    liveClasses.forEach((liveClass: LiveClass & { 
+      purchases: LiveClassPurchase[],
+      zoomMeetings: ZoomMeeting[]
+    }) => {
+      liveClass.purchases.forEach((purchase: LiveClassPurchase) => {
         uniqueStudentIds.add(purchase.studentId);
         totalEarnings += purchase.amount; // Sum up earnings
       });
     });
 
     // Calculate Zoom meeting stats
-    const allMeetings = liveClasses.flatMap(liveClass => liveClass.zoomMeetings);
+    const allMeetings = liveClasses.flatMap((liveClass: LiveClass & { 
+      purchases: LiveClassPurchase[],
+      zoomMeetings: ZoomMeeting[]
+    }) => liveClass.zoomMeetings);
     
     // Upcoming meetings in the next 7 days
     const upcomingMeetings = allMeetings.filter(meeting => {
@@ -67,12 +69,12 @@ export async function GET() {
     
     // Completed meetings
     const completedMeetings = allMeetings.filter(meeting => 
-      meeting.status === "ENDED" || meeting.status === "COMPLETED"
+      meeting.status === "ENDED"
     ).length;
     
     // Calculate total teaching hours (from completed meetings)
     const totalHours = allMeetings.reduce((total, meeting) => {
-      if (meeting.status === "ENDED" || meeting.status === "COMPLETED") {
+      if (meeting.status === "ENDED") {
         // Convert duration from minutes to hours
         return total + (meeting.duration / 60);
       }

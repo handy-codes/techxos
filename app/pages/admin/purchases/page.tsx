@@ -5,11 +5,29 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { formatDate, formatCurrency } from "@/lib/format-date";
+import { LiveClassPurchase, LiveClass } from "@prisma/client";
+
+// Define types
+type Purchase = LiveClassPurchase & {
+  liveClass?: LiveClass;
+  student?: {
+    name: string;
+    email: string;
+  };
+};
+
+type UserDetails = {
+  [key: string]: {
+    name: string;
+    email: string;
+    clerkUserId?: string;
+  };
+};
 
 export default function AdminPurchasesPage() {
-  const [purchases, setPurchases] = useState([]);
+  const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState<UserDetails>({});
   const router = useRouter();
 
   useEffect(() => {
@@ -20,8 +38,8 @@ export default function AdminPurchasesPage() {
         setPurchases(response.data);
         
         // Extract user details from the enhanced purchases
-        const userMap = {};
-        response.data.forEach(purchase => {
+        const userMap: UserDetails = {};
+        response.data.forEach((purchase: Purchase) => {
           if (purchase.student) {
             userMap[purchase.studentId] = purchase.student;
           }
@@ -31,9 +49,9 @@ export default function AdminPurchasesPage() {
         
         // For any missing user details, fetch from Clerk
         const clerkUserIds = response.data
-          .filter(p => !p.student || p.student.name === "Unknown User")
-          .map(p => p.studentId)
-          .filter(id => id.startsWith("user_"));
+          .filter((p: Purchase) => !p.student || p.student.name === "Unknown User")
+          .map((p: Purchase) => p.studentId)
+          .filter((id: string) => id.startsWith("user_"));
           
         if (clerkUserIds.length > 0) {
           fetchClerkUsers(clerkUserIds);
@@ -49,12 +67,12 @@ export default function AdminPurchasesPage() {
     fetchPurchases();
   }, []);
   
-  const fetchClerkUsers = async (clerkUserIds) => {
+  const fetchClerkUsers = async (clerkUserIds: string[]) => {
     try {
       const response = await axios.post("/api/admin/clerk-users", { userIds: clerkUserIds });
       const newUserDetails = { ...userDetails };
       
-      response.data.forEach(user => {
+      response.data.forEach((user: { id: string; name: string; email: string }) => {
         newUserDetails[user.id] = {
           name: user.name,
           email: user.email,

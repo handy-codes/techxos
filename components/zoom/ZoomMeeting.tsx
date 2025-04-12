@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Loader2 } from 'lucide-react';
@@ -23,78 +23,72 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
   const { user } = useUser();
   const zoomContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const loadZoomSDK = useCallback(async () => {
     let isMounted = true;
     
-    const loadZoomSDK = async () => {
-      try {
-        // Load Zoom Meeting SDK
-        const ZoomMtgEmbedded = (await import('@zoom/meetingsdk/embedded')).default;
-        
-        // Initialize Zoom client
-        const client = ZoomMtgEmbedded.createClient();
-        
-        if (zoomContainerRef.current) {
-          // Prepare the container for embedding
-          client.init({ 
-            zoomAppRoot: zoomContainerRef.current,
-            language: 'en-US',
-            customize: {
-              video: {
-                isResizable: true,
-                viewSizes: {
-                  default: {
-                    width: 1000,
-                    height: 600
-                  },
-                  ribbon: {
-                    width: 300,
-                    height: 700
-                  }
+    try {
+      // Load Zoom Meeting SDK
+      const ZoomMtgEmbedded = (await import('@zoom/meetingsdk/embedded')).default;
+      
+      // Initialize Zoom client
+      const client = ZoomMtgEmbedded.createClient();
+      
+      if (zoomContainerRef.current) {
+        // Prepare the container for embedding
+        client.init({ 
+          zoomAppRoot: zoomContainerRef.current,
+          language: 'en-US',
+          customize: {
+            video: {
+              isResizable: true,
+              viewSizes: {
+                default: {
+                  width: 1000,
+                  height: 600
+                },
+                ribbon: {
+                  width: 300,
+                  height: 700
                 }
               }
             }
+          }
+        });
+        
+        // Join the meeting
+        if (meetingDetails) {
+          await client.join({
+            sdkKey: process.env.NEXT_PUBLIC_ZOOM_SDK_KEY,
+            signature: meetingDetails.signature,
+            meetingNumber: meetingDetails.meetingNumber,
+            password: meetingDetails.password,
+            userName: meetingDetails.userName,
+            userEmail: meetingDetails.userEmail,
+            tk: '',
+            zak: ''
           });
           
-          // Join the meeting
-          if (meetingDetails) {
-            await client.join({
-              sdkKey: process.env.NEXT_PUBLIC_ZOOM_SDK_KEY,
-              signature: meetingDetails.signature,
-              meetingNumber: meetingDetails.meetingNumber,
-              password: meetingDetails.password,
-              userName: meetingDetails.userName,
-              userEmail: meetingDetails.userEmail,
-              tk: '',
-              zak: ''
-            });
-            
-            if (onJoinSuccess && isMounted) {
-              onJoinSuccess();
-            }
+          if (onJoinSuccess && isMounted) {
+            onJoinSuccess();
           }
-        }
-      } catch (err: any) {
-        console.error('Failed to join Zoom meeting:', err);
-        
-        if (isMounted) {
-          setError(err.message || 'Failed to join the meeting');
-          
-          if (onJoinError) {
-            onJoinError(err);
-          }
-          
-          toast.error('Failed to join the meeting. Please try again.');
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
         }
       }
-    };
-    
-    if (meetingDetails) {
-      loadZoomSDK();
+    } catch (err: any) {
+      console.error('Failed to join Zoom meeting:', err);
+      
+      if (isMounted) {
+        setError(err.message || 'Failed to join the meeting');
+        
+        if (onJoinError) {
+          onJoinError(err);
+        }
+        
+        toast.error('Failed to join the meeting. Please try again.');
+      }
+    } finally {
+      if (isMounted) {
+        setLoading(false);
+      }
     }
     
     return () => {
@@ -103,27 +97,33 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
   }, [meetingDetails, onJoinSuccess, onJoinError]);
 
   useEffect(() => {
-    const fetchMeetingDetails = async () => {
-      try {
-        const response = await axios.get(`/api/zoom-meetings/${meetingId}`);
-        setMeetingDetails(response.data);
-      } catch (err: any) {
-        console.error('Failed to fetch meeting details:', err);
-        setError(err.message || 'Failed to fetch meeting details');
-        toast.error('Failed to fetch meeting details. Please try again.');
-      }
-    };
+    if (meetingDetails) {
+      loadZoomSDK();
+    }
+  }, [loadZoomSDK]);
 
-    if (meetingId) {
-      fetchMeetingDetails();
+  const fetchMeetingDetails = useCallback(async () => {
+    try {
+      const response = await axios.get(`/api/zoom-meetings/${meetingId}`);
+      setMeetingDetails(response.data);
+    } catch (err: any) {
+      console.error('Failed to fetch meeting details:', err);
+      setError(err.message || 'Failed to fetch meeting details');
+      toast.error('Failed to fetch meeting details. Please try again.');
     }
   }, [meetingId]);
 
-  const handleJoinViaUrl = () => {
+  useEffect(() => {
+    if (meetingId) {
+      fetchMeetingDetails();
+    }
+  }, [fetchMeetingDetails]);
+
+  const handleJoinViaUrl = useCallback(() => {
     if (meetingDetails?.joinUrl) {
       window.open(meetingDetails.joinUrl, '_blank');
     }
-  };
+  }, [meetingDetails]);
 
   if (loading) {
     return (

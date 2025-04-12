@@ -3,13 +3,28 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "react-hot-toast";
+import { LiveClassPurchase } from "@prisma/client";
+
+// Define the purchase type
+type Purchase = LiveClassPurchase & {
+  courseName?: string;
+  studentName?: string;
+  studentEmail?: string;
+};
+
+// Define form data type
+type FormData = {
+  status: string;
+  transactionId: string;
+  txRef: string;
+};
 
 export default function UpdatePaymentPage() {
   const { isSignedIn, userId } = useAuth();
-  const [purchases, setPurchases] = useState([]);
+  const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPurchase, setSelectedPurchase] = useState(null);
-  const [formData, setFormData] = useState({
+  const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
+  const [formData, setFormData] = useState<FormData>({
     status: "COMPLETED",
     transactionId: "",
     txRef: ""
@@ -38,7 +53,7 @@ export default function UpdatePaymentPage() {
     }
   };
 
-  const handlePurchaseSelect = (purchase) => {
+  const handlePurchaseSelect = (purchase: Purchase) => {
     setSelectedPurchase(purchase);
     setFormData({
       status: purchase.status || "COMPLETED",
@@ -47,12 +62,12 @@ export default function UpdatePaymentPage() {
     });
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!selectedPurchase) return;
 
@@ -150,7 +165,6 @@ export default function UpdatePaymentPage() {
                   value={formData.transactionId}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded"
-                  placeholder="Enter transaction ID"
                 />
               </div>
               
@@ -162,19 +176,18 @@ export default function UpdatePaymentPage() {
                   value={formData.txRef}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded"
-                  placeholder="Enter transaction reference"
                 />
               </div>
               
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
               >
                 Update Payment
               </button>
             </form>
           ) : (
-            <div className="text-center text-gray-500 p-8 border rounded-lg">
+            <div className="text-center text-gray-500 p-4 border rounded">
               Select a purchase to update
             </div>
           )}

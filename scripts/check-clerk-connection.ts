@@ -3,7 +3,7 @@
  * Run with: npx tsx scripts/check-clerk-connection.ts
  */
 
-import * as clerkSDK from '@clerk/clerk-sdk-node';
+import { clerkClient } from '@clerk/clerk-sdk-node';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -21,13 +21,12 @@ async function main() {
     
     console.log(`Using Clerk key: ${secretKey.substring(0, 7)}...`);
     
-    // Initialize the Clerk client correctly
-    const clerk = clerkSDK.clerkClient;
-    clerk.setKey(secretKey);
+    // Set the secret key for the clerkClient
+    process.env.CLERK_SECRET_KEY = secretKey;
     
     // List all users
     console.log('Fetching users from Clerk...');
-    const users = await clerk.users.getUserList({
+    const users = await clerkClient.users.getUserList({
       limit: 10,
     });
     

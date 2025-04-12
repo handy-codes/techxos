@@ -3,7 +3,7 @@
  * Run with: npx tsx scripts/direct-role-fix.ts
  */
 
-import { PrismaClient, LiveClassUserRole } from "@prisma/client";
+import { PrismaClient, LiveClassUserRole, LiveClassUser } from "@prisma/client";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
@@ -22,7 +22,7 @@ async function main() {
     const adminEmail = process.env.HEAD_ADMIN_EMAIL || "paxymekventures@gmail.com";
     console.log(`Looking for admin with email: ${adminEmail}`);
     
-    let admin = await db.liveClassUser.findFirst({
+    let admin = await prisma.liveClassUser.findFirst({
       where: { 
         email: adminEmail
       }
@@ -32,7 +32,7 @@ async function main() {
       console.log(`No user found with email ${adminEmail}`);
       console.log("Let's check all users in the database:");
       
-      const allUsers = await db.liveClassUser.findMany({
+      const allUsers = await prisma.liveClassUser.findMany({
         orderBy: { createdAt: 'desc' },
         take: 10
       });
@@ -42,7 +42,7 @@ async function main() {
         
         // Create a default admin
         console.log("Creating a default HEAD_ADMIN user...");
-        admin = await db.liveClassUser.create({
+        admin = await prisma.liveClassUser.create({
           data: {
             name: "Default Admin",
             email: adminEmail,
@@ -55,7 +55,7 @@ async function main() {
       } else {
         // Display all users
         console.log("\nExisting users:");
-        allUsers.forEach((user, i) => {
+        allUsers.forEach((user: LiveClassUser, i: number) => {
           console.log(`${i + 1}. ID: ${user.id} | Email: ${user.email} | Name: ${user.name} | Role: ${user.role} | ClerkID: ${user.clerkUserId || 'None'}`);
         });
         
@@ -69,7 +69,7 @@ async function main() {
         }
         
         // Find selected user
-        admin = await db.liveClassUser.findUnique({
+        admin = await prisma.liveClassUser.findUnique({
           where: { id: userId }
         });
         
@@ -83,7 +83,7 @@ async function main() {
     // Update the user to HEAD_ADMIN
     console.log(`Updating user: ${admin.name} (${admin.email}) to HEAD_ADMIN role...`);
     
-    const updatedAdmin = await db.liveClassUser.update({
+    const updatedAdmin = await prisma.liveClassUser.update({
       where: { id: admin.id },
       data: {
         role: LiveClassUserRole.HEAD_ADMIN,
@@ -121,7 +121,7 @@ async function main() {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    await db.$disconnect();
+    await prisma.$disconnect();
   }
 }
 

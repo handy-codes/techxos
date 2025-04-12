@@ -156,7 +156,7 @@ export async function GET(req: Request) {
             zoomMeetingId: "123456789",
             zoomPassword: "techxos",
             isActive: true,
-            lecturerId: defaultLecturer.id,
+            lecturerId: defaultLecturer?.id || user?.id || "",
             price: 250000, // 250,000 NGN
             duration: 12,  // 12 weeks
             batchNumber: 1 // First batch
@@ -218,7 +218,7 @@ export async function GET(req: Request) {
                              user.role === LiveClassUserRole.HEAD_ADMIN;
       
       userRole = user.role;
-      hasAccess = isPurchased || isAdminOrHigher;
+      hasAccess = !!isPurchased || isAdminOrHigher;
       console.log(`User role: ${userRole}, isAdminOrHigher: ${isAdminOrHigher}, hasAccess: ${hasAccess}`);
     } else {
       // For visitors without database records, check if their email is a known admin

@@ -46,7 +46,7 @@ function fixAposInFile(filePath) {
 // Main function
 function main() {
   const rootDir = process.cwd();
-  console.log('Starting ' fix process...');
+  console.log("Starting ' fix process...");
   
   const files = getAllFiles(rootDir);
   console.log(`Found ${files.length} files to process`);
@@ -55,7 +55,7 @@ function main() {
     fixAposInFile(file);
   });
   
-  console.log('' fix process completed!');
+  console.log("' fix process completed!");
 }
 
 main(); 

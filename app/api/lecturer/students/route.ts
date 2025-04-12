@@ -31,15 +31,11 @@ export async function GET(req: Request) {
       select: {
         id: true,
         title: true,
-        purchases: {
-          include: {
-            student: true
-          }
-        },
+        purchases: true,
         zoomMeetings: {
           select: {
             id: true,
-            attendance: {
+            attendees: {
               select: {
                 userId: true
               }
@@ -65,8 +61,8 @@ export async function GET(req: Request) {
         
         if (totalMeetings > 0) {
           for (const meeting of liveClass.zoomMeetings) {
-            const attended = meeting.attendance.some(
-              attendance => attendance.userId === purchase.student.id
+            const attended = meeting.attendees.some(
+              (attendance: { userId: string }) => attendance.userId === purchase.studentId
             );
             
             if (attended) {
@@ -80,10 +76,22 @@ export async function GET(req: Request) {
           ? Math.round((attendedMeetings / totalMeetings) * 100) 
           : 100; // If no meetings yet, assume 100%
         
+        // Get student details
+        const student = await db.liveClassUser.findUnique({
+          where: { id: purchase.studentId },
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        });
+        
+        if (!student) continue;
+        
         students.push({
-          id: purchase.student.id,
-          name: purchase.student.name,
-          email: purchase.student.email,
+          id: student.id,
+          name: student.name,
+          email: student.email,
           classId: liveClass.id,
           className: liveClass.title,
           joinDate: purchase.createdAt,

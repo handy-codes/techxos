@@ -9,7 +9,7 @@ import {
   Section,
 } from "@prisma/client";
 import toast from "react-hot-toast";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { File, Loader2, Lock } from "lucide-react";
 
@@ -85,7 +85,7 @@ const SectionsDetails = ({
     setPaymentConfig(config);
   }, [course.price]);
 
-  const buyCourse = async () => {
+  const buyCourse = useCallback(async () => {
     try {
       setIsLoading(true);
       makePayment({
@@ -114,7 +114,7 @@ const SectionsDetails = ({
       toast.error("Payment failed!");
       setIsLoading(false);
     }
-  };
+  }, [course.id, makePayment]);
 
   return (
     <div className="px-6 py-4 flex flex-col gap-5">

@@ -4,7 +4,7 @@
  */
 
 import { PrismaClient, LiveClassUserRole } from "@prisma/client";
-import * as clerkSDK from '@clerk/clerk-sdk-node';
+import { clerkClient } from "@clerk/clerk-sdk-node";
 import dotenv from "dotenv";
 
 // Load environment variables
@@ -33,13 +33,12 @@ async function main() {
       return;
     }
     
-    // Initialize Clerk client
-    const clerk = clerkSDK.clerkClient;
-    clerk.setKey(secretKey);
+    // Set the secret key for the clerkClient
+    process.env.CLERK_SECRET_KEY = secretKey;
     
     // Get user from Clerk
     try {
-      const clerkUser = await clerk.users.getUser(clerkUserId);
+      const clerkUser = await clerkClient.users.getUser(clerkUserId);
       console.log(`Found Clerk user: ${clerkUser.id}`);
       console.log(`Name: ${clerkUser.firstName} ${clerkUser.lastName}`);
       
@@ -50,7 +49,7 @@ async function main() {
       console.log(`Email: ${primaryEmail || 'No primary email'}`);
       
       // Find or create user in database
-      let dbUser = await db.liveClassUser.findFirst({
+      let dbUser = await prisma.liveClassUser.findFirst({
         where: { clerkUserId }
       });
       
@@ -59,7 +58,7 @@ async function main() {
         console.log(`Current role: ${dbUser.role}`);
         
         // Update user role
-        dbUser = await db.liveClassUser.update({
+        dbUser = await prisma.liveClassUser.update({
           where: { id: dbUser.id },
           data: { 
             role: role as LiveClassUserRole,
@@ -72,7 +71,7 @@ async function main() {
         console.log(`Creating new user in database...`);
         
         // Create new user
-        dbUser = await db.liveClassUser.create({
+        dbUser = await prisma.liveClassUser.create({
           data: {
             name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'User',
             email: primaryEmail || `user-${clerkUser.id}@example.com`,
@@ -87,7 +86,7 @@ async function main() {
       
       // Update Clerk metadata
       console.log(`Updating Clerk user metadata...`);
-      await clerk.users.updateUser(clerkUser.id, {
+      await clerkClient.users.updateUser(clerkUser.id, {
         publicMetadata: {
           ...clerkUser.publicMetadata,
           systemRole: role
@@ -104,7 +103,7 @@ async function main() {
   } catch (error) {
     console.error("Error in script:", error);
   } finally {
-    await db.$disconnect();
+    await prisma.$disconnect();
   }
 }
 

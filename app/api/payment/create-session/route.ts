@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request) {
   try {
@@ -17,26 +18,37 @@ export async function POST(req: Request) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
-    // Create a payment session in the database
-    const paymentSession = await db.paymentSession.create({
+    // Generate a unique transaction reference
+    const txRef = `${courseId}-${uuidv4()}`;
+    
+    // Calculate end date (90 days from now)
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 90);
+
+    // Create a pending purchase record
+    const purchase = await db.liveClassPurchase.create({
       data: {
-        userId,
+        studentId: userId,
+        liveClassId: courseId,
         amount,
-        email,
-        name,
-        courseId,
-        courseName,
         status: "PENDING",
+        txRef,
+        isActive: false,
+        startDate: new Date(),
+        endDate,
+        courseName,
+        studentEmail: email,
+        studentName: name,
       },
     });
 
     // In a real implementation, you would integrate with Flutterwave here
     // For now, we'll just return a mock payment URL
-    const paymentUrl = `/payment/checkout?sessionId=${paymentSession.id}`;
+    const paymentUrl = `/payment/checkout?sessionId=${purchase.id}`;
 
     return NextResponse.json({
       paymentUrl,
-      sessionId: paymentSession.id,
+      sessionId: purchase.id,
     });
   } catch (error) {
     console.error("[PAYMENT_CREATE_SESSION] Error:", error);

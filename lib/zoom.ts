@@ -8,8 +8,16 @@ export const initZoom = async () => {
   
   if (!isZoomInitialized) {
     try {
-      const { ZoomClient } = await import('@zoom/meetingsdk');
-      await ZoomClient.init();
+      // ZoomMtg.init() requires a config object
+      await ZoomMtg.init({
+        leaveUrl: window.location.origin,
+        success: () => {
+          console.log('Zoom initialized successfully');
+        },
+        error: (error: any) => {
+          console.error('Zoom initialization error:', error);
+        }
+      });
       isZoomInitialized = true;
     } catch (error) {
       console.error('Failed to initialize Zoom:', error);
@@ -31,13 +39,23 @@ export const joinMeeting = async (
   
   try {
     await initZoom();
-    const { ZoomClient } = await import('@zoom/meetingsdk');
-    await ZoomClient.join({
-      meetingId,
-      userName,
-      userEmail,
-      role,
-      meetingPassword
+    
+    // Generate a signature for the meeting
+    // In a real implementation, this would come from your backend
+    const signature = ''; // This should be generated on the server
+    
+    await ZoomMtg.join({
+      meetingNumber: meetingId,
+      userName: userName,
+      userEmail: userEmail,
+      passWord: meetingPassword,
+      signature: signature,
+      success: () => {
+        console.log('Joined meeting successfully');
+      },
+      error: (error: any) => {
+        console.error('Failed to join meeting:', error);
+      }
     });
   } catch (error) {
     console.error('Failed to join meeting:', error);

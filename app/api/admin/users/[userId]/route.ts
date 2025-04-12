@@ -14,7 +14,7 @@ export async function GET(
     // Validate admin access
     const adminCheck = await requireAdmin();
     if (!adminCheck.success) {
-      return new NextResponse(adminCheck.message, { status: adminCheck.status });
+      return adminCheck.response;
     }
 
     const user = await db.liveClassUser.findUnique({
@@ -40,7 +40,7 @@ export async function PATCH(
     // Validate admin access
     const adminCheck = await requireAdmin();
     if (!adminCheck.success) {
-      return new NextResponse(adminCheck.message, { status: adminCheck.status });
+      return adminCheck.response;
     }
 
     const { isActive, role, name, email } = await req.json();
@@ -56,7 +56,7 @@ export async function PATCH(
 
     // If changing role, use the sync function to update both DB and Clerk
     if (role && role !== existingUser.role) {
-      const updatedUser = await syncUserRole(params.userId, role as LiveClassUserRole);
+      const updatedUser = await syncUserRole(existingUser.clerkUserId);
       
       // Update other fields if provided
       if (isActive !== undefined || name || email) {
@@ -104,7 +104,7 @@ export async function DELETE(
     }
 
     // Only HEAD_ADMIN can delete users
-    if (authCheck.user.role !== "HEAD_ADMIN") {
+    if (authCheck.user && authCheck.user.role !== "HEAD_ADMIN") {
       return new NextResponse("Only HEAD_ADMIN can delete users", { status: 403 });
     }
 
@@ -139,7 +139,7 @@ export async function DELETE(
       try {
         const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY! });
         await clerk.users.updateUser(userToDelete.clerkUserId, {
-          banned: true
+          publicMetadata: { banned: true }
         });
         console.log(`[USER_DELETE] Banned Clerk user: ${userToDelete.clerkUserId}`);
       } catch (clerkError) {

@@ -1,6 +1,11 @@
-const { PrismaClient } = require("@prisma/client");
-// import { PrismaClient } from '@prisma/client'
-const database = new PrismaClient();
+import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config({ path: '.env.local' });
+dotenv.config();
+
+const prisma = new PrismaClient();
 
 async function main() {
   try {
@@ -53,7 +58,7 @@ async function main() {
 
     // Sequentially create each category with its subcategories
     for (const category of categories) {
-      await database.category.create({
+      await prisma.category.create({
         data: {
           name: category.name,
           subCategories: category.subCategories,
@@ -64,7 +69,7 @@ async function main() {
       });
     }
 
-    await database.level.createMany({
+    await prisma.level.createMany({
       data: [
         { name: "Beginner" },
         { name: "Intermediate" },
@@ -77,7 +82,7 @@ async function main() {
   } catch (error) {
     console.log("Seeding failed", error);
   } finally {
-    await database.$disconnect();
+    await prisma.$disconnect();
   }
 }
 

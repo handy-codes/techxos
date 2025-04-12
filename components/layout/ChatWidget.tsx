@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
@@ -37,26 +37,26 @@ export default function ChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const loadMessages = (): Message[] => {
-      try {
-        const storageKey = getStorageKey();
-        const saved = localStorage.getItem(storageKey);
-        
-        const initialMessages: Message[] = saved ? JSON.parse(saved) : [];
-        const hasWelcome = initialMessages.some(msg => 
-          msg.bot?.startsWith("wandy_") && msg.bot.includes("_welcome")
-        );
+  const loadMessages = useCallback((): Message[] => {
+    try {
+      const storageKey = getStorageKey();
+      const saved = localStorage.getItem(storageKey);
+      
+      const initialMessages: Message[] = saved ? JSON.parse(saved) : [];
+      const hasWelcome = initialMessages.some(msg => 
+        msg.bot?.startsWith("wandy_") && msg.bot.includes("_welcome")
+      );
 
-        return hasWelcome ? initialMessages : [getWelcomeMessage(user ?? undefined), ...initialMessages];
-      } catch (error) {
-        console.error("Failed to load messages:", error);
-        return [getWelcomeMessage(user ?? undefined)];
-      }
-    };
-
-    setMessages(loadMessages());
+      return hasWelcome ? initialMessages : [getWelcomeMessage(user ?? undefined), ...initialMessages];
+    } catch (error) {
+      console.error("Failed to load messages:", error);
+      return [getWelcomeMessage(user ?? undefined)];
+    }
   }, [user]);
+
+  useEffect(() => {
+    setMessages(loadMessages());
+  }, [loadMessages]);
 
   useEffect(() => {
     try {
@@ -67,22 +67,22 @@ export default function ChatWidget() {
     }
   }, [messages]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping]);
+  }, [messages, isTyping, scrollToBottom]);
 
-  const toggleChat = () => {
+  const toggleChat = useCallback(() => {
     if (!isOpen) {
       new Audio("/chat-popup.mp3").play().catch(console.error);
     }
     setIsOpen(!isOpen);
-  };
+  }, [isOpen]);
 
-  const sendMessage = async () => {
+  const sendMessage = useCallback(async () => {
     const trimmedInput = input.trim();
     if (!trimmedInput) return;
 
@@ -117,14 +117,14 @@ export default function ChatWidget() {
     } finally {
       setIsTyping(false);
     }
-  };
+  }, [input, user]);
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
-  };
+  }, [sendMessage]);
 
   return (
     <div className="fixed bottom-4 right-4 z-50">

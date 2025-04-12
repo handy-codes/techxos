@@ -21,7 +21,7 @@ export default function CoursePayment({
   hasAccess,
   onAccessChange
 }: CoursePaymentProps) {
-  const { isSignedIn, user } = useAuth();
+  const { isSignedIn, isLoaded, user } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,44 +48,54 @@ export default function CoursePayment({
 
   if (!isSignedIn) {
     return (
-      <Button 
-        onClick={() => router.push('/sign-in')}
-        className="w-full bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 transition-colors"
-      >
-        Sign in to Enroll
-      </Button>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <Button disabled className="w-full bg-gray-400 text-white py-3 px-6 rounded-md">
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        Processing...
-      </Button>
+      <div className="text-center p-6 border rounded-lg bg-gray-50">
+        <h3 className="text-lg font-medium mb-2">Sign in to purchase this course</h3>
+        <p className="text-gray-600 mb-4">You need to be signed in to purchase this course.</p>
+        <Button 
+          onClick={() => router.push('/sign-in')}
+          className="bg-blue-600 hover:bg-blue-700"
+        >
+          Sign In
+        </Button>
+      </div>
     );
   }
 
   if (hasAccess) {
     return (
-      <Button 
-        onClick={handleJoinClass}
-        className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors"
-      >
-        Join Live Class
-      </Button>
+      <div className="text-center p-6 border rounded-lg bg-green-50">
+        <h3 className="text-lg font-medium mb-2 text-green-800">You have access to this course</h3>
+        <p className="text-gray-600 mb-4">You can now join the live classroom sessions.</p>
+        <Button 
+          onClick={handleJoinClass}
+          className="bg-green-600 hover:bg-green-700"
+        >
+          Join Class
+        </Button>
+      </div>
     );
   }
 
   return (
-    <FlutterwavePayment 
-      courseId={courseId}
-      courseName={courseName}
-      amount={amount}
-      email={userEmail}
-      name={userName}
-      onSuccess={handlePaymentSuccess}
-      onError={handlePaymentError}
-    />
+    <div className="text-center p-6 border rounded-lg">
+      <h3 className="text-lg font-medium mb-2">Purchase this course</h3>
+      <p className="text-gray-600 mb-4">
+        Get access to all live sessions and course materials.
+      </p>
+      
+      <div className="mb-4">
+        <span className="text-2xl font-bold">{amount.toLocaleString()} NGN</span>
+      </div>
+      
+      <FlutterwavePayment
+        amount={amount}
+        email={userEmail}
+        name={userName}
+        courseId={courseId}
+        courseName={courseName}
+        onSuccess={handlePaymentSuccess}
+        onError={handlePaymentError}
+      />
+    </div>
   );
 } 

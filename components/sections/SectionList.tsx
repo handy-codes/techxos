@@ -5,7 +5,7 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Grip, Pencil } from "lucide-react";
 
 interface SectionListProps {
@@ -18,15 +18,19 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [sections, setSections] = useState(items);
 
-  useEffect(() => {
+  const initializeMounted = useCallback(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    initializeMounted();
+  }, [initializeMounted]);
 
   useEffect(() => {
     setSections(items);
   }, [items]);
 
-  const onDragEnd = (result: DropResult) => {
+  const onDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) return;
 
     const items = Array.from(sections);
@@ -46,7 +50,7 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
     }));
 
     onReorder(bulkUpdateData);
-  };
+  }, [sections, onReorder]);
 
   if (!isMounted) return null;
 

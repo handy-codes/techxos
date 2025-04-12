@@ -22,10 +22,7 @@ export async function GET(req: Request) {
     // Find all users with this email (case insensitive)
     const users = await db.liveClassUser.findMany({
       where: {
-        email: {
-          contains: email,
-          mode: 'insensitive'
-        }
+        email: email.toLowerCase()
       }
     });
     

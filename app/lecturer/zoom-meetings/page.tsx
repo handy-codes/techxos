@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -42,11 +42,7 @@ export default function LecturerZoomMeetingsPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("upcoming");
 
-  useEffect(() => {
-    fetchMeetings();
-  }, []);
-
-  const fetchMeetings = async () => {
+  const fetchMeetings = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get("/api/lecturer/zoom-meetings");
@@ -57,9 +53,13 @@ export default function LecturerZoomMeetingsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const startMeeting = async (meetingId: string) => {
+  useEffect(() => {
+    fetchMeetings();
+  }, [fetchMeetings]);
+
+  const startMeeting = useCallback(async (meetingId: string) => {
     try {
       await axios.post(`/api/zoom/meetings/${meetingId}/start`);
       toast.success("Meeting started");
@@ -68,9 +68,9 @@ export default function LecturerZoomMeetingsPage() {
       console.error("Error starting meeting:", error);
       toast.error("Failed to start meeting");
     }
-  };
+  }, [router]);
 
-  const endMeeting = async (meetingId: string) => {
+  const endMeeting = useCallback(async (meetingId: string) => {
     try {
       await axios.post(`/api/zoom/meetings/${meetingId}/end`);
       toast.success("Meeting ended");
@@ -79,9 +79,9 @@ export default function LecturerZoomMeetingsPage() {
       console.error("Error ending meeting:", error);
       toast.error("Failed to end meeting");
     }
-  };
+  }, [fetchMeetings]);
 
-  const deleteMeeting = async (meetingId: string) => {
+  const deleteMeeting = useCallback(async (meetingId: string) => {
     if (!confirm("Are you sure you want to delete this meeting?")) return;
     
     try {
@@ -92,9 +92,9 @@ export default function LecturerZoomMeetingsPage() {
       console.error("Error deleting meeting:", error);
       toast.error("Failed to delete meeting");
     }
-  };
+  }, [fetchMeetings]);
 
-  const formatMeetingDate = (dateString: string) => {
+  const formatMeetingDate = useCallback((dateString: string) => {
     const date = new Date(dateString);
     
     if (isToday(date)) {
@@ -106,9 +106,9 @@ export default function LecturerZoomMeetingsPage() {
     } else {
       return format(date, 'MMM d, yyyy • h:mm a');
     }
-  };
+  }, []);
 
-  const formatRelativeTime = (dateString: string) => {
+  const formatRelativeTime = useCallback((dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
     
@@ -117,9 +117,9 @@ export default function LecturerZoomMeetingsPage() {
     } else {
       return `Started ${formatDistance(date, now, { addSuffix: true })}`;
     }
-  };
+  }, []);
 
-  const getMeetingStatusColor = (status: string) => {
+  const getMeetingStatusColor = useCallback((status: string) => {
     switch (status) {
       case "SCHEDULED":
         return "bg-blue-100 text-blue-800";
@@ -131,7 +131,7 @@ export default function LecturerZoomMeetingsPage() {
       default:
         return "bg-gray-100 text-gray-800";
     }
-  };
+  }, []);
 
   const upcomingMeetings = meetings.filter(meeting => 
     meeting.status === "SCHEDULED"

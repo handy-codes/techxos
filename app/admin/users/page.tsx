@@ -157,7 +157,7 @@ export default function UsersPage() {
     }
   }, [isLoaded, user, router, fetchUsers]);
 
-  const toggleUserStatus = async (userId: string, currentStatus: boolean) => {
+  const toggleUserStatus = useCallback(async (userId: string, currentStatus: boolean) => {
     try {
       await axios.patch(`/api/admin/users/${userId}`, {
         isActive: !currentStatus,
@@ -173,9 +173,9 @@ export default function UsersPage() {
       }
       console.error(err);
     }
-  };
+  }, [fetchUsers]);
 
-  const deleteUser = async (userId: string) => {
+  const deleteUser = useCallback(async (userId: string) => {
     try {
       await axios.delete(`/api/admin/users/${userId}`);
       toast.success("User deleted successfully");
@@ -189,7 +189,7 @@ export default function UsersPage() {
       }
       console.error(err);
     }
-  };
+  }, [fetchUsers]);
 
   if (!isLoaded) {
     return null;

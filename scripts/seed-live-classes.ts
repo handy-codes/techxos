@@ -1,34 +1,40 @@
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient, LiveClassUserRole } from "@prisma/client";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config({ path: '.env.local' });
+dotenv.config();
 
 const prisma = new PrismaClient();
 
 async function main() {
   try {
     // Check if Head Admin exists
-    let headAdmin = await db.liveClassUser.findUnique({
+    let headAdmin = await prisma.liveClassUser.findUnique({
       where: { email: "paxymekventures@gmail.com" }
     });
 
     // Create Head Admin if doesn't exist
     if (!headAdmin) {
-      headAdmin = await db.liveClassUser.create({
+      headAdmin = await prisma.liveClassUser.create({
         data: {
           email: "paxymekventures@gmail.com",
-          role: "HEAD_ADMIN",
+          role: LiveClassUserRole.HEAD_ADMIN,
           name: "Head Administrator",
           isActive: true,
+          clerkUserId: "default_admin"
         },
       });
     }
 
     // Check if live class exists
-    let liveClass = await db.liveClass.findFirst({
+    let liveClass = await prisma.liveClass.findFirst({
       where: { title: "Project Management" }
     });
 
     // Create live class if doesn't exist
     if (!liveClass) {
-      liveClass = await db.liveClass.create({
+      liveClass = await prisma.liveClass.create({
         data: {
           title: "Project Management",
           description: "Comprehensive project management course covering all aspects of modern project management.",
@@ -48,12 +54,12 @@ async function main() {
     }
 
     // Create class materials if they don't exist
-    const materials = await db.liveClassMaterial.findMany({
+    const materials = await prisma.liveClassMaterial.findMany({
       where: { liveClassId: liveClass.id }
     });
 
     if (materials.length === 0) {
-      await db.liveClassMaterial.createMany({
+      await prisma.liveClassMaterial.createMany({
         data: [
           {
             title: "Course Syllabus",
@@ -78,12 +84,12 @@ async function main() {
     }
 
     // Create class schedules if they don't exist
-    const schedules = await db.liveClassSchedule.findMany({
+    const schedules = await prisma.liveClassSchedule.findMany({
       where: { liveClassId: liveClass.id }
     });
 
     if (schedules.length === 0) {
-      await db.liveClassSchedule.createMany({
+      await prisma.liveClassSchedule.createMany({
         data: [
           {
             liveClassId: liveClass.id,
@@ -107,7 +113,7 @@ async function main() {
   } catch (error) {
     console.error("Error seeding live class data:", error);
   } finally {
-    await db.$disconnect();
+    await prisma.$disconnect();
   }
 }
 

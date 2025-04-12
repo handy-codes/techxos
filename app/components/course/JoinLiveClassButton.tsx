@@ -23,16 +23,35 @@ const JoinLiveClassButton: React.FC<JoinLiveClassButtonProps> = ({
       });
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Failed to join the class');
+        if (response.status === 403) {
+          toast.error('You need to purchase this course to join the live class');
+          return;
+        }
+        if (response.status === 404) {
+          const errorData = await response.json().catch(() => ({}));
+          const message = errorData.message || 'No active class found';
+          toast.error(message);
+          return;
+        }
+        throw new Error('Failed to join the class');
       }
       
       const data = await response.json();
       
-      // Open the zoom link in a new tab
       if (data.zoomLink) {
+        // Show meeting details in a toast
+        if (data.zoomMeetingId && data.zoomPassword) {
+          toast.success(
+            `Meeting ID: ${data.zoomMeetingId}\nPassword: ${data.zoomPassword}`, 
+            { duration: 10000 } // Show for 10 seconds
+          );
+        }
+
+        // Open the zoom link in a new tab
         window.open(data.zoomLink, '_blank');
-        toast.success(`Successfully joined ${courseName} live class!`);
+        
+        // Show success message
+        toast.success(data.message || `Successfully ${data.isHost ? 'started' : 'joined'} ${courseName} live class!`);
       } else {
         toast.error('No zoom link available for this class');
       }

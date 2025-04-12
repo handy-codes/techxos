@@ -139,7 +139,7 @@ const ResourceForm = ({ section, courseId }: ResourceFormProps) => {
                   <FormControl>
                     <FileUpload
                       value={field.value || ""}
-                      onChange={(url: string) => field.onChange(url)}
+                      onChange={(url) => field.onChange(url || "")}
                       endpoint="sectionResource"
                       page="Edit Section"
                     />

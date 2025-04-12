@@ -1,4 +1,4 @@
-import { clerkClient } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { LiveClassUserRole } from "@prisma/client";
 

@@ -14,7 +14,7 @@ import {
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface LiveClass {

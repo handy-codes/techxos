@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -43,11 +43,7 @@ export default function LecturerStudentsPage() {
   const [selectedClass, setSelectedClass] = useState<string>("all");
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
 
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
-  const fetchStudents = async () => {
+  const fetchStudents = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get("/api/lecturer/students");
@@ -58,25 +54,27 @@ export default function LecturerStudentsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const toggleStudentSelection = (studentId: string) => {
-    if (selectedStudents.includes(studentId)) {
-      setSelectedStudents(selectedStudents.filter(id => id !== studentId));
-    } else {
-      setSelectedStudents([...selectedStudents, studentId]);
-    }
-  };
+  useEffect(() => {
+    fetchStudents();
+  }, [fetchStudents]);
 
-  const selectAllStudents = (students: Student[]) => {
-    if (selectedStudents.length === students.length) {
-      setSelectedStudents([]);
-    } else {
-      setSelectedStudents(students.map(student => student.id));
-    }
-  };
+  const toggleStudentSelection = useCallback((studentId: string) => {
+    setSelectedStudents(prev => 
+      prev.includes(studentId) 
+        ? prev.filter(id => id !== studentId)
+        : [...prev, studentId]
+    );
+  }, []);
 
-  const sendEmailToSelected = async () => {
+  const selectAllStudents = useCallback((students: Student[]) => {
+    setSelectedStudents(prev => 
+      prev.length === students.length ? [] : students.map(student => student.id)
+    );
+  }, []);
+
+  const sendEmailToSelected = useCallback(async () => {
     if (selectedStudents.length === 0) {
       toast.error("Please select at least one student");
       return;
@@ -91,7 +89,7 @@ export default function LecturerStudentsPage() {
       console.error("Error sending email:", error);
       toast.error("Failed to send email");
     }
-  };
+  }, [selectedStudents]);
 
   // Extract unique class names for filtering
   const classNames = ["all", ...Array.from(new Set(students.map(student => student.className)))];
