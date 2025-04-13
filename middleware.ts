@@ -1,5 +1,6 @@
 import { authMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 // This example protects all routes including api/trpc routes
 // Please edit this to allow other routes to be public as needed.
@@ -7,6 +8,7 @@ import { NextResponse } from "next/server";
 export default authMiddleware({
   publicRoutes: [
     "/",
+    "/about",
     "/api/webhooks(.*)",
     "/sign-in(.*)",
     "/sign-up(.*)",
@@ -16,9 +18,22 @@ export default authMiddleware({
     "/api/live-courses/project-mgt/checkout",
     "/api/test-clerk-admin",
     "/api/auth/check-admin",
-    "/checkout/project-mgt"
+    "/checkout/project-mgt",
+    "/frontend",
+    "/fullstack",
+    "/ai-ml",
+    "/cybersecurity",
+    "/data-science",
+    "/graphic-design",
+    "/ui-ux",
+    "/digital-marketing",
+    "/software-devt",
+    "/project-mgt",
+    "/api/nofilesubmit-form",
+    "/api/live-courses/(.*)",
+  
   ],
-  async afterAuth(auth, req) {
+  async afterAuth(auth: { isPublicRoute: boolean; userId: string | null }, req: NextRequest) {
     // Handle public routes
     if (auth.isPublicRoute) {
       return NextResponse.next();
