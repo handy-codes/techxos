@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -15,7 +14,7 @@ import {
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Calendar, Clock, UserCheck } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 interface Schedule {
   id: string;
@@ -33,7 +32,6 @@ interface Schedule {
 }
 
 export default function SchedulePage() {
-  const { user } = useUser();
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

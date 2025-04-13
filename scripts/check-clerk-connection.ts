@@ -3,12 +3,25 @@
  * Run with: npx tsx scripts/check-clerk-connection.ts
  */
 
-import { clerkClient } from '@clerk/clerk-sdk-node';
+import { createClerkClient } from '@clerk/backend';
 import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
 dotenv.config();
+
+interface EmailAddress {
+  id: string;
+  emailAddress: string;
+}
+
+interface User {
+  id: string;
+  emailAddresses: EmailAddress[];
+  primaryEmailAddressId: string | null;
+  firstName: string | null;
+  lastName: string | null;
+}
 
 async function main() {
   try {
@@ -21,21 +34,20 @@ async function main() {
     
     console.log(`Using Clerk key: ${secretKey.substring(0, 7)}...`);
     
-    // Set the secret key for the clerkClient
-    process.env.CLERK_SECRET_KEY = secretKey;
+    // Create Clerk client
+    const clerk = createClerkClient({ secretKey });
     
     // List all users
     console.log('Fetching users from Clerk...');
-    const users = await clerkClient.users.getUserList({
-      limit: 10,
-    });
+    const usersResponse = await clerk.users.getUserList();
+    const users = usersResponse.data;
     
-    console.log(`Found ${users.totalCount} users in Clerk`);
+    console.log(`Found ${users.length} users in Clerk`);
     
-    if (users.data.length > 0) {
+    if (users.length > 0) {
       // Display the first few users
       console.log('\nFirst users:');
-      users.data.forEach((user, index) => {
+      users.forEach((user: User, index: number) => {
         const primaryEmail = user.emailAddresses.find(email => email.id === user.primaryEmailAddressId)?.emailAddress;
         console.log(`${index + 1}. ID: ${user.id} | Email: ${primaryEmail || 'No primary email'} | Name: ${user.firstName} ${user.lastName}`);
       });
@@ -45,16 +57,16 @@ async function main() {
       console.log(`\nLooking for user with email: ${targetEmail}`);
       
       // Check all email addresses, not just primary
-      const matchingUsers = users.data.filter(user => 
-        user.emailAddresses.some(email => 
+      const matchingUsers = users.filter((user: User) => 
+        user.emailAddresses.some((email: EmailAddress) => 
           email.emailAddress.toLowerCase() === targetEmail.toLowerCase()
         )
       );
       
       if (matchingUsers.length > 0) {
         console.log(`Found ${matchingUsers.length} users with this email:`);
-        matchingUsers.forEach((user, index) => {
-          const emails = user.emailAddresses.map(e => 
+        matchingUsers.forEach((user: User, index: number) => {
+          const emails = user.emailAddresses.map((e: EmailAddress) => 
             `${e.emailAddress}${e.id === user.primaryEmailAddressId ? ' (primary)' : ''}`
           ).join(', ');
           

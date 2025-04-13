@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { LiveClassUserRole } from "@prisma/client";
 import { syncUserRole } from "@/lib/user-sync";
 import { requireAdmin } from "@/lib/auth-utils";
 import { createClerkClient } from "@clerk/backend";
 
 export async function GET(
-  req: Request,
+  request: Request,
   { params }: { params: { userId: string } }
 ) {
   try {

@@ -4,12 +4,26 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Loader2 } from 'lucide-react';
-import { useUser } from '@clerk/nextjs';
 
 interface ZoomMeetingProps {
   meetingId: string;
   onJoinSuccess?: () => void;
   onJoinError?: (error: any) => void;
+}
+
+declare global {
+  interface Window {
+    ZoomMtgEmbed: {
+      createClient: () => any;
+      setZoomJSLib: (lib: any, version: string) => void;
+      preLoadWasm: () => void;
+      prepareWebSDK: (config: any) => void;
+      init: (config: any) => void;
+      join: (config: any) => void;
+      leaveMeeting: () => void;
+      on: (event: string, callback: (data: any) => void) => void;
+    };
+  }
 }
 
 const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ 
@@ -20,7 +34,6 @@ const ZoomMeeting: React.FC<ZoomMeetingProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [meetingDetails, setMeetingDetails] = useState<any>(null);
-  const { user } = useUser();
   const zoomContainerRef = useRef<HTMLDivElement>(null);
 
   const loadZoomSDK = useCallback(async () => {

@@ -1,109 +1,96 @@
 /**
- * This script fixes role synchronization issues by using Clerk User IDs directly
- * Run with: npx tsx scripts/fix-roles-by-id.ts <clerkUserId>
+ * This script fixes user roles by ID
+ * Run with: npx tsx scripts/fix-roles-by-id.ts
  */
 
-import { PrismaClient, LiveClassUserRole } from "@prisma/client";
-import { clerkClient } from "@clerk/clerk-sdk-node";
-import dotenv from "dotenv";
+import { createClerkClient } from '@clerk/backend';
+import dotenv from 'dotenv';
+import { db } from '../lib/db';
+import { syncUserRole } from '../lib/user-sync';
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
 dotenv.config();
 
-const prisma = new PrismaClient();
+interface EmailAddress {
+  id: string;
+  emailAddress: string;
+}
+
+interface User {
+  id: string;
+  emailAddresses: EmailAddress[];
+  primaryEmailAddressId: string | null;
+  firstName: string | null;
+  lastName: string | null;
+}
 
 async function main() {
   try {
-    const clerkUserId = process.argv[2];
-    const role = process.argv[3] || 'HEAD_ADMIN';
-    
-    if (!clerkUserId) {
-      console.error('Please provide a Clerk User ID: npx tsx scripts/fix-roles-by-id.ts <clerkUserId> [role]');
-      console.error('You can find Clerk User IDs by running: npx tsx scripts/check-clerk-connection.ts');
-      return;
-    }
-    
-    console.log(`Setting user ${clerkUserId} to ${role} role...`);
-    
-    // Get Clerk user info
+    // Get the Clerk secret key
     const secretKey = process.env.CLERK_SECRET_KEY;
     if (!secretKey) {
       console.error('CLERK_SECRET_KEY is not set in environment variables');
       return;
     }
     
-    // Set the secret key for the clerkClient
-    process.env.CLERK_SECRET_KEY = secretKey;
+    console.log(`Using Clerk key: ${secretKey.substring(0, 7)}...`);
     
-    // Get user from Clerk
-    try {
-      const clerkUser = await clerkClient.users.getUser(clerkUserId);
-      console.log(`Found Clerk user: ${clerkUser.id}`);
-      console.log(`Name: ${clerkUser.firstName} ${clerkUser.lastName}`);
-      
-      const primaryEmail = clerkUser.emailAddresses.find(
-        email => email.id === clerkUser.primaryEmailAddressId
-      )?.emailAddress;
-      
-      console.log(`Email: ${primaryEmail || 'No primary email'}`);
-      
-      // Find or create user in database
-      let dbUser = await prisma.liveClassUser.findFirst({
-        where: { clerkUserId }
-      });
-      
-      if (dbUser) {
-        console.log(`Found existing user in database: ${dbUser.id}`);
-        console.log(`Current role: ${dbUser.role}`);
-        
-        // Update user role
-        dbUser = await prisma.liveClassUser.update({
-          where: { id: dbUser.id },
-          data: { 
-            role: role as LiveClassUserRole,
-            isActive: true
-          }
-        });
-        
-        console.log(`Updated user role to ${role}`);
-      } else {
-        console.log(`Creating new user in database...`);
-        
-        // Create new user
-        dbUser = await prisma.liveClassUser.create({
-          data: {
-            name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'User',
-            email: primaryEmail || `user-${clerkUser.id}@example.com`,
-            clerkUserId,
-            role: role as LiveClassUserRole,
-            isActive: true
-          }
-        });
-        
-        console.log(`Created new user in database: ${dbUser.id}`);
-      }
-      
-      // Update Clerk metadata
-      console.log(`Updating Clerk user metadata...`);
-      await clerkClient.users.updateUser(clerkUser.id, {
-        publicMetadata: {
-          ...clerkUser.publicMetadata,
-          systemRole: role
-        }
-      });
-      
-      console.log(`Successfully updated Clerk metadata`);
-      console.log(`\nUser ${clerkUserId} is now set as ${role} in both systems`);
-      
-    } catch (error) {
-      console.error(`Error fetching Clerk user: ${clerkUserId}`, error);
+    // Create Clerk client
+    const clerk = createClerkClient({ secretKey });
+    
+    // Get user IDs from command line arguments
+    const userIds = process.argv.slice(2);
+    if (userIds.length === 0) {
+      console.error('Please provide at least one user ID as an argument');
+      console.log('Usage: npx tsx scripts/fix-roles-by-id.ts <userId1> [userId2] ...');
+      return;
     }
     
+    console.log(`Processing ${userIds.length} user(s)...`);
+    
+    for (const userId of userIds) {
+      try {
+        console.log(`\nProcessing user ID: ${userId}`);
+        
+        // Get user from Clerk
+        const clerkUser = await clerk.users.getUser(userId);
+        if (!clerkUser) {
+          console.error(`User not found in Clerk: ${userId}`);
+          continue;
+        }
+        
+        console.log(`Found user in Clerk: ${clerkUser.firstName} ${clerkUser.lastName}`);
+        
+        // Get primary email
+        const primaryEmail = clerkUser.emailAddresses.find(
+          (email: EmailAddress) => email.id === clerkUser.primaryEmailAddressId
+        )?.emailAddress;
+        
+        if (!primaryEmail) {
+          console.error(`No primary email found for user: ${userId}`);
+          continue;
+        }
+        
+        console.log(`Primary email: ${primaryEmail}`);
+        
+        // Sync user role
+        const updatedUser = await syncUserRole(userId);
+        if (!updatedUser) {
+          console.error(`Failed to sync role for user: ${userId}`);
+          continue;
+        }
+        console.log(`User role synced: ${updatedUser.role}`);
+        
+      } catch (error) {
+        console.error(`Error processing user ${userId}:`, error);
+      }
+    }
+    
+    console.log('\nRole sync completed!');
+    
   } catch (error) {
-    console.error("Error in script:", error);
-  } finally {
-    await prisma.$disconnect();
+    console.error('Error:', error);
   }
 }
 
