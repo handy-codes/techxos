@@ -29,6 +29,7 @@ export default authMiddleware({
     "/pages/digital-marketing",
     "/pages/software-devt",
     "/pages/careers",
+    "/pages/mathematics-jss",
     "/pages/services",
     "/api/nofilesubmit-form",
     "/api/live-courses/(.*)",

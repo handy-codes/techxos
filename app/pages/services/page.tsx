@@ -63,7 +63,7 @@ const ServicesPage: NextPage = () => {
           </p>
           <div className="relative h-64 w-full">
             <Image
-              src="/logo2.webp"
+              src="/techxos-new-logo.jpg"
               alt="Technology Illustration"
               fill
               className="object-contain"
@@ -112,7 +112,7 @@ const ServicesPage: NextPage = () => {
             <div className="md:w-1/2">
               <div className="relative h-64 w-full">
                 <Image
-                  src="/images/consulting.jpg"
+                  src="/techxos-new-logo.png"
                   alt="Tech Consulting"
                   fill
                   className="object-contain"
