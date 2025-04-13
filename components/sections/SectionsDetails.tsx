@@ -21,6 +21,7 @@ import ProgressButton from "./ProgressButton";
 import SectionMenu from "../layout/SectionMenu";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { redirect, useRouter } from "next/navigation";
+import { FlutterwaveConfig } from "flutterwave-react-v3/dist/types";
 
 interface SectionsDetailsProps {
   course: Course & { sections: Section[] };
@@ -30,24 +31,6 @@ interface SectionsDetailsProps {
   resources: Resource[] | [];
   progress: Progress | null;
 }
-
-type FlutterwaveConfig = {
-  public_key: string | undefined;
-  tx_ref?: number;
-  amount: number;
-  currency: string;
-  payment_options: string;
-  customer: {
-    email: string;
-    phone_number: string;
-    name: string;
-  };
-  customizations: {
-    title: string;
-    description: string;
-    logo: string;
-  };
-};
 
 const SectionsDetails = ({
   course,
@@ -62,12 +45,28 @@ const SectionsDetails = ({
   const isLocked = !purchase && !section.isFree;
   const router = useRouter();
 
-  const makePayment = useFlutterwave(paymentConfig || {});
+  const makePayment = useFlutterwave(paymentConfig || {
+    public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY || '',
+    tx_ref: Date.now().toString(),
+    amount: 0,
+    currency: "NGN",
+    payment_options: "card,mobilemoney,ussd",
+    customer: {
+      email: "",
+      name: "",
+      phone_number: ""
+    },
+    customizations: {
+      title: "Course Payment",
+      description: "Payment for course access",
+      logo: "https://example.com/logo.png",
+    },
+  });
 
   useEffect(() => {
     const config: FlutterwaveConfig = {
-      public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY,
-      tx_ref: Date.now(),
+      public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY || '',
+      tx_ref: Date.now().toString(),
       amount: Math.round(course.price!),
       currency: "NGN",
       payment_options: "card,mobilemoney,ussd",

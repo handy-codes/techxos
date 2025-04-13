@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Image from 'next/image'
+import Image from "next/image"
 import ScrollToTopButton from '@/components/layout/ScrollToTopButton'
 
 interface Service {
@@ -67,11 +67,13 @@ const ServicesPage: NextPage = () => {
               alt="Technology Illustration"
               fill
               className="object-contain"
-            />
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
           </div>
         </div>
       </div>
-
       {/* Services Grid */}
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -88,7 +90,10 @@ const ServicesPage: NextPage = () => {
                       alt={service.title}
                       fill
                       className="object-contain"
-                    />
+                      style={{
+                        maxWidth: "100%",
+                        height: "auto"
+                      }} />
                   </div>
                 </div>
               </div>
@@ -102,7 +107,6 @@ const ServicesPage: NextPage = () => {
           ))}
         </div>
       </div>
-
       {/* Tech Consulting Section */}
       <div className="bg-gray-100 py-16">
         <div className="container mx-auto px-4">
@@ -114,7 +118,10 @@ const ServicesPage: NextPage = () => {
                   alt="Tech Consulting"
                   fill
                   className="object-contain"
-                />
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto"
+                  }} />
               </div>
             </div>
             <div className="md:w-1/2">
@@ -144,7 +151,7 @@ const ServicesPage: NextPage = () => {
       </div>
       <ScrollToTopButton />
     </div>
-  )
+  );
 }
 
 export default ServicesPage

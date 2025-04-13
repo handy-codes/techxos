@@ -194,7 +194,6 @@ export default function Page() {
           content="Welcome to the Graphic Design Course"
         />
       </Head>
-
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -217,12 +216,14 @@ export default function Page() {
                 className="object-cover"
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
-              />
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
             </div>
           </div>
         </div>
       </section>
-
       <section className="container mx-auto p-4 mt-4 flex flex-col md:flex-row gap-8">
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">

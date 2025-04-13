@@ -125,13 +125,16 @@ export default function LecturerLayout({
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
               {user?.imageUrl && (
-                <Image 
-                  src={user.imageUrl} 
-                  alt={user.firstName || "User"} 
+                <Image
+                  src={user.imageUrl}
+                  alt={user.firstName || "User"}
                   width={32}
                   height={32}
                   className="object-cover"
-                />
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto"
+                  }} />
               )}
             </div>
             <div>
