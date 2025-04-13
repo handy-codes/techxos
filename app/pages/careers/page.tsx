@@ -102,7 +102,8 @@ export default function Page() {
   };
 
   return (
-    <div className="mt-[22%] sm:mt-[9%]">
+    // <div className="mt-[22%] sm:mt-[9%]">
+    <div className="">
       <Head>
         <title>Course Page</title>
         <meta
@@ -136,8 +137,7 @@ export default function Page() {
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
                 style={{
-                  maxWidth: "100%",
-                  height: "auto"
+                  maxWidth: "100%"
                 }} />
             </div>
           </div>

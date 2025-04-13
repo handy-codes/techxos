@@ -219,8 +219,7 @@ export default function Page() {
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
                 style={{
-                  maxWidth: "100%",
-                  height: "auto"
+                  maxWidth: "100%"
                 }} />
             </div>
           </div>

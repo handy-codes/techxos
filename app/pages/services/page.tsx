@@ -68,8 +68,7 @@ const ServicesPage: NextPage = () => {
               fill
               className="object-contain"
               style={{
-                maxWidth: "100%",
-                height: "auto"
+                maxWidth: "100%"
               }} />
           </div>
         </div>
@@ -91,8 +90,7 @@ const ServicesPage: NextPage = () => {
                       fill
                       className="object-contain"
                       style={{
-                        maxWidth: "100%",
-                        height: "auto"
+                        maxWidth: "100%"
                       }} />
                   </div>
                 </div>
@@ -119,8 +117,7 @@ const ServicesPage: NextPage = () => {
                   fill
                   className="object-contain"
                   style={{
-                    maxWidth: "100%",
-                    height: "auto"
+                    maxWidth: "100%"
                   }} />
               </div>
             </div>
