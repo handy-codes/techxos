@@ -67,7 +67,7 @@ export default function JoinLiveClassButton({
     <Button
       onClick={handleJoinClass}
       disabled={isLoading}
-      className={className}
+      className={`bg-green-700 hover:bg-green-800 text-white ${className}`}
     >
       {isLoading ? (
         <>
