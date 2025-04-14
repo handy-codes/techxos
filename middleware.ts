@@ -33,7 +33,7 @@ export default authMiddleware({
     "/pages/services",
     "/api/nofilesubmit-form",
     "/api/live-courses/(.*)",
-  
+    "/api/chatbot",
   ],
   async afterAuth(auth: { isPublicRoute: boolean; userId: string | null }, req: NextRequest) {
     // Handle public routes

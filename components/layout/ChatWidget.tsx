@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
@@ -37,26 +37,26 @@ export default function ChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const loadMessages = useCallback((): Message[] => {
-    try {
-      const storageKey = getStorageKey();
-      const saved = localStorage.getItem(storageKey);
-      
-      const initialMessages: Message[] = saved ? JSON.parse(saved) : [];
-      const hasWelcome = initialMessages.some(msg => 
-        msg.bot?.startsWith("wandy_") && msg.bot.includes("_welcome")
-      );
-
-      return hasWelcome ? initialMessages : [getWelcomeMessage(user ?? undefined), ...initialMessages];
-    } catch (error) {
-      console.error("Failed to load messages:", error);
-      return [getWelcomeMessage(user ?? undefined)];
-    }
-  }, [user]);
-
   useEffect(() => {
+    const loadMessages = (): Message[] => {
+      try {
+        const storageKey = getStorageKey();
+        const saved = localStorage.getItem(storageKey);
+        
+        const initialMessages: Message[] = saved ? JSON.parse(saved) : [];
+        const hasWelcome = initialMessages.some(msg => 
+          msg.bot?.startsWith("wandy_") && msg.bot.includes("_welcome")
+        );
+
+        return hasWelcome ? initialMessages : [getWelcomeMessage(user ?? undefined), ...initialMessages];
+      } catch (error) {
+        console.error("Failed to load messages:", error);
+        return [getWelcomeMessage(user ?? undefined)];
+      }
+    };
+
     setMessages(loadMessages());
-  }, [loadMessages]);
+  }, [user]);
 
   useEffect(() => {
     try {
@@ -67,22 +67,22 @@ export default function ChatWidget() {
     }
   }, [messages]);
 
-  const scrollToBottom = useCallback(() => {
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping, scrollToBottom]);
+  }, [messages, isTyping]);
 
-  const toggleChat = useCallback(() => {
+  const toggleChat = () => {
     if (!isOpen) {
       new Audio("/chat-popup.mp3").play().catch(console.error);
     }
     setIsOpen(!isOpen);
-  }, [isOpen]);
+  };
 
-  const sendMessage = useCallback(async () => {
+  const sendMessage = async () => {
     const trimmedInput = input.trim();
     if (!trimmedInput) return;
 
@@ -98,131 +98,342 @@ export default function ChatWidget() {
         body: JSON.stringify({ 
           message: newMessage,
           user: {
-            id: user?.id,
             firstName: user?.firstName,
             username: user?.username
           }
-        })
+        }),
       });
 
+      const textResponse = await response.text();
+      const data = JSON.parse(textResponse);
+
       if (!response.ok) {
-        throw new Error("Failed to get response");
+        throw new Error(data.error || `Request failed with status ${response.status}`);
       }
 
-      const data = await response.json();
-      setMessages(prev => [...prev, { bot: data.message }]);
+      setMessages(prev => [...prev, { bot: data.reply }]);
     } catch (error) {
-      console.error("Error sending message:", error);
-      setMessages(prev => [...prev, { bot: "Sorry, I'm having trouble responding right now. Please try again later." }]);
+      console.error("Chat error:", error);
+      const fallback = "Our chat service is currently unavailable. Please email hello@techxos.com";
+      setMessages(prev => [...prev, { bot: fallback }]);
     } finally {
       setIsTyping(false);
     }
-  }, [input, user]);
+  };
 
-  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
+  const renderMessageContent = (msg: Message) => {
+    if (msg.user) return <div className="message-text">{msg.user}</div>;
+
+    if (msg.bot?.startsWith("wandy_")) {
+      const [messageType, welcomeText] = msg.bot.split(":");
+      const isProd = window.location.hostname === "techxos.com";
+      
+      return (
+        <div className="welcome-message flex flex-col justify-center">
+          <div className="flex items-center gap-2">
+            <TechxosLogo className="w-6 h-6 text-purple-600" />
+            <span className="text-black">
+              {welcomeText || (isProd 
+                ? "Techxos Production Support" 
+                : "Hi! I'm Wandy, Techxos AI sales expert")}
+            </span>
+          </div>
+          <div className="mt-2 text-black self-center">
+            {isProd ? "🔒 Secure enterprise assistance ready" : "🤖 How can I help you today?"}
+          </div>
+        </div>
+      );
     }
-  }, [sendMessage]);
+
+    // Handle URLs in bot messages
+    if (msg.bot) {
+      // Updated regex to match both relative and absolute URLs
+      const urlRegex = /(https?:\/\/[^\s]+|\/[^\s]+)/g;
+      const parts = msg.bot.split(urlRegex);
+      
+      return (
+        <div className="message-text">
+          {parts.map((part, index) => {
+            if (part.match(urlRegex)) {
+              // Display URLs as plain text with styling
+              return (
+                <span 
+                  key={index} 
+                  className="text-blue-600"
+                >
+                  {part}
+                </span>
+              );
+            }
+            return part;
+          })}
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      {!isOpen && (
-        <button
-          onClick={toggleChat}
-          className="bg-[#F89928] text-white rounded-full p-4 shadow-lg hover:bg-[#E5A111] transition-colors"
-          aria-label="Open chat"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        </button>
-      )}
+    <div className="chat-container">
+      <button
+        className="chat-button flex items-center text-white"
+        onClick={toggleChat}
+        aria-label={isOpen ? "Close chat" : "Open chat"}
+      >
+        <div className="flex w-fit h-fit items-center justify-center gap-2 rounded-full bg-[#5025D1] shadow-md cursor-pointer transition-transform hover:scale-105 px-4 py-3">
+          <TechxosLogo className="text-white w-6 h-6" />
+          <h1 className="whitespace-nowrap">Ask Wandy</h1>
+        </div>
+      </button>
 
       {isOpen && (
-        <div className="bg-white rounded-lg shadow-xl w-80 md:w-96 h-96 flex flex-col">
-          <div className="bg-[#F89928] text-white p-4 rounded-t-lg flex justify-between items-center">
-            <h3 className="font-semibold">Chat with us</h3>
+        <div className="chat-window">
+          <div className="chat-header">
+            <h3 className="flex items-center gap-2">
+              <TechxosLogo className="text-white w-5 h-5" />
+              Wandy
+            </h3>
             <button
-              onClick={toggleChat}
-              className="text-white hover:text-gray-200"
+              className="close-button"
+              onClick={() => setIsOpen(false)}
               aria-label="Close chat"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
+              <CloseIcon className="text-white w-4 h-4" />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4">
-            {messages.map((msg, index) => (
-              <div key={index} className={`mb-4 ${msg.user ? "text-right" : "text-left"}`}>
-                {msg.user && (
-                  <div className="inline-block bg-[#F89928] text-white rounded-lg py-2 px-4 max-w-[80%]">
-                    {msg.user}
-                  </div>
-                )}
-                {msg.bot && (
-                  <div className="inline-block bg-gray-100 text-gray-800 rounded-lg py-2 px-4 max-w-[80%]">
-                    {msg.bot}
-                  </div>
-                )}
+          <div className="chat-messages" aria-live="polite">
+            {messages.map((msg, i) => (
+              <div key={i} className={`message ${msg.user ? "user" : "bot"}`}>
+                {renderMessageContent(msg)}
               </div>
             ))}
             {isTyping && (
-              <div className="text-left">
-                <div className="inline-block bg-gray-100 text-gray-800 rounded-lg py-2 px-4">
-                  <span className="inline-block w-2 h-2 bg-gray-500 rounded-full mr-1 animate-bounce" />
-                  <span className="inline-block w-2 h-2 bg-gray-500 rounded-full mr-1 animate-bounce" style={{ animationDelay: "0.2s" }} />
-                  <span className="inline-block w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }} />
-                </div>
+              <div className="typing-indicator">
+                {[...Array(3)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="dot"
+                    style={{ animationDelay: `${i * 0.2}s` }}
+                  />
+                ))}
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="border-t p-4">
-            <div className="flex">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="flex-1 border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#F89928]"
-              />
-              <button
-                onClick={sendMessage}
-                className="bg-[#F89928] text-white rounded-r-lg px-4 py-2 hover:bg-[#E5A111] transition-colors"
-              >
-                Send
-              </button>
-            </div>
+          <div className="chat-input outline-none">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              placeholder="Tell us how we can help..."
+              aria-label="Chat input"
+            />
+            <button
+              className={`send-button ${input.trim() ? "active" : "disabled"}`}
+              onClick={sendMessage}
+              disabled={!input.trim() || isTyping}
+              aria-label="Send message"
+            >
+              Send
+            </button>
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        .chat-container {
+          position: fixed;
+          bottom: 1rem;
+          right: 1rem;
+          z-index: 1000;
+        }
+
+        .chat-window {
+          width: 420px;
+          max-height: 70vh;
+          background: white;
+          border-radius: 1rem;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+          position: absolute;
+          bottom: calc(100% + 1rem);
+          right: 0;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .chat-header {
+          padding: 1rem 1.5rem;
+          background: linear-gradient(135deg, #0070f3, #0063cc);
+          color: white;
+          border-radius: 1rem 1rem 0 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .chat-messages {
+          flex: 1;
+          padding: 1rem;
+          overflow-y: auto;
+          min-height: 300px;
+        }
+
+        .message {
+          margin: 0.5rem 0;
+          padding: 0.75rem 1rem;
+          border-radius: 1rem;
+          max-width: 85%;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+
+        .message-text {
+          word-break: break-word;
+          overflow-wrap: break-word;
+          white-space: pre-wrap;
+        }
+
+        .message-text a {
+          color: #0070f3;
+          text-decoration: underline;
+        }
+
+        .message-text a:hover {
+          color: #0051b3;
+        }
+
+        .message.user {
+          background: #0070f3;
+          color: white;
+          margin-left: auto;
+        }
+
+        .message.bot {
+          background: #f3f4f6;
+          color: #1f2937;
+          margin-right: auto;
+        }
+
+        .typing-indicator {
+          display: flex;
+          gap: 0.5rem;
+          padding: 1rem;
+        }
+
+        .dot {
+          width: 0.5rem;
+          height: 0.5rem;
+          background: #94a3b8;
+          border-radius: 50%;
+          animation: typing 1.4s infinite ease-in-out;
+        }
+
+        @keyframes typing {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+
+        .chat-input {
+          display: flex;
+          gap: 0.5rem;
+          padding: 1rem;
+          border-top: 1px solid #e2e8f0;
+          color: black;
+          border: none;
+          outline: none;
+        }
+
+        input {
+          flex: 1;
+          padding: 0.75rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 0.5rem;
+          min-width: 0;
+        }
+
+        .send-button {
+          padding: 0.75rem 1.25rem;
+          background: #0070f3;
+          color: white;
+          border: none;
+          border-radius: 0.5rem;
+          cursor: pointer;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+
+        .send-button:disabled {
+          background: #e2e8f0;
+          cursor: not-allowed;
+        }
+
+        @media (max-width: 640px) {
+          .chat-container {
+            bottom: 0.5rem;
+            right: 0.5rem;
+          }
+
+          .chat-window {
+            width: calc(100vw - 1rem);
+            right: 0.5rem;
+            bottom: calc(100% + 0.5rem);
+            max-width: 100vw;
+          }
+
+          .chat-messages {
+            min-height: 200px;
+          }
+
+          .message {
+            max-width: 90%;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+          }
+
+          .chat-input {
+            padding: 0.75rem;
+            gap: 0.25rem;
+          }
+
+          input {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+          }
+
+          .send-button {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+          }
+
+          .chat-button h1 {
+            display: none;
+          }
+
+          .chat-header h3 {
+            font-size: 1rem;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .chat-window {
+            width: 100vw;
+            right: 0;
+            bottom: calc(100% + 0.5rem);
+          }
+
+          .chat-input {
+            padding: 0.5rem;
+          }
+
+          .send-button {
+            padding: 0.5rem;
+          }
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import * as cheerio from "cheerio";
-import { createClerkClient } from "@clerk/backend";
+import { NextRequest } from "next/server";
 
 interface GroqResponse {
   choices: Array<{
@@ -193,7 +193,7 @@ async function getWebsiteContent(): Promise<WebsiteCache> {
   return cachedWebsiteContent;
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     if (!req.headers.get("content-type")?.includes("application/json")) {
       return NextResponse.json(
