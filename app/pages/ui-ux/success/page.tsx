@@ -55,7 +55,7 @@ export default function PaymentSuccessPage() {
         
         // Redirect to the course page after a short delay
         setTimeout(() => {
-          router.push("/pages/project-mgt");
+          router.push("/pages/ui-ux");
         }, 3000);
       } catch (error) {
         console.error("Payment processing error:", error);
@@ -86,7 +86,7 @@ export default function PaymentSuccessPage() {
             </div>
             <p className="text-red-600 mb-4">{error}</p>
             <Link 
-              href="/pages/project-mgt" 
+              href="/pages/ui-ux" 
               className="inline-block bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
             >
               Return to Course
@@ -101,7 +101,7 @@ export default function PaymentSuccessPage() {
             </div>
             <p className="text-gray-600 mb-4">Your payment was successful! Redirecting you to the course...</p>
             <Link 
-              href="/pages/project-mgt" 
+              href="/pages/ui-ux" 
               className="inline-block bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors"
             >
               Go to Course Now

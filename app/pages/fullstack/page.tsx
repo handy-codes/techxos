@@ -8,7 +8,7 @@ import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
 import { Loader2 } from "lucide-react";
-import Frontend from "@/components/curriculum/Frontend";
+import Fullstack from "@/components/curriculum/Fullstack";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
@@ -36,7 +36,7 @@ interface LiveCourseWithLectures {
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Frontend Development",
+    courseTitle: "Fullstack Development",
     name: "",
     surname: "",
     email: "",
@@ -57,7 +57,7 @@ export default function Page() {
   const fetchLectureDetails = useCallback(async () => {
     try {
       console.log("Fetching lecture details...");
-      const response = await axios.get("/api/live-courses/frontend/lecture");
+      const response = await axios.get("/api/live-courses/fullstack/lecture");
       console.log("Lecture details response:", response.data);
 
       setLecture({
@@ -129,7 +129,7 @@ export default function Page() {
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Frontend Development",
+        courseTitle: "Fullstack Development",
         name: "",
         surname: "",
         email: "",
@@ -200,20 +200,20 @@ export default function Page() {
         <div className="mt-4">
           {lecture.hasAccess ? (
             <JoinLiveClassButton 
-              courseId="frontend" 
-              courseName="Frontend Development" 
+              courseId="fullstack" 
+              courseName="Fullstack Development" 
             />
           ) : (
             <div className="inline-block">
               <FlutterwavePayment 
-                courseId="frontend"
-                courseName="Frontend Development"
-                amount={150000}
+                courseId="fullstack"
+                courseName="Fullstack Development"
+                amount={250000}
                 email={user?.primaryEmailAddress?.emailAddress || ""}
                 name={`${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Student"}
                 onSuccess={() => {
                   toast.success("Payment successful! Redirecting to course...");
-                  router.push("/frontend/success");
+                  router.push("/fullstack/success");
                 }}
                 onError={(error) => {
                   console.error("Payment error:", error);
@@ -233,7 +233,7 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Frontend Development Course"
+          content="Welcome to the Fullstack Development Course"
         />
       </Head>
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
@@ -241,14 +241,13 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Frontend Development
+                Fullstack Development
               </h1>
               <p className="text-xl mb-8">
-                How about crafting stunning, interactive websites that millions
-                of users adore—that is Frontend Development. It is where
-                creativity meets code, letting you design sleek interfaces,
-                animate pixels into life, and turn ideas into immersive digital
-                experiences.
+                Master Full Stack Development! Learn to build complete web
+                applications from frontend to backend. From React to Node.js,
+                databases to APIs, you will develop the skills to create modern,
+                scalable web applications that solve real-world problems.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
@@ -270,21 +269,22 @@ export default function Page() {
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
-              Frontend Development
+              Fullstack Development
             </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            150,000 NGN
+            250,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            In 12 weeks, Techxos turbocharges your journey: Code real
-            projects, collaborate with industry pros, and join a tribe of
-            creators obsessed with pixel perfection. Whether you are animating a
-            button or architecting a full-scale web app, every lesson sharpens
-            your skills for a tech world hungry for design-savvy coders. Ready
-            to paint the digital canvas? Enroll now and start turning
-            imagination into code—one breathtaking webpage at a time. 🎨🚀
+            Techxos powers your rise: Master the art of full stack development,
+            from frontend to backend. Learn from industry experts who have built
+            scalable applications used by millions. Join a community of developers
+            passionate about creating impactful web solutions. Dive into modern
+            frameworks, databases, and cloud technologies while earning
+            certifications that showcase your expertise. Ready to become a full
+            stack developer? Enroll now and start building the future—one
+            application at a time. 💻🚀🌐
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
@@ -313,7 +313,7 @@ export default function Page() {
               <span>Options: Evening Class, Executive (one-to-one) class</span>
             </div>
             <h2 className="text-2xl font-bold mb-2 mt-6">
-              Frontend Development Virtual
+              Fullstack Development Virtual
             </h2>
             
             {/* Display lecture information if available */}
@@ -417,7 +417,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <Frontend />
+      <Fullstack />
       <ScrollToTopButton />
     </div>
   );
