@@ -39,7 +39,7 @@ const WandyCarousel = () => {
   };
 
   const images = [
-    { id: 1, src: '/grad2.jpg', alt: 'Destination 1' },
+    { id: 1, src: '/grad5.jpg', alt: 'Destination 1' },
     { id: 2, src: '/grad1.jpg', alt: 'Destination 2' },
     { id: 3, src: '/grad3.jpg', alt: 'Destination 3' },
     { id: 4, src: '/grad4.jpg', alt: 'Destination 4' },
@@ -84,12 +84,11 @@ const WandyCarousel = () => {
           width: 100%;
         }
       `}</style>
-      <section className="py-16 px-4 md:px-8 lg:px-16 bg-gray-50">
+      <section className="py-6 px-4 md:px-8 lg:px-16 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">We Are Going Places</h2>
-            <p className="text-4xl text-black max-w-2xl mx-auto">
-              Explore the world with us and discover amazing destinations
+          <div className="text-center mb-6">
+            <p className="text-4xl text-black font-bold max-w-2xl mx-auto">
+              Upskill with every ease!
             </p>
           </div>
           

@@ -7,13 +7,15 @@ import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
-import MathematicsJss from "@/components/curriculum/Mathematics-jss";
+import { Loader2 } from "lucide-react";
+import Frontend from "@/components/curriculum/Frontend";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
 import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import FlutterwavePayment from "@/components/payment/FlutterwavePayment";
+import { useRouter } from "next/navigation";
 
 interface LiveLecture {
   id: string;
@@ -28,11 +30,13 @@ interface LiveCourseWithLectures {
   zoomLink: string | null;
   lectures: LiveLecture[];
   hasAccess: boolean;
+  studentEmail?: string;
+  studentName?: string;
 }
 
 export default function Page() {
   const [formData, setFormData] = useState({
-    courseTitle: "Mathematics JSS",
+    courseTitle: "Frontend Development",
     name: "",
     surname: "",
     email: "",
@@ -46,15 +50,20 @@ export default function Page() {
   >("idle");
 
   const { isSignedIn } = useAuth();
+  const { user } = useUser();
   const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
+  const router = useRouter();
 
   const fetchLectureDetails = useCallback(async () => {
     try {
       console.log("Fetching lecture details...");
-      const response = await axios.get("/api/live-courses/mathematics-jss/lecture");
+      const response = await axios.get("/api/live-courses/frontend/lecture");
       console.log("Lecture details response:", response.data);
 
-      setLecture(response.data.lecture);
+      setLecture({
+        ...response.data.lecture,
+        hasAccess: response.data.hasAccess
+      });
 
     } catch (error: unknown) {
       const err = error as {
@@ -120,7 +129,7 @@ export default function Page() {
 
       setSubmitStatus("success");
       setFormData({
-        courseTitle: "Mathematics JSS",
+        courseTitle: "Frontend Development",
         name: "",
         surname: "",
         email: "",
@@ -137,11 +146,31 @@ export default function Page() {
 
   // Function to render lecture information if available
   const renderLectureInfo = () => {
-    if (!lecture) return null;
+    if (!isSignedIn) {
+      return (
+        <div className="mt-6">
+          <Link
+            href="/sign-in"
+            className="inline-block text-white bg-green-700 px-6 py-3 rounded-md hover:bg-green-600 transition-colors"
+          >
+            Enroll Now
+          </Link>
+        </div>
+      );
+    }
+
+    if (!lecture) {
+      return (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm flex flex-col items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600 mb-3" />
+          <p className="text-gray-600 font-medium">Loading course information...</p>
+        </div>
+      );
+    }
     
     return (
       <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
-        <h3 className="text-xl font-semibold mb-2">Current Class Information</h3>
+        <h3 className="text-xl font-semibold mb-2">Current Course Information</h3>
         {lecture.lectures && lecture.lectures.length > 0 ? (
           <div>
             <p className="mb-2">
@@ -171,14 +200,27 @@ export default function Page() {
         <div className="mt-4">
           {lecture.hasAccess ? (
             <JoinLiveClassButton 
-              courseId="mathematics-jss" 
-              courseName="Mathematics JSS" 
+              courseId="frontend" 
+              courseName="Frontend Development" 
             />
           ) : (
-            <CoursePurchaseButton 
-              courseId="mathematics-jss" 
-              courseName="Mathematics JSS" 
-            />
+            <div className="inline-block">
+              <FlutterwavePayment 
+                courseId="frontend"
+                courseName="Frontend Development"
+                amount={150000}
+                email={user?.primaryEmailAddress?.emailAddress || ""}
+                name={`${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Student"}
+                onSuccess={() => {
+                  toast.success("Payment successful! Redirecting to course...");
+                  router.push("/frontend/success");
+                }}
+                onError={(error) => {
+                  console.error("Payment error:", error);
+                  toast.error("Payment failed. Please try again.");
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -191,7 +233,7 @@ export default function Page() {
         <title>Course Page</title>
         <meta
           name="description"
-          content="Welcome to the Mathematics JSS Course"
+          content="Welcome to the Frontend Development Course"
         />
       </Head>
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
@@ -199,21 +241,20 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                Mathematics JSS
+                Frontend Development
               </h1>
               <p className="text-xl mb-8">
-                Our comprehensive
-                maths lessons cover all essential topics from the JSS curriculum,
-                helping students build a strong foundation in mathematics.
-                Through interactive lessons, practice exercises, and real-world
-                applications, students will develop problem-solving skills and build
-                mathematical confidence.
+                How about crafting stunning, interactive websites that millions
+                of users adore—that is Frontend Development. It is where
+                creativity meets code, letting you design sleek interfaces,
+                animate pixels into life, and turn ideas into immersive digital
+                experiences.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://media.istockphoto.com/id/636332456/photo/online-education-concept.jpg?b=1&s=612x612&w=0&k=20&c=B3Qb1fWVWdKcibGsE_ikxdpKjWkwKrIFtWzL7vJyq5c="
-                alt="Mathematics JSS"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF-4cK7qw8-AroSfhE44AvDOvA-cyFM5p9ww&shttps://media.istockphoto.com/id/636332456/photo/online-education-concept.jpg?b=1&s=612x612&w=0&k=20&c=B3Qb1fWVWdKcibGsE_ikxdpKjWkwKrIFtWzL7vJyq5c="
+                alt="Team Collaboration"
                 fill
                 className="object-cover"
                 priority
@@ -229,22 +270,21 @@ export default function Page() {
         <div className="flex-1 text-black">
           <div className="mt-4 md:mt-0 mb-4 md:mb-2 lg:mb-6">
             <h1 className="text-2xl lg:text-4xl font-bold mb-[4px]">
-              Mathematics JSS
+              Frontend Development
             </h1>
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            3,000 NGN PER MONTH
+            150,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            Techxos powers your academic success: Master junior secondary school
-            mathematics with our comprehensive curriculum. Learn from experienced
-            teachers who understand the challenges students face. Join a community
-            of learners focused on building strong mathematical foundations.
-            Through interactive lessons, practice exercises, and real-world
-            applications, develop problem-solving skills and mathematical
-            confidence. Ready to excel in mathematics? Enroll now and start
-            solving—with one formular at a time. 📐✏️📚
+            In 12 weeks, Techxos turbocharges your journey: Code real
+            projects, collaborate with industry pros, and join a tribe of
+            creators obsessed with pixel perfection. Whether you are animating a
+            button or architecting a full-scale web app, every lesson sharpens
+            your skills for a tech world hungry for design-savvy coders. Ready
+            to paint the digital canvas? Enroll now and start turning
+            imagination into code—one breathtaking webpage at a time. 🎨🚀
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
@@ -262,7 +302,7 @@ export default function Page() {
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <AiFillSchedule className="text-black text-[24px]" />
-              <span>Schedule: 6 hours/week</span>
+              <span>Schedule: 9 hours/week</span>
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <HiLocationMarker className="text-black text-[27px]" />
@@ -273,27 +313,11 @@ export default function Page() {
               <span>Options: Evening Class, Executive (one-to-one) class</span>
             </div>
             <h2 className="text-2xl font-bold mb-2 mt-6">
-              Mathematics JSS Virtual
+              Frontend Development Virtual
             </h2>
             
             {/* Display lecture information if available */}
             {renderLectureInfo()}
-            
-            <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
-              {!isSignedIn ? (
-                <Link
-                  href="/sign-in"
-                  className="inline-block text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
-                >
-                  Enroll Now
-                </Link>
-              ) : (
-                <CoursePurchaseButton 
-                  courseId="mathematics-jss" 
-                  courseName="Mathematics JSS" 
-                />
-              )}
-            </div>
           </div>
         </div>
 
@@ -393,7 +417,7 @@ export default function Page() {
           </form>
         </div>
       </section>
-      <MathematicsJss />
+      <Frontend />
       <ScrollToTopButton />
     </div>
   );

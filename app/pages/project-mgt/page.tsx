@@ -15,6 +15,7 @@ import { toast } from "react-hot-toast";
 import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
 import FlutterwavePayment from "@/components/payment/FlutterwavePayment";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 interface LiveLecture {
   id: string;
@@ -158,11 +159,18 @@ export default function Page() {
       );
     }
 
-    if (!lecture) return null;
+    if (!lecture) {
+      return (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm flex flex-col items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600 mb-3" />
+          <p className="text-gray-600 font-medium">Loading course information...</p>
+        </div>
+      );
+    }
     
     return (
       <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
-        <h3 className="text-xl font-semibold mb-2">Current Class Information</h3>
+        <h3 className="text-xl font-semibold mb-2">Current Course Information</h3>
         {lecture.lectures && lecture.lectures.length > 0 ? (
           <div>
             <p className="mb-2">

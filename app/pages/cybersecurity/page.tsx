@@ -7,13 +7,15 @@ import { FaCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiFillSchedule } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
 import { IoMdOptions } from "react-icons/io";
+import { Loader2 } from "lucide-react";
 import Cybersecurity from "@/components/curriculum/Cybersecurity";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import CoursePurchaseButton from "@/components/course/CoursePurchaseButton";
 import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
+import FlutterwavePayment from "@/components/payment/FlutterwavePayment";
+import { useRouter } from "next/navigation";
 
 interface LiveLecture {
   id: string;
@@ -28,6 +30,8 @@ interface LiveCourseWithLectures {
   zoomLink: string | null;
   lectures: LiveLecture[];
   hasAccess: boolean;
+  studentEmail?: string;
+  studentName?: string;
 }
 
 export default function Page() {
@@ -46,7 +50,9 @@ export default function Page() {
   >("idle");
 
   const { isSignedIn } = useAuth();
+  const { user } = useUser();
   const [lecture, setLecture] = useState<LiveCourseWithLectures | null>(null);
+  const router = useRouter();
 
   const fetchLectureDetails = useCallback(async () => {
     try {
@@ -54,7 +60,10 @@ export default function Page() {
       const response = await axios.get("/api/live-courses/cybersecurity/lecture");
       console.log("Lecture details response:", response.data);
 
-      setLecture(response.data.lecture);
+      setLecture({
+        ...response.data.lecture,
+        hasAccess: response.data.hasAccess
+      });
 
     } catch (error: unknown) {
       const err = error as {
@@ -137,11 +146,31 @@ export default function Page() {
 
   // Function to render lecture information if available
   const renderLectureInfo = () => {
-    if (!lecture) return null;
+    if (!isSignedIn) {
+      return (
+        <div className="mt-6">
+          <Link
+            href="/sign-in"
+            className="inline-block text-white bg-green-700 px-6 py-3 rounded-md hover:bg-green-600 transition-colors"
+          >
+            Enroll Now
+          </Link>
+        </div>
+      );
+    }
+
+    if (!lecture) {
+      return (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm flex flex-col items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600 mb-3" />
+          <p className="text-gray-600 font-medium">Loading course information...</p>
+        </div>
+      );
+    }
     
     return (
       <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
-        <h3 className="text-xl font-semibold mb-2">Current Class Information</h3>
+        <h3 className="text-xl font-semibold mb-2">Current Course Information</h3>
         {lecture.lectures && lecture.lectures.length > 0 ? (
           <div>
             <p className="mb-2">
@@ -175,10 +204,23 @@ export default function Page() {
               courseName="Cybersecurity" 
             />
           ) : (
-            <CoursePurchaseButton 
-              courseId="cybersecurity" 
-              courseName="Cybersecurity" 
-            />
+            <div className="inline-block">
+              <FlutterwavePayment 
+                courseId="cybersecurity"
+                courseName="Cybersecurity"
+                amount={250000}
+                email={user?.primaryEmailAddress?.emailAddress || ""}
+                name={`${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Student"}
+                onSuccess={() => {
+                  toast.success("Payment successful! Redirecting to course...");
+                  router.push("/cybersecurity/success");
+                }}
+                onError={(error) => {
+                  console.error("Payment error:", error);
+                  toast.error("Payment failed. Please try again.");
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -202,18 +244,18 @@ export default function Page() {
                 Cybersecurity
               </h1>
               <p className="text-xl mb-8">
-                Defend the Digital Frontier with Cybersecurity! Imagine being the
-                guardian of digital assets, protecting systems from sophisticated
-                threats, and outsmarting cybercriminals at their own game.
-                Cybersecurity is the art of defending networks, systems, and
-                programs from digital attacks—and it is more critical than ever in
-                our connected world.
+              Defend the Digital Frontier with Cybersecurity! Imagine being the
+              guardian of digital assets, protecting systems from sophisticated
+              threats, and outsmarting cybercriminals at their own game.
+              Cybersecurity is the art of defending networks, systems, and
+              programs from digital attacks—and it is more critical than ever in
+              our connected world.
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://i.ibb.co/4nDmr2nb/Gemini-Generated-Image-72ww6w72ww6w72ww.jpg"
-                alt="Cybersecurity"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF-4cK7qw8-AroSfhE44AvDOvA-cyFM5p9ww&s"
+                alt="Team Collaboration"
                 fill
                 className="object-cover"
                 priority
@@ -237,13 +279,13 @@ export default function Page() {
             250,000 NGN
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
-            Techxos powers your rise: Simulate real-world cyber attacks (think
-            penetration testing or incident response), learn from industry pros
-            who have foiled cybercrime rings, and join a network of defenders
-            obsessed with keeping data safe. Dive into ethical hacking, network
-            security, and threat intelligence, while earning certifications that
-            scream, hire me. Ready to become a digital guardian? Enroll now and
-            start defending the future—one firewall at a time. 🛡️🔒🚀
+          Techxos powers your rise: Simulate real-world cyber attacks (think
+          penetration testing or incident response), learn from industry pros
+          who have foiled cybercrime rings, and join a network of defenders
+          obsessed with keeping data safe. Dive into ethical hacking, network
+          security, and threat intelligence, while earning certifications that
+          scream, hire me. Ready to become a digital guardian? Enroll now and
+          start defending the future—one firewall at a time. 🛡️🔒🚀
           </p>
           <div className="p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md inline-block bg-white font-bold border-solid">
             <a
@@ -257,7 +299,7 @@ export default function Page() {
           <div className="font-semibold">
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <FaRegClock className="text-black text-[22px]" />
-              <span>Duration: 12 weeks</span>
+              <span>Duration: 16 weeks</span>
             </div>
             <div className="flex items-center gap-3 mt-3 md:mt-4">
               <AiFillSchedule className="text-black text-[24px]" />
@@ -277,22 +319,6 @@ export default function Page() {
             
             {/* Display lecture information if available */}
             {renderLectureInfo()}
-            
-            <div className=" p-2 md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-white hover:text-green-700 transition-all duration-500 text-white border-2 border-[#38a169] rounded-md inline-block bg-green-700 font-bold border-solid">
-              {!isSignedIn ? (
-                <Link
-                  href="/sign-in"
-                  className="inline-bloc text-white md:p-4 mt-2 md:mt-3 mb-1 shadow-md hover:bg-green-700 hover:text-white transition-all duration-500 border-2 border-[#38a169] rounded-md bg-white font-bold border-solid"
-                >
-                  Enroll Now
-                </Link>
-              ) : (
-                <CoursePurchaseButton 
-                  courseId="cybersecurity" 
-                  courseName="Cybersecurity" 
-                />
-              )}
-            </div>
           </div>
         </div>
 

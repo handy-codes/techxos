@@ -77,7 +77,7 @@ export default function FlutterwavePayment({
         name
       });
 
-      const response = await fetch(`/api/live-courses/project-mgt/checkout`, {
+      const response = await fetch(`/api/live-courses/${courseId}/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ export default function FlutterwavePayment({
         amount: data.price,
         currency: "NGN",
         payment_options: "card,ussd",
-        redirect_url: "/project-mgt/success",
+        redirect_url: `/${courseId}/success`,
         customer: {
           email: email,
           name: name,

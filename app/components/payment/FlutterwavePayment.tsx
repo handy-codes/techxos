@@ -50,6 +50,7 @@ const FlutterwavePayment: React.FC<FlutterwavePaymentProps> = ({
       
       // Redirect to the payment page
       if (data.paymentUrl) {
+        onSuccess();
         window.location.href = data.paymentUrl;
       } else {
         toast.error('No payment URL available');

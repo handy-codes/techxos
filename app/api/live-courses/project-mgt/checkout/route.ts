@@ -12,6 +12,19 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    const body = await req.json();
+    const { amount } = body;
+
+    if (!amount) {
+      return new NextResponse("Missing amount", { status: 400 });
+    }
+
+    // Ensure amount is a valid number
+    const formattedAmount = Number(amount);
+    if (isNaN(formattedAmount) || formattedAmount <= 0) {
+      return new NextResponse("Invalid amount", { status: 400 });
+    }
+
     // Get user details directly from Clerk for more reliable data
     let userEmail = "";
     let userName = "";
@@ -122,8 +135,8 @@ export async function POST(req: Request) {
     // Debug the price value from the database
     console.log("Raw price from database:", liveClass.price, typeof liveClass.price);
     
-    // Use the original price of 250000
-    const price = 250000;
+    // Use the amount passed from the client
+    const price = formattedAmount;
     
     // Update the course price in database if needed
     if (liveClass.price !== price) {
