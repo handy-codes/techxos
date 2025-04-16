@@ -145,87 +145,87 @@ export default function Page() {
   };
 
   // Function to render lecture information if available
-  const renderLectureInfo = () => {
-    if (!isSignedIn) {
-      return (
-        <div className="mt-6">
-          <Link
-            href="/sign-in"
-            className="inline-block text-white bg-green-700 px-6 py-3 rounded-md hover:bg-green-600 transition-colors"
-          >
-            Enroll Now
-          </Link>
-        </div>
-      );
-    }
+  // const renderLectureInfo = () => {
+  //   if (!isSignedIn) {
+  //     return (
+  //       <div className="mt-6">
+  //         <Link
+  //           href="/sign-in"
+  //           className="inline-block text-white bg-green-700 px-6 py-3 rounded-md hover:bg-green-600 transition-colors"
+  //         >
+  //           Enroll Now
+  //         </Link>
+  //       </div>
+  //     );
+  //   }
 
-    if (!lecture) {
-      return (
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm flex flex-col items-center justify-center py-8">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600 mb-3" />
-          <p className="text-gray-600 font-medium">Loading course information...</p>
-        </div>
-      );
-    }
+  //   if (!lecture) {
+  //     return (
+  //       <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm flex flex-col items-center justify-center py-8">
+  //         <Loader2 className="h-8 w-8 animate-spin text-blue-600 mb-3" />
+  //         <p className="text-gray-600 font-medium">Loading course information...</p>
+  //       </div>
+  //     );
+  //   }
     
-    return (
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
-        <h3 className="text-xl font-semibold mb-2">Current Course Information</h3>
-        {lecture.lectures && lecture.lectures.length > 0 ? (
-          <div>
-            <p className="mb-2">
-              <span className="font-medium">Latest lecture:</span>{" "}
-              {lecture.lectures[0].title || "Upcoming Session"}
-            </p>
-            <p className="mb-2">
-              <span className="font-medium">Date:</span>{" "}
-              {new Date(lecture.lectures[0].date).toLocaleString()}
-            </p>
-            {lecture.lectures[0].isRecorded && lecture.lectures[0].recordingUrl && (
-              <div className="mt-2">
-                <a 
-                  href={lecture.lectures[0].recordingUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View Recording
-                </a>
-              </div>
-            )}
-          </div>
-        ) : (
-          <p>No scheduled lectures at this time. Please check back later.</p>
-        )}
-        <div className="mt-4">
-          {lecture.hasAccess ? (
-            <JoinLiveClassButton 
-              courseId="mathematics-jss" 
-              courseName="Mathematics (JSS Module)" 
-            />
-          ) : (
-            <div className="inline-block">
-              <FlutterwavePayment 
-                courseId="mathematics-jss"
-                courseName="Mathematics (JSS Module)"
-                amount={1000}
-                email={user?.primaryEmailAddress?.emailAddress || ""}
-                name={`${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Student"}
-                onSuccess={() => {
-                  toast.success("Payment successful! Redirecting to course...");
-                  router.push("/mathematics-jss/success");
-                }}
-                onError={(error) => {
-                  console.error("Payment error:", error);
-                  toast.error("Payment failed. Please try again.");
-                }}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
+  //   return (
+  //     <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
+  //       <h3 className="text-xl font-semibold mb-2">Current Course Information</h3>
+  //       {lecture.lectures && lecture.lectures.length > 0 ? (
+  //         <div>
+  //           <p className="mb-2">
+  //             <span className="font-medium">Latest lecture:</span>{" "}
+  //             {lecture.lectures[0].title || "Upcoming Session"}
+  //           </p>
+  //           <p className="mb-2">
+  //             <span className="font-medium">Date:</span>{" "}
+  //             {new Date(lecture.lectures[0].date).toLocaleString()}
+  //           </p>
+  //           {lecture.lectures[0].isRecorded && lecture.lectures[0].recordingUrl && (
+  //             <div className="mt-2">
+  //               <a 
+  //                 href={lecture.lectures[0].recordingUrl} 
+  //                 target="_blank" 
+  //                 rel="noopener noreferrer"
+  //                 className="text-blue-600 hover:underline"
+  //               >
+  //                 View Recording
+  //               </a>
+  //             </div>
+  //           )}
+  //         </div>
+  //       ) : (
+  //         <p>No scheduled lectures at this time. Please check back later.</p>
+  //       )}
+  //       <div className="mt-4">
+  //         {lecture.hasAccess ? (
+  //           <JoinLiveClassButton 
+  //             courseId="mathematics-jss" 
+  //             courseName="Mathematics (JSS Module)" 
+  //           />
+  //         ) : (
+  //           <div className="inline-block">
+  //             <FlutterwavePayment 
+  //               courseId="mathematics-jss"
+  //               courseName="Mathematics (JSS Module)"
+  //               amount={1000}
+  //               email={user?.primaryEmailAddress?.emailAddress || ""}
+  //               name={`${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Student"}
+  //               onSuccess={() => {
+  //                 toast.success("Payment successful! Redirecting to course...");
+  //                 router.push("pages/mathematics-jss/success");
+  //               }}
+  //               onError={(error) => {
+  //                 console.error("Payment error:", error);
+  //                 toast.error("Payment failed. Please try again.");
+  //               }}
+  //             />
+  //           </div>
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   return (
     <div>
@@ -276,7 +276,7 @@ export default function Page() {
             <div className="h-[8px] w-[80px] md:w-[150px] bg-[#E79D09]"></div>
           </div>
           <h1 className="text-3xl text-green-800 lg:text-4xl font-extrabold mb-4 md:mb-2 lg:mb-6">
-            1,000 NGN
+            10,000 NGN (per month)
           </h1>
           <p className="text-justify font-semibold max-sm:mb-1">
             Techxos powers your academic success: Master junior secondary school
@@ -314,12 +314,12 @@ export default function Page() {
               <IoMdOptions className="text-black text-[24px]" />
               <span>Options: Evening Class, Executive (one-to-one) class</span>
             </div>
-            <h2 className="text-2xl font-bold mb-2 mt-6">
+            {/* <h2 className="text-2xl font-bold mb-2 mt-6">
               Mathematics (JSS Module) Virtual
-            </h2>
+            </h2> */}
             
             {/* Display lecture information if available */}
-            {renderLectureInfo()}
+            {/* {renderLectureInfo()} */}
           </div>
         </div>
 
@@ -327,9 +327,14 @@ export default function Page() {
           id="contact"
           className="flex-1 text-black bg-gray-100 p-6 rounded-lg shadow-md"
         >
-          <h1 className="text-2xl font-bold mb-4">
-            Contact Us for More Enquiry
-          </h1>
+          <div className="bg-[#5025D1] text-white p-4 flex flex-col rounded-lg mb-4">
+            <h1 className="text-2xl font-bold mb-4">
+              Register now for our Free Demo Classes 
+            </h1>
+            <h1 className="text-2xl font-bold mb-4">
+              April 19-20, 2025 Time: 5:00pm - 7:00pm                 
+            </h1>
+          </div>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
@@ -377,24 +382,25 @@ export default function Page() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Subject*</label>
+              <label className="block text-sm font-medium mb-1">Topic*</label>
               <input
                 type="text"
                 name="subject"
                 required
                 value={formData.subject}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded placeholder-gray-500"
+                placeholder="What topic in mathematics do you want to start with?"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Message*</label>
+              <label className="block text-sm font-medium mb-1">Message</label>
               <textarea
                 name="message"
-                required
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded placeholder-gray-500"
+                placeholder="What your challenge with maths as a subject? (Optional)"
                 rows={4}
               ></textarea>
             </div>
@@ -406,9 +412,10 @@ export default function Page() {
               {isSubmitting ? "Submitting..." : "Submit"}
             </button>
             {submitStatus === "success" && (
-              <div className="mt-4 flex items-center text-green-600">
+              <div className="mt-4 flex flex-col items-center text-green-600">
                 <FaCheckCircle className="mr-2" size={24} />
                 <p className="font-bold">Form submitted successfully!</p>
+                <p className="font-bold">Zoom Meeting Link or passcode will be sent to your email</p>
               </div>
             )}
             {submitStatus === "error" && (

@@ -5,7 +5,7 @@ export default function MathematicsJSS() {
           <h1 className="text-4xl font-bold text-gray-900 text-center mb-12">
             Junior Secondary Mathematics Mastery
             <span className="block mt-2 text-2xl text-green-600">
-              (16-Week BECE Preparation Program)
+              (16-Week Preparation Program)
             </span>
           </h1>
   
