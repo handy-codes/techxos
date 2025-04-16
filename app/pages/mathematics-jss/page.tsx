@@ -390,7 +390,7 @@ export default function Page() {
                 value={formData.subject}
                 onChange={handleChange}
                 className="w-full p-2 border rounded placeholder-gray-500"
-                placeholder="What topic in mathematics do you want to start with?"
+                placeholder="What topic in mathematics do you want to learn first?"
               />
             </div>
             <div className="mb-4">
@@ -400,7 +400,7 @@ export default function Page() {
                 value={formData.message}
                 onChange={handleChange}
                 className="w-full p-2 border rounded placeholder-gray-500"
-                placeholder="What your challenge with maths as a subject? (Optional)"
+                placeholder="Describe any challenge you may have with learning mathematics as a subject? (optional)"
                 rows={4}
               ></textarea>
             </div>
@@ -413,9 +413,11 @@ export default function Page() {
             </button>
             {submitStatus === "success" && (
               <div className="mt-4 flex flex-col items-center text-green-600">
-                <FaCheckCircle className="mr-2" size={24} />
-                <p className="font-bold">Form submitted successfully!</p>
-                <p className="font-bold">Zoom Meeting Link or passcode will be sent to your email</p>
+                <div className="flex">
+                  <FaCheckCircle className="mr-2" size={24} />
+                  <p className="font-bold">Form submitted successfully!</p>
+                </div>
+                <p className="font-bold">Zoom Meeting Link and passcode will be sent to your email</p>
               </div>
             )}
             {submitStatus === "error" && (
