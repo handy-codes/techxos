@@ -5,6 +5,7 @@ import {
   FaFacebookF,
   FaLinkedinIn,
   FaYoutube,
+  FaPhone,
   FaMapMarkerAlt,
   FaInstagram,
 } from "react-icons/fa";
@@ -163,6 +164,11 @@ const Footer = () => {
               101, Lagos-Ikorodu Road, by (WandyTechX Place) Jumofak Ikorodu Lagos
             </p>
           </div>
+          <div className="flex space-x-2 xl:hidden">
+              <FaPhone className="text-[orange]" />
+              <p className="text-[#CED1E4] text-sm mb-4 md:mb-0">+2349123444391, +2348167715107</p>
+            </div>
+
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-[#CED1E4] text-sm mb-4 md:mb-0">
               © {new Date().getFullYear()} Techxos Digital Products. All rights reserved.
