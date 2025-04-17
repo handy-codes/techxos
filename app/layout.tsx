@@ -30,7 +30,7 @@ export default function RootLayout({
         <ClerkProvider>
           <div className="min-h-screen flex flex-col">
             <Topbar />
-            <main className="flex-grow mt-[120px]">
+            <main className="flex-grow mt-[80px] xl:mt-[120px]">
               {children}
             </main>
             <FooterWrapper />

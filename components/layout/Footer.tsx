@@ -5,6 +5,7 @@ import {
   FaFacebookF,
   FaLinkedinIn,
   FaYoutube,
+  FaMapMarkerAlt,
   FaInstagram,
 } from "react-icons/fa";
 import Image from "next/image";
@@ -156,6 +157,12 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-gray-700">
+          <div className="flex space-x-2 xl:hidden">
+            <FaMapMarkerAlt className="text-[orange]" />
+            <p className="text-[#CED1E4] text-sm mb-4 md:mb-0">
+              101, Lagos-Ikorodu Road, by (WandyTechX Place) Jumofak Ikorodu Lagos
+            </p>
+          </div>
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-[#CED1E4] text-sm mb-4 md:mb-0">
               © {new Date().getFullYear()} Techxos Digital Products. All rights reserved.

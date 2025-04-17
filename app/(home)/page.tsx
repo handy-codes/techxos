@@ -16,7 +16,7 @@ import CoursesBanner from "@/components/UpdateUi/CoursesBanner";
 import Slider from "@/components/layout/Slider";
 import Testimonials from "@/components/layout/Testimonials";
 // import { Category, Course, SubCategory } from "@prisma/client";
-import WandyCarousel from "@/components/layout/WandyCarousel";
+// import WandyCarousel from "@/components/layout/WandyCarousel";
 
 // import TestimonialSection from "@/components/layout/TestimonialSection";
 
@@ -64,7 +64,7 @@ export default async function Home() {
         <Courses />
         {/* <TestimonialSection/> */}
         {/* <OnsiteClass /> */}
-        <WandyCarousel />
+        {/* <WandyCarousel /> */}
         <HeroSection />
         <Testimonials />
         {/* <WhatsAppLink /> */}

@@ -95,7 +95,7 @@ const Topbar = () => {
           <div className="flex items-center space-x-2">
             <FaMapMarkerAlt className="text-[orange]" />
             <span>
-              101, Lagos Ikorodu Road, (Wandytech Suites) by Jumofak Aruna Bus
+              101, Lagos-Ikorodu Road, (Wandytech Suites) by Jumofak Aruna Bus
               Stop, Ikorodu Lagos
             </span>
           </div>
