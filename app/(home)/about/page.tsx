@@ -47,6 +47,7 @@ const AboutPage = () => {
       role: "CEO",
       name: "Jonadab Areuya",
       image: "/wandyboss2.jpg",
+      linkedin: "https://www.linkedin.com/in/jonadab-arueya-mitpn-mipma-34b85a34",
     },
     {
       role: "CTO",
