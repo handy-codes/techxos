@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { LiveClassUserRole } from "@prisma/client";
+import { LiveClassUserRole, Prisma } from "@prisma/client";
 
 export async function GET(req: Request) {
   try {
@@ -18,16 +18,38 @@ export async function GET(req: Request) {
     });
 
     if (!user && clerkUser) {
-      // Create user if they don't exist
-      user = await db.liveClassUser.create({
-        data: {
-          clerkUserId: userId,
-          email: clerkUser.emailAddresses[0]?.emailAddress || "",
-          name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim(),
-          role: LiveClassUserRole.LEARNER,
-          isActive: true
+      const userEmail = clerkUser.emailAddresses[0]?.emailAddress || "";
+      const userName = `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim();
+      
+      try {
+        // Try to create a new user
+        user = await db.liveClassUser.create({
+          data: {
+            clerkUserId: userId,
+            email: userEmail,
+            name: userName,
+            role: LiveClassUserRole.LEARNER,
+            isActive: true
+          }
+        });
+      } catch (error) {
+        // Handle unique constraint violation (email already exists)
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+          console.log("[LECTURE_GET] User with this email already exists, updating with Clerk ID");
+          
+          // Find the user by email and update with Clerk ID
+          user = await db.liveClassUser.update({
+            where: { email: userEmail },
+            data: { 
+              clerkUserId: userId,
+              name: userName || undefined // Only update name if it's not empty
+            }
+          });
+        } else {
+          // Re-throw other errors
+          throw error;
         }
-      });
+      }
     }
 
     if (!user) {

@@ -12,7 +12,7 @@ import MathematicsJss from "@/components/curriculum/Mathematics-jss";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
-import { toast } from "sonner";
+import { toast } from "react-hot-toast";
 import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
 import FlutterwavePayment from "@/components/payment/FlutterwavePayment";
 import { useRouter } from "next/navigation";
