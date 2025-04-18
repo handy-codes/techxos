@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,8 +46,12 @@ export const MathsDemoForm = () => {
       }
 
       toast.success("Free Demo Request Successful!");
-      // Reload the page to update the UI and show the Join Live Class button
-      window.location.reload();
+      
+      // Add a small delay before reloading to ensure the toast is visible
+      setTimeout(() => {
+        // Reload the page to update the UI and show the Join Live Class button
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Failed to submit form. Please try again.");

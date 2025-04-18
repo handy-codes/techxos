@@ -1,40 +1,39 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { useAuth } from "@clerk/nextjs";
+import toast from "react-hot-toast";
 
-export function ClassModeToggle() {
+export const ClassModeToggle = () => {
+  const { user, isLoaded } = useUser();
   const [isDemoMode, setIsDemoMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const { isLoaded, userId } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoaded) {
-      fetchMode();
-    }
-  }, [isLoaded]);
-
-  const fetchMode = async () => {
-    try {
-      const response = await fetch("/api/maths-demo/mode");
-      if (!response.ok) {
-        throw new Error("Failed to fetch mode");
+    const fetchMode = async () => {
+      try {
+        const response = await fetch("/api/maths-demo/mode");
+        if (response.ok) {
+          const data = await response.json();
+          setIsDemoMode(data.mode === "demo");
+        }
+      } catch (error) {
+        console.error("Error fetching class mode:", error);
       }
-      const data = await response.json();
-      setIsDemoMode(data.mode === "demo");
-    } catch (error) {
-      console.error("Error fetching mode:", error);
-      toast.error("Failed to fetch class mode");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+
+    fetchMode();
+  }, []);
 
   const handleToggle = async () => {
-    if (!isLoaded || !userId) {
+    if (!isLoaded) {
+      toast.error("You must be logged in to change the class mode");
+      return;
+    }
+
+    if (!user) {
       toast.error("You must be logged in to change the class mode");
       return;
     }
@@ -51,16 +50,15 @@ export function ClassModeToggle() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to update mode");
+        const error = await response.text();
+        throw new Error(error);
       }
 
-      const data = await response.json();
-      setIsDemoMode(data.mode === "demo");
-      toast.success(`Class mode changed to ${data.mode}`);
+      setIsDemoMode(!isDemoMode);
+      toast.success(`Class mode changed to ${newMode} mode`);
     } catch (error) {
-      console.error("Error updating mode:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to update class mode");
+      console.error("Error updating class mode:", error);
+      toast.error("Failed to update class mode. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -69,14 +67,14 @@ export function ClassModeToggle() {
   return (
     <div className="flex items-center space-x-2">
       <Switch
-        id="demo-mode"
+        id="class-mode"
         checked={isDemoMode}
         onCheckedChange={handleToggle}
         disabled={isLoading}
       />
-      <Label htmlFor="demo-mode">
+      <Label htmlFor="class-mode">
         {isDemoMode ? "Demo Mode" : "Paid Mode"}
       </Label>
     </div>
   );
-} 
+}; 

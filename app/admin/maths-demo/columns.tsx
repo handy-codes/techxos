@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { EditDemoDialog } from "./components/edit-demo-dialog";
-import { toast } from "sonner";
+import { toast } from "react-hot-toast";
 
 export type MathsDemoRegistration = {
   id: string;
