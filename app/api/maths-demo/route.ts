@@ -110,17 +110,13 @@ export async function GET() {
           try {
             const user = await clerkClient.users.getUser(userId);
             userDataMap.set(userId, {
-              email: user.emailAddresses[0]?.emailAddress || "Email not available",
-              firstName: user.firstName || "",
-              lastName: user.lastName || "",
+              email: user.emailAddresses[0]?.emailAddress,
+              firstName: user.firstName,
+              lastName: user.lastName,
             });
           } catch (error) {
             console.error(`Error fetching user ${userId}:`, error);
-            userDataMap.set(userId, {
-              email: "Email not available",
-              firstName: "",
-              lastName: "",
-            });
+            // Don't set default values, just log the error
           }
         })
       );
@@ -128,17 +124,13 @@ export async function GET() {
 
     // Combine registration data with user data
     const registrationsWithUserInfo = registrations.map(registration => {
-      const userData = userDataMap.get(registration.userId) || {
-        email: "Email not available",
-        firstName: "",
-        lastName: "",
-      };
+      const userData = userDataMap.get(registration.userId);
       
       return {
         ...registration,
-        userEmail: userData.email,
-        userFirstName: userData.firstName,
-        userLastName: userData.lastName,
+        userEmail: userData?.email || "",
+        userFirstName: userData?.firstName || "",
+        userLastName: userData?.lastName || "",
       };
     });
 
