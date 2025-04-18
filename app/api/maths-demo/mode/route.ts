@@ -17,12 +17,21 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const adminCheck = await requireAdmin();
-    if (!adminCheck.success) {
-      return NextResponse.json(
-        { error: adminCheck.error },
-        { status: adminCheck.status }
-      );
+    const { success, user, response } = await requireAdmin();
+    if (!success) {
+      return response;
+    }
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Convert string IDs to numbers for comparison
+    const userId = parseInt(user.id);
+    const adminId = parseInt(process.env.ADMIN_USER_ID || "0");
+
+    if (userId !== adminId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
     const { mode } = await request.json();
