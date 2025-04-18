@@ -1,22 +1,22 @@
-const { PrismaClient, LiveClassUserRole } = require("@prisma/client");
-const dotenv = require("dotenv");
+import { PrismaClient, LiveClassUserRole } from '@prisma/client';
+import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
 dotenv.config();
 
-const prisma = new PrismaClient();
+const prismaClient = new PrismaClient();
 
-async function main() {
+async function seedLiveClasses() {
   try {
     // Check if Head Admin exists
-    let headAdmin = await prisma.liveClassUser.findUnique({
+    let headAdmin = await prismaClient.liveClassUser.findUnique({
       where: { email: "paxymekventures@gmail.com" }
     });
 
     // Create Head Admin if doesn't exist
     if (!headAdmin) {
-      headAdmin = await prisma.liveClassUser.create({
+      headAdmin = await prismaClient.liveClassUser.create({
         data: {
           email: "paxymekventures@gmail.com",
           role: LiveClassUserRole.HEAD_ADMIN,
@@ -28,7 +28,7 @@ async function main() {
     }
 
     // Create category for Mathematics
-    const category = await prisma.category.upsert({
+    const category = await prismaClient.category.upsert({
       where: { name: 'Mathematics' },
       update: {},
       create: {
@@ -37,7 +37,7 @@ async function main() {
     });
 
     // Create subcategory for JSS
-    let subCategory = await prisma.subCategory.findFirst({
+    let subCategory = await prismaClient.subCategory.findFirst({
       where: { 
         name: 'Junior Secondary',
         categoryId: category.id,
@@ -45,7 +45,7 @@ async function main() {
     });
 
     if (!subCategory) {
-      subCategory = await prisma.subCategory.create({
+      subCategory = await prismaClient.subCategory.create({
         data: {
           name: 'Junior Secondary',
           categoryId: category.id,
@@ -54,7 +54,7 @@ async function main() {
     }
 
     // Create level for JSS
-    const level = await prisma.level.upsert({
+    const level = await prismaClient.level.upsert({
       where: { name: 'JSS' },
       update: {},
       create: {
@@ -63,7 +63,7 @@ async function main() {
     });
 
     // Create mathematics-jss course
-    const course = await prisma.course.upsert({
+    const course = await prismaClient.course.upsert({
       where: { id: 'mathematics-jss' },
       update: {
         title: 'Mathematics (JSS Module)',
@@ -88,7 +88,7 @@ async function main() {
     });
 
     // Create active zoom meeting for the course
-    const zoomMeeting = await prisma.courseZoomMeeting.upsert({
+    const zoomMeeting = await prismaClient.courseZoomMeeting.upsert({
       where: { 
         id: 'afadc946-b82e-4852-a0af-e6d004cefc63'
       },
@@ -109,13 +109,13 @@ async function main() {
     });
 
     // Check if live class exists
-    let liveClass = await prisma.liveClass.findFirst({
+    let liveClass = await prismaClient.liveClass.findFirst({
       where: { title: "Project Management" }
     });
 
     // Create live class if doesn't exist
     if (!liveClass) {
-      liveClass = await prisma.liveClass.create({
+      liveClass = await prismaClient.liveClass.create({
         data: {
           title: "Project Management",
           description: "Comprehensive project management course covering all aspects of modern project management.",
@@ -135,12 +135,12 @@ async function main() {
     }
 
     // Create class materials if they don't exist
-    const materials = await prisma.liveClassMaterial.findMany({
+    const materials = await prismaClient.liveClassMaterial.findMany({
       where: { liveClassId: liveClass.id }
     });
 
     if (materials.length === 0) {
-      await prisma.liveClassMaterial.createMany({
+      await prismaClient.liveClassMaterial.createMany({
         data: [
           {
             title: "Course Syllabus",
@@ -165,12 +165,12 @@ async function main() {
     }
 
     // Create class schedules if they don't exist
-    const schedules = await prisma.liveClassSchedule.findMany({
+    const schedules = await prismaClient.liveClassSchedule.findMany({
       where: { liveClassId: liveClass.id }
     });
 
     if (schedules.length === 0) {
-      await prisma.liveClassSchedule.createMany({
+      await prismaClient.liveClassSchedule.createMany({
         data: [
           {
             liveClassId: liveClass.id,
@@ -194,8 +194,8 @@ async function main() {
   } catch (error) {
     console.error("Error seeding mathematics JSS course:", error);
   } finally {
-    await prisma.$disconnect();
+    await prismaClient.$disconnect();
   }
 }
 
-main(); 
+seedLiveClasses(); 

@@ -1,10 +1,10 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prismaClient = new PrismaClient();
 
-async function main() {
+async function checkCourse() {
   try {
-    const course = await prisma.course.findUnique({
+    const course = await prismaClient.course.findUnique({
       where: {
         id: 'mathematics-jss'
       },
@@ -19,8 +19,8 @@ async function main() {
   } catch (error) {
     console.error('Error fetching course:', error);
   } finally {
-    await prisma.$disconnect();
+    await prismaClient.$disconnect();
   }
 }
 
-main(); 
+checkCourse(); 
