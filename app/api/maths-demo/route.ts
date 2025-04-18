@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { clerkClient } from "@clerk/nextjs/server";
+import { requireAdmin } from "@/lib/auth-utils";
 
 export async function POST(req: Request) {
   try {
@@ -77,5 +79,72 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("[MATHS_DEMO]", error);
     return new NextResponse("Internal Error", { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const authCheck = await requireAdmin();
+    if (!authCheck.success) {
+      return authCheck.response;
+    }
+
+    // Get all registrations
+    const registrations = await db.mathsDemo.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    // Get unique user IDs
+    const userIds = [...new Set(registrations.map(r => r.userId))];
+    
+    // Fetch user data in batches to avoid timeouts
+    const userDataMap = new Map();
+    const batchSize = 10;
+    
+    for (let i = 0; i < userIds.length; i += batchSize) {
+      const batch = userIds.slice(i, i + batchSize);
+      await Promise.all(
+        batch.map(async (userId) => {
+          try {
+            const user = await clerkClient.users.getUser(userId);
+            userDataMap.set(userId, {
+              email: user.emailAddresses[0]?.emailAddress || "Email not available",
+              firstName: user.firstName || "",
+              lastName: user.lastName || "",
+            });
+          } catch (error) {
+            console.error(`Error fetching user ${userId}:`, error);
+            userDataMap.set(userId, {
+              email: "Email not available",
+              firstName: "",
+              lastName: "",
+            });
+          }
+        })
+      );
+    }
+
+    // Combine registration data with user data
+    const registrationsWithUserInfo = registrations.map(registration => {
+      const userData = userDataMap.get(registration.userId) || {
+        email: "Email not available",
+        firstName: "",
+        lastName: "",
+      };
+      
+      return {
+        ...registration,
+        userEmail: userData.email,
+        userFirstName: userData.firstName,
+        userLastName: userData.lastName,
+      };
+    });
+
+    return NextResponse.json(registrationsWithUserInfo);
+  } catch (error) {
+    console.error("[MATHS_DEMO_GET] Error:", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 } 
