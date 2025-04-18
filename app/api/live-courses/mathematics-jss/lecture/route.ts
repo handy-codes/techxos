@@ -107,8 +107,8 @@ export async function GET(req: Request) {
           type: "pdf"
         }
       ],
-      studentEmail: user?.emailAddresses?.[0]?.emailAddress,
-      studentName: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
+      studentEmail: user?.email,
+      studentName: user?.name || "Student",
     };
 
     return NextResponse.json(response);
