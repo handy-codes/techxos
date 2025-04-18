@@ -423,6 +423,8 @@ model CourseZoomMeeting {
   courseId    String
   course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   zoomLink    String   @db.Text
+  startTime   DateTime @default(now())
+  duration    Int      @default(60) // Duration in minutes
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -431,18 +433,24 @@ model CourseZoomMeeting {
   @@index([isActive])
 }
 
-model MathsDemo {
-  id            String   @id @default(uuid())
-  userId        String
-  name          String
-  class         String
-  topic         String?
-  trainingDate  String
-  whatsappGroup Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  mathsDemo MathsDemo?
+}
 
-  @@index([userId])
+model MathsDemo {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  startTime DateTime @default(now())
+  duration  Int      @default(60)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ClassMode {
