@@ -80,57 +80,63 @@ export const columns: ColumnDef<MathsDemoRegistration>[] = [
     id: "actions",
     cell: ({ row }) => {
       const registration = row.original;
-      const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+      
+      // Create a proper React component for the actions cell
+      const ActionsCell = () => {
+        const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-      const handleDelete = async () => {
-        if (!confirm("Are you sure you want to delete this registration?")) {
-          return;
-        }
-
-        try {
-          const response = await fetch(`/api/maths-demo/${registration.id}`, {
-            method: "DELETE",
-          });
-
-          if (!response.ok) {
-            throw new Error("Failed to delete registration");
+        const handleDelete = async () => {
+          if (!confirm("Are you sure you want to delete this registration?")) {
+            return;
           }
 
-          toast.success("Registration deleted successfully");
-          window.location.reload();
-        } catch (error) {
-          console.error("Error deleting registration:", error);
-          toast.error("Failed to delete registration");
-        }
+          try {
+            const response = await fetch(`/api/maths-demo/${registration.id}`, {
+              method: "DELETE",
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to delete registration");
+            }
+
+            toast.success("Registration deleted successfully");
+            window.location.reload();
+          } catch (error) {
+            console.error("Error deleting registration:", error);
+            toast.error("Failed to delete registration");
+          }
+        };
+
+        return (
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDelete} className="text-red-600">
+                  <Trash className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <EditDemoDialog
+              registration={registration}
+              open={isEditDialogOpen}
+              onOpenChange={setIsEditDialogOpen}
+            />
+          </div>
+        );
       };
 
-      return (
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
-                <Pencil className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete} className="text-red-600">
-                <Trash className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <EditDemoDialog
-            registration={registration}
-            open={isEditDialogOpen}
-            onOpenChange={setIsEditDialogOpen}
-          />
-        </div>
-      );
+      return <ActionsCell />;
     },
   },
 ]; 
