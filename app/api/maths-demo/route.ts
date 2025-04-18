@@ -109,14 +109,22 @@ export async function GET() {
         batch.map(async (userId) => {
           try {
             const user = await clerkClient.users.getUser(userId);
+            
+            // Extract email from the first email address
+            let email = "";
+            if (user.emailAddresses && user.emailAddresses.length > 0) {
+              email = user.emailAddresses[0].emailAddress || "";
+            }
+            
             userDataMap.set(userId, {
-              email: user.emailAddresses[0]?.emailAddress,
-              firstName: user.firstName,
-              lastName: user.lastName,
+              email,
+              firstName: user.firstName || "",
+              lastName: user.lastName || "",
             });
+            
+            console.log(`Fetched user data for ${userId}:`, { email, firstName: user.firstName, lastName: user.lastName });
           } catch (error) {
             console.error(`Error fetching user ${userId}:`, error);
-            // Don't set default values, just log the error
           }
         })
       );
@@ -134,6 +142,8 @@ export async function GET() {
       };
     });
 
+    console.log(`Returning ${registrationsWithUserInfo.length} registrations with user data`);
+    
     return NextResponse.json(registrationsWithUserInfo);
   } catch (error) {
     console.error("[MATHS_DEMO_GET] Error:", error);
