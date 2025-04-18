@@ -20,21 +20,21 @@ const Footer = () => {
       href: "https://web.facebook.com/profile.php?id=61572481057148",
       label: "Facebook",
     },
-    {
-      icon: <FaX className="w-5 h-5" />,
-      href: "#",
-      label: "Twitter/X",
-    },
+    // {
+    //   icon: <FaX className="w-5 h-5" />,
+    //   href: "/",      
+    //   label: "Twitter/X",
+    // },
     {
       icon: <FaLinkedinIn className="w-5 h-5" />,
       href: "https://www.linkedin.com/company/techxos-digital-products",
       label: "LinkedIn",
     },
-    {
-      icon: <FaYoutube className="w-5 h-5" />,
-      href: "#",
-      label: "YouTube",
-    },
+    // {
+    //   icon: <FaYoutube className="w-5 h-5" />,
+    //   href: "/",
+    //   label: "YouTube",
+    // },
     {
       icon: <FaInstagram className="w-5 h-5" />,
       href: "https://www.instagram.com/techxosoffical/",

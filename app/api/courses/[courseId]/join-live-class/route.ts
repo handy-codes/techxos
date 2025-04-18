@@ -156,7 +156,14 @@ export async function GET(
       }
     });
 
-    if (!isHost(user.role) && !purchase) {
+    // Check if user has demo access
+    const demoAccess = await db.mathsDemo.findFirst({
+      where: {
+        userId: userId,
+      }
+    });
+
+    if (!isHost(user.role) && !purchase && !demoAccess) {
       return new NextResponse("You need to purchase this course to join the live class", { status: 403 });
     }
 

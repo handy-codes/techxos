@@ -170,17 +170,17 @@ export default function Page() {
     
     return (
       <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
-        <h3 className="text-xl font-semibold mb-2">Current Course Information</h3>
+        {/* <h3 className="text-xl font-semibold mb-2">Current Course Information</h3> */}
         {lecture.lectures && lecture.lectures.length > 0 ? (
           <div>
-            <p className="mb-2">
+            {/* <p className="mb-2">
               <span className="font-medium">Latest lecture:</span>{" "}
               {lecture.lectures[0].title || "Upcoming Session"}
             </p>
             <p className="mb-2">
               <span className="font-medium">Date:</span>{" "}
               {new Date(lecture.lectures[0].date).toLocaleString()}
-            </p>
+            </p> */}
             {lecture.lectures[0].isRecorded && lecture.lectures[0].recordingUrl && (
               <div className="mt-2">
                 <a 

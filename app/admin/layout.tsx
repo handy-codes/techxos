@@ -10,7 +10,8 @@ import {
   Settings,
   LayoutDashboard,
   CreditCard,
-  Video
+  Video,
+  ClipboardList
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -75,6 +76,12 @@ export default function AdminLayout({
       icon: CreditCard,
       href: "/admin/pages/purchases",
       active: pathname === "/admin/pages/purchases" || pathname?.startsWith("/admin/pages/purchases/"),
+    },
+    {
+      label: "Maths Demo",
+      icon: ClipboardList,
+      href: "/admin/maths-demo",
+      active: pathname === "/admin/maths-demo" || pathname?.startsWith("/admin/maths-demo/"),
     },
     {
       label: "Settings",

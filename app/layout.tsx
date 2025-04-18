@@ -5,6 +5,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Topbar from "@/components/layout/Topbar";
 import FooterWrapper from "@/components/layout/FooterWrapper";
+// import Footer from "@/components/layout/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
               {children}
             </main>
             <FooterWrapper />
+            {/* <Footer /> */}
           </div>
           <Toaster />
         </ClerkProvider>

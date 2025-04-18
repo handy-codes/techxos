@@ -430,3 +430,24 @@ model CourseZoomMeeting {
   @@index([courseId])
   @@index([isActive])
 }
+
+model MathsDemo {
+  id            String   @id @default(uuid())
+  userId        String
+  name          String
+  class         String
+  topic         String?
+  trainingDate  String
+  whatsappGroup Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model ClassMode {
+  id        String   @id @default(uuid())
+  mode      String   @default("paid") // "paid" or "demo"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
