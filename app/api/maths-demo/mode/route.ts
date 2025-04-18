@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/auth-utils";
+import { auth } from "@clerk/nextjs/server";
 
 export async function GET() {
   try {
@@ -17,18 +17,23 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { success, user, response } = await requireAdmin();
-    if (!success) {
-      return response;
+    const { userId } = auth();
+    
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    
+    // Check if user is admin
+    const user = await prisma.liveClassUser.findFirst({
+      where: {
+        clerkUserId: userId,
+        role: {
+          in: ["HEAD_ADMIN", "ADMIN"]
+        }
+      }
+    });
+    
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    // Compare string IDs directly
-    const adminId = process.env.ADMIN_USER_ID;
-    if (user.id !== adminId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 

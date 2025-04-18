@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { LiveClassUserRole } from "@prisma/client";
 
 export async function GET(req: Request) {
   try {
     const { userId } = auth();
+    const clerkUser = await currentUser();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -78,10 +79,10 @@ export async function GET(req: Request) {
         zoomLink: activeZoomMeeting?.zoomLink || null,
         lectures: [
           {
-            id: activeZoomMeeting?.id || "",
-            title: "Mathematics JSS Live Class",
-            date: formatDate(activeZoomMeeting?.createdAt),
+            id: "lecture-1",
+            date: formatDate(activeZoomMeeting?.startTime),
             recordingUrl: null,
+            title: course.title,
             isRecorded: false
           }
         ]
@@ -95,8 +96,8 @@ export async function GET(req: Request) {
       courseDetails: {
         title: course.title,
         description: course.description,
-        startTime: formatDate(activeZoomMeeting?.createdAt),
-        endTime: formatDate(activeZoomMeeting?.createdAt ? new Date(new Date(activeZoomMeeting.createdAt).getTime() + 60 * 60000) : null),
+        startTime: formatDate(activeZoomMeeting?.startTime),
+        endTime: formatDate(activeZoomMeeting?.startTime ? new Date(new Date(activeZoomMeeting.startTime).getTime() + (activeZoomMeeting.duration || 60) * 60000) : null),
         zoomMeetingId: activeZoomMeeting?.id,
         zoomPassword: ""
       },
@@ -107,8 +108,8 @@ export async function GET(req: Request) {
           type: "pdf"
         }
       ],
-      studentEmail: user?.email,
-      studentName: user?.name || "Student",
+      studentEmail: clerkUser?.emailAddresses?.[0]?.emailAddress || user.email || "",
+      studentName: clerkUser?.firstName ? `${clerkUser.firstName} ${clerkUser.lastName || ""}`.trim() : user.name || "Student",
     };
 
     return NextResponse.json(response);
