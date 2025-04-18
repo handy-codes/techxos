@@ -68,9 +68,7 @@ export async function PATCH(
         class: className,
         topic,
         trainingDate,
-        whatsappGroup,
-        startTime: new Date(),
-        duration: 60
+        whatsappGroup
       },
     });
 

@@ -190,15 +190,18 @@ CREATE TABLE `LiveClassPurchase` (
     `isActive` BOOLEAN NOT NULL DEFAULT true,
     `startDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `endDate` DATETIME(3) NOT NULL,
-    `studentName` VARCHAR(191) NOT NULL,
-    `studentEmail` VARCHAR(191) NOT NULL,
-    `courseName` VARCHAR(191) NOT NULL,
+    `courseName` VARCHAR(191) NULL,
+    `studentEmail` VARCHAR(191) NULL,
+    `studentName` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
     INDEX `LiveClassPurchase_liveClassId_idx`(`liveClassId`),
     INDEX `LiveClassPurchase_studentId_idx`(`studentId`),
     INDEX `LiveClassPurchase_status_idx`(`status`),
+    INDEX `LiveClassPurchase_isActive_idx`(`isActive`),
+    INDEX `LiveClassPurchase_startDate_idx`(`startDate`),
+    INDEX `LiveClassPurchase_endDate_idx`(`endDate`),
     UNIQUE INDEX `LiveClassPurchase_studentId_liveClassId_key`(`studentId`, `liveClassId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -343,11 +346,54 @@ CREATE TABLE `CourseZoomMeeting` (
     `id` VARCHAR(191) NOT NULL,
     `courseId` VARCHAR(191) NOT NULL,
     `zoomLink` TEXT NOT NULL,
+    `startTime` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `duration` INTEGER NOT NULL DEFAULT 60,
     `isActive` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
     INDEX `CourseZoomMeeting_courseId_idx`(`courseId`),
     INDEX `CourseZoomMeeting_isActive_idx`(`isActive`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `User` (
+    `id` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NULL,
+    `role` VARCHAR(191) NOT NULL DEFAULT 'user',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `User_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `MathsDemo` (
+    `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `class` VARCHAR(191) NOT NULL,
+    `topic` VARCHAR(191) NULL,
+    `trainingDate` DATETIME(3) NOT NULL,
+    `whatsappGroup` BOOLEAN NOT NULL DEFAULT false,
+    `startTime` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `duration` INTEGER NOT NULL DEFAULT 60,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `MathsDemo_userId_key`(`userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ClassMode` (
+    `id` VARCHAR(191) NOT NULL,
+    `mode` VARCHAR(191) NOT NULL DEFAULT 'paid',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

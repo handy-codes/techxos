@@ -26,11 +26,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Convert string IDs to numbers for comparison
-    const userId = parseInt(user.id);
-    const adminId = parseInt(process.env.ADMIN_USER_ID || "0");
-
-    if (userId !== adminId) {
+    // Compare string IDs directly
+    const adminId = process.env.ADMIN_USER_ID;
+    if (user.id !== adminId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
@@ -43,9 +41,9 @@ export async function POST(request: Request) {
     }
 
     const updatedMode = await prisma.classMode.upsert({
-      where: { id: 1 },
+      where: { id: "1" },
       update: { mode },
-      create: { id: 1, mode },
+      create: { id: "1", mode },
     });
 
     return NextResponse.json({ mode: updatedMode.mode });

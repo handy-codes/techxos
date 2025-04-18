@@ -47,9 +47,7 @@ export async function POST(req: Request) {
         class: className,
         topic,
         trainingDate,
-        whatsappGroup: whatsappGroup || false,
-        startTime: new Date(),
-        duration: 60
+        whatsappGroup: whatsappGroup || false
       },
     });
 

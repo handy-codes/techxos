@@ -78,10 +78,10 @@ export async function GET(req: Request) {
         zoomLink: activeZoomMeeting?.zoomLink || null,
         lectures: [
           {
-            id: "lecture-1",
-            date: formatDate(activeZoomMeeting?.startTime),
+            id: activeZoomMeeting?.id || "",
+            title: "Mathematics JSS Live Class",
+            date: formatDate(activeZoomMeeting?.createdAt),
             recordingUrl: null,
-            title: course.title,
             isRecorded: false
           }
         ]
@@ -95,8 +95,8 @@ export async function GET(req: Request) {
       courseDetails: {
         title: course.title,
         description: course.description,
-        startTime: formatDate(activeZoomMeeting?.startTime),
-        endTime: formatDate(activeZoomMeeting?.startTime ? new Date(new Date(activeZoomMeeting.startTime).getTime() + (activeZoomMeeting.duration || 60) * 60000) : null),
+        startTime: formatDate(activeZoomMeeting?.createdAt),
+        endTime: formatDate(activeZoomMeeting?.createdAt ? new Date(new Date(activeZoomMeeting.createdAt).getTime() + 60 * 60000) : null),
         zoomMeetingId: activeZoomMeeting?.id,
         zoomPassword: ""
       },
@@ -106,7 +106,9 @@ export async function GET(req: Request) {
           url: "/materials/mathematics-intro.pdf",
           type: "pdf"
         }
-      ]
+      ],
+      studentEmail: user?.emailAddresses?.[0]?.emailAddress,
+      studentName: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
     };
 
     return NextResponse.json(response);
