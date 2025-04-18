@@ -12,7 +12,7 @@ import MathematicsJss from "@/components/curriculum/Mathematics-jss";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import JoinLiveClassButton from "@/components/course/JoinLiveClassButton";
 import FlutterwavePayment from "@/components/payment/FlutterwavePayment";
 import { useRouter } from "next/navigation";
@@ -83,6 +83,9 @@ export default function Page() {
 
       if (err.response?.status === 401) {
         toast.error("Please sign in to access this course");
+      } else if (err.response?.status === 404) {
+        toast.error("Course not found or you don't have access");
+        setLecture(null);
       } else if (err.response?.status === 500) {
         toast.error("Server error. Please try again later.");
       } else {
@@ -204,44 +207,15 @@ export default function Page() {
 
     // If user has access (either through demo or paid), show the course information
     if (lecture) {
-    return (
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
-        {/* Temporarily commented out course information
-        <h3 className="text-xl font-semibold mb-2">Current Course Information</h3>
-        {lecture.lectures && lecture.lectures.length > 0 ? (
-          <div>
-            <p className="mb-2">
-              <span className="font-medium">Latest lecture:</span>{" "}
-              {lecture.lectures[0].title || "Upcoming Session"}
-            </p>
-            <p className="mb-2">
-              <span className="font-medium">Date:</span>{" "}
-              {new Date(lecture.lectures[0].date).toLocaleString()}
-            </p>
-            {lecture.lectures[0].isRecorded && lecture.lectures[0].recordingUrl && (
-              <div className="mt-2">
-                <a 
-                  href={lecture.lectures[0].recordingUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View Recording
-                </a>
-              </div>
-            )}
-          </div>
-        ) : (
-          <p>No scheduled lectures at this time. Please check back later.</p>
-        )}
-        */}
-        <div className="mt-4">
-            {lecture.hasAccess || (isDemoMode && hasDemoAccess) ? (
-            <JoinLiveClassButton 
-              courseId="mathematics-jss" 
-              courseName="Mathematics (JSS Module)" 
-            />
-          ) : (
+      return (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
+          <div className="mt-4">
+            {(lecture.hasAccess || (isDemoMode && hasDemoAccess)) ? (
+              <JoinLiveClassButton 
+                courseId="mathematics-jss" 
+                courseName="Mathematics (JSS Module)" 
+              />
+            ) : (
               <FlutterwavePayment 
                 courseId="mathematics-jss"
                 courseName="Mathematics (JSS Module)"
@@ -259,30 +233,39 @@ export default function Page() {
               />
             )}
           </div>
-      </div>
+        </div>
       );
     }
 
     // If not in demo mode or user doesn't have access, show the payment component
-    return (
-      <div className="mt-6">
-        <div className="inline-block">
-          <FlutterwavePayment 
-            courseId="mathematics-jss"
-            courseName="Mathematics (JSS Module)"
-            amount={10000}
-            email={user?.primaryEmailAddress?.emailAddress || ""}
-            name={`${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Student"}
-            onSuccess={() => {
-              toast.success("Payment successful! Redirecting to course...");
-              router.push("pages/mathematics-jss/success");
-            }}
-            onError={(error) => {
-              console.error("Payment error:", error);
-              toast.error("Payment failed. Please try again.");
-            }}
-          />
+    if (!isDemoMode || !hasDemoAccess) {
+      return (
+        <div className="mt-6">
+          <div className="inline-block">
+            <FlutterwavePayment 
+              courseId="mathematics-jss"
+              courseName="Mathematics (JSS Module)"
+              amount={10000}
+              email={user?.primaryEmailAddress?.emailAddress || ""}
+              name={`${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Student"}
+              onSuccess={() => {
+                toast.success("Payment successful! Redirecting to course...");
+                router.push("pages/mathematics-jss/success");
+              }}
+              onError={(error) => {
+                console.error("Payment error:", error);
+                toast.error("Payment failed. Please try again.");
+              }}
+            />
+          </div>
         </div>
+      );
+    }
+
+    // Default case: show loading or error state
+    return (
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow-sm">
+        <p className="text-gray-600">Loading course information...</p>
       </div>
     );
   };

@@ -1,5 +1,5 @@
-import { PrismaClient, LiveClassUserRole } from "@prisma/client";
-import dotenv from "dotenv";
+const { PrismaClient, LiveClassUserRole } = require("@prisma/client");
+const dotenv = require("dotenv");
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
@@ -26,6 +26,87 @@ async function main() {
         },
       });
     }
+
+    // Create category for Mathematics
+    const category = await prisma.category.upsert({
+      where: { name: 'Mathematics' },
+      update: {},
+      create: {
+        name: 'Mathematics',
+      },
+    });
+
+    // Create subcategory for JSS
+    let subCategory = await prisma.subCategory.findFirst({
+      where: { 
+        name: 'Junior Secondary',
+        categoryId: category.id,
+      }
+    });
+
+    if (!subCategory) {
+      subCategory = await prisma.subCategory.create({
+        data: {
+          name: 'Junior Secondary',
+          categoryId: category.id,
+        },
+      });
+    }
+
+    // Create level for JSS
+    const level = await prisma.level.upsert({
+      where: { name: 'JSS' },
+      update: {},
+      create: {
+        name: 'JSS',
+      },
+    });
+
+    // Create mathematics-jss course
+    const course = await prisma.course.upsert({
+      where: { id: 'mathematics-jss' },
+      update: {
+        title: 'Mathematics (JSS Module)',
+        description: 'Our comprehensive maths lessons cover all essential topics from the JSS curriculum, helping students build a strong foundation in mathematics.',
+        price: 10000,
+        isPublished: true,
+        categoryId: category.id,
+        subCategoryId: subCategory.id,
+        levelId: level.id,
+      },
+      create: {
+        id: 'mathematics-jss',
+        instructorId: headAdmin.id,
+        title: 'Mathematics (JSS Module)',
+        description: 'Our comprehensive maths lessons cover all essential topics from the JSS curriculum, helping students build a strong foundation in mathematics.',
+        price: 10000,
+        isPublished: true,
+        categoryId: category.id,
+        subCategoryId: subCategory.id,
+        levelId: level.id,
+      },
+    });
+
+    // Create active zoom meeting for the course
+    const zoomMeeting = await prisma.courseZoomMeeting.upsert({
+      where: { 
+        id: 'afadc946-b82e-4852-a0af-e6d004cefc63'
+      },
+      update: {
+        zoomLink: process.env.ZOOM_MATHS_JSS_MEETING_URL || "https://us05web.zoom.us/j/89661114279?pwd=gnL2oalIFeRPzNLIBHuYfsAGZ6CWRv.1",
+        startTime: new Date(),
+        duration: 60,
+        isActive: true,
+      },
+      create: {
+        id: 'afadc946-b82e-4852-a0af-e6d004cefc63',
+        courseId: course.id,
+        zoomLink: process.env.ZOOM_MATHS_JSS_MEETING_URL || "https://us05web.zoom.us/j/89661114279?pwd=gnL2oalIFeRPzNLIBHuYfsAGZ6CWRv.1",
+        startTime: new Date(),
+        duration: 60,
+        isActive: true,
+      },
+    });
 
     // Check if live class exists
     let liveClass = await prisma.liveClass.findFirst({
@@ -109,9 +190,9 @@ async function main() {
       });
     }
 
-    console.log("Live class data seeded successfully");
+    console.log("Mathematics JSS course and zoom meeting seeded successfully");
   } catch (error) {
-    console.error("Error seeding live class data:", error);
+    console.error("Error seeding mathematics JSS course:", error);
   } finally {
     await prisma.$disconnect();
   }

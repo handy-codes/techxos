@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { EditDemoDialog } from "./components/edit-demo-dialog";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 
 export type MathsDemoRegistration = {
   id: string;
@@ -21,7 +21,7 @@ export type MathsDemoRegistration = {
   name: string;
   class: string;
   topic: string | null;
-  trainingDate: string;
+  trainingDate: Date;
   whatsappGroup: boolean;
   createdAt: Date;
   userEmail?: string | null;
@@ -55,6 +55,22 @@ export const columns: ColumnDef<MathsDemoRegistration>[] = [
   {
     accessorKey: "trainingDate",
     header: "Training Date",
+    cell: ({ row }) => {
+      const date = row.getValue("trainingDate") as Date;
+      const formattedDate = new Date(date);
+      
+      // Check if the date matches one of our predefined dates
+      const isApril19 = formattedDate.getMonth() === 3 && formattedDate.getDate() === 19 && formattedDate.getHours() === 17;
+      const isApril20 = formattedDate.getMonth() === 3 && formattedDate.getDate() === 20 && formattedDate.getHours() === 17;
+      
+      if (isApril19) {
+        return "19th April 5:00pm";
+      } else if (isApril20) {
+        return "20th April 5:00pm";
+      } else {
+        return format(formattedDate, "PPP p");
+      }
+    },
   },
   {
     accessorKey: "whatsappGroup",

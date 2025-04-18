@@ -59,6 +59,26 @@ export async function PATCH(
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
+    // Convert trainingDate string to DateTime
+    let parsedDate: Date;
+    
+    if (trainingDate === "19th April 5:00pm") {
+      parsedDate = new Date("2024-04-19T17:00:00.000Z");
+    } else if (trainingDate === "20th April 5:00pm") {
+      parsedDate = new Date("2024-04-20T17:00:00.000Z");
+    } else if (trainingDate === "Both") {
+      // Default to the first date if "Both" is selected
+      parsedDate = new Date("2024-04-19T17:00:00.000Z");
+    } else {
+      // Try to parse as ISO string if it's in that format
+      parsedDate = new Date(trainingDate);
+      
+      // Check if the date is valid
+      if (isNaN(parsedDate.getTime())) {
+        return new NextResponse("Invalid date format", { status: 400 });
+      }
+    }
+
     const updatedRegistration = await db.mathsDemo.update({
       where: {
         id: params.id,
@@ -67,7 +87,7 @@ export async function PATCH(
         name,
         class: className,
         topic,
-        trainingDate,
+        trainingDate: parsedDate,
         whatsappGroup,
         startTime: new Date(),
         duration: 60

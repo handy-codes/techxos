@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { MathsDemoRegistration } from "../columns";
 
 interface EditDemoDialogProps {
@@ -30,17 +30,36 @@ export function EditDemoDialog({
     name: registration.name,
     class: registration.class,
     topic: registration.topic || "",
-    trainingDate: registration.trainingDate,
+    trainingDate: registration.trainingDate ? new Date(registration.trainingDate).toISOString().split('T')[0] : "",
     whatsappGroup: registration.whatsappGroup,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  // Convert the DateTime to a string format for the form
+  useEffect(() => {
+    if (registration.trainingDate) {
+      const date = new Date(registration.trainingDate);
+      
+      // Check if the date matches one of our predefined dates
+      const isApril19 = date.getMonth() === 3 && date.getDate() === 19 && date.getHours() === 17;
+      const isApril20 = date.getMonth() === 3 && date.getDate() === 20 && date.getHours() === 17;
+      
+      if (isApril19) {
+        setFormData(prev => ({ ...prev, trainingDate: "19th April 5:00pm" }));
+      } else if (isApril20) {
+        setFormData(prev => ({ ...prev, trainingDate: "20th April 5:00pm" }));
+      } else {
+        // Default to the first date if it doesn't match
+        setFormData(prev => ({ ...prev, trainingDate: "19th April 5:00pm" }));
+      }
+    }
+  }, [registration.trainingDate]);
 
-  const handleRadioChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, trainingDate: value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,7 +71,10 @@ export function EditDemoDialog({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          trainingDate: new Date(formData.trainingDate).toISOString(),
+        }),
       });
 
       if (!response.ok) {
@@ -108,25 +130,27 @@ export function EditDemoDialog({
           </div>
 
           <div className="space-y-2">
-            <Label>Training Date</Label>
-            <RadioGroup
+            <Label htmlFor="trainingDate">Training Date</Label>
+            <Input
+              id="trainingDate"
+              name="trainingDate"
+              type="date"
               value={formData.trainingDate}
-              onValueChange={handleRadioChange}
-              className="flex flex-col space-y-2"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="19th April 5:00pm" id="date1" />
-                <Label htmlFor="date1">19th April 5:00pm</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="20th April 5:00pm" id="date2" />
-                <Label htmlFor="date2">20th April 5:00pm</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Both" id="date3" />
-                <Label htmlFor="date3">Both</Label>
-              </div>
-            </RadioGroup>
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="whatsappGroup"
+              name="whatsappGroup"
+              checked={formData.whatsappGroup}
+              onChange={handleChange}
+              className="h-4 w-4 rounded border-gray-300"
+            />
+            <Label htmlFor="whatsappGroup">Added to WhatsApp Group</Label>
           </div>
 
           <DialogFooter>

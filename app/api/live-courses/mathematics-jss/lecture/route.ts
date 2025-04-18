@@ -12,13 +12,26 @@ export async function GET(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get user role
-    const user = await db.liveClassUser.findUnique({
+    // Get or create user role
+    let user = await db.liveClassUser.findUnique({
       where: { clerkUserId: userId }
     });
 
+    if (!user && clerkUser) {
+      // Create user if they don't exist
+      user = await db.liveClassUser.create({
+        data: {
+          clerkUserId: userId,
+          email: clerkUser.emailAddresses[0]?.emailAddress || "",
+          name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim(),
+          role: LiveClassUserRole.LEARNER,
+          isActive: true
+        }
+      });
+    }
+
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      return new NextResponse("Failed to create user account", { status: 500 });
     }
 
     const userRole = user.role;
@@ -40,6 +53,7 @@ export async function GET(req: Request) {
     });
 
     if (!course) {
+      console.error("[LECTURE_GET] Course not found: mathematics-jss");
       return new NextResponse("Course not found", { status: 404 });
     }
 
