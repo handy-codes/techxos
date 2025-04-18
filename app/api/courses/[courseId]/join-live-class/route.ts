@@ -126,6 +126,75 @@ export async function GET(
       });
     }
 
+    // For Mathematics JSS course, use the environment variables
+    if (courseId === "mathematics-jss") {
+      const zoomMeetingId = process.env.ZOOM_MATHEMATICS_JSS_MEETING_ID?.replace(/\s/g, '');
+      const zoomPassword = process.env.ZOOM_MATHEMATICS_JSS_MEETING_PASSWORD;
+
+      if (!zoomMeetingId) {
+        return new NextResponse("Zoom meeting details not configured", { status: 404 });
+      }
+
+      // Check if user has access
+      const liveClass = await db.liveClass.findFirst({
+        where: {
+          title: "Mathematics JSS",
+          isActive: true
+        }
+      });
+
+      if (!liveClass) {
+        return new NextResponse("No active class found", { status: 404 });
+      }
+
+      // Check if user is a host or has purchased the course
+      const isUserHost = isHost(user.role);
+      const hasPurchase = await db.liveClassPurchase.findFirst({
+        where: {
+          studentId: user.id,
+          liveClassId: liveClass.id,
+          isActive: true,
+          endDate: { gt: new Date() }
+        }
+      });
+
+      // Check if user has demo access
+      const demoAccess = await db.mathsDemo.findFirst({
+        where: {
+          userId: userId,
+        }
+      });
+
+      if (!isUserHost && !hasPurchase && !demoAccess) {
+        return new NextResponse("You need to purchase this course or have demo access to join the live class", { status: 403 });
+      }
+
+      // Construct the appropriate Zoom URL based on role
+      const baseUrl = isUserHost 
+        ? `https://zoom.us/s/${zoomMeetingId}`
+        : `https://zoom.us/j/${zoomMeetingId}`;
+      
+      const zoomLink = `${baseUrl}?pwd=${zoomPassword}`;
+
+      // Log attendance
+      await db.liveClassAttendance.create({
+        data: {
+          studentId: user.id,
+          liveClassId: liveClass.id,
+          status: "PRESENT",
+          joinTime: new Date(),
+        }
+      });
+
+      return NextResponse.json({
+        zoomLink,
+        zoomMeetingId,
+        zoomPassword,
+        isHost: isUserHost,
+        message: `Successfully ${isUserHost ? 'started' : 'joined'} the live class`
+      });
+    }
+
     // For other courses, use the zoomMeetings table
     const course = await db.course.findUnique({
       where: { id: courseId },

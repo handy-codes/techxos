@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     // Find the active course
     const liveClass = await db.liveClass.findFirst({
       where: { 
-        title: "Project Management",
+        title: "Mathematics JSS",
         isActive: true,
         endTime: {
           gt: new Date()
