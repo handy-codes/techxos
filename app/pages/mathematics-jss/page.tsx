@@ -374,12 +374,12 @@ export default function Page() {
             
             {/* Display lecture information if available */}
             {renderLectureInfo()}
-            <p className="mb-2 mt-4">Need Meeting Reminders (optional)</p>
+            <p className="mb-4 my-4">Need Meeting Reminders (optional)</p>
             <Link 
               href="https://chat.whatsapp.com/I9DkCCosIvxFcQo75dnNGA"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 font-bold hover:underline"
+              className="text-[white] p-4 mt-4 w-fit bg-[#3259E6] shadow-md rounded-md underline font-font-extrabold hover:underline block"
             >
               Join Techxos Whatsapp Group
             </Link>
