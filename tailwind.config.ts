@@ -59,22 +59,17 @@ const config = {
               md: 'calc(var(--radius) - 2px)',
               sm: 'calc(var(--radius) - 4px)'
           },
+          clipPath: {
+              'news': 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)',
+          },
           keyframes: {
               'accordion-down': {
-                  from: {
-                      height: '0'
-                  },
-                  to: {
-                      height: 'var(--radix-accordion-content-height)'
-                  }
+                  from: { height: '0' },
+                  to: { height: 'var(--radix-accordion-content-height)' }
               },
               'accordion-up': {
-                  from: {
-                      height: 'var(--radix-accordion-content-height)'
-                  },
-                  to: {
-                      height: '0'
-                  }
+                  from: { height: 'var(--radix-accordion-content-height)' },
+                  to: { height: '0' }
               },
               'slide-in-left': {
                   from: {
@@ -86,11 +81,21 @@ const config = {
                       opacity: '1'
                   }
               },
+              'marquee-right': {
+                  from: { transform: 'translateX(0)' },
+                  to: { transform: 'translateX(-50%)' }
+              },
+              'marquee-left': {
+                  '0%': { transform: 'translateX(-50%)' },
+                  '100%': { transform: 'translateX(0)' }
+              }
           },
           animation: {
               'accordion-down': 'accordion-down 0.2s ease-out',
               'accordion-up': 'accordion-up 0.2s ease-out',
               'slide-in-left': 'slide-in-left 1s ease-out',
+              'marquee-right': 'marquee-right 25s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+              'marquee-left': 'marquee-left 25s cubic-bezier(0.4, 0, 0.2, 1) infinite'
           },
           container: {
               center: true,
@@ -117,7 +122,7 @@ const config = {
           },
           translate: {
               '1': '0.25rem'
-          }
+          },
       }
   },
   variants: {

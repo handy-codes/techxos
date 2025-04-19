@@ -15,6 +15,7 @@ import WelcomeBanner from "@/components/UpdateUi/WelcomeBanner";
 import CoursesBanner from "@/components/UpdateUi/CoursesBanner";
 import Slider from "@/components/layout/Slider";
 import Testimonials from "@/components/layout/Testimonials";
+import NewsMarquee from "@/components/layout/NewsMarquee";
 // import { Category, Course, SubCategory } from "@prisma/client";
 // import WandyCarousel from "@/components/layout/WandyCarousel";
 
@@ -42,6 +43,7 @@ export default async function Home() {
   return (
     <main className="">
       {/* <Welcome /> */}
+      <NewsMarquee />
       <Slider />
       {/* <div className="mb-0 bg-[#1F1F1F] text-white"> */}
       <div className="mb-0 bg-[white] text-white">
